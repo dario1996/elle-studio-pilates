@@ -12,6 +12,7 @@ import { AuthJwtService } from '../../../../core/services/authJwt.service';
 import { FormsModule } from '@angular/forms';
 // import { JumbotronComponent } from '../../../../core/jumbotron/jumbotron.component';
 import { SpinnerComponent } from '../../../../core/spinner/spinner.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -20,9 +21,9 @@ import { SpinnerComponent } from '../../../../core/spinner/spinner.component';
   styleUrl: './login.component.css',
   imports: [
     RouterModule,
-    SpinnerComponent,
     FormsModule,
     TranslateModule,
+    CommonModule
   ],
 })
 export class LoginComponent implements OnInit {
