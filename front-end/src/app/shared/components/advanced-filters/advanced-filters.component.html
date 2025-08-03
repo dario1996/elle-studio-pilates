@@ -1,0 +1,16 @@
+<div class="advanced-filters-container">
+  <app-filter-button
+    [activeFiltersCount]="getActiveFiltersCount()"
+    [hasActiveFilters]="hasActiveFilters()"
+    (onClick)="openFilterPanel()">
+  </app-filter-button>
+
+  <app-filter-panel
+    [filtri]="filtri"
+    [valori]="valori"
+    [isOpen]="isFilterPanelOpen"
+    (close)="closeFilterPanel()"
+    (applyFilters)="onApplyFilters($event)"
+    (clearFilters)="onClearFilters()">
+  </app-filter-panel>
+</div>

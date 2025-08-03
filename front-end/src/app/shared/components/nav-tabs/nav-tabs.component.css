@@ -1,0 +1,230 @@
+/* ================== CONTAINER PRINCIPALE =================== */
+.nav-tabs-container-animated {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto 24px auto;
+  padding: 0 16px;
+}
+
+/* ================== TABS ANIMATE =================== */
+.nav-tabs-animated {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px;
+  list-style: none;
+  gap: 20px;
+  max-width: 800px;
+  margin: 0;
+}
+
+/* ================== INDICATORE ANIMATO =================== */
+.nav-tabs-animated::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: calc(100% / var(--tab-count) - 8px);
+  height: calc(100% - 8px);
+  transition: all 0.4s ease-out;
+  z-index: 1;
+  transform: translateX(calc(var(--active-index) * 100%));
+}
+
+/* ================== ITEMS E LINKS =================== */
+.nav-tabs-animated .nav-item {
+  position: relative;
+  flex: 1;
+  margin: 0;
+  z-index: 2;
+}
+
+.nav-tabs-animated .nav-item.active {
+  position: relative;
+  flex: 1;
+  margin: 0;
+  z-index: 2;
+  background-color: #000000;
+}
+
+.nav-tabs-animated .nav-item.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.nav-tabs-animated .nav-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  background: transparent;
+  border: none;
+  border-radius: 46px;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  text-align: center;
+  min-height: 44px;
+  outline: none;
+  user-select: none;
+  width: 100%;
+}
+
+.nav-tabs-animated .nav-link:hover:not(.active):not(.disabled) {
+  color: #333;
+}
+
+.nav-tabs-animated .nav-link.active {
+  color: #000000;
+  font-weight: 600;
+}
+
+.nav-tabs-animated .nav-link.disabled {
+  color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ================== ICONE =================== */
+.nav-tabs-animated .nav-link i {
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+.tab-label {
+  transition: all 0.3s ease;
+}
+
+/* ================== VARIANTI DI COLORE =================== */
+.nav-tabs-animated.tabs-blue::before {
+  border-bottom: 4px solid #000000;
+}
+
+.nav-tabs-animated.tabs-green::before {
+  background: linear-gradient(135deg, #5ee7df 0%, #66a6ff 100%);
+}
+
+.nav-tabs-animated.tabs-purple::before {
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+}
+
+.nav-tabs-animated.tabs-orange::before {
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+}
+
+/* ================== VARIANTI DI DIMENSIONE =================== */
+.nav-tabs-animated.size-small {
+  padding: 3px;
+}
+
+.nav-tabs-animated.size-small .nav-link {
+  padding: 8px 16px;
+  font-size: 12px;
+  min-height: 36px;
+}
+
+.nav-tabs-animated.size-small .nav-link i {
+  font-size: 14px;
+  margin-right: 6px;
+}
+
+.nav-tabs-animated.size-large {
+  padding: 6px;
+}
+
+.nav-tabs-animated.size-large .nav-link {
+  padding: 16px 24px;
+  font-size: 16px;
+  min-height: 52px;
+}
+
+.nav-tabs-animated.size-large .nav-link i {
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+/* ================== RESPONSIVE =================== */
+@media (max-width: 768px) {
+  .nav-tabs-animated {
+    flex-direction: column;
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    max-width: 100%;
+  }
+  
+  .nav-tabs-animated::before {
+    display: none;
+  }
+  
+  .nav-tabs-animated .nav-link {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    color: #495057;
+  }
+  
+  .nav-tabs-animated .nav-link.active {
+    background: #007bff;
+    color: #ffffff;
+    border-color: #007bff;
+    transform: none;
+  }
+  
+  .nav-tabs-animated .nav-link:hover:not(.active):not(.disabled) {
+    background: #e9ecef;
+    transform: none;
+  }
+  
+  .nav-tabs-container-animated {
+    padding: 0 8px;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-tabs-animated .nav-link {
+    padding: 10px 16px;
+    font-size: 13px;
+    min-height: 40px;
+  }
+  
+  .nav-tabs-animated .nav-link i {
+    margin-right: 6px;
+    font-size: 14px;
+  }
+}
+
+/* ================== ANIMAZIONI SPECIALI =================== */
+@keyframes tabPulse {
+  0% { transform: translateY(-1px) scale(1); }
+  50% { transform: translateY(-1px) scale(1.02); }
+  100% { transform: translateY(-1px) scale(1); }
+}
+
+/* ================== ACCESSIBILITÀ =================== */
+@media (prefers-reduced-motion: reduce) {
+  .nav-tabs-animated,
+  .nav-tabs-animated::before,
+  .nav-tabs-animated .nav-link,
+  .tab-label {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Focus per accessibilità */
+.nav-tabs-animated .nav-link:focus-visible {
+  outline: 2px solid #0066cc;
+  outline-offset: 2px;
+}

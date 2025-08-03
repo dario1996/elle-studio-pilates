@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <!-- Include all changesets -->
+    <include file="db/changelog/changes/001-create-initial-schema.xml" />
+    <include file="db/changelog/changes/002-create-indexes.xml" />
+    <include file="db/changelog/changes/004-create-users-table.xml" />
+    <include file="db/changelog/changes/005-create-learning-data-tables.xml" />
+    <include file="db/changelog/changes/006-add-processed-flag.xml" />
+    <include file="db/changelog/changes/007-add-employee-content-ids.xml" />
+    <include file="db/changelog/changes/008-insert-piattaforme-data.xml" />
+    <include file="db/changelog/changes/009-add-data-termine-prevista.xml" />
+
+</databaseChangeLog> 

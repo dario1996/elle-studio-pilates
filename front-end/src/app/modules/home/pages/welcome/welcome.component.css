@@ -1,0 +1,264 @@
+/* ================== APP LAYOUT =================== */
+/* .app-layout {
+  display: flex;
+  height: 100%;
+} */
+
+/* ================== SIDEBAR =================== */
+/* .sidebar {
+  width: 280px;
+  background: var(--color-background);
+  border-right: 1px solid var(--color-border);
+  height: 100%;
+  min-height: 0; */
+  /* position: fixed; */
+  /* top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  transform: none;
+  transition: transform 0.3s;
+} */
+
+
+/* .sidebar-logo {
+  height: 32px;
+  width: auto;
+} */
+
+.sidebar-nav {
+  padding: var(--spacing-md);
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* .sidebar-footer {
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+} */
+
+.sidebar-footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 16px;
+}
+
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+.sidebar.sidebar-open {
+  transform: translateX(0);
+}
+
+/* regola che permette di nascondere il toggle menu del mobile quando si è in desktop */
+.sidebar-toggle-btn {
+    display: none;
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  padding: 0.5em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 2em;
+  height: 2em;
+}
+
+.logout-btn .nav-icon {
+  stroke: #000000;      /* rosso */
+  width: 2em;
+  height: 2em;
+  font-weight: bold;    /* bold */
+}
+
+.logout-btn:hover .logout-icon {
+  stroke: #e53935;      /* rosso su hover */
+}
+
+.logout-icon {
+  stroke: #000;
+  width: 2em;
+  height: 2em;
+  font-weight: bold;
+  transition: stroke 0.4s;
+  display: block;
+}
+
+
+/* Override avatar component styles for sidebar */
+::ng-deep .sidebar-user .avatar-sidebar {
+  align-items: center !important;
+}
+
+::ng-deep .sidebar-user .avatar-sidebar .user-name-sidebar {
+  color: var(--color-foreground) !important;
+  font-size: var(--font-size-sm) !important;
+  font-weight: 500 !important;
+  text-shadow: none !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+  margin-top: var(--spacing-xs) !important;
+}
+
+/* Additional specificity for username color */
+::ng-deep .sidebar-footer .sidebar-user .avatar-sidebar span.user-name-sidebar {
+  color: hsl(0 0% 20%) !important;
+}
+
+/* ================== NAVIGATION =================== */
+/* .nav-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nav-item {
+  margin: 0;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 200;
+  color: var(--color-muted-foreground);
+  text-decoration: none;
+  transition: all 0.15s ease;
+  gap: var(--spacing-sm);
+}
+
+.nav-link:hover {
+  background: var(--color-accent);
+  color: var(--color-BLU);
+}
+
+.nav-link.active {
+  background: var(--color-BLU-PASTELLO);
+  color: var(--color-BLU);
+}
+
+.nav-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+} */
+
+/* ================== MAIN HEADER =================== */
+.main-header {
+  background: var(--color-background);
+  border-bottom: 1px solid var(--color-border);
+  padding: 0 var(--spacing-lg);
+  min-height: var(--header-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ================== RESPONSIVE =================== */
+@media (max-width: 991px) {
+  .sidebar-toggle-btn {
+    display: flex;
+    position: fixed;
+    top: 8px;
+    left: -15px;
+    z-index: 1050;
+    background: #000000;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    width: 31px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    transition: left 0.3s;
+  }
+
+  .sidebar.sidebar-open ~ .sidebar-toggle-btn {
+    /* Sposta il pulsante vicino al bordo della sidebar aperta */
+    left: 238px; /* stessa larghezza della sidebar + 8px (margine sinistro)*/
+  }
+
+  .sidebar.sidebar-open {
+    transform: translateX(0);
+  }
+
+  .sidebar.sidebar-open .menu-item {
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+      opacity 0.3s cubic-bezier(0.4,0,0.2,1),
+      transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .sidebar:not(.sidebar-open) .menu-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: none;
+  }
+
+  .main-content {
+    flex: 1;
+    margin-left: 0;
+  }
+
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 19;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .sidebar-overlay.show {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/* ================== NOTIFICATIONS =================== */
+/* .notification-floating {
+  position: fixed;
+  bottom: 8px;
+  right: 8px;
+  z-index: 9999;
+} */
+
+/* ================== UTILITY =================== */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

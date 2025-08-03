@@ -1,0 +1,12 @@
+/* Contenitore con altezza adattiva per evitare che il footer nasconda la form */
+.custom-container {
+  min-height: calc(100vh - 60px); /* Sottrae l'altezza del footer */
+  overflow-y: auto; /* Abilita lo scroll solo se necessario */
+  padding-bottom: 10px;
+}
+
+/* Assicura che il contenuto sia visibile sopra il footer */
+.form-container {
+  max-width: 600px;
+  margin-bottom: 60px; /* Distanza dal footer */
+}

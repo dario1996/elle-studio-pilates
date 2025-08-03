@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="002-01" author="sistema-formazione">
+        <comment>Create indexes for better performance</comment>
+
+        <!-- Indexes on foreign keys -->
+        <createIndex indexName="idx_corso_piattaforma" tableName="corsi">
+            <column name="piattaforma_id" />
+        </createIndex>
+
+        <createIndex indexName="idx_assegnazione_dipendente" tableName="assegnazioni">
+            <column name="dipendente_id" />
+        </createIndex>
+
+        <createIndex indexName="idx_assegnazione_corso" tableName="assegnazioni">
+            <column name="corso_id" />
+        </createIndex>
+
+        <createIndex indexName="idx_log_dipendente" tableName="log_login">
+            <column name="dipendente_id" />
+        </createIndex>
+
+        <createIndex indexName="idx_log_corso" tableName="log_login">
+            <column name="corso_id" />
+        </createIndex>
+
+        <!-- Indexes for search and filtering -->
+        <createIndex indexName="idx_dipendente_email" tableName="dipendenti">
+            <column name="email" />
+        </createIndex>
+
+        <createIndex indexName="idx_dipendente_commerciale" tableName="dipendenti">
+            <column name="commerciale" />
+        </createIndex>
+
+        <createIndex indexName="idx_dipendente_attivo" tableName="dipendenti">
+            <column name="attivo" />
+        </createIndex>
+
+        <createIndex indexName="idx_corso_stato" tableName="corsi">
+            <column name="stato" />
+        </createIndex>
+
+        <createIndex indexName="idx_corso_data_scadenza" tableName="corsi">
+            <column name="data_scadenza" />
+        </createIndex>
+
+        <createIndex indexName="idx_corso_categoria" tableName="corsi">
+            <column name="categoria" />
+        </createIndex>
+
+        <createIndex indexName="idx_assegnazione_stato" tableName="assegnazioni">
+            <column name="stato" />
+        </createIndex>
+
+        <createIndex indexName="idx_assegnazione_data_assegnazione" tableName="assegnazioni">
+            <column name="data_assegnazione" />
+        </createIndex>
+
+        <createIndex indexName="idx_log_data_import" tableName="log_login">
+            <column name="data_import" />
+        </createIndex>
+
+        <createIndex indexName="idx_log_processed" tableName="log_login">
+            <column name="processed" />
+        </createIndex>
+
+        <createIndex indexName="idx_log_fornitore" tableName="log_login">
+            <column name="fornitore_contenuto" />
+        </createIndex>
+
+        <!-- Composite indexes for common queries -->
+        <createIndex indexName="idx_assegnazione_dipendente_stato" tableName="assegnazioni">
+            <column name="dipendente_id" />
+            <column name="stato" />
+        </createIndex>
+
+        <createIndex indexName="idx_corso_piattaforma_stato" tableName="corsi">
+            <column name="piattaforma_id" />
+            <column name="stato" />
+        </createIndex>
+
+        <createIndex indexName="idx_log_dipendente_processed" tableName="log_login">
+            <column name="dipendente_id" />
+            <column name="processed" />
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog> 

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="008-add-employee-content-ids-to-learning-data" author="data-processor">
+        <comment>Add employee_id and content_id columns to learning_data table for better data linking</comment>
+
+        <addColumn tableName="learning_data">
+            <column name="employee_id" type="VARCHAR(50)">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+
+        <addColumn tableName="learning_data">
+            <column name="content_id" type="VARCHAR(50)">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+
+        <!-- Add indexes for the new columns for better query performance -->
+        <createIndex tableName="learning_data" indexName="idx_learning_data_employee_id">
+            <column name="employee_id" />
+        </createIndex>
+
+        <createIndex tableName="learning_data" indexName="idx_learning_data_content_id">
+            <column name="content_id" />
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog> 

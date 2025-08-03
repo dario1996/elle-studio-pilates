@@ -1,0 +1,130 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <div class="col-md-6 form-field">
+      <label for="nome" class="form-label p-0 m-0">Nome</label>
+      <input id="nome" type="text" class="form-control" formControlName="nome"
+        placeholder="Inserisci il nome"
+        [ngClass]="{ 'is-invalid': submitted && form.controls['nome'].invalid }" />
+      <div *ngIf="submitted && form.controls['nome'].invalid" class="invalid-feedback">
+        Il nome è obbligatorio (min 3, max 99 caratteri).
+      </div>
+    </div>
+    <div class="col-md-6 form-field">
+      <label for="cognome" class="form-label p-0 m-0">Cognome</label>
+      <input id="cognome" type="text" class="form-control" formControlName="cognome"
+        placeholder="Inserisci il cognome"
+        [ngClass]="{ 'is-invalid': submitted && form.controls['cognome'].invalid }" />
+      <div *ngIf="submitted && form.controls['cognome'].invalid" class="invalid-feedback">
+        Il cognome è obbligatorio (min 3, max 99 caratteri).
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-md-6 form-field">
+      <label for="email" class="form-label p-0 m-0">Email</label>
+      <input id="email" type="email" class="form-control" formControlName="email"
+        placeholder="Inserisci l'email"
+        [ngClass]="{ 'is-invalid': submitted && form.controls['email'].invalid }" />
+      <div *ngIf="submitted && form.controls['email'].invalid" class="invalid-feedback">
+        Inserisci un'email valida.
+      </div>
+    </div>
+    <div class="col-md-6 form-field">
+      <label for="codiceDipendente" class="form-label p-0 m-0">Codice Dipendente</label>
+      <input id="codiceDipendente" type="text" class="form-control" formControlName="codiceDipendente"
+        placeholder="Inserisci il codice dipendente"
+        [ngClass]="{ 'is-invalid': submitted && form.controls['codiceDipendente'].invalid }" />
+      <div *ngIf="submitted && form.controls['codiceDipendente'].invalid" class="invalid-feedback">
+        Il codice dipendente è obbligatorio (max 50 caratteri).
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-md-6 form-field">
+      <label for="reparto" class="form-label p-0 m-0">Reparto</label>
+      <input id="reparto" type="text" class="form-control" formControlName="reparto"
+        placeholder="Inserisci il reparto"
+        [ngClass]="{ 'is-invalid': submitted && form.controls['reparto'].invalid }" />
+      <div *ngIf="submitted && form.controls['reparto'].invalid" class="invalid-feedback">
+        Il reparto non può superare 100 caratteri.
+      </div>
+    </div>
+    <div class="col-md-6 form-field">
+      <label for="commerciale" class="form-label p-0 m-0">Area Commerciale</label>
+      <input id="commerciale" type="text" class="form-control" formControlName="commerciale"
+        placeholder="Inserisci l'area commerciale"
+        [ngClass]="{ 'is-invalid': submitted && form.controls['commerciale'].invalid }" />
+      <div *ngIf="submitted && form.controls['commerciale'].invalid" class="invalid-feedback">
+        L'area commerciale non può superare 100 caratteri.
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-md-6 form-field">
+      <label for="azienda" class="form-label p-0 m-0">Azienda</label>
+      <input id="azienda" type="text" class="form-control" formControlName="azienda"
+        placeholder="Inserisci l'azienda"
+        [ngClass]="{ 'is-invalid': submitted && form.controls['azienda'].invalid }" />
+      <div *ngIf="submitted && form.controls['azienda'].invalid" class="invalid-feedback">
+        L'azienda non può superare 100 caratteri.
+      </div>
+    </div>
+    <div class="col-md-6 form-field">
+      <label for="ruolo" class="form-label p-0 m-0">Ruolo</label>
+      <input id="ruolo" type="text" class="form-control" formControlName="ruolo"
+        placeholder="Inserisci il ruolo"
+        [ngClass]="{ 'is-invalid': submitted && form.controls['ruolo'].invalid }" />
+      <div *ngIf="submitted && form.controls['ruolo'].invalid" class="invalid-feedback">
+        Il ruolo non può superare 100 caratteri.
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-md-6 form-field">
+      <label for="isms" class="form-label p-0 m-0">ISMS</label>
+      <select id="isms" class="form-select" formControlName="isms"
+        [ngClass]="{ 'is-invalid': submitted && form.controls['isms'].invalid }">
+        <option value="">Seleziona...</option>
+        <option value="Si">Si</option>
+        <option value="No">No</option>
+      </select>
+      <div *ngIf="submitted && form.controls['isms'].invalid" class="invalid-feedback">
+        Il campo ISMS non può superare 10 caratteri.
+      </div>
+    </div>
+    <div class="col-md-6 form-field">
+      <label for="sede" class="form-label p-0 m-0">Sede</label>
+      <input id="sede" type="text" class="form-control" formControlName="sede"
+        placeholder="Inserisci la sede"
+        [ngClass]="{ 'is-invalid': submitted && form.controls['sede'].invalid }" />
+      <div *ngIf="submitted && form.controls['sede'].invalid" class="invalid-feedback">
+        La sede non può superare 100 caratteri.
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-md-6 form-field">
+      <label for="community" class="form-label p-0 m-0">Community</label>
+      <input id="community" type="text" class="form-control" formControlName="community"
+        placeholder="Inserisci la community"
+        [ngClass]="{ 'is-invalid': submitted && form.controls['community'].invalid }" />
+      <div *ngIf="submitted && form.controls['community'].invalid" class="invalid-feedback">
+        La community non può superare 100 caratteri.
+      </div>
+    </div>
+    <div class="col-md-6 form-field">
+      <label for="responsabile" class="form-label p-0 m-0">Responsabile</label>
+      <input id="responsabile" type="text" class="form-control" formControlName="responsabile"
+        placeholder="Inserisci il responsabile"
+        [ngClass]="{ 'is-invalid': submitted && form.controls['responsabile'].invalid }" />
+      <div *ngIf="submitted && form.controls['responsabile'].invalid" class="invalid-feedback">
+        Il responsabile non può superare 200 caratteri.
+      </div>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="005-create-learning-data-table" author="data-processor">
+        <comment>Create table for storing learning data imported from JSON files</comment>
+
+        <createTable tableName="learning_data">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+
+            <!-- User Information -->
+            <column name="first_name" type="VARCHAR(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="last_name" type="VARCHAR(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <!-- Content Information -->
+            <column name="content_name" type="VARCHAR(500)">
+                <constraints nullable="false" />
+            </column>
+            <column name="content_type" type="VARCHAR(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="time_viewed_seconds" type="BIGINT">
+                <constraints nullable="true" />
+            </column>
+            <column name="percentage_complete" type="DECIMAL(5,2)">
+                <constraints nullable="true" />
+            </column>
+
+            <!-- Completion Information -->
+            <column name="completion_date" type="DATE">
+                <constraints nullable="true" />
+            </column>
+
+            <!-- Skills and Rating -->
+            <column name="skills" type="TEXT">
+                <constraints nullable="true" />
+            </column>
+            <column name="rating" type="DECIMAL(3,2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="total_ratings" type="INT">
+                <constraints nullable="true" />
+            </column>
+
+            <!-- Additional Information -->
+            <column name="difficulty" type="VARCHAR(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="course_url" type="TEXT">
+                <constraints nullable="true" />
+            </column>
+            <column name="provider" type="VARCHAR(100)" defaultValue="LinkedIn Learning">
+                <constraints nullable="true" />
+            </column>
+
+            <!-- Processing Information -->
+            <column name="processed_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+            <column name="source_file" type="VARCHAR(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <!-- Audit fields -->
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+            <column name="updated_at" type="TIMESTAMP"
+                defaultValueComputed="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <!-- Indexes for better performance -->
+        <createIndex tableName="learning_data" indexName="idx_learning_data_email">
+            <column name="email" />
+        </createIndex>
+
+        <createIndex tableName="learning_data" indexName="idx_learning_data_content">
+            <column name="content_name" />
+        </createIndex>
+
+        <createIndex tableName="learning_data" indexName="idx_learning_data_processed_at">
+            <column name="processed_at" />
+        </createIndex>
+
+        <createIndex tableName="learning_data" indexName="idx_learning_data_completion_date">
+            <column name="completion_date" />
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="006-create-processing-log-table" author="data-processor">
+        <comment>Create table for tracking JSON file processing status</comment>
+
+        <createTable tableName="processing_log">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+
+            <column name="file_name" type="VARCHAR(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="file_path" type="VARCHAR(500)">
+                <constraints nullable="false" />
+            </column>
+            <column name="file_size" type="BIGINT">
+                <constraints nullable="true" />
+            </column>
+            <column name="processing_status" type="VARCHAR(50)">
+                <constraints nullable="false" />
+            </column>
+            <column name="records_processed" type="INT" defaultValue="0">
+                <constraints nullable="false" />
+            </column>
+            <column name="records_failed" type="INT" defaultValue="0">
+                <constraints nullable="false" />
+            </column>
+            <column name="error_message" type="TEXT">
+                <constraints nullable="true" />
+            </column>
+            <column name="started_at" type="TIMESTAMP">
+                <constraints nullable="true" />
+            </column>
+            <column name="completed_at" type="TIMESTAMP">
+                <constraints nullable="true" />
+            </column>
+
+            <!-- Audit fields -->
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+            <column name="updated_at" type="TIMESTAMP"
+                defaultValueComputed="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <!-- Indexes -->
+        <createIndex tableName="processing_log" indexName="idx_processing_log_file_name">
+            <column name="file_name" />
+        </createIndex>
+
+        <createIndex tableName="processing_log" indexName="idx_processing_log_status">
+            <column name="processing_status" />
+        </createIndex>
+
+        <createIndex tableName="processing_log" indexName="idx_processing_log_created_at">
+            <column name="created_at" />
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog> 

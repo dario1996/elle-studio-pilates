@@ -1,0 +1,32 @@
+<div class="pagination-footer-container">
+  <div class="table-footer">
+    <nav class="table-pagination">
+      <div class="table-pagination-inner">
+        <ul class="pagination">
+          <!-- Bottone precedente -->
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <button class="page-link" (click)="goTo(currentPage - 1)">«</button>
+          </li>
+          
+          <!-- Numeri di pagina -->
+          <li *ngFor="let p of pages" class="page-item" [class.active]="p === currentPage">
+            <button class="page-link" (click)="goTo(p)">{{ p }}</button>
+          </li>
+          
+          <!-- Bottone successivo -->
+          <li class="page-item" [class.disabled]="currentPage === totalPages">
+            <button class="page-link" (click)="goTo(currentPage + 1)">»</button>
+          </li>
+        </ul>
+        
+        <!-- Info paginazione -->
+        <span class="pagination-info">
+          Pagina {{ currentPage }} di {{ totalPages }}
+          <span *ngIf="displayedItems && totalItems">
+            (Visualizzati {{ displayedItems }} {{ entityName }} su {{ totalItems }} disponibili)
+          </span>
+        </span>
+      </div>
+    </nav>
+  </div>
+</div>

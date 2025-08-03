@@ -1,0 +1,255 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="row mt-3 mb-3"> <!-- Aggiunto g-4 per più spazio tra le colonne -->
+    <!-- Sezione Dipendente - Con limitazioni -->
+    <div class="col-md-6 form-field">      
+      <div class="form-field">
+        <label for="searchDipendente" class="form-label">Cerca Dipendente</label>
+        
+        <div class="search-container">
+          <!-- Input Dipendenti -->
+          <input 
+            type="text" 
+            id="searchDipendente"
+            class="form-control searchable-dropdown-input"
+            formControlName="searchDipendente"
+            placeholder="Digita nome, cognome o email"
+            [disabled]="!isPossibileAggiungereDipendenti"
+            (input)="onSearchDipendente($event)"
+            (focus)="onDipendenteFocus()"
+            (blur)="onDipendenteBlur()">
+          
+          <!-- Dropdown dipendenti -->
+          <div class="search-dropdown position-absolute w-100" 
+               *ngIf="shouldShowDipendentiDropdown">
+            
+            <!-- SPOSTA QUI: Messaggio di limitazione come primo elemento -->
+            <div *ngIf="showDipendentiBloccoMessage" 
+                 class="search-dropdown-header">
+              <div class="search-dropdown-item p-3 text-warning border-bottom">
+                <i class="fas fa-lock me-2"></i>
+                <strong>Hai selezionato {{ corsiSelezionati.length }} corsi. Puoi selezionare solo 1 dipendente.</strong>
+                <br><small class="text-muted">Clicca su un dipendente per sostituire la selezione.</small>
+              </div>
+            </div>
+            
+            <!-- Lista dipendenti - ora sotto il messaggio -->
+            <div class="search-dropdown-item p-2 cursor-pointer" 
+                 *ngFor="let dipendente of dipendentiFiltrati"
+                 [ngClass]="{'opacity-75': showDipendentiBloccoMessage}"
+                 (click)="aggiungiDipendente(dipendente)">
+              <div class="fw-bold">{{ dipendente.nome }} {{ dipendente.cognome }}</div>
+              <small class="text-muted">{{ dipendente.email }} • {{ dipendente.ruolo }}</small>
+              <small *ngIf="showDipendentiBloccoMessage" class="text-primary d-block">
+                <i class="fas fa-refresh me-1"></i>Sostituirà la selezione corrente
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Lista dipendenti selezionati - Con contenitore scrollabile -->
+      <div class="dipendenti-container" 
+           [attr.data-count]="dipendentiSelezionati.length"
+           *ngIf="dipendentiSelezionati.length > 0">
+        <div class="card-container">
+          <div *ngFor="let dipendente of dipendentiSelezionati; let i = index" 
+               class="selected-item-card">
+            <div class="card">
+              <!-- Header accordion con rimozione -->
+              <div class="card-header p-0 d-flex align-items-center">
+                <button 
+                  class="btn btn-link w-100 text-start text-decoration-none d-flex justify-content-between align-items-center"
+                  type="button" 
+                  data-bs-toggle="collapse" 
+                  [attr.data-bs-target]="'#collapse-dipendente-' + dipendente.id"
+                  [attr.aria-expanded]="false">
+                  
+                  <div class="d-flex align-items-center">
+                    <i class="fas fa-user me-3"></i>
+                    <strong>{{ dipendente.nome }} {{ dipendente.cognome }}</strong>
+                  </div>
+                  <i class="fas fa-chevron-down transition-transform"></i>
+                </button>
+                
+                <!-- Bottone rimozione -->
+                <button 
+                  type="button" 
+                  class="btn btn-sm me-2"
+                  (click)="rimuoviDipendente(i)"
+                  title="Rimuovi dipendente">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+              
+              <!-- Contenuto accordion -->
+              <div class="collapse" [id]="'collapse-dipendente-' + dipendente.id">
+                <div class="card-body">
+                  <div class="row g-2">
+                    <div class="col-12 text-muted mt-1">
+                      <i class="fas fa-envelope"></i>
+                      {{ dipendente.email }}
+                    </div>
+                    <div class="col-12 text-muted mt-0">
+                      <i class="fas fa-briefcase"></i>
+                      {{ dipendente.ruolo }}
+                    </div>
+                    <div class="col-12 text-muted mt-0" *ngIf="dipendente.reparto">
+                      <i class="fas fa-building"></i>
+                      {{ dipendente.reparto }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Sezione Corso - Aggiornata con multiselezione -->
+    <div class="col-md-6 form-field">      
+      <div class="form-field">
+        <label for="searchCorso" class="form-label">Cerca Corso</label>
+        
+        <!-- Campo ricerca corso -->
+        <div class="search-container">
+          <!-- Input Corsi -->
+          <input 
+            id="searchCorso" 
+            type="text" 
+            class="form-control searchable-dropdown-input" 
+            formControlName="searchCorso"
+            placeholder="Digita titolo, macro-argomento o modalità"
+            [disabled]="!isPossibileAggiungereCorsi"
+            (input)="onSearchCorso($event)"
+            (focus)="onCorsoFocus()"
+            (blur)="onCorsoBlur()"
+            [ngClass]="{ 'is-invalid': form.get('corsiIds')?.invalid && form.get('corsiIds')?.touched }" />
+          
+          <!-- Dropdown corsi -->
+          <div *ngIf="shouldShowCorsiDropdown" 
+               class="search-dropdown position-absolute w-100">
+            
+            <!-- SPOSTA QUI: Messaggio di limitazione come primo elemento -->
+            <div *ngIf="showCorsiBloccoMessage" 
+                 class="search-dropdown-header">
+              <div class="search-dropdown-item p-3 text-warning border-bottom">
+                <i class="fas fa-lock me-2"></i>
+                <strong>Hai selezionato {{ dipendentiSelezionati.length }} dipendenti. Puoi selezionare solo 1 corso.</strong>
+                <br><small class="text-muted">Clicca su un corso per sostituire la selezione.</small>
+              </div>
+            </div>
+            
+            <!-- Lista corsi - ora sotto il messaggio -->
+            <div *ngFor="let corso of corsiFiltrati.slice(0, 10)" 
+                 class="search-dropdown-item p-3 cursor-pointer"
+                 [ngClass]="{'opacity-75': showCorsiBloccoMessage}"
+                 (mousedown)="aggiungiCorso(corso)">
+              <div class="d-flex justify-content-between align-items-start">
+                <div class="flex-grow-1">
+                  <div class="fw-bold text-success">
+                    {{ corso.nome }}
+                  </div>
+                  <div class="text-muted small" *ngIf="corso.argomento">
+                    <i class="fas fa-tag me-1"></i>{{ corso.argomento }}
+                  </div>
+                  <div class="text-secondary small" *ngIf="corso.piattaforma?.nome">
+                    <i class="fas fa-laptop me-1"></i>{{ corso.piattaforma.nome }}
+                  </div>
+                  <small *ngIf="showCorsiBloccoMessage" class="text-primary d-block mt-1">
+                    <i class="fas fa-refresh me-1"></i>Sostituirà la selezione corrente
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MODIFICA: Messaggio di limitazione - solo quando ci sono conflitti reali -->
+        <!-- <div *ngIf="messaggioLimitazione" class="alert alert-info py-2 px-3 mb-2">
+          <i class="fas fa-info-circle me-2"></i>
+          {{ messaggioLimitazione }}
+        </div> -->
+        
+        <div *ngIf="form.get('corsiIds')?.invalid && form.get('corsiIds')?.touched" 
+             class="invalid-feedback">
+          Seleziona almeno un corso.
+        </div>
+      </div>
+      
+      <!-- Lista corsi selezionati - Con contenitore scrollabile -->
+      <div class="corsi-container" 
+           [attr.data-count]="corsiSelezionati.length"
+           *ngIf="corsiSelezionati.length > 0">
+        <div class="card-container">
+          <div *ngFor="let corso of corsiSelezionati; let i = index" 
+               class="selected-item-card">
+            <div class="card">
+              <!-- Header accordion con rimozione -->
+              <div class="card-header p-0 d-flex align-items-center">
+                <button 
+                  class="btn btn-link w-100 text-start text-decoration-none d-flex justify-content-between align-items-center"
+                  type="button" 
+                  data-bs-toggle="collapse" 
+                  [attr.data-bs-target]="'#collapse-corso-' + corso.id"
+                  [attr.aria-expanded]="false">
+                  
+                  <div class="d-flex align-items-center">
+                    <i class="fas fa-graduation-cap me-3"></i>
+                    <strong>{{ corso.nome }}</strong>
+                  </div>
+                  <i class="fas fa-chevron-down transition-transform"></i>
+                </button>
+                
+                <!-- Bottone rimozione -->
+                <button 
+                  type="button" 
+                  class="btn btn-sm me-2"
+                  (click)="rimuoviCorso(i)"
+                  title="Rimuovi corso">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+              
+              <!-- Contenuto accordion -->
+              <div class="collapse" [id]="'collapse-corso-' + corso.id">
+                <div class="card-body">
+                  <div class="row g-2">
+                    <div class="col-12 text-muted mt-1" *ngIf="corso.argomento">
+                      <i class="fas fa-tag"></i>
+                      {{ corso.argomento }}
+                    </div>
+                    <div class="col-12 text-muted mt-0" *ngIf="corso.piattaforma?.nome">
+                      <i class="fas fa-laptop"></i>
+                      {{ corso.piattaforma.nome }}
+                    </div>
+                    <div class="col-12 text-muted mt-0" *ngIf="corso.durata">
+                      <i class="fas fa-clock"></i>
+                      {{ corso.durata }} ore
+                    </div>
+                    <div class="col-12 text-muted mt-0" *ngIf="corso.categoria">
+                      <i class="fas fa-info-circle"></i>
+                      {{ corso.categoria }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Data termine prevista e opzioni -->
+      <div class="row mb-0 mt-3">
+        <div class="col-md-6 form-field mb-0">      
+          <label for="dataTerminePrevista" class="form-label mb-0">Data termine prevista</label>
+          <input 
+            class="form-control" 
+            type="date" 
+            id="dataTerminePrevista"
+            formControlName="dataTerminePrevista">
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

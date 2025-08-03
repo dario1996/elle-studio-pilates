@@ -1,0 +1,12 @@
+<button 
+  type="button" 
+  class="filter-button"
+  [class.active]="hasActiveFilters"
+  (click)="onButtonClick()"
+  title="Apri filtri">
+  <i class="fas fa-filter"></i>
+  <span class="filter-text">Filtri</span>
+  <span class="filter-badge" *ngIf="activeFiltersCount > 0">
+    {{ activeFiltersCount }}
+  </span>
+</button>

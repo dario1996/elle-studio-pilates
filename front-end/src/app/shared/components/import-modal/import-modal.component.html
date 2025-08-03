@@ -1,0 +1,206 @@
+<!-- Standardized Import Modal Component -->
+<div class="import-modal-container">
+  
+  <!-- File Upload Section -->
+  <div class="upload-section" *ngIf="!showPreview && !isProcessing">
+    <div class="upload-area" (click)="fileInput.click()">
+      <div class="upload-content">
+        <div class="upload-icon">
+          <i class="fas fa-cloud-upload-alt"></i>
+        </div>
+        <h6 class="upload-title">Seleziona un file da importare</h6>
+        <p class="upload-description">Formati supportati: {{ getFormattedFileTypes() }}</p>
+        <!-- <button type="button" class="btn btn-primary btn-sm">
+          <i class="fas fa-folder-open me-2"></i>
+          Sfoglia file
+        </button> -->
+      </div>
+    </div>
+    
+    <input #fileInput
+           type="file"
+           class="d-none"
+           [accept]="supportedFormats.join(',')"
+           (change)="onFileSelected($event)">
+  </div>
+
+  <!-- Processing Section -->
+  <div class="processing-section" *ngIf="isProcessing">
+    <div class="processing-content">
+      <div class="processing-spinner">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Elaborazione...</span>
+        </div>
+      </div>
+      <h6 class="processing-title">Elaborazione in corso...</h6>
+      <p class="processing-description">Stiamo analizzando il file, attendere prego.</p>
+    </div>
+  </div>
+
+  <!-- Validation Errors -->
+  <div class="validation-errors" *ngIf="hasValidationErrors()">
+    <div class="alert alert-danger">
+      <div class="alert-icon">
+        <i class="fas fa-exclamation-circle"></i>
+      </div>
+      <div class="alert-content">
+        <strong>Errori di validazione:</strong>
+        <ul class="error-list">
+          <li *ngFor="let error of validationErrors">{{ error }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Preview Section -->
+  <div class="preview-section" *ngIf="showPreview && !isProcessing">
+    
+    <!-- Preview Header -->
+    <div class="preview-header">
+      <div class="preview-title">
+        <h6>Anteprima Dati</h6>
+        <span class="preview-count">{{ previewData.length }} righe</span>
+      </div>
+      <button class="btn btn-outline-secondary btn-sm" (click)="onResetImport()">
+        <i class="fas fa-redo me-2"></i>
+        Carica altro file
+      </button>
+    </div>
+
+    <!-- Summary Statistics -->
+    <div class="stats-grid">
+      <div class="stat-card stat-total">
+        <div class="stat-icon">
+          <i class="fas fa-file-alt"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-value">{{ getStats().total }}</div>
+          <div class="stat-label">Totale</div>
+        </div>
+      </div>
+      
+      <div class="stat-card stat-valid">
+        <div class="stat-icon">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-value">{{ getStats().valid }}</div>
+          <div class="stat-label">Valide</div>
+        </div>
+      </div>
+      
+      <div class="stat-card stat-duplicate">
+        <div class="stat-icon">
+          <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-value">{{ getStats().duplicates }}</div>
+          <div class="stat-label">Duplicati</div>
+        </div>
+      </div>
+      
+      <div class="stat-card stat-error">
+        <div class="stat-icon">
+          <i class="fas fa-times-circle"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-value">{{ getStats().errors }}</div>
+          <div class="stat-label">Errori</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Import Options -->
+    <div class="import-options" *ngIf="importOptions.length > 0">
+      <div class="options-header" (click)="toggleOptions()">
+        <span class="options-title">
+          <i class="fas fa-cog me-2"></i>
+          Opzioni di importazione
+        </span>
+        <button type="button" class="btn btn-link btn-sm p-0">
+          <i class="fas" [class.fa-chevron-down]="!optionsExpanded" [class.fa-chevron-up]="optionsExpanded"></i>
+        </button>
+      </div>
+      
+      <div class="options-content" [class.expanded]="optionsExpanded">
+        <div class="options-grid">
+          <div class="option-item" *ngFor="let option of importOptions">
+            <div class="form-check">
+              <input class="form-check-input" 
+                     type="checkbox" 
+                     [id]="option.key"
+                     [(ngModel)]="option.value"
+                     (change)="onOptionChange()">
+              <label class="form-check-label" [for]="option.key">
+                {{ option.label }}
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Preview Table -->
+    <div class="table-section">
+      <div class="table-responsive">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th class="row-number-header">#</th>
+              <th *ngFor="let column of tableColumns">{{ column.label }}</th>
+              <th class="status-header">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of previewData; let i = index"
+                [class]="getRowClass(item)">
+              <td class="row-number">{{ i + 1 }}</td>
+              <td *ngFor="let column of tableColumns">
+                {{ renderCellValue(item, column) }}
+              </td>
+              <td class="status-cell">
+                <span class="status-icon">
+                  <i [class]="getRowIcon(item)"></i>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Error Details -->
+    <div class="error-details" *ngIf="getErrorDetails().length > 0">
+      <div class="alert alert-warning">
+        <div class="alert-icon">
+          <i class="fas fa-info-circle"></i>
+        </div>
+        <div class="alert-content">
+          <strong>Dettagli errori:</strong>
+          <div class="error-items">
+            <div *ngFor="let errorItem of getErrorDetails()" class="error-item">
+              <strong>Riga {{ errorItem.row }}:</strong>
+              <ul class="error-list">
+                <li *ngFor="let error of errorItem.data.errors">{{ error }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <button class="btn btn-secondary" (click)="onImportCancel()">
+        <i class="fas fa-times me-2"></i>
+        Annulla
+      </button>
+      <button class="btn btn-primary" 
+              (click)="onImportConfirm()"
+              [disabled]="getStats().valid === 0 || isProcessing">
+        <i class="fas fa-check me-2"></i>
+        Importa {{ getStats().valid }} elementi
+      </button>
+    </div>
+  </div>
+</div>

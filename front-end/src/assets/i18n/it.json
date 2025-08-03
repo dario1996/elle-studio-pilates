@@ -1,0 +1,71 @@
+{
+  "common": {
+    "goBack": "Torna Indietro",
+    "externalTitle": "Formazione | {{ title }}",
+    "pagination": {
+      "previous": "Precedente",
+      "next": "Successivo"
+    }
+  },
+  "core": {
+    "error": {
+      "title": "Oops! Pagina non trovata",
+      "description": "Sembra che tu abbia preso una via sbagliata. Non preoccuparti... succede anche ai migliori di noi. Ecco un piccolo consiglio che potrebbe aiutarti a rimetterti in carreggiata.",
+      "please": "Prego",
+      "clickHere": "clicca qui"
+    },
+    "forbidden": {
+      "title": "Accesso Negato",
+      "noPermits": "Non hai i permessi necessari per accedere a questa pagina.",
+      "forgottenLogin": "Se non hai effettuato l'accesso, per favore",
+      "loginHere": "Accedi qui"
+    }
+  },
+  "store": {
+    "employees": {
+      "title": "Dipendenti",
+      "list": {
+        "employeeCode": "Codice",
+        "denmination": "Denominazione",
+        "mobile": "Cellulare",
+        "email": "Email",
+        "recruitmentDate": "Data Assunzione",
+        "birthDate": "Data di nascita",
+        "color": "Colore",
+        "actions": "Azioni"
+      },
+      "addEmployee": "Aggiungi Dipendente",
+      "updEmployee": "Modifica Dipendente",
+      "delEmployee": "Elimina Dipendente",
+      "loadingInProgress": "Caricamento dipendenti in corso..."
+    },
+    "services": {
+      "title": "Servizi",
+      "list": {
+        "serviceCode": "Codice",
+        "serviceName": "Servizio",
+        "servicePrice": "Prezzo",
+        "actions": "Azioni"
+      },
+      "addService": "Aggiungi Servizio",
+      "updService": "Modifica Servizio",
+      "delService": "Elimina Servizio",
+      "loadingInProgress": "Caricamento servizi in corso..."
+    },
+    "customers": {
+      "title": "Clienti",
+      "list": {
+        "customerCode": "Codice",
+        "denmination": "Denominazione",
+        "mobile": "Cellulare",
+        "email": "Email",
+        "birthDate": "Data di nascita",
+        "actions": "Azioni"
+      },
+      "addCustomer": "Aggiungi Cliente",
+      "updCustomer": "Modifica Cliente",
+      "delCustomer": "Elimina Cliente",
+      "loadingInProgress": "Caricamento clienti in corso..."
+    }
+  }
+}

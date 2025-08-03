@@ -1,0 +1,140 @@
+/* ================== CONTAINER FOOTER PAGINAZIONE =================== */
+.pagination-footer-container {
+  /* height: 100%; */
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* padding-bottom: 13px; */
+  position: relative;
+  z-index: 1;
+  border-radius: 4px;
+  /* padding: 4px 13px 5px 13px; */
+  margin-top: 4px; /* MODIFICATO: ridotto margin-top da 8px a 4px */
+}
+
+/* ================== FOOTER DENTRO CONTAINER =================== */
+.table-pagination {
+  margin: 0;
+}
+
+.table-pagination-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Pagination controls */
+.pagination {
+  display: flex;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  align-items: center;
+}
+
+.page-item {
+  margin: 0;
+}
+
+.page-link {
+  min-width: 36px;
+  height: 36px;
+  padding: 0;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  
+  /* RIMUOVO tutti i contorni */
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  user-select: none;
+  background: transparent;
+}
+
+.page-link:hover:not(:disabled):not(.active) {
+  background: #f3f4f6;
+  color: #2d2d2d;
+  
+  /* RIMUOVO contorni anche per hover */
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+/* Stato attivo */
+.page-item.active .page-link {
+  color: var(--color-BLU) !important;
+  border-radius: 50px !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.page-item.disabled .page-link {
+  border: none;
+  color: #c8c8c8;
+  cursor: not-allowed;
+  pointer-events: none;
+  background: none;
+}
+
+.pagination-info {
+  font-size: 14px;
+  color: #374151;
+  font-weight: 500;
+}
+
+.pagination-info span {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 400;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .table-pagination-inner {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .pagination-footer-container {
+    left: 0;
+    right: 0;
+    margin-left: 20px;
+    margin-right: 20px;
+    bottom: 10px;
+    padding: 10px 16px; /* Footer ancora più compatto su mobile */
+  }
+  
+  .pagination-info {
+    font-size: 13px;
+  }
+  
+  .pagination-info span {
+    display: block;
+    margin-top: 4px;
+  }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 480px) {
+  .pagination-footer-container {
+    margin-left: 10px;
+    margin-right: 10px;
+    bottom: 8px;
+    padding: 8px 12px;
+  }
+  
+  .main-body {
+    padding-bottom: 20px;
+  }
+}

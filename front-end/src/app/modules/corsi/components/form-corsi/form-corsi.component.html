@@ -1,0 +1,47 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="row mt-3">
+    <div class="col-md-6 form-field">
+      <label for="nome" class="form-label">Nome</label>
+      <input id="nome" type="text" class="form-control" formControlName="nome"
+        placeholder="Inserisci il nome del corso"
+        [ngClass]="{ 'is-invalid': submitted && form.controls['nome'].invalid }" />
+      <div *ngIf="submitted && form.controls['nome'].invalid" class="invalid-feedback">
+        Il nome è obbligatorio (min 3, max 99 caratteri).
+      </div>
+    </div>
+    <div class="col-md-6 form-field">
+      <label for="argomento" class="form-label">Macro argomento</label>
+      <input id="argomento" type="text" class="form-control" formControlName="argomento"
+        placeholder="Inserisci il macro argomento"
+        [ngClass]="{ 'is-invalid': submitted && form.controls['argomento'].invalid }" />
+      <div *ngIf="submitted && form.controls['argomento'].invalid" class="invalid-feedback">
+        Il macro argomento è obbligatorio (min 3, max 499 caratteri).
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-5">
+    <div class="col-md-6 form-field">
+      <label for="durata" class="form-label">Durata</label>
+      <input id="durata" type="number" class="form-control" formControlName="durata"
+        placeholder="Ore"
+        [ngClass]="{ 'is-invalid': submitted && form.controls['durata'].invalid }" />
+      <div *ngIf="submitted && form.controls['durata'].invalid" class="invalid-feedback">
+        La durata è obbligatoria.
+      </div>
+    </div>
+    <div class="col-md-6 form-field">
+      <label for="piattaforma" class="form-label">Piattaforma</label>
+      <select id="piattaforma" class="form-select" formControlName="piattaforma"
+        [ngClass]="{ 'is-invalid': submitted && form.controls['piattaforma'].invalid }">
+        <option value="">Seleziona piattaforma</option>
+        <option *ngFor="let piattaforma of piattaforme; trackBy: trackById" [value]="piattaforma.id">
+          {{ piattaforma.nome }}
+        </option>
+      </select>
+      <div *ngIf="submitted && form.controls['piattaforma'].invalid" class="invalid-feedback">
+        Seleziona una piattaforma.
+      </div>
+    </div>
+  </div>
+</form>

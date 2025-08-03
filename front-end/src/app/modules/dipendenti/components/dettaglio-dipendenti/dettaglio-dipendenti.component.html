@@ -1,0 +1,100 @@
+<!-- Modal Content -->
+<div class="modal-content">
+  
+  <!-- Modal Header -->
+  <div class="modal-header">
+    <h5 class="modal-title">
+      <i class="fas fa-user me-2"></i>
+      {{ dati?.nominativo || (dati?.nome + ' ' + dati?.cognome) }}
+    </h5>
+  </div>
+
+  <!-- Modal Body -->
+  <div class="modal-body">
+    <div class="detail-content">
+      <div class="detail-section">
+        <div class="detail-field">
+          <div class="detail-field-label">
+            <i class="fa fa-envelope"></i>
+            <span>Email</span>
+          </div>
+          <div class="detail-field-value">{{ dati?.email || '–' }}</div>
+        </div>
+        
+        <div class="detail-field">
+          <div class="detail-field-label">
+            <i class="fa fa-building"></i>
+            <span>Azienda</span>
+          </div>
+          <div class="detail-field-value">{{ dati?.azienda || '–' }}</div>
+        </div>
+        
+        <div class="detail-field">
+          <div class="detail-field-label">
+            <i class="fa fa-map-marker-alt"></i>
+            <span>Sede</span>
+          </div>
+          <div class="detail-field-value">{{ dati?.sede || '–' }}</div>
+        </div>
+        
+        <div class="detail-field">
+          <div class="detail-field-label">
+            <i class="fa fa-briefcase"></i>
+            <span>Reparto</span>
+          </div>
+          <div class="detail-field-value">{{ dati?.reparto || '–' }}</div>
+        </div>
+        
+        <div class="detail-field">
+          <div class="detail-field-label">
+            <i class="fa fa-id-badge"></i>
+            <span>Ruolo</span>
+          </div>
+          <div class="detail-field-value">{{ dati?.ruolo || '–' }}</div>
+        </div>
+        
+        <div class="detail-field">
+          <div class="detail-field-label">
+            <i class="fa fa-users"></i>
+            <span>Community</span>
+          </div>
+          <div class="detail-field-value">{{ dati?.community || '–' }}</div>
+        </div>
+        
+        <div class="detail-field">
+          <div class="detail-field-label">
+            <i class="fa fa-shield-alt"></i>
+            <span>ISMS</span>
+          </div>
+          <div class="detail-field-value">
+            <app-status-badge 
+              [value]="dati?.isms || '–'"
+              [statusType]="'general'">
+            </app-status-badge>
+          </div>
+        </div>
+        
+        <div class="detail-field">
+          <div class="detail-field-label">
+            <i class="fa fa-user-tie"></i>
+            <span>Responsabile</span>
+          </div>
+          <div class="detail-field-value">{{ dati?.responsabile || '–' }}</div>
+        </div>
+        
+        <div class="detail-field">
+          <div class="detail-field-label">
+            <i class="fa fa-toggle-on"></i>
+            <span>Stato</span>
+          </div>
+          <div class="detail-field-value">
+            <app-status-badge 
+              [value]="dati?.attivo === true ? 'Attivo' : (dati?.attivo === false ? 'Non attivo' : dati?.attivo) || '–'"
+              [statusType]="'dipendente'">
+            </app-status-badge>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

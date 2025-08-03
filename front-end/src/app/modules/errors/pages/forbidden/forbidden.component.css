@@ -1,0 +1,45 @@
+.forbidden-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Sposta il contenuto più in alto */
+  height: 100vh;
+  background-color: black;
+  color: white;
+  text-align: center;
+  padding-top: 10vh; /* Aggiunge spazio sopra */
+}
+
+.content {
+  max-width: 500px;
+  padding: 20px;
+}
+
+i {
+  font-size: 80px;
+  color: #ffcc00;
+}
+
+h1 {
+  font-size: 36px;
+  margin-top: 10px;
+}
+
+p {
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+.btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #ffcc00;
+  color: black;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.btn:hover {
+  background-color: #e6b800;
+}

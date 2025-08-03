@@ -1,0 +1,65 @@
+# WSL MySQL Development Configuration
+# This file should be added to .gitignore for personal use only
+# mvn spring-boot:run "-Dspring.profiles.active=dev"
+spring:
+  application:
+    name: gestionale-formazione
+
+  # WSL MySQL Database Configuration
+  datasource:
+    url: jdbc:mysql://172.23.207.87:3306/gest-form?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+    username: root
+    password: hello!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none # Let Liquibase handle the schema
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+
+  sql:
+    init:
+      mode: always
+      platform: mysql
+
+  # Liquibase Configuration for MySQL
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    default-schema: gest-form
+
+# Security Configuration (same as main config)
+sicurezza:
+  uri: /auth
+  refresh: /refresh
+  header: Authorization
+  prefix: Bearer
+  expiration: 3600 # 1 hour instead of 10 minutes
+  refresh-expiration: 86400 # 24 hours for refresh token
+  secret: wNoe5AlDAtrrRJtbPQZ6UtdgvYwF2DKYSlNEVcCD/IzToqX9bXpmRzflYBGDViZDJgV3HTPfDGY5ix1U9hJtfA==
+
+logging:
+  level:
+    liquibase: DEBUG
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+    com.example.demo: DEBUG
+    web: DEBUG
+
+# Development specific settings
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,liquibase

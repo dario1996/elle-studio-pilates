@@ -1,0 +1,42 @@
+<div class="filtri-generici-container">
+  <h6 class="filtri-titolo">Filtri ricerca</h6>
+  <form class="filtri-generici-form">
+    <div class="row g-2 align-items-end">
+      <ng-container *ngFor="let filtro of filtri">
+        <div [ngClass]="filtro.colClass || 'col-12 col-sm-6 col-md-4 col-lg-3 mb-2'">
+          <label class="form-label w-100">{{ filtro.label }}</label>
+          <ng-container [ngSwitch]="filtro.type">
+            <input *ngSwitchCase="'text'" type="text" class="form-control form-control-sm"
+              [placeholder]="filtro.placeholder"
+              [(ngModel)]="valori[filtro.key]"
+              (ngModelChange)="onChange(filtro.key, $event)"
+              name="{{filtro.key}}_text" />
+
+            <input *ngSwitchCase="'number'" type="number" class="form-control form-control-sm"
+              [placeholder]="filtro.placeholder"
+              [(ngModel)]="valori[filtro.key]"
+              (ngModelChange)="onChange(filtro.key, $event)"
+              name="{{filtro.key}}_number" />
+
+            <input *ngSwitchCase="'date'" type="date" class="form-control form-control-sm"
+              [(ngModel)]="valori[filtro.key]"
+              (ngModelChange)="onChange(filtro.key, $event)"
+              name="{{filtro.key}}_date" />
+
+            <select *ngSwitchCase="'select'" class="form-select form-select-sm"
+              [(ngModel)]="valori[filtro.key]"
+              (ngModelChange)="onChange(filtro.key, $event)"
+              name="{{filtro.key}}_select">
+              <option *ngFor="let opt of filtro.options" [value]="opt.value">{{ opt.label }}</option>
+            </select>
+
+            <input *ngSwitchCase="'checkbox'" type="checkbox"
+              [(ngModel)]="valori[filtro.key]"
+              (ngModelChange)="onChange(filtro.key, $event)"
+              name="{{filtro.key}}_checkbox" />
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </form>
+</div>

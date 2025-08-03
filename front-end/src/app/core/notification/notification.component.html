@@ -1,0 +1,75 @@
+  <!-- <button class="bell-button" (click)="togglePanel()">
+    <i class="material-icons md-notifications_active"></i>
+    <div class="bell__count" [class.has-new]="hasNewNotifications">
+      {{ notCount }}
+    </div>
+  </button> -->
+
+<button
+  class="bell-button"
+  [ngClass]="notCount > 0 ? 'has-notifications' : 'no-notifications'"
+  (click)="togglePanel()">
+  <i class="material-icons md-notifications_active"></i>
+  <div class="bell__count" [class.has-new]="hasNewNotifications">
+    {{ notCount }}
+  </div>
+</button>
+    <!-- Overlay for mobile -->
+<div
+  class="notification-overlay"
+  [class.show]="isPanelOpen"
+  (click)="isPanelOpen = false"
+></div>
+
+<div class="notification-panel" [class.show]="isPanelOpen">
+  <div class="notification-header">
+    <h6 class="m-0">Notifiche</h6>
+    <button class="btn btn-link btn-sm p-0 text-muted" (click)="togglePanel()">
+      <i class="material-icons md-close"></i>
+    </button>
+  </div>
+
+  <div class="notification-content">
+    <!-- Notifiche Nuove -->
+    <div class="notification-section">
+      <span class="section-title">Nuove</span>
+      @if (newNotifications.length === 0) {
+        <div class="alert alert-warning mt-2 mb-0 py-2 text-center" role="alert">
+          <i class="fas fa-exclamation-triangle"></i>
+          <span class="ms-2">Nessuna nuova notifica.</span>
+        </div>
+      } @else {
+        @for (notification of newNotifications; track notification.id) {
+          <!-- Template per le nuove notifiche -->
+          <div class="notification-item">
+            {{ notification.message }}
+          </div>
+        }
+      }
+    </div>
+
+    <!-- Notifiche Da Leggere -->
+    <div class="notification-section">
+      <span class="section-title">Da leggere</span>
+      @if (unreadNotifications.length === 0) {
+        <div class="alert alert-info mt-2 mb-0 py-2 text-center" role="alert">
+          <i class="fas fa-info-circle"></i>
+          <span class="ms-2">Nessuna notifica da leggere.</span>
+        </div>
+      } @else {
+        @for (notification of unreadNotifications; track notification.id) {
+          <!-- Template per le notifiche da leggere -->
+          <div class="notification-item">
+            {{ notification.message }}
+          </div>
+        }
+      }
+    </div>
+  </div>
+
+  <div class="notification-footer">
+    <button class="btn btn-sm btn-outline-secondary" (click)="togglePanel()">
+      Chiudi
+    </button>
+  </div>
+</div>

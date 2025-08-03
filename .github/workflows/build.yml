@@ -1,0 +1,45 @@
+# .github/workflows/build.yml
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: "temurin"
+          cache: "maven"
+
+      # Set up Node.js (frontend-maven-plugin can install it,
+      # but pre-installing might be faster/more reliable in CI)
+      # - name: Set up Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: '18.18.0' # Match version in pom.xml
+      #     cache: 'npm'
+      #     cache-dependency-path: 'front-end/package-lock.json' # Adjust if using yarn
+
+      - name: Build with Maven
+        # Run mvn package from the root, specifying the pom file location
+        # -B enables batch mode (non-interactive)
+        run: mvn -B package --file back-end/pom.xml
+
+      # Upload the build artifact (JAR file)
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: spring-boot-jar # Name of the artifact
+          path: back-end/target/*.jar # Path to the file(s) to upload
+          if-no-files-found: error # Fail if JAR not found

@@ -1,0 +1,56 @@
+<div class="page-container">
+    <app-page-title
+      [title]="'Dipendenti'"
+      [subtitle]="'Gestione dei dipendenti disponibili'"
+      [buttons]="buttons"
+      [activeFiltersCount]="getActiveFiltersCount()"
+      (buttonActionClick)="handleButtonClick($event)"
+      [searchFields]="searchFields"
+      (searchChange)="filtraTabella($event)"
+      >
+    </app-page-title>
+  
+  <div class="page-content" #pageContentInner>
+    <!-- Content Area -->
+    <div class="content-area">
+      <!-- Filters Section -->
+      <div class="filters-section">
+        <!-- Filter Panel -->
+        <app-filter-panel
+          [filtri]="filtri"
+          [valori]="valoriFiltri"
+          [isOpen]="isFilterPanelOpen"
+          (close)="closeFilterPanel()"
+          (applyFilters)="applyFilters($event)"
+          (clearFilters)="clearFilters()">
+        </app-filter-panel>
+      </div>
+      
+      <!-- Table Container -->
+      <div class="table-container">
+        <app-tabella-generica 
+          [data]="dipendentiFiltrati"
+          [columns]="columns"
+          [azioni]="azioni"
+          [entityName]="'dipendenti'"
+          (action)="gestioneAzione($event)"
+          (rowClick)="gestioneAzione({tipo: 'view', item: $event})"
+          [rowClickable]="true"
+          (paginationInfo)="aggiornaPaginazione($event)">
+        </app-tabella-generica>
+      </div>
+
+      <!-- Pagination Container -->
+        <app-pagination-footer
+          [currentPage]="paginationInfo.currentPage"
+          [totalPages]="paginationInfo.totalPages"
+          [pages]="paginationInfo.pages"
+          [displayedItems]="paginationInfo.displayedItems"
+          [totalItems]="paginationInfo.totalItems"
+          [pageSize]="paginationInfo.pageSize"
+          [entityName]="paginationInfo.entityName"
+          (pageChange)="cambiaPagina($event)">
+        </app-pagination-footer>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+<app-import-modal
+  title="Import Massivo Dipendenti"
+  [supportedFormats]="supportedFormats"
+  [expectedHeaders]="expectedHeaders"
+  [previewData]="previewData"
+  [importOptions]="importOptions"
+  [isProcessing]="isProcessing"
+  [showPreview]="showPreview"
+  [validationErrors]="validationErrors"
+  [tableColumns]="tableColumns"
+  (fileSelected)="onFileSelected($event)"
+  (importOptionsChanged)="onImportOptionsChanged($event)"
+  (importConfirmed)="onImportConfirmed()"
+  (importCancelled)="onImportCancelled()"
+  (resetRequested)="onResetRequested()">
+</app-import-modal>

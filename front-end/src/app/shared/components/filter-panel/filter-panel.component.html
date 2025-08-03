@@ -1,0 +1,151 @@
+<!-- Modal Backdrop -->
+<div class="modal-backdrop" *ngIf="isOpen" (click)="onClose()"></div>
+
+<!-- Modal -->
+<div class="modal" [class.show]="isOpen" *ngIf="isOpen">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="fas fa-filter me-2"></i>
+          Filtri di ricerca
+          <span class="filter-count" *ngIf="getActiveFiltersCount() > 0">
+            ({{ getActiveFiltersCount() }})
+          </span>
+        </h5>
+        <button type="button" class="button-close" (click)="onClose()" aria-label="Chiudi">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <form class="filter-form">
+          <div class="filter-sections">
+            <ng-container *ngFor="let filtro of filtri; let i = index">
+              <div class="filter-group" [class.filter-group-full]="filtro.type === 'text' || filtro.type === 'number'">
+                <label class="filter-label">{{ filtro.label }}</label>
+                
+                <ng-container [ngSwitch]="filtro.type">
+                  <div class="input-wrapper" *ngSwitchCase="'text'">
+                    <input 
+                      type="text" 
+                      class="form-control"
+                      [placeholder]="filtro.placeholder || 'Inserisci ' + filtro.label.toLowerCase()"
+                      [(ngModel)]="tempValori[filtro.key]"
+                      (ngModelChange)="onChange(filtro.key, $event)"
+                      [name]="filtro.key + '_text'" />
+                    <i class="fas fa-search input-icon" *ngIf="!tempValori[filtro.key]"></i>
+                    <button 
+                      type="button" 
+                      class="btn-clear-input" 
+                      *ngIf="tempValori[filtro.key]"
+                      (click)="onChange(filtro.key, '')">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+
+                  <div class="input-wrapper" *ngSwitchCase="'number'">
+                    <input 
+                      type="number" 
+                      class="form-control"
+                      [placeholder]="filtro.placeholder || 'Inserisci ' + filtro.label.toLowerCase()"
+                      [(ngModel)]="tempValori[filtro.key]"
+                      (ngModelChange)="onChange(filtro.key, $event)"
+                      [name]="filtro.key + '_number'" />
+                    <i class="fas fa-hashtag input-icon" *ngIf="!tempValori[filtro.key]"></i>
+                    <button 
+                      type="button" 
+                      class="btn-clear-input" 
+                      *ngIf="tempValori[filtro.key]"
+                      (click)="onChange(filtro.key, '')">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+
+                  <div class="input-wrapper" *ngSwitchCase="'date'">
+                    <input 
+                      type="date" 
+                      class="form-control"
+                      [(ngModel)]="tempValori[filtro.key]"
+                      (ngModelChange)="onChange(filtro.key, $event)"
+                      [name]="filtro.key + '_date'" />
+                    <i class="fas fa-calendar input-icon" *ngIf="!tempValori[filtro.key]"></i>
+                    <button 
+                      type="button" 
+                      class="btn-clear-input" 
+                      *ngIf="tempValori[filtro.key]"
+                      (click)="onChange(filtro.key, '')">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+
+                  <div class="select-wrapper" *ngSwitchCase="'select'">
+                    <select 
+                      class="form-select"
+                      [(ngModel)]="tempValori[filtro.key]"
+                      (ngModelChange)="onChange(filtro.key, $event)"
+                      [name]="filtro.key + '_select'">
+                      <option value="">Seleziona {{ filtro.label.toLowerCase() }}</option>
+                      <option 
+                        *ngFor="let opt of filtro.options" 
+                        [value]="opt.value">
+                        {{ opt.label }}
+                      </option>
+                    </select>
+                    <i class="fas fa-chevron-down select-icon"></i>
+                  </div>
+
+                  <div class="checkbox-wrapper" *ngSwitchCase="'checkbox'">
+                    <div class="form-check">
+                      <input 
+                        class="form-check-input"
+                        type="checkbox"
+                        [(ngModel)]="tempValori[filtro.key]"
+                        (ngModelChange)="onChange(filtro.key, $event)"
+                        [name]="filtro.key + '_checkbox'"
+                        [id]="filtro.key + '_checkbox'" />
+                      <label class="form-check-label" [for]="filtro.key + '_checkbox'">
+                        {{ filtro.label }}
+                      </label>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </ng-container>
+          </div>
+        </form>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button 
+          type="button" 
+          class="btn btn-secondary btn-sm"
+          (click)="onClear()"
+          [disabled]="!hasActiveFilters()">
+          <i class="fas fa-eraser me-2"></i>
+          Pulisci filtri
+        </button>
+        
+        <div class="main-actions">
+          <button 
+            type="button" 
+            class="btn-sm btn-cancel"
+            (click)="onClose()">
+            Annulla
+          </button>
+          <button 
+            type="button" 
+            class="btn-sm btn-primary"
+            (click)="onApply()">
+            <!-- <i class="fas fa-check me-2"></i> -->
+            Applica filtri
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

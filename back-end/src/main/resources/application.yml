@@ -1,0 +1,54 @@
+spring:
+  application:
+    name: gestionale-formazione
+
+  sql:
+    init:
+      mode: always
+      platform: mysql
+
+  datasource:
+    url: jdbc:mysql://localhost:3307/gest-form?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+    username: root
+    password: Agostino96!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    default-schema: gest-form
+
+# Security Configuration
+sicurezza:
+  uri: /auth
+  refresh: /refresh
+  header: Authorization
+  prefix: Bearer
+  expiration: 3600 # 1 hour instead of 10 minutes
+  refresh-expiration: 86400 # 24 hours for refresh token
+  secret: wNoe5AlDAtrrRJtbPQZ6UtdgvYwF2DKYSlNEVcCD/IzToqX9bXpmRzflYBGDViZDJgV3HTPfDGY5ix1U9hJtfA==
+
+logging:
+  level:
+    liquibase: DEBUG
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+    org.springframework.web: DEBUG
+    org.springframework.web.servlet.mvc.method.annotation: DEBUG
+    com.example.demo: DEBUG
+    com.example.demo.service.AssegnazioneBulkImportService: DEBUG
+    com.example.demo.controller: DEBUG
+    root: INFO

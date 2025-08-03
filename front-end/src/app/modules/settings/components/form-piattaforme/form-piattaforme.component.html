@@ -1,0 +1,43 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="form">
+    <div class="row mb-3">
+        <div class="col-12">
+            <label for="nome" class="form-label">Nome</label>
+            <input id="nome" type="text" class="form-control" formControlName="nome"
+                [ngClass]="{'is-invalid': submitted && form.controls['nome'].invalid}" />
+            <div *ngIf="submitted && form.controls['nome'].invalid" class="invalid-feedback">
+                Il nome è obbligatorio (min 3, max 99 caratteri).
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-12">
+            <label for="descrizione" class="form-label">Descrizione</label>
+            <textarea id="descrizione" class="form-control" rows="3" formControlName="descrizione"
+                [ngClass]="{'is-invalid': submitted && form.controls['descrizione'].invalid}"></textarea>
+            <div *ngIf="submitted && form.controls['descrizione'].invalid" class="invalid-feedback">
+                La descrizione è obbligatoria (min 3, max 499 caratteri).
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-9">
+            <label for="urlSito" class="form-label">URL Sito</label>
+            <input id="urlSito" type="text" class="form-control" formControlName="urlSito"
+                [ngClass]="{'is-invalid': submitted && form.controls['urlSito'].invalid}" />
+            <div *ngIf="submitted && form.controls['urlSito'].invalid" class="invalid-feedback">
+                L'URL è obbligatorio (min 3, max 254 caratteri).
+            </div>
+        </div>
+        <div class="col-3">
+            <label for="attiva" class="form-label">Attiva</label>
+            <select id="attiva" class="form-select" formControlName="attiva"
+                [ngClass]="{'is-invalid': submitted && form.controls['attiva'].invalid}">
+                <option value="true">Sì</option>
+                <option value="false">No</option>
+            </select>
+            <div *ngIf="submitted && form.controls['attiva'].invalid" class="invalid-feedback">
+                Seleziona se la piattaforma è attiva.
+            </div>
+        </div>
+    </div>
+</form>

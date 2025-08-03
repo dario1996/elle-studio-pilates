@@ -1,0 +1,26 @@
+<div class="nav-tabs-container-animated">
+  <ul 
+    [class]="containerClasses"
+    #tabsContainer>
+    <li 
+      *ngFor="let tab of tabs; let i = index" 
+      class="nav-item"
+      [class.disabled]="tab.disabled"
+      [attr.data-index]="i">
+      <button 
+        class="nav-link" 
+        [class.active]="tab.active"
+        [class.disabled]="tab.disabled"
+        [disabled]="tab.disabled"
+        (click)="selectTab(tab, i)"
+        [attr.aria-controls]="tab.id"
+        [attr.aria-selected]="tab.active"
+        [attr.aria-disabled]="tab.disabled"
+        role="tab"
+        type="button">
+        <i *ngIf="tab.icon" [class]="tab.icon"></i>
+        <span class="tab-label">{{ tab.label }}</span>
+      </button>
+    </li>
+  </ul>
+</div>

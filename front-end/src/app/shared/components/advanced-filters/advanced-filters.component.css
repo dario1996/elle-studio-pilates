@@ -1,0 +1,12 @@
+.advanced-filters-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0 13px; /* Match the padding of the original filtri-generici-container */
+}
+
+/* Align with table margins */
+.advanced-filters-container + app-tabella-generica {
+  margin-top: 0;
+}

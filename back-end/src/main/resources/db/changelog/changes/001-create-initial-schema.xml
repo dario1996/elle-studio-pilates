@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="001-01" author="sistema-formazione">
+        <comment>Create Piattaforme table</comment>
+
+        <createTable tableName="piattaforme">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="nome" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="descrizione" type="VARCHAR(500)">
+                <constraints nullable="true" />
+            </column>
+            <column name="url_sito" type="VARCHAR(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_creazione" type="TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+            <column name="data_modifica" type="TIMESTAMP">
+                <constraints nullable="true" />
+            </column>
+            <column name="attiva" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="001-02" author="sistema-formazione">
+        <comment>Create Dipendenti table</comment>
+
+        <createTable tableName="dipendenti">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="nome" type="VARCHAR(100)">
+                <constraints nullable="false" />
+            </column>
+            <column name="cognome" type="VARCHAR(100)">
+                <constraints nullable="false" />
+            </column>
+            <column name="email" type="VARCHAR(150)">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="commerciale" type="VARCHAR(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="azienda" type="VARCHAR(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="ruolo" type="VARCHAR(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="reparto" type="VARCHAR(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_assunzione" type="TIMESTAMP">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_cessazione" type="TIMESTAMP">
+                <constraints nullable="true" />
+            </column>
+            <column name="codice_dipendente" type="VARCHAR(50)">
+                <constraints nullable="true" unique="true" />
+            </column>
+            <column name="isms" type="VARCHAR(10)">
+                <constraints nullable="true" />
+            </column>
+            <column name="sede" type="VARCHAR(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="community" type="VARCHAR(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="responsabile" type="VARCHAR(200)">
+                <constraints nullable="true" />
+            </column>
+            <column name="attivo" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false" />
+            </column>
+            <column name="data_creazione" type="TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+            <column name="data_modifica" type="TIMESTAMP">
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="001-03" author="sistema-formazione">
+        <comment>Create Corsi table</comment>
+
+        <createTable tableName="corsi">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="nome" type="VARCHAR(200)">
+                <constraints nullable="false" />
+            </column>
+            <column name="categoria" type="VARCHAR(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="argomento" type="VARCHAR(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="modulo" type="VARCHAR(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="formati_richiedenti" type="VARCHAR(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="durata" type="DECIMAL(5,2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_inizio" type="DATE">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_fine" type="DATE">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_scadenza" type="DATE">
+                <constraints nullable="true" />
+            </column>
+            <column name="ore" type="DECIMAL(5,2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="ore_rimanenti" type="DECIMAL(5,2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="stato" type="VARCHAR(20)" defaultValue="PIANIFICATO">
+                <constraints nullable="false" />
+            </column>
+            <column name="priorita" type="VARCHAR(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="codice_corso" type="VARCHAR(100)">
+                <constraints nullable="true" unique="true" />
+            </column>
+            <column name="id_contenuto_linkedin" type="VARCHAR(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="url_corso" type="VARCHAR(500)">
+                <constraints nullable="true" />
+            </column>
+            <column name="costo" type="DECIMAL(10,2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="certificazione_rilasciata" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="true" />
+            </column>
+            <column name="feedback_richiesto" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_creazione" type="TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+            <column name="data_modifica" type="TIMESTAMP">
+                <constraints nullable="true" />
+            </column>
+            <column name="piattaforma_id" type="BIGINT">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="001-04" author="sistema-formazione">
+        <comment>Create Assegnazioni table</comment>
+
+        <createTable tableName="assegnazioni">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="dipendente_id" type="BIGINT">
+                <constraints nullable="false" />
+            </column>
+            <column name="corso_id" type="BIGINT">
+                <constraints nullable="false" />
+            </column>
+            <column name="data_assegnazione" type="DATE">
+                <constraints nullable="false" />
+            </column>
+            <column name="data_inizio" type="DATE">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_completamento" type="DATE">
+                <constraints nullable="true" />
+            </column>
+            <column name="percentuale_completamento" type="DECIMAL(5,2)" defaultValueNumeric="0">
+                <constraints nullable="true" />
+            </column>
+            <column name="ore_completate" type="DECIMAL(5,2)" defaultValueNumeric="0">
+                <constraints nullable="true" />
+            </column>
+            <column name="stato" type="VARCHAR(20)" defaultValue="ASSEGNATO">
+                <constraints nullable="false" />
+            </column>
+            <column name="obbligatorio" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false" />
+            </column>
+            <column name="feedback_fornito" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="true" />
+            </column>
+            <column name="valutazione" type="DECIMAL(3,1)">
+                <constraints nullable="true" />
+            </column>
+            <column name="note_feedback" type="VARCHAR(1000)">
+                <constraints nullable="true" />
+            </column>
+            <column name="competenze_acquisite" type="VARCHAR(500)">
+                <constraints nullable="true" />
+            </column>
+            <column name="certificato_ottenuto" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="true" />
+            </column>
+            <column name="esito" type="VARCHAR(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="fonte_richiesta" type="VARCHAR(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="impatto_isms" type="BOOLEAN">
+                <constraints nullable="true" />
+            </column>
+            <column name="attestato" type="BOOLEAN">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_creazione" type="TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+            <column name="data_modifica" type="TIMESTAMP">
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="001-05" author="sistema-formazione">
+        <comment>Create Log Login table</comment>
+
+        <createTable tableName="log_login">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="dipendente_id" type="BIGINT">
+                <constraints nullable="false" />
+            </column>
+            <column name="corso_id" type="BIGINT">
+                <constraints nullable="true" />
+            </column>
+            <column name="nome_contenuto" type="VARCHAR(300)">
+                <constraints nullable="true" />
+            </column>
+            <column name="fornitore_contenuto" type="VARCHAR(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="tipo_contenuto" type="VARCHAR(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="id_contenuto_esterno" type="VARCHAR(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="ore_visione" type="DECIMAL(5,2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="percentuale_completamento" type="DECIMAL(5,2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_inizio" type="TIMESTAMP">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_ultima_visualizzazione" type="TIMESTAMP">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_completamento" type="TIMESTAMP">
+                <constraints nullable="true" />
+            </column>
+            <column name="valutazioni_totali" type="INTEGER" defaultValueNumeric="0">
+                <constraints nullable="true" />
+            </column>
+            <column name="numero_valutazioni_completate" type="INTEGER" defaultValueNumeric="0">
+                <constraints nullable="true" />
+            </column>
+            <column name="competenze" type="VARCHAR(500)">
+                <constraints nullable="true" />
+            </column>
+            <column name="nome_corso_video" type="VARCHAR(300)">
+                <constraints nullable="true" />
+            </column>
+            <column name="id_corso_video" type="VARCHAR(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="gruppi_interazione" type="VARCHAR(500)">
+                <constraints nullable="true" />
+            </column>
+            <column name="gruppi_iscrizioni_attuali" type="VARCHAR(500)">
+                <constraints nullable="true" />
+            </column>
+            <column name="fonte_import" type="VARCHAR(50)" defaultValue="LINKEDIN">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_import" type="TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+            <column name="processed" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="001-06" author="sistema-formazione">
+        <comment>Add foreign key constraints</comment>
+
+        <!-- Corso -> Piattaforma -->
+        <addForeignKeyConstraint
+            baseTableName="corsi"
+            baseColumnNames="piattaforma_id"
+            constraintName="fk_corso_piattaforma"
+            referencedTableName="piattaforme"
+            referencedColumnNames="id"
+            onDelete="RESTRICT"
+            onUpdate="CASCADE" />
+
+        <!-- Assegnazione -> Dipendente -->
+        <addForeignKeyConstraint
+            baseTableName="assegnazioni"
+            baseColumnNames="dipendente_id"
+            constraintName="fk_assegnazione_dipendente"
+            referencedTableName="dipendenti"
+            referencedColumnNames="id"
+            onDelete="CASCADE"
+            onUpdate="CASCADE" />
+
+        <!-- Assegnazione -> Corso -->
+        <addForeignKeyConstraint
+            baseTableName="assegnazioni"
+            baseColumnNames="corso_id"
+            constraintName="fk_assegnazione_corso"
+            referencedTableName="corsi"
+            referencedColumnNames="id"
+            onDelete="CASCADE"
+            onUpdate="CASCADE" />
+
+        <!-- LogLogin -> Dipendente -->
+        <addForeignKeyConstraint
+            baseTableName="log_login"
+            baseColumnNames="dipendente_id"
+            constraintName="fk_log_dipendente"
+            referencedTableName="dipendenti"
+            referencedColumnNames="id"
+            onDelete="CASCADE"
+            onUpdate="CASCADE" />
+
+        <!-- LogLogin -> Corso (optional) -->
+        <addForeignKeyConstraint
+            baseTableName="log_login"
+            baseColumnNames="corso_id"
+            constraintName="fk_log_corso"
+            referencedTableName="corsi"
+            referencedColumnNames="id"
+            onDelete="SET NULL"
+            onUpdate="CASCADE" />
+    </changeSet>
+
+</databaseChangeLog> 

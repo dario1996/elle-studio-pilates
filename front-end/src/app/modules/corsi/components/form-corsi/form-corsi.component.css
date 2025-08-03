@@ -1,0 +1,23 @@
+.form-control {
+    font-size: 12px;
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+    transition:
+        border-color 0.15s ease-in-out,
+        box-shadow 0.15s ease-in-out;
+}
+
+.invalid-feedback {
+  font-size: 12px;
+  color: #dc2626;
+  margin-top: 4px;
+}
+
+.form-select {
+    font-size: 12px;
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+    transition:
+        border-color 0.15s ease-in-out,
+        box-shadow 0.15s ease-in-out;
+}

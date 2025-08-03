@@ -1,0 +1,104 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="filter-panel-form">
+  <div class="filter-panel-section">
+
+    <!-- Dipendente, Corso ed Esito -->
+    <div class="filter-row">
+      <div class="filter-field">
+        <label class="filter-label">Dipendente</label>
+        <input type="text" class="filter-input" [value]="dati?.dipendenteNome || 'N/A'" readonly>
+      </div>
+      <div class="filter-field">
+        <label class="filter-label">Corso</label>
+        <input type="text" class="filter-input" [value]="dati?.corsoNome || 'N/A'" readonly>
+      </div>
+      <div class="filter-field">
+        <label for="esito" class="filter-label">Esito</label>
+        <select id="esito" class="filter-select" formControlName="esito"
+          [ngClass]="{ 'is-invalid': submitted && form.controls['esito'].invalid }">
+          <option value="">Seleziona esito</option>
+          <option value="Superato">Superato</option>
+          <option value="Non superato">Non Superato</option>
+          <option value="In corso">In Corso</option>
+        </select>
+        <div *ngIf="submitted && form.controls['esito'].invalid" class="invalid-feedback">
+          Seleziona un esito valido.
+        </div>  
+      </div>
+    </div>
+
+    <!-- Data Assegnazione, Stato, Percentuale -->
+    <div class="filter-row">
+      <div class="filter-field">
+        <label for="dataAssegnazione" class="filter-label">Data Assegnazione</label>
+        <input id="dataAssegnazione" type="date" class="filter-input" formControlName="dataAssegnazione"
+          [ngClass]="{ 'is-invalid': submitted && form.controls['dataAssegnazione'].invalid }">
+        <div *ngIf="submitted && form.controls['dataAssegnazione'].invalid" class="invalid-feedback">
+          Data assegnazione non valida.
+        </div>
+      </div>
+      <div class="filter-field">
+        <label for="stato" class="filter-label">Stato</label>
+        <select id="stato" class="filter-select" formControlName="stato"
+          [ngClass]="{ 'is-invalid': submitted && form.controls['stato'].invalid }">
+          <option value="DA_INIZIARE">Da iniziare</option>
+          <option value="IN_CORSO">In corso</option>
+          <option value="TERMINATO">Terminato</option>
+          <option value="INTERROTTO">Interrotto</option>
+        </select>
+        <div *ngIf="submitted && form.controls['stato'].invalid" class="invalid-feedback">
+          Lo stato è obbligatorio.
+        </div>
+      </div>
+      <div class="filter-field">
+        <label for="percentualeCompletamento" class="filter-label">Percentuale Completamento (%)</label>
+        <input id="percentualeCompletamento" type="number" class="filter-input" formControlName="percentualeCompletamento"
+          min="0" max="100" placeholder="0-100"
+          [ngClass]="{ 'is-invalid': submitted && form.controls['percentualeCompletamento'].invalid }">
+        <div *ngIf="submitted && form.controls['percentualeCompletamento'].invalid" class="invalid-feedback">
+          La percentuale deve essere tra 0 e 100.
+        </div>
+      </div>
+    </div>
+
+    <!-- Date previste ed effettive -->
+    <div class="filter-row">
+      <div class="filter-field">
+        <label for="dataTerminePrevista" class="filter-label">Data Termine Prevista</label>
+        <input id="dataTerminePrevista" type="date" class="filter-input" formControlName="dataTerminePrevista">
+      </div>
+      <div class="filter-field">
+        <label for="dataInizio" class="filter-label">Data Inizio</label>
+        <input id="dataInizio" type="date" class="filter-input" formControlName="dataInizio"
+          [ngClass]="{ 'is-invalid': submitted && form.controls['dataInizio'].invalid }">
+        <div *ngIf="submitted && form.controls['dataInizio'].invalid" class="invalid-feedback">
+          Data inizio non valida.
+        </div>
+      </div>
+      <div class="filter-field">
+        <label for="dataCompletamento" class="filter-label">Data Completamento</label>
+        <input id="dataCompletamento" type="date" class="filter-input" formControlName="dataCompletamento"
+          [ngClass]="{ 'is-invalid': submitted && form.controls['dataCompletamento'].invalid }">
+        <div *ngIf="submitted && form.controls['dataCompletamento'].invalid" class="invalid-feedback">
+          Data completamento non valida.
+        </div>
+      </div>
+    </div>
+
+    <!-- Checkbox -->
+    <div class="filter-row">
+      <div class="filter-field">
+        <div class="filter-checkbox-group">
+          <input type="checkbox" class="filter-checkbox" formControlName="impattoIsms" id="impattoIsms">
+          <label class="filter-checkbox-label" for="impattoIsms">Impatto ISMS</label>
+        </div>
+      </div>
+      <div class="filter-field">
+        <div class="filter-checkbox-group">
+          <input type="checkbox" class="filter-checkbox" formControlName="attestato" id="attestato">
+          <label class="filter-checkbox-label" for="attestato">Attestato</label>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</form>

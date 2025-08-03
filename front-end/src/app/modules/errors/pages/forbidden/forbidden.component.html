@@ -1,0 +1,12 @@
+<div class="forbidden-container">
+  <div class="content">
+    <i class="fas fa-exclamation-triangle"></i>
+    <h1>{{ 'core.forbidden.title' | translate }}</h1>
+    <p>
+      ⚠ {{ 'core.forbidden.noPermits' | translate }}<br>
+      {{ 'core.forbidden.forgottenLogin' | translate }} <a href="/login">{{ 'core.forbidden.loginHere' | translate
+        }}</a>.
+    </p>
+    <button class="btn" onclick="window.history.back()">{{ 'common.goBack' | translate }}</button>
+  </div>
+</div>

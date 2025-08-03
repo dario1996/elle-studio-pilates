@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="008-01" author="sistema-formazione">
+        <comment>Insert additional piattaforme data</comment>
+
+        <insert tableName="piattaforme">
+            <column name="nome" value="Udemy" />
+            <column name="descrizione" value="Udemy" />
+            <column name="url_sito" value="" />
+            <column name="data_creazione" valueDate="now()" />
+            <column name="data_modifica" valueDate="now()" />
+            <column name="attiva" valueBoolean="true" />
+        </insert>
+
+        <insert tableName="piattaforme">
+            <column name="nome" value="Linkedin" />
+            <column name="descrizione" value="Linkedin" />
+            <column name="url_sito" value="" />
+            <column name="data_creazione" valueDate="now()" />
+            <column name="data_modifica" valueDate="now()" />
+            <column name="attiva" valueBoolean="true" />
+        </insert>
+
+        <insert tableName="piattaforme">
+            <column name="nome" value="Corso" />
+            <column name="descrizione" value="Corso" />
+            <column name="url_sito" value="" />
+            <column name="data_creazione" valueDate="now()" />
+            <column name="data_modifica" valueDate="now()" />
+            <column name="attiva" valueBoolean="true" />
+        </insert>
+
+        <insert tableName="piattaforme">
+            <column name="nome" value="Certificazione" />
+            <column name="descrizione" value="Certificazione" />
+            <column name="url_sito" value="" />
+            <column name="data_creazione" valueDate="now()" />
+            <column name="data_modifica" valueDate="now()" />
+            <column name="attiva" valueBoolean="true" />
+        </insert>
+
+        <insert tableName="piattaforme">
+            <column name="nome" value="Affiancamento/TOJ" />
+            <column name="descrizione" value="Affiancamento/TOJ" />
+            <column name="url_sito" value="" />
+            <column name="data_creazione" valueDate="now()" />
+            <column name="data_modifica" valueDate="now()" />
+            <column name="attiva" valueBoolean="true" />
+        </insert>
+
+        <insert tableName="piattaforme">
+            <column name="nome" value="Evento/Webinar" />
+            <column name="descrizione" value="Evento/Webinar" />
+            <column name="url_sito" value="" />
+            <column name="data_creazione" valueDate="now()" />
+            <column name="data_modifica" valueDate="now()" />
+            <column name="attiva" valueBoolean="true" />
+        </insert>
+
+        <insert tableName="piattaforme">
+            <column name="nome" value="Newsletter" />
+            <column name="descrizione" value="Newsletter" />
+            <column name="url_sito" value="" />
+            <column name="data_creazione" valueDate="now()" />
+            <column name="data_modifica" valueDate="now()" />
+            <column name="attiva" valueBoolean="true" />
+        </insert>
+
+        <insert tableName="piattaforme">
+            <column name="nome" value="Questionario ISMS" />
+            <column name="descrizione" value="Questionario ISMS" />
+            <column name="url_sito" value="" />
+            <column name="data_creazione" valueDate="now()" />
+            <column name="data_modifica" valueDate="now()" />
+            <column name="attiva" valueBoolean="true" />
+        </insert>
+
+        <insert tableName="piattaforme">
+            <column name="nome" value="Fonarcom" />
+            <column name="descrizione" value="Fonarcom" />
+            <column name="url_sito" value="" />
+            <column name="data_creazione" valueDate="now()" />
+            <column name="data_modifica" valueDate="now()" />
+            <column name="attiva" valueBoolean="true" />
+        </insert>
+
+        <insert tableName="piattaforme">
+            <column name="nome" value="Formazione obbligatoria" />
+            <column name="descrizione" value="Formazione obbligatoria" />
+            <column name="url_sito" value="" />
+            <column name="data_creazione" valueDate="now()" />
+            <column name="data_modifica" valueDate="now()" />
+            <column name="attiva" valueBoolean="true" />
+        </insert>
+
+        <insert tableName="piattaforme">
+            <column name="nome" value="Onboarding" />
+            <column name="descrizione" value="Onboarding" />
+            <column name="url_sito" value="" />
+            <column name="data_creazione" valueDate="now()" />
+            <column name="data_modifica" valueDate="now()" />
+            <column name="attiva" valueBoolean="true" />
+        </insert>
+
+        <insert tableName="piattaforme">
+            <column name="nome" value="Certificazione Linkedin" />
+            <column name="descrizione" value="Certificazione Linkedin" />
+            <column name="url_sito" value="" />
+            <column name="data_creazione" valueDate="now()" />
+            <column name="data_modifica" valueDate="now()" />
+            <column name="attiva" valueBoolean="true" />
+        </insert>
+
+        <insert tableName="piattaforme">
+            <column name="nome" value="TBD" />
+            <column name="descrizione" value="TBD" />
+            <column name="url_sito" value="" />
+            <column name="data_creazione" valueDate="now()" />
+            <column name="data_modifica" valueDate="now()" />
+            <column name="attiva" valueBoolean="true" />
+        </insert>
+
+    </changeSet>
+
+</databaseChangeLog>

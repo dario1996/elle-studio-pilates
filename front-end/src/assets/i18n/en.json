@@ -1,0 +1,71 @@
+{
+  "common": {
+    "goBack": "Go Back",
+    "externalTitle": "Management Training | {{ title }}",
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next"
+    }
+  },
+  "core": {
+    "error": {
+      "title": "Oops! Page Not Found",
+      "description": "It looks like you took a wrong turn. Don't worry... it happens to the best of us. Here's a little tip that might help you get back on track.",
+      "please": "Please",
+      "clickHere": "click here"
+    },
+    "forbidden": {
+      "title": "Access Denied",
+      "noPermits": "You do not have the necessary permissions to access this page.",
+      "forgottenLogin": "If you have not logged in, please",
+      "loginHere": "Log in here"
+    }
+  },
+  "store": {
+    "employees": {
+      "title": "Employees",
+      "list": {
+        "employeeCode": "Code",
+        "denmination": "Denomination",
+        "mobile": "Mobile",
+        "email": "Email",
+        "recruitmentDate": "Recruitment Date",
+        "birthDate": "Date of Birth",
+        "color": "Color",
+        "actions": "Actions"
+      },
+      "addEmployee": "Add Employee",
+      "updEmployee": "Edit Employee",
+      "delEmployee": "Delete Employee",
+      "loadingInProgress": "Loading employees in progress..."
+    },
+    "services": {
+      "title": "Services",
+      "list": {
+        "serviceCode": "Code",
+        "serviceName": "Service",
+        "servicePrice": "Price",
+        "actions": "Actions"
+      },
+      "addService": "Add Service",
+      "updService": "Edit Service",
+      "delService": "Delete Service",
+      "loadingInProgress": "Loading services in progress..."
+    },
+    "customers": {
+      "title": "Customers",
+      "list": {
+        "customerCode": "Code",
+        "denmination": "Denomination",
+        "mobile": "Mobile",
+        "email": "Email",
+        "birthDate": "Date of Birth",
+        "actions": "Actions"
+      },
+      "addCustomer": "Add Customer",
+      "updCustomer": "Edit Customer",
+      "delCustomer": "Delete Customer",
+      "loadingInProgress": "Caricamento customers in corso..."
+    }
+  }
+}

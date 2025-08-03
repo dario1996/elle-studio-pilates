@@ -1,0 +1,630 @@
+/* GESTIONE ASPETTO TABLE*/
+.table-container.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+.table {
+  width: 100%;
+  border-spacing: 0;
+  font-size: 12px !important;
+  margin: 0;
+  table-layout: fixed; /* IMPORTANTE: Forza le colonne a rispettare le larghezze definite */
+}
+.table-header th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #ffffff;
+  border-bottom: 2px solid #e3e6ea;
+  height: 45px; /* RIDOTTO: da auto a 45px per essere più compatto */
+  vertical-align: middle;
+  color: rgb(0, 0, 0);
+  padding: 8px; /* RIDOTTO: da 12px a 8px */
+  font-size: 12px; /* AGGIUNTO: Font leggermente più piccolo */
+  font-weight: 600;
+}
+
+/* CSS Ordinamento colonne */
+th.sortable {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  transition: color 0.2s;
+}
+th.sorted {
+  color: #222;
+  font-weight: bold;
+}
+th.sorted-desc {
+  color: #222;
+}
+th .fa {
+  margin-left: 4px;
+  font-size: 12px;
+}
+
+/* Text truncation with tooltip - SOLO PER TABELLE */
+.table-scroll-container .table-body td .truncated-text {
+  max-width: 200px;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  cursor: help;
+  display: inline-block;
+  width: 100%;
+}
+
+.table-scroll-container .table-body td .truncated-text:hover {
+  opacity: 0.8;
+}
+
+/* Assicura che tutte le celle possano essere troncate - SOLO PER TABELLE */
+.table-scroll-container .table-body td {
+  max-width: 0; /* Forza il contenuto a rispettare la larghezza della colonna */
+  overflow: hidden;
+  white-space: nowrap; /* Previene il wrapping del testo */
+  text-overflow: ellipsis; /* Mostra ... quando il testo è troppo lungo */
+  position: relative;
+}
+
+/* Responsive truncation - SOLO PER TABELLE */
+@media (max-width: 768px) {
+  .table-scroll-container .table-body td .truncated-text {
+    max-width: 150px;
+  }
+}
+
+@media (max-width: 576px) {
+  .table-scroll-container .table-body td .truncated-text {
+    max-width: 100px;
+  }
+}
+
+/* FINE */
+
+/* ================== BOTTONI AZIONI SOLO ICONA =================== */
+.actions-cell {
+  text-align: center;
+  white-space: nowrap;
+  padding: 8px 12px !important;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Rimuovi completamente lo stile bottone */
+.action-buttons .btn {
+  background: transparent !important;
+  border: none !important;
+  padding: 6px !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  min-height: 24px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: none !important;
+  outline: none !important;
+  cursor: pointer !important;
+  transition: transform 0.2s ease !important;
+}
+
+/* Hover effects - solo ingrandimento */
+.action-buttons .btn:hover {
+  /* background: transparent !important; */
+  border: none !important;
+  opacity: 1 !important;
+}
+
+.action-buttons .btn-outline-primary:hover,
+.action-buttons .btn-primary:hover {
+  color: #000000 !important; /* Grigio più scuro su hover */
+  background: transparent !important;
+}
+
+.action-buttons .btn-outline-danger:hover,
+.action-buttons .btn-danger:hover {
+  color: #b91c1c !important; /* Rosso più scuro su hover */
+  background: transparent !important;
+}
+
+/* Focus states */
+.action-buttons .btn:focus,
+.action-buttons .btn:focus-visible {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: black;
+  /* outline: 2px solid #3b82f6 !important;
+  outline-offset: 2px !important; */
+}
+
+/* Active state */
+.action-buttons .btn:active {
+  background: transparent !important;
+  border: none !important;
+  transform: scale(0.9) !important;
+}
+
+/* Icone dimensionate */
+.action-buttons .btn .fa,
+.action-buttons .btn .fas,
+.action-buttons .btn .fa-solid {
+  font-size: 17px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+}
+
+/* Rimuovi tutti gli stati Bootstrap */
+.action-buttons .btn:not(:disabled):not(.disabled):active,
+.action-buttons .btn:not(:disabled):not(.disabled).active {
+  /* background: transparent !important; */
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* INIZIO - contenitore per la gestione dello scrolling del contenuto tabella */
+.table-scroll-container {
+  /* flex: 1 1 auto; */
+  min-height: 0;
+  max-height: 100%; /* AUMENTATO: ridotto da 322px a 260px per più spazio */
+  overflow-y: auto; /* Scroll verticale */
+  overflow-x: hidden; /* Nasconde scroll orizzontale se non necessario */
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 4px;
+  padding: 0px 13px 13px 13px;
+  margin-bottom: 16px;
+  /* box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05); */
+  -ms-overflow-style: auto;
+  scrollbar-width: thin; /* Firefox: thin scrollbar */
+  scrollbar-color: #cbd5e1 #f1f5f9; /* Firefox: thumb e track colors */
+  scroll-behavior: smooth;
+  overscroll-behavior: contain;
+  
+  /* Migliora le performance dello scroll */
+  will-change: scroll-position;
+  transform: translateZ(0);
+
+}
+
+/* Quando ci sono pochi dati, la tabella non dovrebbe forzare l'altezza completa */
+.table-scroll-container.few-records {
+  flex: 0 1 auto; /* Permette alla tabella di comprimersi quando ci sono pochi dati */
+}
+
+/* Quando non ci sono dati, la tabella dovrebbe avere una dimensione minima */
+.table-scroll-container.no-data {
+  flex: 0 1 auto;
+  min-height: 300px;
+}
+
+.table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  margin-bottom: 0;
+  /* RIMOSSO: height: 100% - permette alla tabella di adattarsi al contenuto */
+}
+
+.table-scroll-container .pagination {
+  display: none !important; /* NASCOSTO: La paginazione interna non serve più */
+}
+/* FINE */
+
+
+/* INIZIO - effetto su singola riga della tabella */
+.table-body tr:hover > td {
+  min-height: 35px;
+  height: auto;
+  background: var(--color-BIANCO-PASTELLO) !important; /* colore dello sfondo della riga con mouse hover */
+  z-index: 1;
+  position: relative;
+  color: var(--color-NERO) !important; /* colore del testo della riga con mouse hover */
+  padding: 8px 8px 8px 8px;
+}
+
+/* cambia il puntatore quando il mouse è su una riga cliccabile della tabella */
+.row-clickable {
+  cursor: pointer;
+}
+
+/* ================== SCROLLBAR =================== */
+/* Hide scrollbar for Chrome, Safari and Opera */
+.table-scroll-container::-webkit-scrollbar {
+  display: none;
+  width: 12px; /* Larghezza scrollbar verticale */
+  height: 12px; /* Altezza scrollbar orizzontale */
+}
+
+.table-scroll-container::-webkit-scrollbar-track {
+  background: #f8fafc; /* Colore track (sfondo) */
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.table-scroll-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #cbd5e1 0%, #94a3b8 100%); /* Gradiente thumb */
+  border-radius: 8px;
+  border: 2px solid #f8fafc; /* Bordo per creare spazio */
+  min-height: 30px; /* Altezza minima del thumb */
+}
+
+.table-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #94a3b8 0%, #64748b 100%); /* Più scuro su hover */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table-scroll-container::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(180deg, #64748b 0%, #475569 100%); /* Ancora più scuro quando premuto */
+}
+
+/* 🔥 Corner dove si incontrano scrollbar verticale e orizzontale */
+.table-scroll-container::-webkit-scrollbar-corner {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+/* 🔥 Scrollbar orizzontale (se necessario) */
+.table-scroll-container::-webkit-scrollbar:horizontal {
+  height: 12px;
+}
+
+/* PAGINATION STYLE */
+.table-pagination {
+  display: none !important; /* NASCOSTO: Footer paginazione interno */
+}
+
+/* footer che contiene la la paginazione */
+.table-pagination-inner {
+  display: flex;
+  align-items: center;
+  pointer-events: auto;  /* Riabilita click solo sul blocco centrale */
+}
+
+.table-footer {
+  display: none !important; /* NASCOSTO: Footer interno della tabella */
+}
+
+.pagination {
+  display: flex;
+  gap: 2px;
+  margin: 0;
+  list-style: none;
+}
+
+.page-item {
+  margin: 0 2px;
+}
+
+.page-link {
+  min-width: 34px;
+  height: 34px;
+  /* padding: 0 10px; */
+  border: none;
+  /* background: transparent; */
+  color: #969696;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 50%;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-link:hover:not(:disabled):not(.active) {
+  background: #e2e8f0;
+  color: #3b3b3b;
+}
+
+.page-item.disabled .page-link,
+.page-link:disabled {
+  color: #cbd5e1;
+  cursor: not-allowed;
+  background: transparent;
+}
+
+.pagination-info {
+  font-size: 13px;
+  color: #848484;
+  margin-left: 16px;
+}
+
+.table-body tr {
+  min-height: 35px;
+  max-height: auto;
+}
+
+.page-link:focus,
+.page-link:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Nessun colore alternato, hover o click per le righe vuote */
+.table-body tr.empty-rows > td {
+  background: #fff !important;
+  cursor: default !important;
+  pointer-events: none;
+  height: 35px !important; /* Altezza fissa per righe vuote */
+  min-height: 35px !important;
+  max-height: 35px !important;
+  padding: 0 !important; /* Rimuove padding extra */
+}
+
+.table-body tr.empty-rows:hover > td {
+  background: #fff !important;
+}
+
+/* Bordo solo per le righe piene */
+.table-body tr:not(.empty-rows) > td {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* Nessun bordo per le righe vuote */
+.table-body tr.empty-rows > td {
+  border-bottom: none !important;
+}
+
+@media (max-width: 1400px) {
+  .table-scroll-container {
+    max-height: calc(100vh - 180px); /* AUMENTATO: più spazio su schermi grandi */
+  }
+}
+
+@media (max-width: 1200px) {
+  .table-scroll-container {
+    max-height: calc(100vh - 200px); /* AUMENTATO: più spazio su schermi medi */
+  }
+}
+
+@media (max-width: 768px) {
+  .table-container { overflow-x: auto; }
+  .data-table { min-width: 600px; }
+  /* .table-header th, .table-body td { padding: 8px; font-size: 13px; } */
+  .action-buttons { gap: 2px; }
+  .table-scroll-container {
+    max-height: calc(100vh - 220px); /* AUMENTATO: più spazio su mobile */
+    overflow-x: auto; /* Permette scroll orizzontale su mobile */
+  }
+  
+  .table {
+    min-width: 600px; /* Larghezza minima per evitare compressione */
+  }
+
+  .table-header th {
+    padding: 6px;
+    font-size: 12px;
+    height: 40px;
+  }
+  
+  .table-scroll-container .table-body td {
+    padding: 4px 6px;
+    font-size: 12px;
+    max-width: 0; /* Mantiene la troncatura su mobile */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+}
+
+@media (max-width: 480px) {
+  .table-scroll-container {
+    max-height: calc(100vh - 240px); /* AUMENTATO: più spazio su mobile piccolo */
+    padding: 0.5rem;
+  }
+}
+
+/* Override più aggressivo per le icone */
+/* .action-buttons .btn-outline-primary *,
+.action-buttons .btn-primary * {
+  color: #1f09ee !important;
+} */
+
+.action-buttons .btn-outline-danger *,
+.action-buttons .btn-danger * {
+  color: #de8a8a !important;
+  transition: all 0.25s ease !important;
+}
+
+.action-buttons .btn-outline-danger:hover *,
+.action-buttons .btn-danger:hover * {
+  color: #ff5353 !important;
+  transform: translateY(-2px);
+  transition: all 0.25s ease !important;
+}
+
+.action-buttons .btn-outline-warning *,
+.action-buttons .btn-warning * {
+  color: #de8a8a !important;
+}
+
+.action-buttons .btn-outline-warning:hover *,
+.action-buttons .btn-warning:hover * {
+  color: #ff5353 !important;
+  transform: translateY(-2px);
+  transition: all 0.25s ease !important;
+}
+
+.action-buttons .btn-outline-primary *,
+.action-buttons .btn-primary * {
+  color: #0d6efd !important;
+}
+
+/* Tasto modifica in tabella-generica-component*/
+.action-buttons .btn-outline-secondary *,
+.action-buttons .btn-secondary * {
+  color: #a4a4a4 !important;
+}
+
+.action-buttons .btn-outline-secondary:hover *,
+.action-buttons .btn-secondary:hover * {
+  color: #000000 !important;
+  transform: translateY(-2px);
+  transition: all 0.25s ease !important;
+}
+
+/* ================== BADGE PERSONALIZZATI =================== */
+.badge {
+  display: inline-block;
+  padding: 0.25em 0.5em;
+  font-size: 0.75em;
+  font-weight: 600;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.375rem;
+}
+
+.bg-success {
+  background-color: transparent !important;
+  color: #418d6a !important;
+  font-weight: bold !important;
+  text-transform: uppercase !important;
+}
+
+.bg-secondary {
+  background-color: transparent !important;
+  color: #ff8800 !important;
+  font-weight: bold !important;
+  text-transform: uppercase !important;
+}
+
+.bg-danger {
+  background-color: #dc3545 !important;
+  color: #fff !important;
+  font-weight: bold !important;
+  text-transform: uppercase !important;
+}
+
+.bg-warning {
+  background-color: #ffc107 !important;
+  color: #000 !important;
+  font-weight: bold !important;
+  text-transform: uppercase !important;
+}
+
+.bg-info {
+  background-color: #0dcaf0 !important;
+  color: #000 !important;
+}
+
+.bg-primary {
+  background-color: #0d6efd !important;
+  color: #fff !important;
+  font-weight: bold !important;
+  text-transform: uppercase !important;
+}
+
+/* ================== FIX COLORE ICONA MODIFICA =================== */
+/* Forza il colore nero per l'icona di modifica */
+/* .action-buttons .btn-primary,
+.action-buttons .btn-primary * {
+  color: #000000 !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+.action-buttons .btn-primary:hover,
+.action-buttons .btn-primary:hover * {
+  color: #000000 !important;
+  background: rgba(0, 0, 0, 0.1) !important;
+  border: none !important;
+} */
+
+/* Forza il colore per l'icona FontAwesome */
+/* .action-buttons .btn-primary .fa,
+.action-buttons .btn-primary .fas,
+.action-buttons .btn-primary .fa-pen,
+.action-buttons .btn-primary i {
+  color: #000000 !important;
+  background: transparent !important;
+} */
+
+/* Assicura che tutti gli stati abbiano il colore nero */
+/* .action-buttons .btn-primary:focus,
+.action-buttons .btn-primary:active,
+.action-buttons .btn-primary:visited {
+  color: #000000 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+} */
+
+/* ================== NO DATA TEMPLATE =================== */
+.no-data-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 300px;
+  padding: 40px 20px;
+}
+
+.no-data-content {
+  text-align: center;
+  max-width: 400px;
+}
+
+.no-data-icon {
+  font-size: 4rem;
+  color: #9ca3af;
+  margin-bottom: 1.5rem;
+}
+
+.no-data-icon i {
+  display: block;
+}
+
+.no-data-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.75rem;
+  margin-top: 0;
+}
+
+.no-data-message {
+  font-size: 1rem;
+  color: #6b7280;
+  margin-bottom: 0;
+  line-height: 1.5;
+}
+
+/* Responsive per no-data template */
+@media (max-width: 768px) {
+  .no-data-container {
+    min-height: 200px;
+    padding: 30px 15px;
+  }
+  
+  .no-data-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .no-data-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .no-data-message {
+    font-size: 0.875rem;
+  }
+}
