@@ -1,12 +1,85 @@
-/* Contenitore con altezza adattiva per evitare che il footer nasconda la form */
-.custom-container {
-  min-height: calc(100vh - 60px); /* Sottrae l'altezza del footer */
-  overflow-y: auto; /* Abilita lo scroll solo se necessario */
-  padding-bottom: 10px;
+.stepwizard-step p {
+    margin-top: 10px;
+}
+.stepwizard {
+    display: flex;
+    justify-content: center;
+    width: 60%; /* o 50%, scegli tu */
+    margin: 0 auto;
+    position: relative;
+}
+.stepwizard-step button[disabled] {
+    opacity: 1 !important;
+    filter: alpha(opacity=100) !important;
+}
+.stepwizard-row {
+    display: flex;
+    flex: 1;
+    position: relative;
+    justify-content: space-between;
+}
+.stepwizard-row:before {
+    position: absolute;
+    top: 49px; /* regola se serve per centrare la linea */
+    left: calc(50% / 3 - 12px - 2px);  /* vedi nota sotto */
+    right: calc(50% / 3 - 12px - 2px); /* vedi nota sotto */
+    content: "";
+    height: 2px;
+    background-color: #222;
+    z-index: 0;
+}
+.stepwizard-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1 1 0;
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    padding: 0;
+}
+.step-label {
+    display: block;
+    margin-bottom: 10px;
+    font-family: 'Montserrat', Arial, sans-serif;
+    color: #222;
+    font-size: 1.1rem;
+    font-weight: 400;
+}
+.btn-circle {
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    font-size: 14px;
+    line-height: 30px;
+    border-radius: 50%;
+    border: 2px solid #bbb;
+    background: #fff;
+    color: #222;
+    transition: all 0.2s;
+    font-weight: 500;
+    margin: 0 auto;
+    z-index: 1;
+    position: relative;
 }
 
-/* Assicura che il contenuto sia visibile sopra il footer */
-.form-container {
-  max-width: 600px;
-  margin-bottom: 60px; /* Distanza dal footer */
+/* Step corrente: solo bordo nero */
+.btn-circle.current {
+    border-color: #222;
+    background: #fff;
+    color: #222;
+}
+
+/* Step completato: riempito nero */
+.btn-circle.completed {
+    border-color: #222;
+    background: #222;
+    color: #fff;
+}
+
+/* Step futuro: bordo grigio */
+.btn-circle[disabled], .btn-circle:disabled {
+    border-color: #bbb;
+    background: #fff;
+    color: #bbb;
 }

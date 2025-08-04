@@ -1,265 +1,28 @@
 <div class="container-fluid d-flex flex-column justify-content-start custom-container">
-
+  <div class="row">
+    <div class="col-12 d-flex justify-content-start align-items-start mt-5 ms-5">
+      <img src="/assets/images/elle-studio-logo.png" alt="Logo Elle Studio Pilates"
+        style="max-width: 200px; height: auto;">
+    </div>
+  </div>
   <div class="row">
     <div class="col-12 d-flex justify-content-center align-items-start mt-5">
-      <form (ngSubmit)="register()" [formGroup]="form" class="w-100 form-container" style="max-width: 800px;">
-        <div class="card shadow-lg p-3">
-          <!-- Titolo -->
-          <div class="card-header text-center sc-primary fw-bold fs-4">
-            Registrazione Utente
+      <div class="stepwizard col-md-offset-3">
+        <div class="stepwizard-row setup-panel">
+          <div class="stepwizard-step">
+            <span class="step-label">Dettagli profilo</span>
+            <a href="#step-1" type="button" class="btn btn-circle current"></a>
           </div>
-
-          <div class="card-body">
-            @if ((loading$ | async) === false && showAlert) {
-              <div class="row mt-2">
-                <div class="col-12">
-                <div class="alert mt-3 text-center" [ngClass]="{
-            'alert-warning': alertType === 'warning',
-            'alert-success': alertType === 'success',
-            'alert-danger': alertType === 'danger'
-          }" role="alert">
-                  <i class="fas" [ngClass]="{
-               'fa-exclamation-triangle': alertType === 'warning',
-               'fa-check-circle': alertType === 'success',
-               'fa-times-circle': alertType === 'danger'
-             }">
-                    </i>
-                    <span class="ms-2 me-2">{{ apiMsg.message + " Torna alla" }} <a routerLink="/login"
-                      class="text-primary text-decoration-none me-2">
-                      <i class="fas fa-right-to-bracket me-1"></i> Login
-                    </a></span>
-                  </div>
-                </div>
-              </div>
-            }
-            <!-- Username -->
-            <div class="mb-3">
-              <label for="username" class="fw-bold form-label">Username</label>
-
-              <input type="text" id="username" class="form-control" formControlName="username" autocomplete="off"
-                [ngClass]="{ 'is-invalid': submitted && f['username'].errors }" />
-
-                @if (f['username'].errors) {
-                  <div class="invalid-feedback">
-                    @if (f['username'].errors['required']) {
-                      <div>Il username è richiesto</div>
-                    }
-                    @if (f['username'].errors['minlength']) {
-                      <div>Il username deve contenere almeno {{ f['username'].errors['minlength'].requiredLength }}
-                      caratteri</div>
-                    }
-                    @if (f['username'].errors['maxlength']) {
-                      <div>Il username non può superare {{ f['username'].errors['maxlength'].requiredLength }} caratteri
-                      </div>
-                    }
-                    @if (f['username'].errors['pattern']) {
-                      <div>
-                        Il username non rispetta il formato supportato.
-                      </div>
-                    }
-                  </div>
-                }
-              </div>
-
-              <!-- Email -->
-              <div class="mb-3">
-                <label for="email" class="fw-bold form-label">Email</label>
-
-                <input type="email" id="email" class="form-control" formControlName="email" autocomplete="off"
-                  [ngClass]="{ 'is-invalid': submitted && f['email'].errors }" />
-
-                  @if (f['email'].errors) {
-                    <div class="invalid-feedback">
-                      @if (f['email'].errors['required']) {
-                        <div>L'email è richiesta</div>
-                      }
-                      @if (f['email'].errors['email']) {
-                        <div>
-                          L'email non è valida
-                        </div>
-                      }
-                    </div>
-                  }
-                </div>
-
-                <!-- Telefono -->
-                <div class="mb-3">
-                  <label for="cellulare" class="fw-bold form-label">Cellulare</label>
-
-                  <input type="text" id="cellulare" class="form-control" formControlName="cellulare" autocomplete="off"
-                    [ngClass]="{ 'is-invalid': submitted && f['cellulare'].errors }" />
-
-                    @if (f['cellulare'].errors) {
-                      <div class="invalid-feedback">
-                        @if (f['cellulare'].errors['required']) {
-                          <div>Il cellulare è richiesto</div>
-                        }
-                        @if (f['cellulare'].errors['pattern']) {
-                          <div>
-                            Formato valido:
-                            <br> - Italia: +39 o 0039 opzionale, seguito da 10 cifre
-                              <br> - UK: +44 o 0044 opzionale, seguito da 10-11 cifre
-                              </div>
-                            }
-                          </div>
-                        }
-                      </div>
-
-                      <!-- Aggiungi negozi -->
-                      <label for="sezNegozi" class="fw-bold form-label">Aggiungi negozio</label>
-                      <div formArrayName="negozi">
-                        @for (negozioForm of negozioFormGroups; track negozioForm; let i = $index) {
-                          <div id="sezNegozi">
-                            <div [formGroup]="negozioForm">
-                              <div class="row mt-2">
-                                <!-- Nome Negozio -->
-                                <div class="col-md-4">
-                                  <label for="shopName" class="form-label fw-bold">Nome</label>
-                                  <input type="text" id="shopName" class="form-control" formControlName="shopName"
-                                    placeholder="Nome negozio"
-                                    [ngClass]="{ 'is-invalid': submitted && negozi.at(i).get('shopName')?.errors }" />
-                                    @if (negozi.at(i).get('shopName')?.errors?.['required']) {
-                                      <div class="invalid-feedback">
-                                        Il nome del negozio è obbligatorio
-                                      </div>
-                                    }
-                                  </div>
-                                  <!-- Città -->
-                                  <div class="col-md-3">
-                                    <label for="shopCity" class="form-label fw-bold">Città</label>
-                                    <input type="text" id="shopCity" class="form-control" formControlName="shopCity"
-                                      placeholder="Città"
-                                      [ngClass]="{ 'is-invalid': submitted && negozi.at(i).get('shopCity')?.errors }" />
-                                      @if (negozi.at(i).get('shopCity')?.errors?.['required']) {
-                                        <div class="invalid-feedback">
-                                          La città è obbligatoria
-                                        </div>
-                                      }
-                                    </div>
-                                    <!-- Indirizzo -->
-                                    <div class="col-md-4">
-                                      <label for="shopAddress" class="form-label fw-bold">Indirizzo</label>
-                                      <input type="text" id="shopAddress" class="form-control" formControlName="shopAddress"
-                                        placeholder="Indirizzo"
-                                        [ngClass]="{ 'is-invalid': submitted && negozi.at(i).get('shopAddress')?.errors }" />
-                                        @if (negozi.at(i).get('shopAddress')?.errors?.['required']) {
-                                          <div class="invalid-feedback">
-                                            L'indirizzo è obbligatorio
-                                          </div>
-                                        }
-                                      </div>
-                                      <!-- Pulsante Rimuovi -->
-                                      @if (negozi.length > 1) {
-                                        <div class="col-md-1 d-flex align-items-end">
-                                          <button type="button" class="btn btn-danger btn-sm" (click)="rimuoviNegozio(i)">
-                                            <i class="fa-solid fa-trash"></i>
-                                          </button>
-                                        </div>
-                                      }
-                                    </div>
-                                  </div>
-                                </div>
-                              }
-
-                              <!-- Pulsante per aggiungere negozi centrato -->
-                              <div class="text-center mt-3">
-                                <button type="button" class="btn btn-success btn-md" (click)="aggiungiNegozio()">
-                                  <i class="fa-solid fa-plus"></i>
-                                </button>
-                              </div>
-
-                            </div>
-
-                            <!-- Password -->
-                            <div class="mb-3">
-                              <label for="password" class="fw-bold form-label">Password</label>
-
-                              <input type="password" id="password" class="form-control" formControlName="password" autocomplete="off"
-                                [ngClass]="{ 'is-invalid': submitted && f['password'].errors }" />
-
-                                @if (f['password'].errors) {
-                                  <div class="invalid-feedback">
-                                    @if (f['password'].errors['required']) {
-                                      <div>Il password è richiesto</div>
-                                    }
-                                    @if (f['password'].errors['minlength']) {
-                                      <div>Il password deve contenere almeno {{ f['password'].errors['minlength'].requiredLength }}
-                                      caratteri</div>
-                                    }
-                                    @if (f['password'].errors['maxlength']) {
-                                      <div>Il password non può superare {{ f['password'].errors['maxlength'].requiredLength }} caratteri
-                                      </div>
-                                    }
-                                    @if (f['password'].errors['pattern']) {
-                                      <div>
-                                        Il password non rispetta il formato supportato.
-                                      </div>
-                                    }
-                                  </div>
-                                }
-                              </div>
-
-                              <!-- Conferma Password -->
-                              <div class="mb-3">
-                                <label for="confirmPassword" class="fw-bold form-label">Conferma Password</label>
-
-                                <input type="password" id="confirmPassword" class="form-control" formControlName="confirmPassword"
-                                  autocomplete="off" [ngClass]="{ 'is-invalid': submitted && f['confirmPassword'].errors }" />
-
-                                  @if (f['confirmPassword'].errors) {
-                                    <div class="invalid-feedback">
-                                      @if (f['confirmPassword'].errors['required']) {
-                                        <div>Confermare la password è obbligatorio</div>
-                                      }
-                                      @if (f['confirmPassword'].errors['passwordMismatch']) {
-                                        <div>Le password non coincidono</div>
-                                      }
-                                    </div>
-                                  }
-                                </div>
-
-                                <!-- Checkbox Privacy Policy -->
-                                <div class="mb-3 form-check">
-                                  <input type="checkbox" id="flagPrivacy" class="form-check-input" formControlName="flagPrivacy"
-                                    autocomplete="off" [ngClass]="{ 'is-invalid': submitted && f['flagPrivacy'].errors }" />
-                                    <label for="flagPrivacy" class="form-check-label">
-                                      Confermo di aver letto e accettato la nostra <a href="#">Informativa per l'utente</a> e <a
-                                    href="#">Informativa sulla privacy</a>.
-                                  </label>
-
-                                  @if (f['flagPrivacy'].errors) {
-                                    <div class="invalid-feedback">
-                                      @if (f['flagPrivacy'].errors['required']) {
-                                        <div>Il flag è obbligatorio</div>
-                                      }
-                                    </div>
-                                  }
-                                </div>
-
-                                <!-- Link "Hai già un account? Login" -->
-                                @if (!showAlert) {
-                                  <div class="text-center mb-4">
-                                    <span class="text-muted me-2">Hai già un account?</span>
-                                    <a routerLink="/login" class="text-primary text-decoration-none">
-                                      <i class="fas fa-right-to-bracket me-1"></i> Login
-                                    </a>
-                                  </div>
-                                }
-
-                                <!-- Pulsanti -->
-                                <div class="d-flex justify-content-between mb-3">
-                                  <button type="button" class="btn btn-primary btn-default w-100 me-2" (click)="onSubmit()">
-                                    <i class="fas fa-user-plus me-1"></i> Registrati
-                                  </button>
-                                  <button type="button" (click)="reset()" class="btn btn-secondary btn-default w-100">
-                                    <i class="fas fa-times me-1"></i> Annulla
-                                  </button>
-                                </div>
-
-                                <app-spinner></app-spinner>
-                              </div>
-                            </div>
-                          </form>
-                        </div>
-                      </div>
-                    </div>
+          <div class="stepwizard-step">
+            <span class="step-label">Certificato medico</span>
+            <a href="#step-2" type="button" class="btn btn-circle completed"></a>
+          </div>
+          <div class="stepwizard-step">
+            <span class="step-label">Email & Password</span>
+            <a href="#step-3" type="button" class="btn btn-circle" disabled></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
