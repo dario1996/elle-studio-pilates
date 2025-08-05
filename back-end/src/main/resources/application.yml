@@ -1,6 +1,6 @@
 spring:
   application:
-    name: gestionale-formazione
+    name: gestionale-elle-studio
 
   sql:
     init:
@@ -8,7 +8,7 @@ spring:
       platform: mysql
 
   datasource:
-    url: jdbc:mysql://localhost:3307/gest-form?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3307/elle-studio?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
     username: root
     password: Agostino96!
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -23,8 +23,8 @@ spring:
 
   liquibase:
     enabled: true
-    change-log: classpath:db/changelog/db.changelog-master.xml
-    default-schema: gest-form
+    change-log: classpath:db/changelog/db.changelog-utenti-only.xml
+    default-schema: elle-studio
 
 # Security Configuration
 sicurezza:

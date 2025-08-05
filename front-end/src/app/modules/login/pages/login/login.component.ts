@@ -73,7 +73,7 @@ export class LoginComponent implements OnInit {
     console.log(`Lo stato di autenticazione è: (${this.autenticato()})`);
 
     if (this.autenticato()) {
-      this.route.navigate(['/gestionale-formazione']);
+      this.route.navigate(['/gestionale-elle-studio']);
     }
   });
 

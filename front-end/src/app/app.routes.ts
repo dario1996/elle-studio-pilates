@@ -9,7 +9,7 @@ export const routes: Routes = [
     redirectTo: 'login',
   },
   {
-    path: 'gestionale-formazione',
+    path: 'gestionale-elle-studio',
     loadComponent: () =>
       import('./modules/home/pages/welcome/welcome.component').then(
         m => m.WelcomeComponent,

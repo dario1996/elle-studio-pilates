@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="010-01" author="elle-studio-pilates">
+        <comment>Add registration fields to utenti table</comment>
+
+        <addColumn tableName="utenti">
+            <column name="nome" type="VARCHAR(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="cognome" type="VARCHAR(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="codice_fiscale" type="VARCHAR(16)">
+                <constraints nullable="true" unique="true" />
+            </column>
+            <column name="certificato_medico" type="VARCHAR(500)">
+                <constraints nullable="true" />
+            </column>
+            <column name="patologie" type="BOOLEAN">
+                <constraints nullable="true" />
+            </column>
+            <column name="descrizione_patologie" type="TEXT">
+                <constraints nullable="true" />
+            </column>
+            <column name="obiettivi" type="TEXT">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="010-02" author="elle-studio-pilates">
+        <comment>Create index for codice_fiscale in utenti table</comment>
+
+        <createIndex tableName="utenti" indexName="idx_utenti_codice_fiscale">
+            <column name="codice_fiscale" />
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

@@ -12,7 +12,7 @@ import { ModalComponent } from "./core/modal/modal.component";
   imports: [RouterOutlet, ModalComponent],
 })
 export class AppComponent implements OnInit {
-  title = 'gestionale-formazione-ui';
+  title = 'gestionale-elle-studio-ui';
   private translate = inject(TranslateService);
   private defaultLang = 'it';
 

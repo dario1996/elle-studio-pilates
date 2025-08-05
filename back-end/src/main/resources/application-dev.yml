@@ -3,7 +3,7 @@
 # mvn spring-boot:run "-Dspring.profiles.active=dev"
 spring:
   application:
-    name: gestionale-formazione
+    name: gestionale-elle-studio
 
   # WSL MySQL Database Configuration
   datasource:
