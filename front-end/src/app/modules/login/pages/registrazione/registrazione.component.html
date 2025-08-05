@@ -11,26 +11,58 @@
         <div class="stepwizard-row setup-panel">
           <div class="stepwizard-step">
             <span class="step-label">Dettagli profilo</span>
-            <a href="#step-1" type="button" class="btn btn-circle current"></a>
+            <a
+              type="button"
+              class="btn btn-circle"
+              [ngClass]="{
+                'completed': currentStep > 1,
+                'current': currentStep === 1
+              }"
+            ></a>
           </div>
           <div class="stepwizard-step">
             <span class="step-label">Certificato medico</span>
-            <a href="#step-2" type="button" class="btn btn-circle completed"></a>
+            <a
+              type="button"
+              class="btn btn-circle"
+              [ngClass]="{
+                'completed': currentStep > 2,
+                'current': currentStep === 2,
+                'disabled': currentStep < 2
+              }"
+            ></a>
           </div>
           <div class="stepwizard-step">
             <span class="step-label">Email & Password</span>
-            <a href="#step-3" type="button" class="btn btn-circle" disabled></a>
+            <a
+              type="button"
+              class="btn btn-circle"
+              [ngClass]="{
+                'current': currentStep === 3,
+                'disabled': currentStep < 3
+              }"
+            ></a>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-12 d-flex justify-content-center align-items-start mt-4">
-      <div class="profile-header-box">
-        <h1 class="profile-title">Il tuo profilo</h1>
-        <p class="profile-subtitle">Aggiungi i dettagli sul tuo profilo</p>
-      </div>
-    </div>
-  </div>
+
+  <app-dettagli-profilo
+    *ngIf="currentStep === 1"
+    (continua)="onContinua($event)">
+  </app-dettagli-profilo>
+
+  <app-certificato-medico
+    *ngIf="currentStep === 2"
+    (continua)="onContinua($event)"
+    (indietro)="onIndietro()">
+  </app-certificato-medico>
+
+  <app-email-password
+    *ngIf="currentStep === 3"
+    (continua)="onContinua($event)"
+    (indietro)="onIndietro()">
+  </app-email-password>
+  
 </div>

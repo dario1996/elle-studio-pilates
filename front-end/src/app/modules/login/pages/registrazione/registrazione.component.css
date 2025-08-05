@@ -4,7 +4,7 @@
 .stepwizard {
     display: flex;
     justify-content: center;
-    width: 60%; /* o 50%, scegli tu */
+    width: 60%;
     margin: 0 auto;
     position: relative;
 }
@@ -21,8 +21,8 @@
 .stepwizard-row:before {
     position: absolute;
     top: 49px; /* regola se serve per centrare la linea */
-    left: calc(50% / 3 - 12px - 2px);  /* vedi nota sotto */
-    right: calc(50% / 3 - 12px - 2px); /* vedi nota sotto */
+    left: calc(50% / 3 - 12px - 2px);
+    right: calc(50% / 3 - 12px - 2px);
     content: "";
     height: 2px;
     background-color: #222;
@@ -47,45 +47,38 @@
     font-weight: 400;
 }
 .btn-circle {
+    border-radius: 50% !important;
     width: 30px;
     height: 30px;
-    text-align: center;
-    font-size: 14px;
-    line-height: 30px;
-    border-radius: 50%;
-    border: 2px solid #bbb;
-    background: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    border: 2px solid #222;
+    background: #fff !important;
     color: #222;
     transition: all 0.2s;
-    font-weight: 500;
-    margin: 0 auto;
-    z-index: 1;
     position: relative;
+    padding: 0;
 }
-
-/* Step corrente: solo bordo nero */
 .btn-circle.current {
     border-color: #222;
-    background: #fff;
+    background: #fff !important;
     color: #222;
 }
-
-/* Step completato: riempito nero */
 .btn-circle.completed {
+    background: #222 !important;
+    color: #fff !important;
     border-color: #222;
-    background: #222;
-    color: #fff;
 }
-
-/* Step futuro: bordo grigio */
-.btn-circle[disabled], .btn-circle:disabled {
-    border-color: #bbb;
-    background: #fff;
-    color: #bbb;
+.btn-circle.disabled,
+.btn-circle[disabled] {
+    border-color: #bbb !important;
+    background: #fff !important;
+    color: #bbb !important;
 }
 
 .profile-header-box {
-    /* border: 3px solid #d32f2f;  <-- RIMUOVI o COMMENTA questa riga */
     border-radius: 8px;
     padding: 32px 24px 16px 24px;
     background: transparent;
