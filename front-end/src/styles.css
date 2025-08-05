@@ -98,6 +98,10 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+html, body, .container-fluid {
+    overflow-x: hidden;
+}
+
 /* Radix UI inspired clean layout */
 .page-container {
   height: 100vh; /* CORRETTO: usa tutta l'altezza viewport */
