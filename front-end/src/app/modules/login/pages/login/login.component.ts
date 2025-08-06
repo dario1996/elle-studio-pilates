@@ -32,6 +32,7 @@ export class LoginComponent implements OnInit {
 
   userId = '';
   password = '';
+  showPassword = false;
 
   //autenticato : boolean = true;
   autenticato = signal<boolean>(false);
@@ -98,5 +99,9 @@ export class LoginComponent implements OnInit {
   annulla() {
     this.userId = '';
     this.password = '';
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 }

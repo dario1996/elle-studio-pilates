@@ -70,7 +70,7 @@
   height: 38px;
   font-size: 12px;
   border-radius: 50px;
-  border: 1px solid #ced4da;
+  border: var(--color-BORDO) 1px solid;
   transition:
       border-color 0.15s ease-in-out,
       box-shadow 0.15s ease-in-out;
@@ -100,7 +100,6 @@
   text-decoration: none;
   color: #fff;
   background-color: var(--color-VIOLA-SCURO, #541388);
-  font-family: 'Bitter', sans-serif;
   font-weight: bold;
   font-size: 16px;
   padding: 12px 32px;
@@ -114,7 +113,6 @@
 
 .effect.effect-2:before {
   content: "\f0a4";
-  font-family: "FontAwesome";
   font-size: 18px;
   display: flex;
   align-items: center;

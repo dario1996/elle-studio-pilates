@@ -1,15 +1,33 @@
 /* You can add global styles to this file, and also import other style files */
 /* ================== RADIX UI INSPIRED DESIGN SYSTEM =================== */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Tenor+Sans:wght@400&family=Montserrat:wght@400;700&display=swap');
 
 :root {
+  /* COLORI DI DEFAULT */
+  --color-BIANCO: #FEFBFB;
+  --color-NERO: #1D1D1B;
+
+  /* COLORI PERSONALIZZATI */
+  /* sottotitoli, campi di testo di esempio */
+  --color-GRIGIO-CHIARO: #898989;
+  /* colore background */
+  --color-BIANCO-BACKGROUND: #F6F6F6;
+  /* colore bordi */
+  --color-BORDO: #C99E67;
+
+  /* FONTS*/
+  --font-tenor-sans: "Tenor Sans", sans-serif;
+  --font-montserrat: "Montserrat", sans-serif;
+  /* Font principale del sito */
+  --font-family: var(--font-montserrat);
+
   /* Colors */
   --color-background: hsl(0 0% 100%);
   --color-foreground: hsl(0 0% 9%);
   --color-muted: hsl(0 0% 96%);
   --color-muted-foreground: hsl(0 0% 45%);
   --color-border: hsl(0 0% 91%);
-  --color-input: hsl(0 0% 100%);
+  --color-input: var(var(--color-BORDO));
   --color-primary: #0F4C82;
   --color-primary-foreground: hsl(0 0% 98%);
   --color-secondary: #93A9D1;
@@ -19,27 +37,6 @@
   --color-destructive: hsl(0 84% 60%);
   --color-destructive-foreground: hsl(0 0% 98%);
 
-  /* COLORI AZIENDALI */
-  --color-BLU : #0F4C82;
-  --color-VIOLA-SCURO : #5A5BA0;
-  --color-VIOLA-CHIARO : #93A9D1;
-  --color-PURPLE : #8B42B9;
-  --color-ROSA : #FA02EE;
-  --color-CELESTE : #00D1DE;
-  --color-BIANCO : #F4F4F4;
-  --color-NERO : #222222;
-
-  /* COLORI AZIENDALI PASTELLO */
-  --color-BLU-PASTELLO: #A3C4E8;           /* Pastel Blue */
-  --color-VIOLA-SCURO-PASTELLO: #B7B9DD;   /* Pastel Dark Violet */
-  --color-VIOLA-CHIARO-PASTELLO: #D6E2F3;  /* Pastel Light Violet */
-  --color-PURPLE-PASTELLO: #CBA4E8;        /* Pastel Purple */
-  --color-ROSA-PASTELLO: #F7B3EA;          /* Pastel Pink */
-  --color-CELESTE-PASTELLO: #A2EAF2;       /* Pastel Light Blue */
-  --color-BIANCO-PASTELLO: #F8F8FA;        /* Soft White */
-  --color-NERO-PASTELLO : #444444;          /* Soft Black */
-
-  
   /* Sidebar - UNA SOLA DICHIARAZIONE */
   --sidebar-width: 230px;
   --sidebar-collapsed-width: 80px;
@@ -57,7 +54,6 @@
   --spacing-2xl: 3rem;
 
   /* Typography */
-  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
@@ -125,8 +121,9 @@ html, body, .container-fluid {
 
 /* ================== BUTTONS =================== */
 /* Button styling */
-.btn {
+/* .btn {
   display: inline-flex;
+  background-color: var(--color-NERO);
   align-items: center;
   justify-content: center;
   gap: 8px;
@@ -141,31 +138,30 @@ html, body, .container-fluid {
   white-space: nowrap;
   outline: none;
   position: relative;
-}
+} */
 
-.btn:focus-visible {
+/* .btn:focus-visible {
   outline: 2px solid #0F4C82;
   outline-offset: 2px;
   border: none !important;
-}
+} */
 
-.btn-secondary {
+/* .btn-secondary {
   background: var(--color-VIOLA-SCURO-PASTELLO) !important;
   color: var(--color-VIOLA-SCURO) !important;
   border: none !important;
   border-radius: 50px !important;
   padding: 0px 10px 0px 10px !important;
   transition: all 0.25s ease !important;
-}
+} */
 
-.btn-secondary:hover {
+/* .btn-secondary:hover {
   background: var(--color-VIOLA-SCURO) !important;
   color: var(--color-BIANCO-PASTELLO) !important;
   transform: translateY(-1px);
-  /* box-shadow: 0 4px 8px rgba(125, 125, 125, 0.3); */
-}
+} */
 
-.btn-secondary:active {
+/* .btn-secondary:active {
   background: var(--color-VIOLA-SCURO-PASTELLO) !important;
 }
 
@@ -182,10 +178,9 @@ html, body, .container-fluid {
   background: var(--color-BLU) !important;
   color: var(--color-BIANCO) !important;
   transform: translateY(-1px);
-  /* box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3); */
-}
+} */
 
-.btn-import {
+/* .btn-import {
   background: #e2e3e5 !important;
   color: #535252 !important;
   border: none !important;
@@ -198,7 +193,6 @@ html, body, .container-fluid {
   background: #706f6f !important;
   color: var(--color-BIANCO) !important;
   transform: translateY(-1px);
-  /* box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3); */
 }
 
 .btn-cancel {
@@ -214,7 +208,6 @@ html, body, .container-fluid {
   background: #706f6f !important;
   color: var(--color-BIANCO) !important;
   transform: translateY(-1px);
-  /* box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3); */
 }
 
 .btn-icon {
@@ -248,7 +241,7 @@ html, body, .container-fluid {
 
 .btn-ghost:hover:not(:disabled) {
   background: var(--color-accent);
-}
+} */
 
 /* .btn-outline {
   background: transparent;
@@ -278,7 +271,7 @@ html, body, .container-fluid {
 .form-input {
   height: 44px;
   padding: 0 12px;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-BORDO);
   border-radius: var(--radius-md);
   font-size: 12px;
   background: var(--color-input);
@@ -288,7 +281,7 @@ html, body, .container-fluid {
 
 .form-input:focus {
   outline: none;
-  border-color: var(--color-primary);
+  border-color: var(--color-BORDO);
   box-shadow: 0 0 0 3px hsla(222, 84%, 5%, 0.1);
 }
 
