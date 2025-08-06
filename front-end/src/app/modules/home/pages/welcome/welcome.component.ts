@@ -25,46 +25,46 @@ export class WelcomeComponent implements OnInit {
       ],
     },
     {
-      title: 'Piano Formativo',
+      title: 'Calendario',
       icon: 'fa-solid fa-graduation-cap fa-xl',
       links: [
         {
-          label: 'Piano Formativo',
+          label: 'Calendario',
           url: 'piano-formativo',
           icon: 'fa-solid fa-graduation-cap fa-lg',
         },
       ],
     },
     {
-      title: 'Dipendenti',
+      title: 'Gestione utenti',
       icon: 'fa-solid fa-users fa-xl',
       links: [
         {
-          label: 'Dipendenti',
+          label: 'Gestione utenti',
           url: 'dipendenti',
           icon: 'fa-solid fa-users fa-lg',
         },
       ],
     },
     {
-      title: 'Corsi',
+      title: 'Gestione pacchetti',
       icon: 'fa-solid fa-book fa-xl',
       links: [
         {
-          label: 'Corsi',
+          label: 'Gestione pacchetti',
           url: 'corsi',
           icon: 'fa-solid fa-book fa-lg',
         },
       ],
     },
     {
-      title: 'Impostazioni',
-      icon: 'fa-solid fa-gears fa-xl',
+      title: 'Statistiche',
+      icon: 'fa-solid fa-chart-simple fa-xl',
       links: [
         {
-          label: 'Impostazioni',
+          label: 'Statistiche',
           url: 'impostazioni',
-          icon: 'fa-solid fa-gears fa-lg',
+          icon: 'fa-solid fa-chart-simple fa-lg',
         },
       ],
     },
