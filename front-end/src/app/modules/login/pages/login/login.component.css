@@ -1,0 +1,107 @@
+.login-text {
+  font-size: 1.2rem;
+  color: var(--color-NERO);
+  font-family: var(--font-family) !important;
+}
+
+.login-title {
+  font-size: 1.7rem;
+  font-weight: 500;
+  color: var(--color-NERO);
+  font-family: var(--font-family) !important;
+}  
+
+.register-link {
+  color: var(--color-NERO);
+  text-decoration: underline;
+  font-family: var(--font-family) !important;
+}
+
+.forgot-link {
+  color: var(--color-NERO);
+  text-decoration: none;
+  font-family: var(--font-family) !important;
+}
+
+.form-control {
+    font-size: 12px;
+    border-radius: 6px;
+    border: 1px solid var(--color-NERO);
+    transition:
+        border-color 0.15s ease-in-out,
+        box-shadow 0.15s ease-in-out;
+}
+
+.login-btn {
+  display: inline-flex;
+  background-color: var(--color-NERO) !important;
+  color: var(--color-BIANCO) !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  font-size: 16px !important;
+  font-weight: 500;
+  line-height: 1;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 150ms ease;
+  text-decoration: none;
+  white-space: nowrap;
+  outline: none;
+  position: relative;
+}
+
+.form-check-input {
+    border: 1px solid var(--color-NERO);
+    border-radius: 2px;
+    transition:
+        border-color 0.15s ease-in-out,
+        box-shadow 0.15s ease-in-out;
+}
+
+.bi {
+    border: 1px solid var(--color-NERO);
+}
+
+.password-input-container {
+  position: relative;
+}
+
+.password-input {
+  padding-right: 45px !important; /* Spazio per l'icona */
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--color-GRIGIO-CHIARO);
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+  z-index: 10;
+}
+
+.password-toggle-btn:hover {
+  color: var(--color-NERO);
+}
+
+.password-toggle-btn:focus {
+  outline: none;
+  color: var(--color-NERO);
+}
+
+.password-toggle-btn i {
+  border: none !important;
+  font-size: 16px;
+}

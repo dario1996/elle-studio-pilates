@@ -9,8 +9,8 @@
 }
 
 .profile-title {
-    font-size: 3rem;
-    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: 1.2rem;
+    font-family: var(--font-family);
     font-weight: 400;
     margin-bottom: 8px;
     color: #222;
@@ -19,7 +19,7 @@
 .profile-subtitle {
     font-size: 1.5rem;
     color: #888;
-    font-family: 'Montserrat', Arial, sans-serif;
+    font-family: var(--font-family);
     font-weight: 400;
     margin: 0;
 }
