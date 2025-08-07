@@ -1,48 +1,50 @@
 <div class="page-header-content">
-    <div class="page-title-section">
-        <h1 class="page-title">{{ title }}</h1>
-        <p class="page-description">
-            {{ subtitle }}
-        </p>
+  <div class="page-title-section">
+    <h1 class="page-title">{{ title }}</h1>
+    <p class="page-description">
+      {{ subtitle }}
+    </p>
+  </div>
+  <div class="page-actions">
+    <div class="search-fields" *ngIf="searchFields.length > 0">
+      <input
+        *ngFor="let field of searchFields"
+        type="text"
+        class="form-control form-control-sm search-input"
+        [placeholder]="field.placeholder"
+        [(ngModel)]="searchValues[field.key]"
+        (input)="onSearchChange()"
+        autocomplete="off"
+      />
     </div>
-    <div class="page-actions">
-        <div class="search-fields" *ngIf="searchFields.length > 0">
-            <input
-                *ngFor="let field of searchFields"
-                type="text"
-                class="form-control form-control-sm search-input"
-                [placeholder]="field.placeholder"
-                [(ngModel)]="searchValues[field.key]"
-                (input)="onSearchChange()"
-                autocomplete="off"
-            />
-        </div>
-        <!-- Multiple buttons support -->
-        <div *ngIf="buttons.length > 0" class="buttons-container">
-            <button
-                *ngFor="let button of buttons"
-                class="btn btn-sm"
-                [class]="button.class || 'btn-primary'"
-                (click)="buttonActionClick.emit(button.action || '')">
-                <i *ngIf="button.icon" [class]="button.icon + ' btn-icon'"></i>
-                {{ button.text }}
-                <!-- Badge solo per il bottone Filtri -->
-                <span
-                  *ngIf="button.action === 'filter' && activeFiltersCount > 0"
-                  class="filter-badge ms-1"
-                >
-                  {{ activeFiltersCount }}
-                </span>
-            </button>
-        </div>
-        
-        <!-- Single button fallback (backward compatibility) -->
-        <button
-            *ngIf="showButton && buttons.length === 0"
-            class="btn btn-sm btn-primary text-center"
-            (click)="buttonClick.emit()">
-            <i class="fas fa-plus btn-icon"></i>
-            <span class="btn-primary">{{ buttonText }}</span>
-        </button>
+    <!-- Multiple buttons support -->
+    <div *ngIf="buttons.length > 0" class="buttons-container">
+      <button
+        *ngFor="let button of buttons"
+        class="btn btn-sm"
+        [class]="button.class || 'btn-primary'"
+        (click)="buttonActionClick.emit(button.action || '')"
+      >
+        <i *ngIf="button.icon" [class]="button.icon + ' btn-icon'"></i>
+        {{ button.text }}
+        <!-- Badge solo per il bottone Filtri -->
+        <span
+          *ngIf="button.action === 'filter' && activeFiltersCount > 0"
+          class="filter-badge ms-1"
+        >
+          {{ activeFiltersCount }}
+        </span>
+      </button>
     </div>
+
+    <!-- Single button fallback (backward compatibility) -->
+    <button
+      *ngIf="showButton && buttons.length === 0"
+      class="btn btn-sm btn-primary text-center"
+      (click)="buttonClick.emit()"
+    >
+      <i class="fas fa-plus btn-icon"></i>
+      <span class="btn-primary">{{ buttonText }}</span>
+    </button>
+  </div>
 </div>

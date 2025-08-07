@@ -9,7 +9,7 @@
   font-weight: 500;
   color: var(--color-NERO);
   font-family: var(--font-family) !important;
-}  
+}
 
 .register-link {
   color: var(--color-NERO);
@@ -24,12 +24,12 @@
 }
 
 .form-control {
-    font-size: 12px;
-    border-radius: 6px;
-    border: 1px solid var(--color-NERO);
-    transition:
-        border-color 0.15s ease-in-out,
-        box-shadow 0.15s ease-in-out;
+  font-size: 12px;
+  border-radius: 6px;
+  border: 2px solid var(--color-NERO);
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
 }
 
 .login-btn {
@@ -53,15 +53,15 @@
 }
 
 .form-check-input {
-    border: 1px solid var(--color-NERO);
-    border-radius: 2px;
-    transition:
-        border-color 0.15s ease-in-out,
-        box-shadow 0.15s ease-in-out;
+  border: 1px solid var(--color-NERO);
+  border-radius: 2px;
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
 }
 
 .bi {
-    border: 1px solid var(--color-NERO);
+  border: 1px solid var(--color-NERO);
 }
 
 .password-input-container {

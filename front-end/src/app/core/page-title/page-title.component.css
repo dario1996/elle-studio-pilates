@@ -8,14 +8,16 @@
 .page-title-section {
   flex: 1;
   min-width: 0;
+  font-family: var(--font-family);
 }
 
 .page-title {
-  font-size: 32px;
-  font-weight: 700;
-  color: #1a202c;
-  margin: 0 0 8px 0;
-  line-height: 1.2;
+  font-size: 32px !important;
+  font-weight: 700 !important;
+  color: #1a202c !important;
+  margin: 0 0 8px 0 !important;
+  line-height: 1.2 !important;
+  font-family: var(--font-family) !important;
 }
 
 .page-description {
@@ -67,13 +69,12 @@
 }
 
 .form-control {
-  height: 38px;
   font-size: 12px;
   border-radius: 50px;
   border: var(--color-BORDO) 1px solid;
   transition:
-      border-color 0.15s ease-in-out,
-      box-shadow 0.15s ease-in-out;
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
 }
 
 @media (max-width: 768px) {
@@ -82,11 +83,11 @@
     align-items: stretch;
     gap: 16px;
   }
-  
+
   .page-actions {
     justify-content: flex-end;
   }
-  
+
   .buttons-container {
     flex-wrap: wrap;
   }
@@ -112,7 +113,7 @@
 }
 
 .effect.effect-2:before {
-  content: "\f0a4";
+  content: '\f0a4';
   font-size: 18px;
   display: flex;
   align-items: center;
@@ -122,7 +123,7 @@
   right: -30px;
   width: 30px;
   height: 100%;
-  background-color: rgba(255,255,255,0.3);
+  background-color: rgba(255, 255, 255, 0.3);
   border-radius: 0px 6px 6px 0px;
   transition: all 0.2s linear 0s;
   text-align: center;

@@ -8,10 +8,10 @@
 }
 
 .form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
 }
 
 .form-field {
@@ -31,7 +31,7 @@
   line-height: 1.3;
 }
 
-.form-control,
+/* .form-control,
 .form-select {
   border: 1px solid #e2e8f0;
   border-radius: 6px;
@@ -47,28 +47,28 @@
   min-width: 0;
   flex-shrink: 0;
   vertical-align: top;
-}
+} */
 
 .form-select {
   appearance: none;
   background-image: none;
 }
 
-.form-control:focus,
+/* .form-control:focus,
 .form-select:focus {
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
   outline: none;
-}
+} */
 
-.form-control::placeholder {
+/* .form-control::placeholder {
   color: #94a3b8;
-}
+} */
 
-.form-control[readonly] {
+/* .form-control[readonly] {
   background-color: #f8f9fa;
   color: #6c757d;
-}
+} */
 
 /* Checkbox */
 .form-check {
@@ -87,8 +87,8 @@
 }
 
 .form-check-input:checked {
-  background-color: #3b82f6;
-  border-color: #3b82f6;
+  background-color: #000000;
+  border-color: #ffffff;
 }
 
 .form-check-label {
@@ -232,7 +232,7 @@
   .form-row {
     grid-template-columns: 1fr;
     gap: 0;
-    }
+  }
   .filter-row {
     gap: 0.5rem;
     flex-direction: column;

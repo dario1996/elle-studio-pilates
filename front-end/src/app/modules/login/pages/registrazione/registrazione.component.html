@@ -1,12 +1,21 @@
-<div class="container-fluid d-flex flex-column justify-content-start custom-container">
+<div
+  class="container-fluid d-flex flex-column justify-content-start custom-container"
+>
   <div class="row">
-    <div class="col-12 d-flex justify-content-start align-items-start mt-3 ms-2">
-      <img src="/assets/images/elle-studio-logo.png" alt="Logo Elle Studio Pilates"
-        style="max-width: 130px; height: auto;">
+    <div
+      class="col-12 d-flex justify-content-start align-items-start mt-4 ms-3"
+    >
+      <img
+        src="/assets/images/elle-studio-logo.png"
+        alt="Logo Elle Studio Pilates"
+        style="max-width: 100px; height: auto"
+      />
     </div>
   </div>
   <div class="row">
-    <div class="col-12 d-flex justify-content-center align-items-start mt-1">
+    <div
+      class="col-12 d-flex justify-content-center align-items-start mt-1 mb-3"
+    >
       <div class="stepwizard col-md-offset-3">
         <div class="stepwizard-row setup-panel">
           <div class="stepwizard-step">
@@ -15,8 +24,8 @@
               type="button"
               class="btn btn-circle"
               [ngClass]="{
-                'completed': currentStep > 1,
-                'current': currentStep === 1
+                completed: currentStep > 1,
+                current: currentStep === 1,
               }"
             ></a>
           </div>
@@ -26,9 +35,9 @@
               type="button"
               class="btn btn-circle"
               [ngClass]="{
-                'completed': currentStep > 2,
-                'current': currentStep === 2,
-                'disabled': currentStep < 2
+                completed: currentStep > 2,
+                current: currentStep === 2,
+                disabled: currentStep < 2,
               }"
             ></a>
           </div>
@@ -38,8 +47,8 @@
               type="button"
               class="btn btn-circle"
               [ngClass]="{
-                'current': currentStep === 3,
-                'disabled': currentStep < 3
+                current: currentStep === 3,
+                disabled: currentStep < 3,
               }"
             ></a>
           </div>
@@ -50,19 +59,21 @@
 
   <app-dettagli-profilo
     *ngIf="currentStep === 1"
-    (continua)="onContinua($event)">
+    (continua)="onContinua($event)"
+  >
   </app-dettagli-profilo>
 
   <app-certificato-medico
     *ngIf="currentStep === 2"
     (continua)="onContinua($event)"
-    (indietro)="onIndietro()">
+    (indietro)="onIndietro()"
+  >
   </app-certificato-medico>
 
   <app-email-password
     *ngIf="currentStep === 3"
     (continua)="onContinua($event)"
-    (indietro)="onIndietro()">
+    (indietro)="onIndietro()"
+  >
   </app-email-password>
-  
 </div>

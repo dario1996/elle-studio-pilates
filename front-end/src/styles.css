@@ -4,20 +4,20 @@
 
 :root {
   /* COLORI DI DEFAULT */
-  --color-BIANCO: #FEFBFB;
-  --color-NERO: #1D1D1B;
+  --color-BIANCO: #fefbfb;
+  --color-NERO: #1d1d1b;
 
   /* COLORI PERSONALIZZATI */
   /* sottotitoli, campi di testo di esempio */
   --color-GRIGIO-CHIARO: #898989;
   /* colore background */
-  --color-BIANCO-BACKGROUND: #F6F6F6;
+  --color-BIANCO-BACKGROUND: #f6f6f6;
   /* colore bordi */
-  --color-BORDO: #C99E67;
+  --color-BORDO: #c99e67;
 
   /* FONTS*/
-  --font-tenor-sans: "Tenor Sans", sans-serif;
-  --font-montserrat: "Montserrat", sans-serif;
+  --font-tenor-sans: 'Tenor Sans', sans-serif;
+  --font-montserrat: 'Montserrat', sans-serif;
   /* Font principale del sito */
   --font-family: var(--font-montserrat);
 
@@ -28,9 +28,9 @@
   --color-muted-foreground: hsl(0 0% 45%);
   --color-border: hsl(0 0% 91%);
   --color-input: var(var(--color-BORDO));
-  --color-primary: #0F4C82;
+  --color-primary: #0f4c82;
   --color-primary-foreground: hsl(0 0% 98%);
-  --color-secondary: #93A9D1;
+  --color-secondary: #93a9d1;
   --color-secondary-foreground: hsl(0 0% 9%);
   --color-accent: hsl(0 0% 96%);
   --color-accent-foreground: hsl(0 0% 9%);
@@ -64,8 +64,10 @@
 
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-md:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 
   /* Radius */
   --radius-sm: 6px;
@@ -81,7 +83,8 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   font-family: var(--font-family) !important;
   font-size: var(--font-size-base);
@@ -94,11 +97,12 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-html, body, .container-fluid {
-    overflow-x: hidden;
+html,
+body,
+.container-fluid {
+  overflow-x: hidden;
 }
 
-/* Radix UI inspired clean layout */
 .page-container {
   height: 100vh; /* CORRETTO: usa tutta l'altezza viewport */
   min-height: 0;
@@ -117,6 +121,15 @@ html, body, .container-fluid {
   overflow: hidden;
   position: relative;
   z-index: 1;
+}
+
+.form-control {
+  font-size: 12px;
+  border-radius: 6px;
+  border: 2px solid var(--color-NERO);
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
 }
 
 /* ================== BUTTONS =================== */
@@ -353,10 +366,10 @@ html, body, .container-fluid {
   overflow-x: hidden;
   overflow-y: auto;
   transition:
-    width 0.7s cubic-bezier(.23,1,.32,1),
-    min-width 0.7s cubic-bezier(.23,1,.32,1),
-    max-width 0.7s cubic-bezier(.23,1,.32,1),
-    box-shadow 0.6s cubic-bezier(.23,1,.32,1);
+    width 0.7s cubic-bezier(0.23, 1, 0.32, 1),
+    min-width 0.7s cubic-bezier(0.23, 1, 0.32, 1),
+    max-width 0.7s cubic-bezier(0.23, 1, 0.32, 1),
+    box-shadow 0.6s cubic-bezier(0.23, 1, 0.32, 1);
   background: var(--color-background);
   border-right: 1px solid var(--color-border);
   height: 100vh;
@@ -368,7 +381,7 @@ html, body, .container-fluid {
   flex-direction: column;
   border: 1px solid #e3e6ea;
   background: #ffffff;
-    box-shadow:
+  box-shadow:
     0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
@@ -404,7 +417,9 @@ html, body, .container-fluid {
   object-fit: contain;
   opacity: 1;
   visibility: visible;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
 }
 
 /* Logo immagine (visibile quando espansa) */
@@ -418,7 +433,9 @@ html, body, .container-fluid {
   max-width: 180px;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
 }
 
 /* Quando sidebar espansa: nascondi icona, mostra immagine */
@@ -487,7 +504,9 @@ html, body, .container-fluid {
 .sidebar .user-name-sidebar {
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
   white-space: nowrap;
   overflow: hidden;
   margin-left: 12px;
@@ -532,7 +551,6 @@ html, body, .container-fluid {
   visibility: hidden;
   transition: opacity 0.3s;
   pointer-events: none;
-  
 }
 
 /* Overlay visibile quando sidebar è aperta o in hover */
@@ -576,7 +594,7 @@ html, body, .container-fluid {
     left: 0;
     top: 0;
     height: 100vh;
-    box-shadow: 2px 0 16px rgba(0,0,0,0.08);
+    box-shadow: 2px 0 16px rgba(0, 0, 0, 0.08);
     transform: translateX(-100%);
     transition: transform 0.3s ease;
   }
@@ -595,7 +613,7 @@ html, body, .container-fluid {
     width: var(--sidebar-width);
     min-width: var(--sidebar-width);
     max-width: var(--sidebar-width);
-    box-shadow: 2px 0 16px rgba(0,0,0,0.08);
+    box-shadow: 2px 0 16px rgba(0, 0, 0, 0.08);
     z-index: 30;
   }
 
@@ -735,6 +753,7 @@ html, body, .container-fluid {
 .container-fluid {
   padding-left: 0;
   padding-right: 0;
+  background-color: var(--color-BIANCO-BACKGROUND);
 }
 
 .col-lg-10 {
@@ -981,7 +1000,7 @@ app-pagination-footer {
     width: auto !important;
     max-width: none !important;
   }
-  
+
   #toast-container.toast-bottom-center,
   #toast-container.toast-top-center {
     bottom: 16px !important;
@@ -991,7 +1010,7 @@ app-pagination-footer {
     width: auto !important;
     max-width: none !important;
   }
-  
+
   .radix-toast {
     padding: 12px !important;
     margin-bottom: 8px !important;
@@ -1011,7 +1030,7 @@ app-pagination-footer {
     border-color: var(--color-border) !important;
     color: var(--color-foreground) !important;
   }
-  
+
   .radix-toast-message {
     color: var(--color-muted-foreground) !important;
   }

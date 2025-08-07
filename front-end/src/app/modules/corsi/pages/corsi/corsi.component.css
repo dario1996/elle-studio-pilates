@@ -36,16 +36,13 @@
   margin-bottom: 8px;
 }
 
-.form-control,
-.form-select {
-  width: 100%;
-  padding: 8px 12px;
+.form-control {
   font-size: 12px;
-  border: 1px solid #e2e8f0;
   border-radius: 6px;
-  background: white;
-  color: #1a202c;
-  transition: all 150ms ease;
+  border: 2px solid var(--color-NERO);
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
 }
 
 .form-control:focus,
@@ -131,7 +128,7 @@
     height: 100%;
     overflow: hidden;
   }
-  
+
   .table-container {
     margin-bottom: var(--spacing-sm); /* Reduce margin on mobile */
   }

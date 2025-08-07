@@ -1,50 +1,122 @@
 <div class="row">
-    <div class="col-12 d-flex justify-content-center align-items-start mt-4">
-        <div class="profile-header-box">
-            <h1 class="profile-title">Certificato medico</h1>
-            <p class="profile-subtitle">Aggiungi i dettagli sul tuo profilo</p>
-        </div>
+  <div class="col-12 d-flex justify-content-center align-items-start">
+    <div class="profile-header-box">
+      <h1 class="profile-title">Certificato medico</h1>
+      <p class="profile-subtitle">Aggiungi i dettagli sul tuo profilo</p>
     </div>
+  </div>
 </div>
 <div class="row">
-    <div class="col-12 d-flex flex-column align-items-center mt-4">
-        <form [formGroup]="certificatoForm" (ngSubmit)="onSubmit()" novalidate style="width:100%;max-width:600px;">
-            <div class="mb-4">
-                <label class="form-label">Certificato medico</label>
-                <div class="input-group">
-                    <input type="file" id="certificato" class="form-control" formControlName="certificato" style="display:none" (change)="onFileChange($event)">
-                    <input type="text" class="form-control" [value]="fileName || 'Aggiungi allegato'" readonly (click)="fileInput.click()" style="cursor:pointer;">
-                    <span class="input-group-text" (click)="fileInput.click()" style="cursor:pointer;">
-                        <i class="bi bi-upload"></i>
-                    </span>
-                    <input #fileInput type="file" style="display:none" (change)="onFileChange($event)">
-                </div>
-            </div>
-            <div class="mb-4">
-                <label class="form-label">Hai delle patologie da segnalare? <span class="text-danger">*</span></label>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" id="patologieSi" formControlName="patologie" [value]="true">
-                    <label class="form-check-label" for="patologieSi">Sì</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" id="patologieNo" formControlName="patologie" [value]="false">
-                    <label class="form-check-label" for="patologieNo">No</label>
-                </div>
-            </div>
-            <div class="mb-4">
-                <label for="descrizionePatologie" class="form-label">Descrivi le tue patologie</label>
-                <textarea id="descrizionePatologie" class="form-control" formControlName="descrizionePatologie" rows="3" placeholder="Digita in questo spazio"></textarea>
-            </div>
-            <div class="mb-4">
-                <label for="obiettivi" class="form-label">Descrivi i tuoi obiettivi</label>
-                <textarea id="obiettivi" class="form-control" formControlName="obiettivi" rows="3" placeholder="Digita in questo spazio"></textarea>
-            </div>
-            <div class="mb-4">
-                <button type="submit" class="btn btn-dark w-100" style="font-size:1.5rem;">Continua</button>
-            </div>
-            <div class="mb-4">
-                <button type="button" class="btn btn-outline-dark w-100" style="font-size:1.5rem;" (click)="indietro.emit()">Indietro</button>
-            </div>
-        </form>
-    </div>
+  <div class="col-12 d-flex flex-column align-items-center mt-1">
+    <form
+      [formGroup]="certificatoForm"
+      (ngSubmit)="onSubmit()"
+      novalidate
+      style="width: 100%; max-width: 450px"
+    >
+      <div class="mb-4">
+        <label class="form-label">Certificato medico</label>
+        <div class="file-upload-wrapper">
+          <input
+            type="text"
+            class="form-control file-upload-display"
+            [value]="fileName || 'Aggiungi allegato'"
+            readonly
+            (click)="fileInput.click()"
+          />
+          <div class="file-upload-icon" (click)="fileInput.click()">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />
+              <polyline points="16,16 12,12 8,16" />
+              <path d="m12,12 0,9" />
+            </svg>
+          </div>
+          <input
+            #fileInput
+            type="file"
+            style="display: none"
+            (change)="onFileChange($event)"
+          />
+        </div>
+      </div>
+      <div class="mb-4">
+        <label class="form-label"
+          >Hai delle patologie da segnalare?
+          <span class="text-danger">*</span></label
+        >
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            id="patologieSi"
+            formControlName="patologie"
+            [value]="true"
+          />
+          <label class="form-check-label" for="patologieSi">Sì</label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            id="patologieNo"
+            formControlName="patologie"
+            [value]="false"
+          />
+          <label class="form-check-label" for="patologieNo">No</label>
+        </div>
+      </div>
+      <div class="mb-4">
+        <label for="descrizionePatologie" class="form-label"
+          >Descrivi le tue patologie</label
+        >
+        <textarea
+          id="descrizionePatologie"
+          class="form-control"
+          formControlName="descrizionePatologie"
+          rows="3"
+          placeholder="Digita in questo spazio"
+        ></textarea>
+      </div>
+      <div class="mb-5">
+        <label for="obiettivi" class="form-label"
+          >Descrivi i tuoi obiettivi</label
+        >
+        <textarea
+          id="obiettivi"
+          class="form-control"
+          formControlName="obiettivi"
+          rows="3"
+          placeholder="Digita in questo spazio"
+        ></textarea>
+      </div>
+      <div class="mb-3">
+        <button
+          type="submit"
+          class="btn btn-dark w-100"
+          style="font-size: 0.9rem"
+        >
+          Continua
+        </button>
+      </div>
+      <div class="mb-4">
+        <button
+          type="button"
+          class="btn btn-outline-dark w-100"
+          style="font-size: 0.9rem"
+          (click)="indietro.emit()"
+        >
+          Indietro
+        </button>
+      </div>
+    </form>
+  </div>
 </div>

@@ -1,51 +1,113 @@
 <div class="row">
-    <div class="col-12 d-flex justify-content-center align-items-start mt-4">
-        <div class="profile-header-box">
-            <h1 class="profile-title">Il tuo profilo</h1>
-            <p class="profile-subtitle">Aggiungi i dettagli sul tuo profilo</p>
-        </div>
+  <div class="col-12 d-flex justify-content-center align-items-start">
+    <div class="profile-header-box">
+      <h1 class="profile-title">Il tuo profilo</h1>
+      <p class="profile-subtitle">Aggiungi i dettagli sul tuo profilo</p>
     </div>
+  </div>
 </div>
 <div class="row">
-    <div class="col-12 d-flex flex-column align-items-center mt-4">
-        <form [formGroup]="profiloForm" (ngSubmit)="onSubmit()" novalidate style="width:100%;max-width:600px;">
-            <div class="mb-4">
-                <label for="nome" class="form-label">Nome<span class="text-danger">*</span></label>
-                <input type="text" id="nome" class="form-control" formControlName="nome"
-                    [ngClass]="{'is-invalid': profiloForm.get('nome')?.invalid && profiloForm.get('nome')?.touched}"
-                    placeholder="Giovanni">
-                <div class="invalid-feedback"
-                    *ngIf="profiloForm.get('nome')?.invalid && profiloForm.get('nome')?.touched">
-                    Il nome è obbligatorio.
-                </div>
-            </div>
-            <div class="mb-4">
-                <label for="cognome" class="form-label">Cognome<span class="text-danger">*</span></label>
-                <input type="text" id="cognome" class="form-control" formControlName="cognome"
-                    [ngClass]="{'is-invalid': profiloForm.get('cognome')?.invalid && profiloForm.get('cognome')?.touched}"
-                    placeholder="Rossi">
-                <div class="invalid-feedback"
-                    *ngIf="profiloForm.get('cognome')?.invalid && profiloForm.get('cognome')?.touched">
-                    Il cognome è obbligatorio.
-                </div>
-            </div>
-            <div class="mb-4">
-                <label for="codiceFiscale" class="form-label">Codice Fiscale<span class="text-danger">*</span></label>
-                <input type="text" id="codiceFiscale" class="form-control" formControlName="codiceFiscale"
-                    [ngClass]="{'is-invalid': profiloForm.get('codiceFiscale')?.invalid && profiloForm.get('codiceFiscale')?.touched}"
-                    placeholder="RSSGNN87R13H501C">
-                <div class="invalid-feedback"
-                    *ngIf="profiloForm.get('codiceFiscale')?.invalid && profiloForm.get('codiceFiscale')?.touched">
-                    Il codice fiscale è obbligatorio.
-                </div>
-            </div>
-            <div class="mb-4">
-                <button type="submit" class="btn btn-dark w-100" style="font-size:1.5rem;">Continua</button>
-            </div>
-        </form>
-        <div class="mt-4 text-center" style="width:100%;max-width:600px;">
-            <span style="color:#888; font-size:1.2rem;">Hai già un account? <a routerLink="/login"
-                    style="color:#222; text-decoration:underline;">Log in</a></span>
+  <div class="col-12 d-flex flex-column align-items-center mt-1">
+    <form
+      [formGroup]="profiloForm"
+      (ngSubmit)="onSubmit()"
+      novalidate
+      style="width: 100%; max-width: 400px"
+    >
+      <div class="mb-4">
+        <label for="nome" class="form-label"
+          >Nome<span class="text-danger">*</span></label
+        >
+        <input
+          type="text"
+          id="nome"
+          class="form-control"
+          formControlName="nome"
+          [ngClass]="{
+            'is-invalid':
+              profiloForm.get('nome')?.invalid &&
+              profiloForm.get('nome')?.touched,
+          }"
+          placeholder="Giovanni"
+        />
+        <div
+          class="invalid-feedback"
+          *ngIf="
+            profiloForm.get('nome')?.invalid && profiloForm.get('nome')?.touched
+          "
+        >
+          Il nome è obbligatorio.
         </div>
+      </div>
+      <div class="mb-4">
+        <label for="cognome" class="form-label"
+          >Cognome<span class="text-danger">*</span></label
+        >
+        <input
+          type="text"
+          id="cognome"
+          class="form-control"
+          formControlName="cognome"
+          [ngClass]="{
+            'is-invalid':
+              profiloForm.get('cognome')?.invalid &&
+              profiloForm.get('cognome')?.touched,
+          }"
+          placeholder="Rossi"
+        />
+        <div
+          class="invalid-feedback"
+          *ngIf="
+            profiloForm.get('cognome')?.invalid &&
+            profiloForm.get('cognome')?.touched
+          "
+        >
+          Il cognome è obbligatorio.
+        </div>
+      </div>
+      <div class="mb-4">
+        <label for="codiceFiscale" class="form-label"
+          >Codice Fiscale<span class="text-danger">*</span></label
+        >
+        <input
+          type="text"
+          id="codiceFiscale"
+          class="form-control"
+          formControlName="codiceFiscale"
+          [ngClass]="{
+            'is-invalid':
+              profiloForm.get('codiceFiscale')?.invalid &&
+              profiloForm.get('codiceFiscale')?.touched,
+          }"
+          placeholder="RSSGNN87R13H501C"
+        />
+        <div
+          class="invalid-feedback"
+          *ngIf="
+            profiloForm.get('codiceFiscale')?.invalid &&
+            profiloForm.get('codiceFiscale')?.touched
+          "
+        >
+          Il codice fiscale è obbligatorio.
+        </div>
+      </div>
+      <div class="mb-4">
+        <button
+          type="submit"
+          class="btn btn-dark w-100"
+          style="font-size: 0.9rem"
+        >
+          Continua
+        </button>
+      </div>
+    </form>
+    <div class="mt-4 text-center" style="width: 100%; max-width: 450px">
+      <span style="color: #888; font-size: 0.9rem"
+        >Hai già un account?
+        <a routerLink="/login" style="color: #222; text-decoration: underline"
+          >Log in</a
+        ></span
+      >
     </div>
+  </div>
 </div>

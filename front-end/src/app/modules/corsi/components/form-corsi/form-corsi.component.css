@@ -1,10 +1,10 @@
 .form-control {
-    font-size: 12px;
-    border-radius: 6px;
-    border: 1px solid #ced4da;
-    transition:
-        border-color 0.15s ease-in-out,
-        box-shadow 0.15s ease-in-out;
+  font-size: 12px;
+  border-radius: 6px;
+  border: 2px solid var(--color-NERO);
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
 }
 
 .invalid-feedback {
@@ -14,10 +14,10 @@
 }
 
 .form-select {
-    font-size: 12px;
-    border-radius: 6px;
-    border: 1px solid #ced4da;
-    transition:
-        border-color 0.15s ease-in-out,
-        box-shadow 0.15s ease-in-out;
+  font-size: 12px;
+  border-radius: 6px;
+  border: 1px solid #ced4da;
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
 }
