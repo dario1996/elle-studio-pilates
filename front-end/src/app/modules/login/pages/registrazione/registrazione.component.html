@@ -48,21 +48,35 @@
     </div>
   </div>
 
+  <!-- Alert per messaggi -->
+  <div class="row" *ngIf="showAlert">
+    <div class="col-12 d-flex justify-content-center mt-3">
+      <div class="alert alert-{{alertType}} alert-dismissible fade show" role="alert" style="max-width: 600px;">
+        {{alertMessage}}
+        <button type="button" class="btn-close" (click)="showAlert = false" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+
   <app-dettagli-profilo
     *ngIf="currentStep === 1"
-    (continua)="onContinua($event)">
+    [initialData]="getStepData(1)"
+    (continua)="onStepCompleted($event)">
   </app-dettagli-profilo>
 
   <app-certificato-medico
     *ngIf="currentStep === 2"
-    (continua)="onContinua($event)"
-    (indietro)="onIndietro()">
+    [initialData]="getStepData(2)"
+    (continua)="onStepCompleted($event)"
+    (indietro)="onStepBack()">
   </app-certificato-medico>
 
   <app-email-password
     *ngIf="currentStep === 3"
-    (continua)="onContinua($event)"
-    (indietro)="onIndietro()">
+    [initialData]="getStepData(3)"
+    [isSubmitting]="isSubmitting"
+    (continua)="onStepCompleted($event)"
+    (indietro)="onStepBack()">
   </app-email-password>
   
 </div>

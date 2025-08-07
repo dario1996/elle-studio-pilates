@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
@@ -10,7 +10,8 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, RouterModule]
 })
-export class DettagliProfiloComponent {
+export class DettagliProfiloComponent implements OnInit {
+  @Input() initialData: any = {};
   @Output() continua = new EventEmitter<any>();
 
   profiloForm: FormGroup;
@@ -21,6 +22,12 @@ export class DettagliProfiloComponent {
       cognome: ['', Validators.required],
       codiceFiscale: ['', Validators.required]
     });
+  }
+
+  ngOnInit() {
+    if (this.initialData) {
+      this.profiloForm.patchValue(this.initialData);
+    }
   }
 
   onSubmit() {

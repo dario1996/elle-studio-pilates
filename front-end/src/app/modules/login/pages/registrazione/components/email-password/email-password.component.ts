@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
@@ -10,7 +10,9 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, RouterModule]
 })
-export class EmailPasswordComponent {
+export class EmailPasswordComponent implements OnInit {
+  @Input() initialData: any = {};
+  @Input() isSubmitting: boolean = false;
   @Output() continua = new EventEmitter<any>();
   @Output() indietro = new EventEmitter<void>();
 
@@ -25,6 +27,12 @@ export class EmailPasswordComponent {
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required]
     });
+  }
+
+  ngOnInit() {
+    if (this.initialData) {
+      this.emailForm.patchValue(this.initialData);
+    }
   }
 
   onSubmit() {
