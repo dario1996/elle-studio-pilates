@@ -14,11 +14,6 @@ import { Token } from '../../shared/models/Token';
 import { environment } from '../../../environments/environment.development';
 import { AppCookieService } from './app-cookie.service';
 
-interface UserNameResponse {
-  nome: string;
-  cognome: string;
-}
-
 @Injectable({
   providedIn: 'root',
 })
@@ -216,27 +211,5 @@ export class AuthJwtService {
     } catch (error) {
       return true;
     }
-  }
-
-  getUserName(): Observable<UserNameResponse> {
-    const token = this.getAuthToken();
-    console.log(
-      'Token per getUserName:',
-      token ? token.substring(0, 20) + '...' : 'NESSUN TOKEN',
-    );
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    });
-
-    console.log('Headers per getUserName:', headers.get('Authorization'));
-
-    return this.http.get<UserNameResponse>('/api/user/name', { headers }).pipe(
-      catchError(error => {
-        console.error('Errore dettagliato getUserName:', error);
-        return throwError(() => error);
-      }),
-    );
   }
 }

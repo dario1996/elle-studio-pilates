@@ -107,53 +107,29 @@ export class WelcomeComponent implements OnInit {
   }
 
   /**
-   * Carica nome e cognome REALI dalla tabella utenti (invece dell'username formattato)
+   * Carica nome e cognome dalla response di login (senza chiamate HTTP aggiuntive)
    */
   private loadUserData(): void {
     if (this.BasicAuth.isLogged()) {
       console.log('=== DEBUG LOAD USER DATA ===');
       console.log('Utente loggato:', this.BasicAuth.loggedUser());
-      console.log('Token presente:', !!this.BasicAuth.getAuthToken());
-      console.log('Token expired:', this.BasicAuth.isTokenExpired());
+      console.log('Display name dal login:', this.BasicAuth.loggedUserDisplayName());
 
-      console.log('Caricamento nome e cognome dalla tabella...');
+      // Usa direttamente il displayName dalla response di login
+      const displayName = this.BasicAuth.loggedUserDisplayName();
+      
+      if (displayName && displayName.trim() !== '' && !displayName.includes('@')) {
+        // DisplayName presente e valido (non è un username o email)
+        this.userFullName = displayName;
+        console.log('✅ Usando displayName dal login:', this.userFullName);
+      } else {
+        // Fallback: formatta username se displayName non disponibile
+        const username = this.BasicAuth.loggedUser() || 'user';
+        this.userFullName = this.formatUsername(username);
+        console.log('🔄 Fallback su username formattato:', this.userFullName);
+      }
 
-      this.BasicAuth.getUserName().subscribe({
-        next: userData => {
-          console.log('✅ Dati ricevuti con successo:', userData);
-
-          if (userData.nome && userData.cognome) {
-            // Formatta nome e cognome REALI dal database: "Cognome Nome"
-            const nomeFormattato =
-              userData.nome.charAt(0).toUpperCase() +
-              userData.nome.slice(1).toLowerCase();
-            const cognomeFormattato =
-              userData.cognome.charAt(0).toUpperCase() +
-              userData.cognome.slice(1).toLowerCase();
-            this.userFullName = `${cognomeFormattato} ${nomeFormattato}`;
-
-            console.log('👤 Nome completo dal DB:', this.userFullName);
-          } else {
-            console.log(
-              '⚠️ Nome/cognome vuoti nel DB, uso username formattato come fallback',
-            );
-            // Solo se nome/cognome sono NULL o vuoti nel database
-            const username = this.BasicAuth.loggedUser() || 'user';
-            this.userFullName = this.formatUsername(username);
-          }
-
-          console.log('🎯 Nome finale visualizzato:', this.userFullName);
-        },
-        error: error => {
-          console.error('❌ Errore nel recuperare dati utente:', error);
-          console.log('🔄 Fallback: uso username formattato');
-
-          // Fallback: usa username formattato solo se l'API fallisce
-          const username = this.BasicAuth.loggedUser() || 'user';
-          this.userFullName = this.formatUsername(username);
-          console.log('🎯 Nome fallback:', this.userFullName);
-        },
-      });
+      console.log('🎯 Nome finale visualizzato:', this.userFullName);
     } else {
       console.log('❌ Utente non loggato');
       this.setDefaultUserData();

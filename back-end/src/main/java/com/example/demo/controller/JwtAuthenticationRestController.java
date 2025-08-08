@@ -1,9 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.services.UtentiService;
-import jakarta.servlet.http.HttpServletRequest;
-import java.util.Map;
-import org.springframework.web.bind.annotation.GetMapping;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -141,73 +138,5 @@ public class JwtAuthenticationRestController
 			log.warning("CREDENZIALI NON VALIDE");
 			throw new AuthenticationException("CREDENZIALI NON VALIDE", e);
 		}
-	}
-	
-	/**
-	 * NUOVO ENDPOINT - Recupera nome e cognome dell'utente corrente
-	 */
-	@GetMapping("/api/user/name")
-	public ResponseEntity<?> getCurrentUserName(HttpServletRequest request) {
-		log.info("🔍 Chiamata ricevuta su /api/user/name");
-		
-		final String authHeader = request.getHeader("Authorization");
-		log.info("📝 Header Authorization: " + (authHeader != null ? "presente" : "mancante"));
-		
-		if (authHeader != null && authHeader.startsWith("Bearer ")) {
-			String token = authHeader.substring(7);
-			log.info("🎫 Token estratto (lunghezza: " + token.length() + ")");
-			
-			try {
-				String username = jwtTokenUtil.getUsernameFromToken(token);
-				log.info("👤 Username dal token: " + username);
-				
-				if (username != null) {
-					// Recupera l'utente dal database
-					Utenti user = utentiService.findByUsername(username);
-					log.info("🔎 Utente trovato nel DB: " + (user != null ? "SÌ" : "NO"));
-					
-					if (user != null) {
-						// Crea la risposta JSON
-						UserNameResponse response = new UserNameResponse();
-						response.setNome(user.getNome());
-						response.setCognome(user.getCognome());
-						
-						log.info("✅ Risposta creata - Nome: " + user.getNome() + ", Cognome: " + user.getCognome());
-						return ResponseEntity.ok(response);
-					} else {
-						log.warning("❌ Utente non trovato nel database per username: " + username);
-						return ResponseEntity.status(HttpStatus.NOT_FOUND)
-							.body(Map.of("error", "Utente non trovato", "username", username));
-					}
-				} else {
-					log.warning("❌ Username non presente nel token");
-					return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-						.body(Map.of("error", "Token non valido - username mancante"));
-				}
-			} catch (Exception e) {
-				log.severe("💥 Errore nell'elaborazione del token: " + e.getMessage());
-				e.printStackTrace();
-				return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-					.body(Map.of("error", "Errore nel token", "message", e.getMessage()));
-			}
-		} else {
-			log.warning("❌ Header Authorization mancante o formato non valido");
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-				.body(Map.of("error", "Header Authorization mancante o non valido"));
-		}
-	}
-	
-	// Classe interna per la risposta JSON
-	public static class UserNameResponse {
-		private String nome;
-		private String cognome;
-		
-		public UserNameResponse() {}
-		
-		public String getNome() { return nome; }
-		public void setNome(String nome) { this.nome = nome; }
-		
-		public String getCognome() { return cognome; }
-		public void setCognome(String cognome) { this.cognome = cognome; }
 	}
 }
