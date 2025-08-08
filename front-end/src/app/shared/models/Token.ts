@@ -3,6 +3,9 @@ export interface Token {
   refreshToken: string;
   expiresIn: number;
   tokenType: string;
+  nome?: string;
+  cognome?: string;
+  displayName?: string;
 }
 
 // Legacy interface for backward compatibility

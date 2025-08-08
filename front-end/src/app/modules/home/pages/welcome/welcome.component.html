@@ -131,7 +131,8 @@
       <div class="sidebar-user">
         <app-avatar
           [isLogged]="BasicAuth.isLogged()"
-          [userName]="userFullName"
+          [userName]="BasicAuth.loggedUser()"
+          [displayName]="BasicAuth.loggedUserDisplayName()"
         ></app-avatar>
       </div>
       <button class="logout-btn">

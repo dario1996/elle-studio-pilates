@@ -45,9 +45,7 @@
     />
     <span class="bell__count" *ngIf="notCount > 0">{{ notCount }}</span>
   </button>
-
-  <!-- User info container -->
-  <div class="user-info" *ngIf="isLogged">
-    <span class="user-name-sidebar">{{ userName }}</span>
-  </div>
+  <span *ngIf="isLogged" class="fw-semibold user-name-sidebar mt-2">{{
+    (displayName || userName)?.toUpperCase()
+  }}</span>
 </div>
