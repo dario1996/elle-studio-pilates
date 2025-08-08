@@ -24,6 +24,8 @@ export class AvatarComponent implements OnInit {
   notCount: number = 0;
   @Input()
   userName: string | null = '';
+  @Input()
+  displayName: string | null = '';
   
   modalTitle = '';
   isPanelOpen: boolean = false;

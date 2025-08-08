@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.entity.JwtTokenRequest;
 import com.example.demo.entity.JwtTokenResponse;
 import com.example.demo.entity.JwtTokensResponse;
+import com.example.demo.entity.Utenti;
 import com.example.demo.exceptions.AuthenticationException;
+import com.example.demo.repository.UtenteRepository;
 import com.example.demo.security.JwtConfig;
 import com.example.demo.security.JwtTokenUtil;
 
@@ -52,6 +54,9 @@ public class JwtAuthenticationRestController
 	@Qualifier("CustomUserDetailsService")
 	private UserDetailsService userDetailsService;
 	
+	@Autowired
+	private UtenteRepository utentiRepository;
+	
 	@PostMapping(value = "${sicurezza.uri}")
 	@SneakyThrows
 	public ResponseEntity<JwtTokensResponse> createAuthenticationToken(@RequestBody JwtTokenRequest authenticationRequest) 
@@ -66,6 +71,12 @@ public class JwtAuthenticationRestController
 		final String accessToken = jwtTokenUtil.generateToken(userDetails);
 		final String refreshToken = jwtTokenUtil.generateRefreshToken(userDetails);
 		
+		// Recuperare i dati utente dal database
+		Utenti utente = utentiRepository.findByUsername(authenticationRequest.getUsername());
+		String nome = utente != null ? utente.getNome() : "";
+		String cognome = utente != null ? utente.getCognome() : "";
+		String displayName = (nome + " " + cognome).trim();
+		
 		log.warning(String.format("Access Token %s", accessToken));
 		log.warning(String.format("Refresh Token %s", refreshToken));
 
@@ -73,7 +84,10 @@ public class JwtAuthenticationRestController
 			accessToken, 
 			refreshToken, 
 			jwtConfig.getExpiration(), 
-			"Bearer"
+			"Bearer",
+			nome,
+			cognome,
+			displayName.isEmpty() ? authenticationRequest.getUsername() : displayName
 		);
 
 		return ResponseEntity.ok(response);

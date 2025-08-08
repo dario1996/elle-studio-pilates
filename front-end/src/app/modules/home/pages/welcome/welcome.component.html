@@ -47,7 +47,7 @@
 
     <div class="sidebar-footer">
       <div class="sidebar-user">
-        <app-avatar [isLogged]="BasicAuth.isLogged()" [userName]="BasicAuth.loggedUser()"></app-avatar>
+        <app-avatar [isLogged]="BasicAuth.isLogged()" [userName]="BasicAuth.loggedUser()" [displayName]="BasicAuth.loggedUserDisplayName()"></app-avatar>
       </div>
       <button class="logout-btn">
         <svg class="logout-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" (click)="logout()">

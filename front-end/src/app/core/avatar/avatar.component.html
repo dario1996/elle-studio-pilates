@@ -44,6 +44,6 @@
   <span
     *ngIf="isLogged"
     class="fw-semibold user-name-sidebar mt-2"
-    >{{ userName?.toUpperCase() }}</span
+    >{{ (displayName || userName)?.toUpperCase() }}</span
   >
 </div>

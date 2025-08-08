@@ -41,6 +41,12 @@ export class AuthJwtService {
 
   private storeTokens(tokenData: Token, username: string): void {
     sessionStorage.setItem('Utente', username);
+    
+    // Salvare nome, cognome e displayName se disponibili
+    if (tokenData.nome) sessionStorage.setItem('UtenteNome', tokenData.nome);
+    if (tokenData.cognome) sessionStorage.setItem('UtenteCognome', tokenData.cognome);
+    if (tokenData.displayName) sessionStorage.setItem('UtenteDisplayName', tokenData.displayName);
+    
     this.storageService.set('AuthToken', tokenData.accessToken);
     this.storageService.set('RefreshToken', tokenData.refreshToken);
     
@@ -153,6 +159,18 @@ export class AuthJwtService {
     return sessionStorage.getItem('Utente') || '';
   }
 
+  loggedUserDisplayName(): string {
+    return sessionStorage.getItem('UtenteDisplayName') || this.loggedUser() || '';
+  }
+
+  loggedUserNome(): string {
+    return sessionStorage.getItem('UtenteNome') || '';
+  }
+
+  loggedUserCognome(): string {
+    return sessionStorage.getItem('UtenteCognome') || '';
+  }
+
   isLogged(): boolean {
     const userLogged = sessionStorage.getItem('Utente');
     const tokenExists = this.getAuthToken();
@@ -168,7 +186,7 @@ export class AuthJwtService {
       clearTimeout(this.tokenExpirationTimer);
     }
     this.storageService.clear();
-    sessionStorage.clear();
+    sessionStorage.clear(); // Rimuove anche UtenteNome, UtenteCognome, UtenteDisplayName
   }
 
   // Method to check if token will expire soon
