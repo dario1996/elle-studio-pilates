@@ -1,13 +1,12 @@
 export interface IUsers {
   username: string;
   email: string;
-  cellulare: string;
   password: string;
   attivo: string;
   flagPrivacy: string;
   ruoli: string[];
   
-  // Nuovi campi per la registrazione
+  // Nuovi campi per la registrazione (allineati con RegistrazioneUtenteDTO)
   nome?: string;
   cognome?: string;
   codiceFiscale?: string;
@@ -15,4 +14,7 @@ export interface IUsers {
   patologie?: boolean;
   descrizionePatologie?: string;
   obiettivi?: string;
+  
+  // Campo aggiuntivo per la conferma password (solo frontend)
+  confirmPassword?: string;
 }
