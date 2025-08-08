@@ -1,15 +1,14 @@
 <div class="page-container">
-    <app-page-title
-      [title]="'Corsi'"
-      [subtitle]="'Gestione dei corsi disponibili'"
-      [buttons]="buttons"
-      [activeFiltersCount]="getActiveFiltersCount()"
-      (buttonClick)="gestioneAzione({ tipo: 'add', item: null })"
-      (buttonActionClick)="handleButtonClick($event)"
-      [searchFields]="searchFields"
-      (searchChange)="filtraTabella($event)"
-    ></app-page-title>
-  
+  <app-page-title
+    [title]="'Gestione pacchetti'"
+    [buttons]="buttons"
+    [activeFiltersCount]="getActiveFiltersCount()"
+    (buttonClick)="gestioneAzione({ tipo: 'add', item: null })"
+    (buttonActionClick)="handleButtonClick($event)"
+    [searchFields]="searchFields"
+    (searchChange)="filtraTabella($event)"
+  ></app-page-title>
+
   <div class="page-content" #pageContentInner>
     <!-- Content Area -->
     <div class="content-area">
@@ -22,34 +21,36 @@
           [isOpen]="isFilterPanelOpen"
           (close)="closeFilterPanel()"
           (applyFilters)="applyFilters($event)"
-          (clearFilters)="clearFilters()">
+          (clearFilters)="clearFilters()"
+        >
         </app-filter-panel>
       </div>
-      
+
       <!-- Table Container -->
       <div class="table-container">
-        <app-tabella-generica 
-          [data]="corsiFiltrati" 
-          [columns]="columns" 
+        <app-tabella-generica
+          [data]="corsiFiltrati"
+          [columns]="columns"
           [azioni]="actions"
           [entityName]="'corsi'"
           (action)="gestioneAzione($event)"
-          (paginationInfo)="aggiornaPaginazione($event)">
+          (paginationInfo)="aggiornaPaginazione($event)"
+        >
         </app-tabella-generica>
       </div>
 
       <!-- Pagination Container -->
-        <app-pagination-footer
-          [currentPage]="paginationInfo.currentPage"
-          [totalPages]="paginationInfo.totalPages"
-          [pages]="paginationInfo.pages"
-          [displayedItems]="paginationInfo.displayedItems"
-          [totalItems]="paginationInfo.totalItems"
-          [pageSize]="paginationInfo.pageSize"
-          [entityName]="paginationInfo.entityName"
-          (pageChange)="cambiaPagina($event)">
-        </app-pagination-footer>
+      <!-- <app-pagination-footer
+        [currentPage]="paginationInfo.currentPage"
+        [totalPages]="paginationInfo.totalPages"
+        [pages]="paginationInfo.pages"
+        [displayedItems]="paginationInfo.displayedItems"
+        [totalItems]="paginationInfo.totalItems"
+        [pageSize]="paginationInfo.pageSize"
+        [entityName]="paginationInfo.entityName"
+        (pageChange)="cambiaPagina($event)"
+      >
+      </app-pagination-footer> -->
     </div>
   </div>
 </div>
-

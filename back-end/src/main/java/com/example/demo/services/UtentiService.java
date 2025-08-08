@@ -9,5 +9,10 @@ public interface UtentiService
 	public void Save(Utenti utente);
 		
 	public boolean CheckExistUsername(String Username);
+
+	public UtentiService getUtentiService();
 	
+	public Utenti findByUsername(String username);
+
+	public Utenti findByEmail(String email);
 }

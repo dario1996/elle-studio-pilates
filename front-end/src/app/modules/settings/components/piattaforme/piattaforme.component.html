@@ -1,14 +1,15 @@
-<app-tabella-generica 
-  [data]="piattaforme" 
-  [columns]="columns" 
-  [azioni]="actions" 
+<app-tabella-generica
+  [data]="piattaforme"
+  [columns]="columns"
+  [azioni]="actions"
   [pageSize]="pageSize"
   [entityName]="'piattaforme'"
   (action)="onTabellaAzione($event)"
-  (paginationInfo)="aggiornaPaginazione($event)">
+  (paginationInfo)="aggiornaPaginazione($event)"
+>
 </app-tabella-generica>
 
-<app-pagination-footer
+<!-- <app-pagination-footer
   [currentPage]="paginationInfo.currentPage"
   [totalPages]="paginationInfo.totalPages"
   [pages]="paginationInfo.pages"
@@ -17,4 +18,4 @@
   [pageSize]="paginationInfo.pageSize"
   [entityName]="paginationInfo.entityName"
   (pageChange)="cambiaPagina($event)">
-</app-pagination-footer>
+</app-pagination-footer> -->

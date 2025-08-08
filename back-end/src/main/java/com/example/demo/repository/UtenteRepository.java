@@ -16,4 +16,8 @@ public interface UtenteRepository extends JpaRepository<Utenti, String>
 	boolean existsByCodiceFiscale(String codiceFiscale);
 	
 	public Utenti findByEmail(String email);
+
+	public Utenti findByNome(String nome);
+
+	public Utenti findByCognome(String cognome);
 }

@@ -1,32 +1,46 @@
 /* ================== APP LAYOUT =================== */
-/* .app-layout {
+.app-layout {
   display: flex;
   height: 100%;
-} */
+}
 
 /* ================== SIDEBAR =================== */
-/* .sidebar {
+.sidebar {
   width: 280px;
   background: var(--color-background);
-  border-right: 1px solid var(--color-border);
+  /* border-right: 1px solid var(--color-border); */
   height: 100%;
-  min-height: 0; */
+  min-height: 0;
   /* position: fixed; */
   /* top: 0;
   left: 0;
   bottom: 0;
-  z-index: 20;
+  z-index: 20; */
   display: flex;
   flex-direction: column;
-  transform: none;
-  transition: transform 0.3s;
-} */
+  /* transform: none; */
+  /* transition: transform 0.3s; */
+}
 
-
-/* .sidebar-logo {
+/* COMMENTED FOR FUTURE USE - COLLAPSED SIDEBAR MANAGEMENT */
+/*
+.sidebar-logo {
   height: 32px;
   width: auto;
-} */
+}
+*/
+
+/* ADDED FOR FIXED SIDEBAR */
+.sidebar-logo-icon {
+  display: none;
+}
+
+.sidebar-logo-full {
+  height: 70px;
+  width: auto;
+  display: block;
+  margin-top: 15px;
+}
 
 .sidebar-nav {
   padding: var(--spacing-md);
@@ -54,20 +68,27 @@
 .sidebar-user {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start; /* Cambiato da center a flex-start */
   padding: var(--spacing-sm);
   border-radius: var(--radius-md);
   margin-bottom: var(--spacing-sm);
+  width: 90%; /* Aggiungi una larghezza specifica */
+  gap: var(--spacing-sm); /* Spazio tra avatar e testo */
 }
 
+/* COMMENTED FOR FUTURE USE - SIDEBAR TOGGLE */
+/*
 .sidebar.sidebar-open {
   transform: translateX(0);
 }
+*/
 
-/* regola che permette di nascondere il toggle menu del mobile quando si è in desktop */
+/* COMMENTED FOR FUTURE USE - MOBILE TOGGLE BUTTON */
+/*
 .sidebar-toggle-btn {
     display: none;
 }
+*/
 
 .logout-btn {
   background: none;
@@ -82,14 +103,14 @@
 }
 
 .logout-btn .nav-icon {
-  stroke: #000000;      /* rosso */
+  stroke: #000000; /* rosso */
   width: 2em;
   height: 2em;
-  font-weight: bold;    /* bold */
+  font-weight: bold; /* bold */
 }
 
 .logout-btn:hover .logout-icon {
-  stroke: #e53935;      /* rosso su hover */
+  stroke: #e53935; /* rosso su hover */
 }
 
 .logout-icon {
@@ -101,25 +122,54 @@
   display: block;
 }
 
-
 /* Override avatar component styles for sidebar */
 ::ng-deep .sidebar-user .avatar-sidebar {
-  align-items: center !important;
+  align-items: flex-start !important; /* Cambiato da center */
+  flex-direction: row !important; /* Assicura layout orizzontale */
+  gap: var(--spacing-sm) !important;
+}
+
+/* Avatar image styling */
+::ng-deep .sidebar-user .avatar-sidebar .avatar-image {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  flex-shrink: 0 !important;
+  object-fit: cover !important;
+}
+
+/* User info container */
+::ng-deep .sidebar-user .avatar-sidebar .user-info {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
 }
 
 ::ng-deep .sidebar-user .avatar-sidebar .user-name-sidebar {
   color: var(--color-foreground) !important;
   font-size: var(--font-size-sm) !important;
-  font-weight: 500 !important;
+  font-weight: 600 !important; /* Più bold per il nome */
   text-shadow: none !important;
   letter-spacing: normal !important;
   text-transform: none !important;
-  margin-top: var(--spacing-xs) !important;
+  margin: 0 !important;
+  line-height: 1.2 !important;
+}
+
+/* Email styling */
+::ng-deep .sidebar-user .avatar-sidebar .user-email {
+  color: var(--color-muted-foreground) !important;
+  font-size: var(--font-size-xs) !important;
+  font-weight: 400 !important;
+  margin: 2px 0 0 0 !important;
+  line-height: 1.2 !important;
 }
 
 /* Additional specificity for username color */
 ::ng-deep .sidebar-footer .sidebar-user .avatar-sidebar span.user-name-sidebar {
   color: hsl(0 0% 20%) !important;
+  font-weight: 600 !important;
 }
 
 /* ================== NAVIGATION =================== */
@@ -178,6 +228,8 @@
 
 /* ================== RESPONSIVE =================== */
 @media (max-width: 991px) {
+  /* COMMENTED FOR FUTURE USE - MOBILE SIDEBAR MANAGEMENT */
+  /*
   .sidebar-toggle-btn {
     display: flex;
     position: fixed;
@@ -196,8 +248,7 @@
   }
 
   .sidebar.sidebar-open ~ .sidebar-toggle-btn {
-    /* Sposta il pulsante vicino al bordo della sidebar aperta */
-    left: 238px; /* stessa larghezza della sidebar + 8px (margine sinistro)*/
+    left: 238px;
   }
 
   .sidebar.sidebar-open {
@@ -217,12 +268,21 @@
     transform: translateY(20px);
     transition: none;
   }
+  */
+
+  /* KEEP SIDEBAR FIXED EVEN ON MOBILE */
+  .sidebar {
+    width: 280px;
+    position: relative;
+  }
 
   .main-content {
     flex: 1;
     margin-left: 0;
   }
 
+  /* COMMENTED FOR FUTURE USE - OVERLAY */
+  /*
   .sidebar-overlay {
     position: fixed;
     top: 0;
@@ -240,6 +300,7 @@
     opacity: 1;
     visibility: visible;
   }
+  */
 }
 
 /* ================== NOTIFICATIONS =================== */

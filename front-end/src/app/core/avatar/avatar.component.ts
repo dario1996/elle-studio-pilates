@@ -23,8 +23,8 @@ export class AvatarComponent implements OnInit {
   @Input('count')
   notCount: number = 0;
   @Input()
-  userName: string | null = '';
-  
+  userName: string | null = ''; // Questo sarà il nome completo formattato
+
   modalTitle = '';
   isPanelOpen: boolean = false;
   isOpenModal = false;
@@ -33,7 +33,7 @@ export class AvatarComponent implements OnInit {
   newNotifications: Notification[] = [];
   unreadNotifications: Notification[] = [];
 
-constructor() {
+  constructor() {
     // Mock data per test
     this.newNotifications = [
       {
@@ -41,8 +41,8 @@ constructor() {
         message: 'Nuovo corso disponibile: Angular Avanzato',
         type: 'info',
         timestamp: new Date(),
-        read: false
-      }
+        read: false,
+      },
     ];
 
     this.unreadNotifications = [
@@ -51,8 +51,8 @@ constructor() {
         message: 'Ricordati di completare il corso Java',
         type: 'warning',
         timestamp: new Date(Date.now() - 86400000), // 1 giorno fa
-        read: false
-      }
+        read: false,
+      },
     ];
   }
 
@@ -79,8 +79,8 @@ constructor() {
   }
 
   private updateNotificationCount(): void {
-    this.notCount = this.newNotifications.length + this.unreadNotifications.length;
+    this.notCount =
+      this.newNotifications.length + this.unreadNotifications.length;
     this.hasNewNotifications = this.newNotifications.length > 0;
   }
-
 }

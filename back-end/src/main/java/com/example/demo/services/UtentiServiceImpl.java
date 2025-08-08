@@ -30,4 +30,18 @@ public class UtentiServiceImpl implements UtentiService {
 		return utentiRepository.existsByUsername(Username);
 	}
     
+	@Override
+	public UtentiService getUtentiService() {
+		return this;
+	}
+	
+	@Override
+	public Utenti findByUsername(String username) {
+		return utentiRepository.findByUsername(username);
+	}
+
+	@Override
+	public Utenti findByEmail(String email) {
+		return utentiRepository.findByEmail(email);
+	}    
 }

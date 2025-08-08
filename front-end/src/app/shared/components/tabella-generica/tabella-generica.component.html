@@ -1,8 +1,9 @@
-<div class="table-scroll-container" 
-     [class.few-records]="paginatedData.length < pageSize / 2"
-     [class.no-data]="data.length === 0">
-    <!-- No Data Template -->
-    <div *ngIf="data.length === 0" class="no-data-container">
+<div
+  [class.few-records]="paginatedData.length < pageSize / 2"
+  [class.no-data]="data.length === 0"
+>
+  <!-- No Data Template -->
+  <!-- <div *ngIf="data.length === 0" class="no-data-container">
         <div class="no-data-content">
             <div class="no-data-icon">
                 <i class="fa fa-inbox"></i>
@@ -12,71 +13,101 @@
                 Non ci sono {{ entityName }} da visualizzare al momento.
             </p>
         </div>
-    </div>
+    </div> -->
 
-    <!-- Table with data -->
-    <table class="table" *ngIf="data.length > 0">
-        <thead class="table-header">
-            <tr>
-                <th *ngFor="let col of columns" 
-                [style.width]="col.width"
-                (click)="col.key !== 'azioni' && sortBy(col.key)"
-                [class.sortable]="col.key !== 'azioni'"
-                [class.sorted-desc]="sortColumn === col.key && sortDirection === 'desc'"
-                >{{ col.label }}
-                    <span *ngIf="col.key !== 'azioni'">
-                        <i 
-                        class="fa"
-                        [ngClass]="{
-                            'fa-chevron-up': sortColumn === col.key && sortDirection === 'asc',
-                            'fa-chevron-down': sortColumn === col.key && sortDirection === 'desc',
-                            'fa-sort': sortColumn !== col.key
-                        }"
-                        ></i>
-                    </span>
-            </th>
-                <th *ngIf="azioni.length" class="actions-column text-center">Azioni</th>
-            </tr>
-        </thead>
-        <tbody class="table-body">
-        <tr *ngFor="let row of paginatedData"
-            [class.row-clickable]="rowClickable"
-            class="align-middle"
-            (click)="rowClick.emit(row)">
-            <td *ngFor="let col of columns">
-              <ng-container [ngSwitch]="col.type">
-                <app-status-badge *ngSwitchCase="'badge'" 
-                                  [value]="isEmptyValue(row[col.key]) ? '-' : row[col.key]" 
-                                  [statusType]="col.statusType || 'general'">
-                </app-status-badge>
-                <span *ngSwitchCase="'date'" 
-                      [class.truncated-text]="shouldTruncate(getFormattedDate(row[col.key]), col.maxLength)"
-                      [title]="getFormattedDate(row[col.key])">
-                  {{ getFormattedDateWithTruncation(row[col.key], col.maxLength) }}
-                </span>
-                <span *ngSwitchDefault 
-                      [class.truncated-text]="shouldTruncate(getDisplayValue(row[col.key]), col.maxLength)"
-                      [title]="getDisplayValue(row[col.key])">
-                  {{ getDisplayValueWithTruncation(row[col.key], col.maxLength) }}
-                </span>
-              </ng-container>
-            </td>
-            <td *ngIf="azioni.length" class="actions-cell" (click)="$event.stopPropagation()">
-                <div class="action-buttons">
-                    <button *ngFor="let azione of azioni" type="button" class="btn btn-sm" [ngClass]="{
-                                    'btn-primary': azione.color === 'primary',
-                                    'btn-danger': azione.color === 'danger',
-                                    'btn-secondary': azione.color === 'secondary',
-                                    'btn-warning': azione.color === 'warning'
-                                }" (click)="onAzione(azione.action, row)">
-                        <i *ngIf="azione.icon" [class]="azione.icon"></i>
-                    </button>
-                </div>
-            </td>
-        </tr>
-        <tr class="empty-rows" *ngFor="let empty of getEmptyRows()">
-            <td [attr.colspan]="columns.length + (azioni.length ? 1 : 0)">&nbsp;</td>
-        </tr>
+  <!-- Table with data -->
+  <table class="table" *ngIf="data.length > 0">
+    <thead class="table-header">
+      <tr>
+        <th
+          *ngFor="let col of columns"
+          [style.width]="col.width"
+          (click)="col.key !== 'azioni' && sortBy(col.key)"
+          [class.sortable]="col.key !== 'azioni'"
+          [class.sorted-desc]="
+            sortColumn === col.key && sortDirection === 'desc'
+          "
+        >
+          {{ col.label }}
+          <span *ngIf="col.key !== 'azioni'">
+            <i
+              class="fa"
+              [ngClass]="{
+                'fa-chevron-up':
+                  sortColumn === col.key && sortDirection === 'asc',
+                'fa-chevron-down':
+                  sortColumn === col.key && sortDirection === 'desc',
+                'fa-sort': sortColumn !== col.key,
+              }"
+            ></i>
+          </span>
+        </th>
+        <th *ngIf="azioni.length" class="actions-column text-center">Azioni</th>
+      </tr>
+    </thead>
+    <tbody class="table-body">
+      <tr
+        *ngFor="let row of paginatedData"
+        [class.row-clickable]="rowClickable"
+        class="align-middle"
+        (click)="rowClick.emit(row)"
+      >
+        <td *ngFor="let col of columns">
+          <ng-container [ngSwitch]="col.type">
+            <app-status-badge
+              *ngSwitchCase="'badge'"
+              [value]="isEmptyValue(row[col.key]) ? '-' : row[col.key]"
+              [statusType]="col.statusType || 'general'"
+            >
+            </app-status-badge>
+            <span
+              *ngSwitchCase="'date'"
+              [class.truncated-text]="
+                shouldTruncate(getFormattedDate(row[col.key]), col.maxLength)
+              "
+              [title]="getFormattedDate(row[col.key])"
+            >
+              {{ getFormattedDateWithTruncation(row[col.key], col.maxLength) }}
+            </span>
+            <span
+              *ngSwitchDefault
+              [class.truncated-text]="
+                shouldTruncate(getDisplayValue(row[col.key]), col.maxLength)
+              "
+              [title]="getDisplayValue(row[col.key])"
+            >
+              {{ getDisplayValueWithTruncation(row[col.key], col.maxLength) }}
+            </span>
+          </ng-container>
+        </td>
+        <td
+          *ngIf="azioni.length"
+          class="actions-cell"
+          (click)="$event.stopPropagation()"
+        >
+          <div class="action-buttons">
+            <button
+              *ngFor="let azione of azioni"
+              type="button"
+              class="btn btn-sm"
+              [ngClass]="{
+                'btn-primary': azione.color === 'primary',
+                'btn-danger': azione.color === 'danger',
+                'btn-secondary': azione.color === 'secondary',
+                'btn-warning': azione.color === 'warning',
+              }"
+              (click)="onAzione(azione.action, row)"
+            >
+              <i *ngIf="azione.icon" [class]="azione.icon"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+      <tr class="empty-rows" *ngFor="let empty of getEmptyRows()">
+        <td [attr.colspan]="columns.length + (azioni.length ? 1 : 0)">
+          &nbsp;
+        </td>
+      </tr>
     </tbody>
-    </table>
+  </table>
 </div>

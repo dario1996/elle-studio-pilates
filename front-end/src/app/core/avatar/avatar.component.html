@@ -25,7 +25,7 @@
 </div>
 
 <!-- Avatar cliccabile con badge -->
-<div class="avatar-sidebar d-flex flex-column align-items-center w-100">
+<div class="avatar-sidebar d-flex align-items-center w-100">
   <button
     class="avatar-btn"
     (click)="togglePanel()"
@@ -33,17 +33,21 @@
     aria-label="Apri notifiche"
   >
     <img
-      class="img-xs rounded-circle"
-      [src]="isLogged ? '/assets/images/124599.jfif' : '/assets/images/avatars/offline_user.png'"
+      class="avatar-image"
+      [src]="
+        isLogged
+          ? '/assets/images/avatars/avatar_example.png'
+          : '/assets/images/avatars/offline_user.png'
+      "
       alt="User"
-      width="45"
-      height="45"
+      width="40"
+      height="40"
     />
     <span class="bell__count" *ngIf="notCount > 0">{{ notCount }}</span>
   </button>
-  <span
-    *ngIf="isLogged"
-    class="fw-semibold user-name-sidebar mt-2"
-    >{{ userName?.toUpperCase() }}</span
-  >
+
+  <!-- User info container -->
+  <div class="user-info" *ngIf="isLogged">
+    <span class="user-name-sidebar">{{ userName }}</span>
+  </div>
 </div>

@@ -1,10 +1,23 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { BehaviorSubject, Observable, map, catchError, throwError, switchMap, timer } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  map,
+  catchError,
+  throwError,
+  switchMap,
+  timer,
+} from 'rxjs';
 import { Token } from '../../shared/models/Token';
 import { environment } from '../../../environments/environment.development';
 import { AppCookieService } from './app-cookie.service';
+
+interface UserNameResponse {
+  nome: string;
+  cognome: string;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -15,16 +28,14 @@ export class AuthJwtService {
   private refreshTokenSubject = new BehaviorSubject<string | null>(null);
   private isRefreshing = false;
   private tokenExpirationTimer: any;
+  private http = inject(HttpClient);
 
-  constructor(
-    private httpClient: HttpClient,
-    private storageService: AppCookieService,
-  ) {
+  constructor(private storageService: AppCookieService) {
     this.initializeTokenRefresh();
   }
 
   autenticaService(username: string, password: string): Observable<Token> {
-    return this.httpClient
+    return this.http
       .post<Token>(`${environment.authServerUri}`, { username, password })
       .pipe(
         map(data => {
@@ -35,7 +46,7 @@ export class AuthJwtService {
         catchError(error => {
           console.error('Authentication failed:', error);
           return throwError(() => error);
-        })
+        }),
       );
   }
 
@@ -43,15 +54,15 @@ export class AuthJwtService {
     sessionStorage.setItem('Utente', username);
     this.storageService.set('AuthToken', tokenData.accessToken);
     this.storageService.set('RefreshToken', tokenData.refreshToken);
-    
+
     // Store expiration time
-    const expirationTime = new Date().getTime() + (tokenData.expiresIn * 1000);
+    const expirationTime = new Date().getTime() + tokenData.expiresIn * 1000;
     this.storageService.set('TokenExpiration', expirationTime.toString());
   }
 
   refreshToken(): Observable<any> {
     const refreshToken = this.storageService.get('RefreshToken');
-    
+
     if (!refreshToken) {
       return throwError(() => new Error('No refresh token available'));
     }
@@ -64,14 +75,14 @@ export class AuthJwtService {
           } else {
             return throwError(() => new Error('Token refresh failed'));
           }
-        })
+        }),
       );
     }
 
     this.isRefreshing = true;
     this.refreshTokenSubject.next(null);
 
-    return this.httpClient
+    return this.http
       .get<any>(`${environment.authServerUri}/refresh`, {
         headers: new HttpHeaders({ Authorization: `Bearer ${refreshToken}` }),
       })
@@ -88,7 +99,7 @@ export class AuthJwtService {
           this.refreshTokenSubject.next(null);
           this.clearAll();
           return throwError(() => error);
-        })
+        }),
       );
   }
 
@@ -102,13 +113,14 @@ export class AuthJwtService {
       if (expirationDate) {
         const now = new Date().getTime();
         const expirationTime = expirationDate.getTime();
-        const refreshTime = expirationTime - now - (5 * 60 * 1000); // Refresh 5 minutes before expiration
+        const refreshTime = expirationTime - now - 5 * 60 * 1000; // Refresh 5 minutes before expiration
 
         if (refreshTime > 0) {
           this.tokenExpirationTimer = setTimeout(() => {
             this.refreshToken().subscribe({
               next: () => console.log('Token refreshed automatically'),
-              error: (error) => console.error('Automatic token refresh failed:', error)
+              error: error =>
+                console.error('Automatic token refresh failed:', error),
             });
           }, refreshTime);
         }
@@ -182,9 +194,31 @@ export class AuthJwtService {
 
       const now = new Date().getTime();
       const timeUntilExpiration = expirationDate.getTime() - now;
-      return timeUntilExpiration < (10 * 60 * 1000); // Will expire in 10 minutes
+      return timeUntilExpiration < 10 * 60 * 1000; // Will expire in 10 minutes
     } catch (error) {
       return true;
     }
+  }
+
+  getUserName(): Observable<UserNameResponse> {
+    const token = this.getAuthToken();
+    console.log(
+      'Token per getUserName:',
+      token ? token.substring(0, 20) + '...' : 'NESSUN TOKEN',
+    );
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+
+    console.log('Headers per getUserName:', headers.get('Authorization'));
+
+    return this.http.get<UserNameResponse>('/api/user/name', { headers }).pipe(
+      catchError(error => {
+        console.error('Errore dettagliato getUserName:', error);
+        return throwError(() => error);
+      }),
+    );
   }
 }

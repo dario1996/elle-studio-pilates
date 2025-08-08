@@ -1,22 +1,23 @@
 <div class="page-container">
   <!-- <div class="page-header"> -->
-    <app-page-title
-      [title]="'Impostazioni'"
-      [subtitle]="'Gestione configurazioni di sistema'"
-      [buttons]="[{
-        text: 'Nuova Piattaforma', 
-        icon: 'fa fa-plus', 
+  <app-page-title
+    [title]="'Statistiche'"
+    [buttons]="[
+      {
+        text: 'Nuova Piattaforma',
+        icon: 'fa fa-plus',
         action: 'add',
-        class: 'btn-primary'
-      }]"
-      (buttonActionClick)="addPiattaforma()">
-    </app-page-title>
+        class: 'btn-primary',
+      },
+    ]"
+    (buttonActionClick)="addPiattaforma()"
+  >
+  </app-page-title>
   <!-- </div> -->
-  
+
   <div class="page-content" #pageContentInner>
     <!-- Modern Tab System -->
-    <div class="tabs-container">
-      <!-- Tab List -->
+    <!-- <div class="tabs-container">
       <div class="tabs-list" role="tablist">
         <button
           *ngFor="let tab of tabs"
@@ -24,57 +25,52 @@
           [attr.data-state]="activeTab === tab.id ? 'active' : 'inactive'"
           [attr.aria-selected]="activeTab === tab.id"
           role="tab"
-          (click)="setActiveTab(tab.id)">
+          (click)="setActiveTab(tab.id)"
+        >
           <i [class]="tab.icon"></i>
           <span>{{ tab.label }}</span>
         </button>
-      </div>
+      </div> -->
 
-      <!-- Tab Content -->
-      <div class="tabs-content">
-        <!-- Platforms Tab -->
-        <div 
+    <!-- Tab Content -->
+    <!-- <div class="tabs-content">
+        <div
           *ngIf="activeTab === 'piattaforme'"
           class="tab-panel"
-          role="tabpanel">
-          
-          <!-- Table -->
+          role="tabpanel"
+        >
           <div class="table-container">
-            <app-tabella-generica 
-              [data]="piattaforme" 
-              [columns]="columns" 
-              [azioni]="actions" 
+            <app-tabella-generica
+              [data]="piattaforme"
+              [columns]="columns"
+              [azioni]="actions"
               [entityName]="'piattaforme'"
               (action)="onTabellaAzione($event)"
-              (paginationInfo)="aggiornaPaginazione($event)">
+              (paginationInfo)="aggiornaPaginazione($event)"
+            >
             </app-tabella-generica>
           </div>
 
-          <!-- Pagination Footer -->
-            <app-pagination-footer
-              [currentPage]="paginationInfo.currentPage"
-              [totalPages]="paginationInfo.totalPages"
-              [pages]="paginationInfo.pages"
-              [displayedItems]="paginationInfo.displayedItems"
-              [totalItems]="paginationInfo.totalItems"
-              [pageSize]="paginationInfo.pageSize"
-              [entityName]="paginationInfo.entityName"
-              (pageChange)="cambiaPagina($event)">
-            </app-pagination-footer>
+          <app-pagination-footer
+            [currentPage]="paginationInfo.currentPage"
+            [totalPages]="paginationInfo.totalPages"
+            [pages]="paginationInfo.pages"
+            [displayedItems]="paginationInfo.displayedItems"
+            [totalItems]="paginationInfo.totalItems"
+            [pageSize]="paginationInfo.pageSize"
+            [entityName]="paginationInfo.entityName"
+            (pageChange)="cambiaPagina($event)"
+          >
+          </app-pagination-footer>
         </div>
-
-        <!-- Future tabs can be added here -->
-        <div 
-          *ngIf="activeTab === 'corsi'"
-          class="tab-panel"
-          role="tabpanel">
+        <div *ngIf="activeTab === 'corsi'" class="tab-panel" role="tabpanel">
           <div class="empty-state">
             <i class="fa fa-flag fa-3x"></i>
             <h3>Stati Corsi</h3>
             <p>Funzionalità in arrivo...</p>
           </div>
         </div>
-      </div>
-    </div>
+      </div> -->
+    <!-- </div> -->
   </div>
 </div>
