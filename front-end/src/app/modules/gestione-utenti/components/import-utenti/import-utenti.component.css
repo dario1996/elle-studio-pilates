@@ -1,0 +1,43 @@
+/* 
+ * CSS per Import Utenti Component
+ * Al momento contiene solo stili base poiché la funzionalità è disabilitata
+ */
+
+.import-utenti-container {
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+}
+
+.fa-upload {
+  opacity: 0.5;
+}
+
+/* Stili che saranno utilizzati in futuro per l'import */
+/*
+.drop-zone {
+  border: 2px dashed #007bff;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.drop-zone:hover {
+  background-color: #f8f9fa;
+  border-color: #0056b3;
+}
+
+.file-preview {
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+*/

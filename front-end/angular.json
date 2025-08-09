@@ -87,7 +87,8 @@
     }
   },
   "cli": {
-    "schematicCollections": []
+    "schematicCollections": [],
+    "analytics": false
   },
   "schematics": {
     "@schematics/angular:component": {

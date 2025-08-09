@@ -1,0 +1,243 @@
+<div class="form-utenti-container">
+  <form [formGroup]="utenteForm" (ngSubmit)="onSubmit()">
+    
+    <!-- Informazioni Base -->
+    <div class="section-header">
+      <h5 class="section-title">
+        <i class="fas fa-user me-2"></i>
+        Informazioni Base
+      </h5>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
+        <input
+          type="text"
+          id="username"
+          class="form-control"
+          formControlName="username"
+          [class.is-invalid]="isFieldInvalid('username')"
+          [readonly]="isEditMode"
+          placeholder="Inserisci username">
+        <div class="invalid-feedback" *ngIf="isFieldInvalid('username')">
+          {{ getFieldErrorMessage('username') }}
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+        <input
+          type="email"
+          id="email"
+          class="form-control"
+          formControlName="email"
+          [class.is-invalid]="isFieldInvalid('email')"
+          placeholder="Inserisci email">
+        <div class="invalid-feedback" *ngIf="isFieldInvalid('email')">
+          {{ getFieldErrorMessage('email') }}
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="nome" class="form-label">Nome <span class="text-danger">*</span></label>
+        <input
+          type="text"
+          id="nome"
+          class="form-control"
+          formControlName="nome"
+          [class.is-invalid]="isFieldInvalid('nome')"
+          placeholder="Inserisci nome">
+        <div class="invalid-feedback" *ngIf="isFieldInvalid('nome')">
+          {{ getFieldErrorMessage('nome') }}
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label for="cognome" class="form-label">Cognome <span class="text-danger">*</span></label>
+        <input
+          type="text"
+          id="cognome"
+          class="form-control"
+          formControlName="cognome"
+          [class.is-invalid]="isFieldInvalid('cognome')"
+          placeholder="Inserisci cognome">
+        <div class="invalid-feedback" *ngIf="isFieldInvalid('cognome')">
+          {{ getFieldErrorMessage('cognome') }}
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="codiceFiscale" class="form-label">Codice Fiscale</label>
+        <input
+          type="text"
+          id="codiceFiscale"
+          class="form-control"
+          formControlName="codiceFiscale"
+          placeholder="Inserisci codice fiscale"
+          style="text-transform: uppercase;">
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label for="ruoli" class="form-label">Ruoli <span class="text-danger">*</span></label>
+        <select
+          id="ruoli"
+          class="form-select"
+          formControlName="ruoli"
+          [class.is-invalid]="isFieldInvalid('ruoli')"
+          multiple>
+          <option *ngFor="let ruolo of ruoliDisponibili" [value]="ruolo.value">
+            {{ ruolo.label }}
+          </option>
+        </select>
+        <div class="form-text">Tieni premuto Ctrl per selezionare più ruoli</div>
+        <div class="invalid-feedback" *ngIf="isFieldInvalid('ruoli')">
+          {{ getFieldErrorMessage('ruoli') }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Password Section -->
+    <div class="section-header mt-4">
+      <h5 class="section-title">
+        <i class="fas fa-lock me-2"></i>
+        {{ isEditMode ? 'Cambia Password (opzionale)' : 'Password' }}
+      </h5>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="password" class="form-label">
+          Password <span *ngIf="!isEditMode" class="text-danger">*</span>
+        </label>
+        <div class="input-group">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            id="password"
+            class="form-control"
+            formControlName="password"
+            [class.is-invalid]="isFieldInvalid('password')"
+            [placeholder]="isEditMode ? 'Lascia vuoto per non modificare' : 'Inserisci password'">
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="togglePasswordVisibility()">
+            <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+          </button>
+        </div>
+        <div class="invalid-feedback" *ngIf="isFieldInvalid('password')">
+          {{ getFieldErrorMessage('password') }}
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-3" *ngIf="!isEditMode || utenteForm.get('password')?.value">
+        <label for="confirmPassword" class="form-label">
+          Conferma Password <span *ngIf="!isEditMode" class="text-danger">*</span>
+        </label>
+        <div class="input-group">
+          <input
+            [type]="showConfirmPassword ? 'text' : 'password'"
+            id="confirmPassword"
+            class="form-control"
+            formControlName="confirmPassword"
+            [class.is-invalid]="isFieldInvalid('confirmPassword')"
+            placeholder="Conferma password">
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="toggleConfirmPasswordVisibility()">
+            <i [class]="showConfirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+          </button>
+        </div>
+        <div class="invalid-feedback" *ngIf="isFieldInvalid('confirmPassword')">
+          {{ getFieldErrorMessage('confirmPassword') }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Informazioni Aggiuntive -->
+    <div class="section-header mt-4">
+      <h5 class="section-title">
+        <i class="fas fa-info-circle me-2"></i>
+        Informazioni Aggiuntive
+      </h5>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="attivo" class="form-label">Stato <span class="text-danger">*</span></label>
+        <select
+          id="attivo"
+          class="form-select"
+          formControlName="attivo"
+          [class.is-invalid]="isFieldInvalid('attivo')">
+          <option value="Si">Attivo</option>
+          <option value="No">Non attivo</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="isFieldInvalid('attivo')">
+          {{ getFieldErrorMessage('attivo') }}
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <div class="form-check mt-4">
+          <input
+            type="checkbox"
+            id="patologie"
+            class="form-check-input"
+            formControlName="patologie">
+          <label for="patologie" class="form-check-label">
+            Ha patologie da segnalare
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="utenteForm.get('patologie')?.value">
+      <div class="col-12 mb-3">
+        <label for="descrizionePatologie" class="form-label">Descrizione Patologie</label>
+        <textarea
+          id="descrizionePatologie"
+          class="form-control"
+          formControlName="descrizionePatologie"
+          rows="3"
+          placeholder="Descrivi le patologie..."></textarea>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 mb-3">
+        <label for="obiettivi" class="form-label">Obiettivi</label>
+        <textarea
+          id="obiettivi"
+          class="form-control"
+          formControlName="obiettivi"
+          rows="3"
+          placeholder="Descrivi gli obiettivi..."></textarea>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="d-flex justify-content-end gap-2 mt-4">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="onCancel()">
+        <i class="fas fa-times me-1"></i>
+        Annulla
+      </button>
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="utenteForm.invalid">
+        <i class="fas fa-save me-1"></i>
+        {{ isEditMode ? 'Modifica' : 'Aggiungi' }}
+      </button>
+    </div>
+
+  </form>
+</div>

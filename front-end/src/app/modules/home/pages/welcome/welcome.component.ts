@@ -40,8 +40,8 @@ export class WelcomeComponent implements OnInit {
       icon: 'fa-solid fa-users fa-xl',
       links: [
         {
-          label: 'Gestione utenti',
-          url: 'dipendenti',
+          label: 'Utenti',
+          url: 'gestione-utenti',
           icon: 'fa-solid fa-users fa-lg',
         },
       ],

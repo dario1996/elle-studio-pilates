@@ -1,0 +1,71 @@
+<<!-- Modal Content -->
+<div class="modal-content">
+  
+  <!-- Modal Header -->
+  <div class="modal-header">
+    <h5 class="modal-title">
+      <i class="fas fa-user me-2"></i>
+      {{ dati?.username || (dati?.nome + ' ' + dati?.cognome) }}
+    </h5>
+  </div>
+
+  <!-- Modal Body -->
+  <div class="modal-body">
+    <div class="detail-content">
+      <div class="detail-section">
+        <div class="detail-field">
+          <div class="detail-field-label">
+            <i class="fa fa-user"></i>
+            <span>Username</span>
+          </div>
+          <div class="detail-field-value">{{ dati?.username || '–' }}</div>
+        </div>
+        
+        <div class="detail-field">
+          <div class="detail-field-label">
+            <i class="fa fa-envelope"></i>
+            <span>Email</span>
+          </div>
+          <div class="detail-field-value">{{ dati?.email || '–' }}</div>
+        </div>
+        
+        <div class="detail-field">
+          <div class="detail-field-label">
+            <i class="fa fa-id-badge"></i>
+            <span>Nome</span>
+          </div>
+          <div class="detail-field-value">{{ dati?.nome || '–' }}</div>
+        </div>
+        
+        <div class="detail-field">
+          <div class="detail-field-label">
+            <i class="fa fa-id-badge"></i>
+            <span>Cognome</span>
+          </div>
+          <div class="detail-field-value">{{ dati?.cognome || '–' }}</div>
+        </div>
+        
+        <div class="detail-field">
+          <div class="detail-field-label">
+            <i class="fa fa-shield-alt"></i>
+            <span>Ruolo</span>
+          </div>
+          <div class="detail-field-value">{{ getRuoliDisplay() }}</div>
+        </div>
+        
+        <div class="detail-field">
+          <div class="detail-field-label">
+            <i class="fa fa-toggle-on"></i>
+            <span>Stato</span>
+          </div>
+          <div class="detail-field-value">
+            <app-status-badge 
+              [value]="dati?.attivo === 'Si' ? 'Attivo' : (dati?.attivo === 'No' ? 'Non attivo' : dati?.attivo) || '–'"
+              [statusType]="'dipendente'">
+            </app-status-badge>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
