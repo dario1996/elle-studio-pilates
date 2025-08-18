@@ -1,4 +1,5 @@
 export interface Token {
+  email: any;
   accessToken: string;
   refreshToken: string;
   expiresIn: number;

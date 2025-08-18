@@ -27,7 +27,7 @@ import { FilterPanelComponent } from '../../../../shared/components/filter-panel
     TabellaGenericaComponent,
     PageTitleComponent,
     FilterPanelComponent,
-    PaginationFooterComponent,
+    // PaginationFooterComponent,
   ],
   templateUrl: './corsi.component.html',
   styleUrls: ['./corsi.component.css'],

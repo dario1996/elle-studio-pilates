@@ -43,7 +43,7 @@ import { FilterPanelComponent } from '../../../../shared/components/filter-panel
     ReactiveFormsModule,
     TabellaGenericaComponent,
     FilterPanelComponent,
-    PaginationFooterComponent,
+    // PaginationFooterComponent,
     PageTitleComponent,
   ],
   templateUrl: './dipendenti.component.html',

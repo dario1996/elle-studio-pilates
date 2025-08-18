@@ -29,8 +29,8 @@ interface TabItem {
   imports: [
     CommonModule, 
     PageTitleComponent, 
-    TabellaGenericaComponent,
-    PaginationFooterComponent
+    // TabellaGenericaComponent,
+    // PaginationFooterComponent
   ],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.css',

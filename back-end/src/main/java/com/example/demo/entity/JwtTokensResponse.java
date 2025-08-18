@@ -19,8 +19,9 @@ public class JwtTokensResponse implements Serializable {
     private String nome;
     private String cognome;
     private String displayName;
+    private String email;
     
-    // Costruttore per retrocompatibilità
+
     public JwtTokensResponse(String accessToken, String refreshToken, long expiresIn, String tokenType) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;

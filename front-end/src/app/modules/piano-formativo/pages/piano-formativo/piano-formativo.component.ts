@@ -50,7 +50,7 @@ import { FormModificaAssegnazioneComponent } from '../../components/form-modific
     ReactiveFormsModule,
     TabellaGenericaComponent,
     FilterPanelComponent,
-    PaginationFooterComponent,
+    // PaginationFooterComponent,
   ],
   templateUrl: './piano-formativo.component.html',
   styleUrl: './piano-formativo.component.css',
