@@ -2,8 +2,11 @@
 
     <!-- Page Title -->
     <div class="page-header">
-    <app-page-title [title]="'Gestione Utenti'" [showButton]="false"></app-page-title>
-    <app-logged-user></app-logged-user>
+      <app-page-title [title]="'Gestione Utenti'" [showButton]="false"></app-page-title>
+      <div class="user-bar">
+        <app-notification></app-notification>
+        <app-logged-user></app-logged-user>
+      </div>
     </div>
 
     <div #pageContentInner class="page-content-inner">

@@ -19,6 +19,8 @@ import {
   CORSI_AZIONI_PAGINA,
 } from '../../../../shared/config/corsi.config';
 import { FilterPanelComponent } from '../../../../shared/components/filter-panel/filter-panel.component';
+import { LoggedUserComponent } from '../../../../shared/components/logged-user/logged-user.component';
+import { NotificationComponent } from '../../../../core/notification/notification.component';
 
 @Component({
   selector: 'app-corsi',
@@ -27,6 +29,8 @@ import { FilterPanelComponent } from '../../../../shared/components/filter-panel
     TabellaGenericaComponent,
     PageTitleComponent,
     FilterPanelComponent,
+    LoggedUserComponent,
+    NotificationComponent
     // PaginationFooterComponent,
   ],
   templateUrl: './corsi.component.html',

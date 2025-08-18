@@ -1,7 +1,10 @@
 <div class="page-container">
   <div class="page-header">
   <app-page-title [title]="'Panoramica'" [showButton]="false"></app-page-title>
-  <app-logged-user></app-logged-user>
+    <div class="user-bar">
+      <app-notification></app-notification>
+      <app-logged-user></app-logged-user>
+    </div>
   </div>
   <div class="page-content" #pageContentInner>
     <!-- Tails -->

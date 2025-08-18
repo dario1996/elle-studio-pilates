@@ -30,6 +30,7 @@ import {
   UTENTI_FILTRI
 } from '../../../../shared/config/utenti.config';
 import { LoggedUserComponent } from "../../../../shared/components/logged-user/logged-user.component";
+import { NotificationComponent } from '../../../../core/notification/notification.component';
 
 @Component({
   selector: 'app-gestione-utenti',
@@ -42,7 +43,8 @@ import { LoggedUserComponent } from "../../../../shared/components/logged-user/l
     FilterPanelComponent,
     PaginationFooterComponent,
     PageTitleComponent,
-    LoggedUserComponent
+    LoggedUserComponent,
+    NotificationComponent
 ],
   templateUrl: './gestione-utenti.component.html',
   styleUrls: ['./gestione-utenti.component.css'],
