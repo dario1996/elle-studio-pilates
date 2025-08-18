@@ -3,11 +3,6 @@
   /* align-items: flex-end; */
   justify-content: space-between;
   flex-wrap: wrap;
-}
-
-.page-title-section {
-  flex: 1;
-  min-width: 0;
   font-family: var(--font-family);
 }
 
@@ -17,7 +12,7 @@
   color: #1a202c !important;
   margin: 0 0 8px 0 !important;
   line-height: 1.2 !important;
-  font-family: var(--font-family) !important;
+  /* font-family: var(--font-family) !important; */
 }
 
 .page-description {

@@ -1,8 +1,11 @@
 <div class="page-container">
-  <!-- <div class="page-header"> -->
+  <div class="page-header">
   <app-page-title [title]="'Panoramica'" [showButton]="false"></app-page-title>
-  <!-- </div> -->
-
+    <div class="user-bar">
+      <app-notification></app-notification>
+      <app-logged-user></app-logged-user>
+    </div>
+  </div>
   <div class="page-content" #pageContentInner>
     <!-- Azioni Rapide -->
     <div class="quick-actions">

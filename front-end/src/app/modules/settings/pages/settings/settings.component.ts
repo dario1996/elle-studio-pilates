@@ -16,6 +16,8 @@ import {
   AzioneType,
   AzioneColor,
 } from '../../../../shared/models/ui/azione-def';
+import { LoggedUserComponent } from '../../../../shared/components/logged-user/logged-user.component';
+import { NotificationComponent } from '../../../../core/notification/notification.component';
 
 interface TabItem {
   id: string;
@@ -29,8 +31,10 @@ interface TabItem {
   imports: [
     CommonModule, 
     PageTitleComponent, 
-    TabellaGenericaComponent,
-    PaginationFooterComponent
+    LoggedUserComponent,
+    NotificationComponent
+    // TabellaGenericaComponent,
+    // PaginationFooterComponent
   ],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.css',

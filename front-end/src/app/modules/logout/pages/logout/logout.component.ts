@@ -11,6 +11,7 @@ import { Component, OnInit } from '@angular/core';
 export class LogoutComponent implements OnInit {
   titolo = 'Logout';
   sottotitolo = 'Procedi ad inserire la userid e la password';
+  router: any;
 
   constructor(private auth: AuthJwtService) {}
 
@@ -18,5 +19,6 @@ export class LogoutComponent implements OnInit {
     this.auth.clearAll();
     localStorage.clear();
     sessionStorage.clear();
+    this.router.navigate(['/login']);
   }
 }

@@ -38,6 +38,13 @@ export const routes: Routes = [
           ).then(m => m.DipendentiComponent),
       },
       {
+        path: 'gestione-utenti',
+        loadComponent: () =>
+          import(
+            './modules/gestione-utenti/pages/gestione-utenti/gestione-utenti.component'
+          ).then(m => m.GestioneUtentiComponent),
+      },
+      {
         path: 'piano-formativo',
         loadComponent: () =>
           import(

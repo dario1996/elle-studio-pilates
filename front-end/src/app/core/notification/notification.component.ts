@@ -17,7 +17,7 @@ interface Notification {
   standalone: true,
   templateUrl: './notification.component.html',
   styleUrl: './notification.component.css',
-  imports: [CommonModule, NgClass]
+  imports: [CommonModule]
 })
 export class NotificationComponent implements OnInit {
   @Input('count')

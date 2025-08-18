@@ -52,6 +52,7 @@ export class AuthJwtService {
     if (tokenData.nome) sessionStorage.setItem('UtenteNome', tokenData.nome);
     if (tokenData.cognome) sessionStorage.setItem('UtenteCognome', tokenData.cognome);
     if (tokenData.displayName) sessionStorage.setItem('UtenteDisplayName', tokenData.displayName);
+    if (tokenData.email) sessionStorage.setItem('UtenteEmail', tokenData.email);
     
     this.storageService.set('AuthToken', tokenData.accessToken);
     this.storageService.set('RefreshToken', tokenData.refreshToken);
@@ -176,6 +177,10 @@ export class AuthJwtService {
 
   loggedUserCognome(): string {
     return sessionStorage.getItem('UtenteCognome') || '';
+  }
+
+  loggedUserEmail(): string {
+    return sessionStorage.getItem('UtenteEmail') || '';
   }
 
   isLogged(): boolean {

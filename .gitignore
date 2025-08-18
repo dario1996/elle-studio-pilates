@@ -63,3 +63,7 @@ dist-ssr
 
 # IDE
 .cursor
+
+# Docker
+.docker
+docker-compose.yml

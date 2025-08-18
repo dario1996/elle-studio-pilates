@@ -5,16 +5,10 @@
     </div>
   </button> -->
 
-<button
-  class="bell-button"
-  [ngClass]="notCount > 0 ? 'has-notifications' : 'no-notifications'"
-  (click)="togglePanel()">
-  <i class="material-icons md-notifications_active"></i>
-  <div class="bell__count" [class.has-new]="hasNewNotifications">
-    {{ notCount }}
-  </div>
+<button class="bell-button" (click)="togglePanel()">
+  <i class="fa-regular fa-bell bell-icon"></i>
+  <span class="bell-dot" *ngIf="hasNewNotifications"></span>
 </button>
-    <!-- Overlay for mobile -->
 <div
   class="notification-overlay"
   [class.show]="isPanelOpen"

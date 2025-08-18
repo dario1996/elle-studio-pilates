@@ -33,6 +33,8 @@ import { DettaglioDipendentiComponent } from '../../components/dettaglio-dipende
 import { ImportDipendentiComponent } from '../../components/import-dipendenti/import-dipendenti.component';
 import { IFiltroDef } from '../../../../shared/models/ui/filtro-def';
 import { FilterPanelComponent } from '../../../../shared/components/filter-panel/filter-panel.component';
+import { LoggedUserComponent } from '../../../../shared/components/logged-user/logged-user.component';
+import { NotificationComponent } from '../../../../core/notification/notification.component';
 
 @Component({
   selector: 'app-dipendenti',
@@ -41,9 +43,11 @@ import { FilterPanelComponent } from '../../../../shared/components/filter-panel
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    LoggedUserComponent,
     TabellaGenericaComponent,
     FilterPanelComponent,
-    PaginationFooterComponent,
+    NotificationComponent,
+    // PaginationFooterComponent,
     PageTitleComponent,
   ],
   templateUrl: './dipendenti.component.html',

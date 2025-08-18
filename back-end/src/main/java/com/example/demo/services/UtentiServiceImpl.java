@@ -1,5 +1,7 @@
 package com.example.demo.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,5 +45,17 @@ public class UtentiServiceImpl implements UtentiService {
 	@Override
 	public Utenti findByEmail(String email) {
 		return utentiRepository.findByEmail(email);
-	}    
+	}
+	
+	// 🆕 Implementazione per ottenere tutti gli utenti
+	@Override
+	public List<Utenti> SelPreloadUsers() {
+		return utentiRepository.findAll();
+	}
+	
+	// 🆕 Implementazione per eliminare un utente
+	@Override
+	public void deleteUtente(String username) {
+		utentiRepository.deleteById(username);
+	}
 }

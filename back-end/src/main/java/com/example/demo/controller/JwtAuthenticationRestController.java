@@ -76,6 +76,7 @@ public class JwtAuthenticationRestController
 		String nome = utente != null ? utente.getNome() : "";
 		String cognome = utente != null ? utente.getCognome() : "";
 		String displayName = (nome + " " + cognome).trim();
+		String email = utente != null ? utente.getEmail() : "";
 		
 		log.warning(String.format("Access Token %s", accessToken));
 		log.warning(String.format("Refresh Token %s", refreshToken));
@@ -87,7 +88,8 @@ public class JwtAuthenticationRestController
 			"Bearer",
 			nome,
 			cognome,
-			displayName.isEmpty() ? authenticationRequest.getUsername() : displayName
+			displayName.isEmpty() ? authenticationRequest.getUsername() : displayName,
+			email
 		);
 
 		return ResponseEntity.ok(response);

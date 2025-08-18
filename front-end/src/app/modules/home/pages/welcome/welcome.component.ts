@@ -1,7 +1,6 @@
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule, NgClass } from '@angular/common';
-import { AvatarComponent } from '../../../../core/avatar/avatar.component';
 import { AuthJwtService } from '../../../../core/services/authJwt.service';
 
 @Component({
@@ -9,7 +8,10 @@ import { AuthJwtService } from '../../../../core/services/authJwt.service';
   standalone: true,
   templateUrl: './welcome.component.html',
   styleUrl: './welcome.component.css',
-  imports: [RouterModule, AvatarComponent, NgClass, CommonModule],
+  imports: [
+    RouterModule, 
+    // NgClass, 
+    CommonModule],
 })
 export class WelcomeComponent implements OnInit {
   menuItems = [
@@ -40,8 +42,8 @@ export class WelcomeComponent implements OnInit {
       icon: 'fa-solid fa-users fa-xl',
       links: [
         {
-          label: 'Gestione utenti',
-          url: 'dipendenti',
+          label: 'Utenti',
+          url: 'gestione-utenti',
           icon: 'fa-solid fa-users fa-lg',
         },
       ],

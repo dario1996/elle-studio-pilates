@@ -675,6 +675,14 @@ body,
   margin-top: 1px;
 }
 
+.user-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  height: 100%; /* opzionale, per allineamento verticale */
+}
+
 /* ================== UTILITY CLASSES =================== */
 .text-muted {
   color: var(--color-muted-foreground);

@@ -1,19 +1,11 @@
 <div class="page-container">
-  <!-- <div class="page-header"> -->
-  <app-page-title
-    [title]="'Statistiche'"
-    [buttons]="[
-      {
-        text: 'Nuova Piattaforma',
-        icon: 'fa fa-plus',
-        action: 'add',
-        class: 'btn-primary',
-      },
-    ]"
-    (buttonActionClick)="addPiattaforma()"
-  >
-  </app-page-title>
-  <!-- </div> -->
+  <div class="page-header">
+    <app-page-title [title]="'Statistiche'" [showButton]="false"></app-page-title>
+    <div class="user-bar">
+      <app-notification></app-notification>
+      <app-logged-user></app-logged-user>
+    </div>
+  </div>
 
   <div class="page-content" #pageContentInner>
     <!-- Modern Tab System -->

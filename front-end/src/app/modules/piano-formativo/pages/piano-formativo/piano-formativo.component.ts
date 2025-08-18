@@ -39,6 +39,8 @@ import { IFiltroDef } from '../../../../shared/models/ui/filtro-def';
 import { FormAssegnazioneComponent } from '../../components/form-assegnazione/form-assegnazione.component';
 import { ImportAssegnazioniComponent } from '../../components/import-assegnazioni/import-assegnazioni.component';
 import { FormModificaAssegnazioneComponent } from '../../components/form-modifica-assegnazione/form-modifica-assegnazione.component';
+import { LoggedUserComponent } from "../../../../shared/components/logged-user/logged-user.component";
+import { NotificationComponent } from '../../../../core/notification/notification.component';
 
 @Component({
   selector: 'app-piano-formativo',
@@ -50,8 +52,9 @@ import { FormModificaAssegnazioneComponent } from '../../components/form-modific
     ReactiveFormsModule,
     TabellaGenericaComponent,
     FilterPanelComponent,
-    PaginationFooterComponent,
-  ],
+    LoggedUserComponent,
+    NotificationComponent
+],
   templateUrl: './piano-formativo.component.html',
   styleUrl: './piano-formativo.component.css',
 })
