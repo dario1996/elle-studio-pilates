@@ -792,9 +792,9 @@ select {
 }
 
 /* Filtri compatti */
-app-page-title {
+/* app-page-title {
   margin: 0px 12px 12px 12px;
-}
+} */
 
 app-nav-tabs {
   flex-shrink: 0; /* Non si comprime */

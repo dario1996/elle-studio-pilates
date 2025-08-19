@@ -32,7 +32,7 @@ export class WelcomeComponent implements OnInit {
       links: [
         {
           label: 'Calendario',
-          url: 'piano-formativo',
+          url: 'agenda',
           icon: 'fa-solid fa-graduation-cap fa-lg',
         },
       ],
@@ -49,11 +49,11 @@ export class WelcomeComponent implements OnInit {
       ],
     },
     {
-      title: 'Gestione pacchetti',
+      title: 'Gestione corsi',
       icon: 'fa-solid fa-book fa-xl',
       links: [
         {
-          label: 'Gestione pacchetti',
+          label: 'Gestione corsi',
           url: 'corsi',
           icon: 'fa-solid fa-book fa-lg',
         },

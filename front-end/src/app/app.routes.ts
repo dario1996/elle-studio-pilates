@@ -45,6 +45,13 @@ export const routes: Routes = [
           ).then(m => m.GestioneUtentiComponent),
       },
       {
+        path: 'agenda',
+        loadComponent: () =>
+          import('./modules/agenda/pages/agenda/agenda.component').then(
+            m => m.AgendaComponent,
+          ),
+      },
+      {
         path: 'piano-formativo',
         loadComponent: () =>
           import(

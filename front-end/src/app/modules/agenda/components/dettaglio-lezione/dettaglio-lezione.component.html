@@ -1,0 +1,171 @@
+<div *ngIf="lezione">
+  <!-- Informazioni Principali -->
+  <div class="info-section">
+    <!-- Titolo con Badge -->
+    <div class="title-section mb-2">
+      <h3 class="lesson-title">{{ lezione.titolo }}</h3>
+      <div class="badges-container">
+        <span 
+          class="status-badge" 
+          [class.active]="lezione.attiva"
+          [class.inactive]="!lezione.attiva"
+        >
+          {{ lezione.attiva ? 'Attiva' : 'Non Attiva' }}
+        </span>
+        <span 
+          class="type-badge"
+          [attr.data-tipo]="lezione.tipo"
+        >
+          {{ tipoLezioneLabel }}
+        </span>
+      </div>
+    </div>
+    
+    <!-- Informazioni Base -->
+    <div class="row mb-2">
+      <div class="col-md-6">
+        <div class="info-card">
+          <h5 class="info-card-title">📅 Programmazione</h5>
+          <div class="info-item">
+            <strong>Data e Ora:</strong> {{ dataOraFormatted }}
+          </div>
+          <div class="info-item">
+            <strong>Durata:</strong> {{ lezione.durata }} minuti
+          </div>
+          <div class="info-item">
+            <strong>Fine lezione:</strong> {{ dataFineFormatted }}
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="info-card">
+          <h5 class="info-card-title">👥 Partecipazione</h5>
+          <div class="info-item">
+            <strong>Istruttore:</strong> {{ istruttoreNome }}
+          </div>
+          <div class="info-item">
+            <strong>Partecipanti:</strong> 
+            <span class="participants" 
+                  [class.full]="isCompleta"
+                  [class.available]="!isCompleta">
+              {{ lezione.partecipantiIscritti }} / {{ lezione.maxPartecipanti }}
+            </span>
+          </div>
+          <div class="info-item">
+            <strong>Posti disponibili:</strong> {{ postiDisponibili }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Informazioni Commerciali -->
+    <div class="row mb-2">
+      <div class="col-md-6">
+        <div class="info-card">
+          <h5 class="info-card-title">💰 Dettagli Commerciali</h5>
+          <div class="info-item">
+            <strong>Prezzo:</strong> €{{ lezione.prezzo | number:'1.2-2' }}
+          </div>
+          <div class="info-item">
+            <strong>Tipo lezione:</strong> {{ tipoLezioneLabel }}
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="info-card">
+          <h5 class="info-card-title">ℹ️ Stato</h5>
+          <div class="info-item">
+            <strong>Status:</strong> 
+            <span class="status-badge" 
+                  [class.active]="lezione.attiva"
+                  [class.inactive]="!lezione.attiva">
+              {{ lezione.attiva ? 'Attiva' : 'Non Attiva' }}
+            </span>
+          </div>
+          <div class="info-item" *ngIf="isCompleta">
+            <span class="full-badge">🔴 Lezione al Completo</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Descrizioni (se presenti) -->
+    <div class="row mb-2" *ngIf="lezione.descrizione || lezione.note">
+      <div class="col-md-6" *ngIf="lezione.descrizione">
+        <div class="info-card">
+          <h5 class="info-card-title">📝 Descrizione</h5>
+          <div class="info-item">
+            {{ lezione.descrizione }}
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6" *ngIf="lezione.note">
+        <div class="info-card">
+          <h5 class="info-card-title">📋 Note</h5>
+          <div class="info-item">
+            {{ lezione.note }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Informazioni di Sistema -->
+  <div class="row">
+    <div class="col-12">
+      <div class="info-card">
+        <h5 class="info-card-title">⚠️ Informazioni Importanti</h5>
+        <div class="alert" [class.alert-warning]="!canCancel" [class.alert-info]="canCancel">
+          <span *ngIf="canCancel">
+            ✅ Cancellazione consentita (oltre 24 ore dall'inizio)
+          </span>
+          <span *ngIf="!canCancel">
+            ⚠️ Cancellazione non consentita (meno di 24 ore dall'inizio)
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <!-- <div class="action-buttons mt-4">
+    <button 
+      type="button" 
+      class="btn btn-secondary me-2" 
+      (click)="onClose()"
+      [disabled]="isLoading"
+    >
+      Chiudi
+    </button>
+
+    <button 
+      type="button" 
+      class="btn btn-warning me-2" 
+      (click)="onToggleStatus()"
+      [disabled]="isLoading"
+    >
+      <span *ngIf="isLoading" class="spinner"></span>
+      {{ lezione?.attiva ? 'Disattiva' : 'Attiva' }}
+    </button>
+
+    <button 
+      type="button" 
+      class="btn btn-primary me-2" 
+      (click)="onEdit()"
+      [disabled]="isLoading"
+    >
+      Modifica
+    </button>
+
+    <button 
+      type="button" 
+      class="btn btn-danger" 
+      (click)="onDelete()"
+      [disabled]="isLoading || !canCancel"
+      [title]="!canCancel ? 'Impossibile eliminare: meno di 24 ore dall\'inizio' : ''"
+    >
+      <span *ngIf="isLoading" class="spinner"></span>
+      Elimina
+    </button>
+  </div> -->
+</div>

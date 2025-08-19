@@ -1,0 +1,30 @@
+<div class="page-container">
+  <div class="page-header">
+    <app-page-title 
+      [title]="title" 
+      [buttons]="buttons"
+      buttonText="Aggiungi Lezione"
+      (buttonClick)="handleAggiungiLezione()">
+    </app-page-title>
+    <div class="user-bar">
+      <app-notification></app-notification>
+      <app-logged-user></app-logged-user>
+    </div>
+  </div>
+  
+  <div class="page-content">
+    <!-- Pulsante Aggiungi Lezione -->
+    <div class="row mb-3 mt-3">
+      <div class="col d-flex justify-content-start">
+        <button class="quick-action-btn" (click)="handleAggiungiLezione()">
+          <i class="fas fa-plus"></i>
+          <span>Aggiungi lezione</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="calendar-container">
+      <full-calendar [options]="calendarOptions"></full-calendar>
+    </div>
+  </div>
+</div>

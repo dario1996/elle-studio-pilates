@@ -1,0 +1,103 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="row">
+        <div class="col-md-6 form-field">
+            <label for="tipo" class="form-label p-0 m-0">Tipo di Lezione *</label>
+            <select id="tipo" formControlName="tipo" class="form-select">
+                <option *ngFor="let tipo of tipiLezione" [value]="tipo.value">
+                    {{ tipo.label }} ({{ tipo.durata }}min - max {{ tipo.maxPartecipanti }} persone)
+                </option>
+            </select>
+            <div *ngIf="form.get('tipo')?.invalid && form.get('tipo')?.touched" class="invalid-feedback">
+                Il tipo di lezione è obbligatorio
+            </div>
+        </div>
+        <div class="col-md-6 form-field">
+            <label for="titolo" class="form-label p-0 m-0">Titolo *</label>
+            <input type="text" id="titolo" formControlName="titolo" class="form-control"
+                placeholder="Es. Pilates Matwork con Sofia">
+            <div *ngIf="form.get('titolo')?.invalid && form.get('titolo')?.touched" class="invalid-feedback">
+                <span *ngIf="form.get('titolo')?.errors?.['required']">Il titolo è obbligatorio</span>
+                <span *ngIf="form.get('titolo')?.errors?.['minlength']">Il titolo deve essere di almeno 3 caratteri</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Data e Ora -->
+    <div class="row mt-3">
+        <div class="col-md-6 form-field">
+            <label for="dataInizio" class="form-label p-0 m-0">Data *</label>
+            <input type="date" id="dataInizio" formControlName="dataInizio" class="form-control">
+            <div *ngIf="form.get('dataInizio')?.invalid && form.get('dataInizio')?.touched" class="invalid-feedback">
+                La data è obbligatoria
+            </div>
+        </div>
+        <div class="col-md-6 form-field">
+            <label for="oraInizio" class="form-label p-0 m-0">Ora *</label>
+            <input type="time" id="oraInizio" formControlName="oraInizio" class="form-control">
+            <div *ngIf="form.get('oraInizio')?.invalid && form.get('oraInizio')?.touched" class="invalid-feedback">
+                L'ora è obbligatoria
+            </div>
+        </div>
+    </div>
+
+    <!-- Durata e Max Partecipanti -->
+    <div class="row mt-3">
+        <div class="col-md-6 form-field">
+            <label for="durata" class="form-label p-0 m-0">Durata (minuti) *</label>
+            <input type="number" id="durata" formControlName="durata" class="form-control" min="30" max="120">
+            <div *ngIf="form.get('durata')?.invalid && form.get('durata')?.touched" class="invalid-feedback">
+                <span *ngIf="form.get('durata')?.errors?.['required']">La durata è obbligatoria</span>
+                <span *ngIf="form.get('durata')?.errors?.['min']">Durata minima: 30 minuti</span>
+                <span *ngIf="form.get('durata')?.errors?.['max']">Durata massima: 120 minuti</span>
+            </div>
+        </div>
+        <div class="col-md-6 form-field">
+            <label for="maxPartecipanti" class="form-label p-0 m-0">Max Partecipanti *</label>
+            <input type="number" id="maxPartecipanti" formControlName="maxPartecipanti" class="form-control" min="1" max="8">
+            <div *ngIf="form.get('maxPartecipanti')?.invalid && form.get('maxPartecipanti')?.touched" class="invalid-feedback">
+                <span *ngIf="form.get('maxPartecipanti')?.errors?.['required']">Il numero di partecipanti è obbligatorio</span>
+                <span *ngIf="form.get('maxPartecipanti')?.errors?.['min']">Minimo 1 partecipante</span>
+                <span *ngIf="form.get('maxPartecipanti')?.errors?.['max']">Massimo 8 partecipanti</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Istruttore e Prezzo -->
+    <div class="row mt-3">
+        <div class="col-md-6 form-field">
+            <label for="istruttoreId" class="form-label p-0 m-0">Istruttore *</label>
+            <select id="istruttoreId" formControlName="istruttoreId" class="form-select">
+                <option value="">Seleziona un istruttore</option>
+                <option *ngFor="let istruttore of istruttori" [value]="istruttore.id">
+                    {{ istruttore.nome }} {{ istruttore.cognome }}
+                </option>
+            </select>
+            <div *ngIf="form.get('istruttoreId')?.invalid && form.get('istruttoreId')?.touched" class="invalid-feedback">
+                L'istruttore è obbligatorio
+            </div>
+        </div>
+        <div class="col-md-6 form-field">
+            <label for="prezzo" class="form-label p-0 m-0">Prezzo (€) *</label>
+            <input type="number" id="prezzo" formControlName="prezzo" class="form-control" min="0" step="0.01"
+                placeholder="0.00">
+            <div *ngIf="form.get('prezzo')?.invalid && form.get('prezzo')?.touched" class="invalid-feedback">
+                <span *ngIf="form.get('prezzo')?.errors?.['required']">Il prezzo è obbligatorio</span>
+                <span *ngIf="form.get('prezzo')?.errors?.['min']">Il prezzo non può essere negativo</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Descrizione e Note -->
+    <div class="row mt-3">
+        <div class="col-md-6 form-field">
+            <label for="descrizione" class="form-label p-0 m-0">Descrizione</label>
+            <textarea id="descrizione" formControlName="descrizione" class="form-control" rows="3"
+                placeholder="Descrizione opzionale della lezione..."></textarea>
+        </div>
+        <div class="col-md-6 form-field">
+            <label for="note" class="form-label p-0 m-0">Note</label>
+            <textarea id="note" formControlName="note" class="form-control" rows="3"
+                placeholder="Note aggiuntive..."></textarea>
+        </div>
+    </div>
+</form>

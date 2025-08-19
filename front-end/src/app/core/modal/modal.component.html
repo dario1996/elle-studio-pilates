@@ -23,14 +23,30 @@
         <ng-template #dynamicTarget></ng-template>
       </div>
       <div class="modal-footer justify-content-center">
-        <button class="btn btn-cancel btn-sm" (click)="chiudi()">Chiudi</button>
-        <button
-          *ngIf="config.onConferma"
-          class="btn btn-primary btn-sm ms-2"
-          (click)="conferma()"
-        >
-          Conferma
-        </button>
+        <!-- Custom buttons if provided -->
+        <ng-container *ngIf="config.customButtons && config.customButtons.length > 0">
+          <button 
+            *ngFor="let button of config.customButtons"
+            [class]="'btn btn-sm me-2 ' + button.cssClass"
+            (click)="button.action()"
+            [disabled]="button.disabled"
+          >
+            <span *ngIf="button.loading" class="spinner-border spinner-border-sm me-1"></span>
+            {{ button.text }}
+          </button>
+        </ng-container>
+
+        <!-- Default buttons if no custom buttons or showDefaultButtons is true -->
+        <ng-container *ngIf="(!config.customButtons || config.customButtons.length === 0 || config.showDefaultButtons !== false)">
+          <button class="btn btn-secondary btn-sm" (click)="chiudi()">Chiudi</button>
+          <button
+            *ngIf="config.onConferma"
+            class="btn btn-primary btn-sm ms-2"
+            (click)="conferma()"
+          >
+            Conferma
+          </button>
+        </ng-container>
       </div>
     </div>
   </div>

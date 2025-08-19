@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, ViewChild, ViewContainerRef, ComponentRef } from '@angular/core';
-import { IModaleConfig } from '../../shared/models/ui/modal-config';
+import { IModaleConfig, IModalButton } from '../../shared/models/ui/modal-config';
 import { ModaleService } from '../services/modal.service';
 
 @Component({
@@ -71,6 +71,23 @@ export class ModalComponent implements OnDestroy {
       typeof this.dynamicComponentRef.instance.confermaForm === 'function'
     ) {
       this.dynamicComponentRef.instance.confermaForm();
+    } else if (
+      this.dynamicComponentRef &&
+      this.dynamicComponentRef.instance &&
+      typeof this.dynamicComponentRef.instance.onSubmit === 'function'
+    ) {
+      this.dynamicComponentRef.instance.onSubmit();
+    }
+  }
+
+  // Metodo per chiamare onSubmit dal form component
+  callFormSubmit() {
+    if (
+      this.dynamicComponentRef &&
+      this.dynamicComponentRef.instance &&
+      typeof this.dynamicComponentRef.instance.onSubmit === 'function'
+    ) {
+      this.dynamicComponentRef.instance.onSubmit();
     }
   }
 

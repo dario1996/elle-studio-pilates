@@ -1,8 +1,8 @@
 /* Azioni Rapide */
 .quick-actions {
   padding: 20px 0;
-  margin-left: 20px;
-  margin-right: 20px;
+  /* margin-left: 20px;
+  margin-right: 20px; */
   margin-bottom: 16px;
 }
 
@@ -69,8 +69,8 @@
 /* Dashboard Stats */
 .dashboard-stats {
   padding: 20px 0;
-  margin-left: 20px; /* Allineamento con il titolo Panoramica */
-  margin-right: 20px; /* Padding destro uguale al sinistro */
+  /* margin-left: 20px;
+  margin-right: 20px; */
 }
 
 .stats-card {
@@ -212,8 +212,8 @@
 /* Sezione Prossimi Appuntamenti */
 .appointments-section {
   margin-top: 32px;
-  margin-left: 20px; /* Allineamento con le card sopra */
-  margin-right: 20px; /* Padding destro uguale al sinistro */
+  /* margin-left: 20px;
+  margin-right: 20px; */
 }
 
 .appointments-card {
