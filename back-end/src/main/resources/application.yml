@@ -23,7 +23,7 @@ spring:
 
   liquibase:
     enabled: true
-    change-log: classpath:db/changelog/db.changelog-utenti-only.xml
+    change-log: classpath:db/changelog/db.changelog-master.xml
     default-schema: elle-studio
 
   # Configurazione upload file

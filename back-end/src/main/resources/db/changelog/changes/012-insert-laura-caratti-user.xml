@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="012-insert-laura-caratti" author="dario">
+        <comment>Insert Laura Caratti user with encrypted password</comment>
+
+        <insert tableName="utenti">
+            <column name="username" value="l.caratti" />
+            <column name="email" value="laura.caratti@mail.com" />
+            <!-- BCrypt hash of "Agostino96!" with salt rounds 10 -->
+            <column name="password" value="$2a$10$N8qpXnQKSGhZhJ9nFvqJveLYtGMNnQwZZYZm1YPQCpd4vM6WgKrN6" />
+            <column name="attivo" value="Si" />
+            <column name="ruoli" value="USER" />
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

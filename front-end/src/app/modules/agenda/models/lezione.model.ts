@@ -1,5 +1,5 @@
 export interface ILezione {
-  id: number;
+  id?: number;
   titolo: string;
   dataInizio: Date;
   dataFine: Date;
@@ -8,8 +8,9 @@ export interface ILezione {
   maxPartecipanti: number;
   partecipantiIscritti: number;
   istruttoreId: number;
+  istruttore?: string; // Aggiunto per compatibilità con backend
   descrizione?: string;
-  prezzo: number;
+  prezzo?: number; // Opzionale
   note?: string;
   attiva: boolean;
 }

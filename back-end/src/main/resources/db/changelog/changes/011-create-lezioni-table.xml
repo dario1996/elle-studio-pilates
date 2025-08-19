@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="create-lezioni-table" author="dario">
+        <createTable tableName="lezioni">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="titolo" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data_inizio" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data_fine" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="istruttore" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tipo_lezione" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="note" type="TEXT"/>
+            <column name="attiva" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="DATETIME" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="DATETIME" defaultValueComputed="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-lezioni-indexes" author="dario">
+        <createIndex tableName="lezioni" indexName="idx_lezioni_data_inizio">
+            <column name="data_inizio"/>
+        </createIndex>
+        
+        <createIndex tableName="lezioni" indexName="idx_lezioni_istruttore">
+            <column name="istruttore"/>
+        </createIndex>
+        
+        <createIndex tableName="lezioni" indexName="idx_lezioni_tipo_lezione">
+            <column name="tipo_lezione"/>
+        </createIndex>
+        
+        <createIndex tableName="lezioni" indexName="idx_lezioni_attiva">
+            <column name="attiva"/>
+        </createIndex>
+        
+        <createIndex tableName="lezioni" indexName="idx_lezioni_range_date">
+            <column name="data_inizio"/>
+            <column name="data_fine"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="insert-lezioni-sample-data" author="dario">
+        <insert tableName="lezioni">
+            <column name="titolo" value="Pilates Privato con Eleonora"/>
+            <column name="data_inizio" value="2025-08-20 09:00:00"/>
+            <column name="data_fine" value="2025-08-20 09:50:00"/>
+            <column name="istruttore" value="Eleonora Bianchi"/>
+            <column name="tipo_lezione" value="PRIVATA"/>
+            <column name="note" value="Prima lezione del cliente"/>
+            <column name="attiva" valueBoolean="true"/>
+        </insert>
+        
+        <insert tableName="lezioni">
+            <column name="titolo" value="Matwork Gruppo"/>
+            <column name="data_inizio" value="2025-08-20 18:00:00"/>
+            <column name="data_fine" value="2025-08-20 18:50:00"/>
+            <column name="istruttore" value="Marco Rossi"/>
+            <column name="tipo_lezione" value="MATWORK"/>
+            <column name="note" value="Gruppo avanzato"/>
+            <column name="attiva" valueBoolean="true"/>
+        </insert>
+        
+        <insert tableName="lezioni">
+            <column name="titolo" value="Yoga Serale"/>
+            <column name="data_inizio" value="2025-08-21 19:30:00"/>
+            <column name="data_fine" value="2025-08-21 20:30:00"/>
+            <column name="istruttore" value="Sofia Verdi"/>
+            <column name="tipo_lezione" value="YOGA"/>
+            <column name="note" value="Portare tappetino personale"/>
+            <column name="attiva" valueBoolean="true"/>
+        </insert>
+        
+        <insert tableName="lezioni">
+            <column name="titolo" value="Semi-Privata Duetto"/>
+            <column name="data_inizio" value="2025-08-22 10:00:00"/>
+            <column name="data_fine" value="2025-08-22 10:50:00"/>
+            <column name="istruttore" value="Eleonora Bianchi"/>
+            <column name="tipo_lezione" value="SEMI_PRIVATA_DUETTO"/>
+            <column name="note" value="Due amiche principianti"/>
+            <column name="attiva" valueBoolean="true"/>
+        </insert>
+        
+        <insert tableName="lezioni">
+            <column name="titolo" value="Prima Lezione"/>
+            <column name="data_inizio" value="2025-08-22 15:00:00"/>
+            <column name="data_fine" value="2025-08-22 16:00:00"/>
+            <column name="istruttore" value="Marco Rossi"/>
+            <column name="tipo_lezione" value="PRIMA_LEZIONE"/>
+            <column name="note" value="Valutazione posturale completa"/>
+            <column name="attiva" valueBoolean="true"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

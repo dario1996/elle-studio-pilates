@@ -1,9 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ModaleService } from '../../../../core/services/modal.service';
-import { LezioniService } from '../../services/lezioni.service';
+import { LezioniService } from '../../../../core/services/lezioni.service';
 import { ToastrService } from 'ngx-toastr';
-import { ILezione, TipoLezione } from '../../models/lezione.model';
+import { ILezione, TipoLezione } from '../../../../shared/models/Lezione';
 import { IModalButton } from '../../../../shared/models/ui/modal-config';
 import { FormLezioneComponent } from '../form-lezione/form-lezione.component';
 
@@ -154,7 +154,7 @@ export class DettaglioLezioneComponent implements OnInit {
   }
 
   onDelete() {
-    if (!this.lezione) return;
+    if (!this.lezione?.id) return;
 
     const confirmMessage = `Sei sicuro di voler eliminare la lezione "${this.lezione.titolo}"?`;
     if (confirm(confirmMessage)) {
@@ -178,20 +178,16 @@ export class DettaglioLezioneComponent implements OnInit {
   }
 
   onToggleStatus() {
-    if (!this.lezione) return;
+    if (!this.lezione?.id) return;
 
     this.isLoading = true;
     
-    const updatedLezione = {
-      ...this.lezione,
-      attiva: !this.lezione.attiva
-    };
-
-    this.lezioniService.updateLezione(this.lezione.id, updatedLezione).subscribe({
-      next: (lezioneAggiornata) => {
-        this.lezione = lezioneAggiornata;
+    this.lezioniService.toggleLezioneStatus(this.lezione.id).subscribe({
+      next: () => {
+        // Chiudi il modale subito
+        this.modaleService.chiudi();
         this.toastr.success(
-          `Lezione ${this.lezione.attiva ? 'attivata' : 'disattivata'} con successo`
+          `Lezione ${this.lezione?.attiva ? 'disattivata' : 'attivata'} con successo`
         );
         this.isLoading = false;
       },

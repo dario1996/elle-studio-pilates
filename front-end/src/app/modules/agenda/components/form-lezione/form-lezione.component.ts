@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModaleService } from '../../../../core/services/modal.service';
 import { ToastrService } from 'ngx-toastr';
-import { LezioniService } from '../../services/lezioni.service';
-import { ILezione, TipoLezione } from '../../models/lezione.model';
+import { LezioniService } from '../../../../core/services/lezioni.service';
+import { ILezione, TipoLezione, StatoLezione } from '../../../../shared/models/Lezione';
 
 @Component({
   selector: 'app-form-lezione',
@@ -43,6 +43,7 @@ export class FormLezioneComponent implements OnInit {
   ngOnInit() {
     console.log('FormLezioneComponent ngOnInit, dati:', this.lezioneToEdit);
     this.modaleService.config$.subscribe(config => {
+      console.log('📦 Config ricevuto nel form:', config);
       if (config?.dati && Object.keys(config.dati).length > 0) {
         this.lezioneToEdit = config.dati;
         this.isEditMode = true;
@@ -52,6 +53,12 @@ export class FormLezioneComponent implements OnInit {
       } else {
         this.isEditMode = false;
         this.lezioneToEdit = undefined;
+      }
+      
+      if (config?.onConferma) {
+        console.log('✅ Callback onConferma trovato:', config.onConferma);
+      } else {
+        console.log('❌ Nessun callback onConferma trovato');
       }
     });
     this.initForm();
@@ -101,14 +108,33 @@ export class FormLezioneComponent implements OnInit {
     if (!this.lezioneToEdit?.dataInizio) return '';
     const dataInizio = new Date(this.lezioneToEdit.dataInizio);
     if (isNaN(dataInizio.getTime())) return '';
-    return dataInizio.toISOString().split('T')[0];
+    
+    console.log('Data originale lezione:', this.lezioneToEdit.dataInizio);
+    console.log('Data convertita:', dataInizio);
+    
+    // Usa getFullYear, getMonth, getDate per evitare problemi di fuso orario
+    const year = dataInizio.getFullYear();
+    const month = String(dataInizio.getMonth() + 1).padStart(2, '0');
+    const day = String(dataInizio.getDate()).padStart(2, '0');
+    const formatted = `${year}-${month}-${day}`;
+    console.log('Data formattata per form:', formatted);
+    return formatted;
   }
 
   private getFormattedTime(): string {
     if (!this.lezioneToEdit?.dataInizio) return '';
     const dataInizio = new Date(this.lezioneToEdit.dataInizio);
     if (isNaN(dataInizio.getTime())) return '';
-    return dataInizio.toTimeString().slice(0, 5);
+    
+    console.log('Ora originale lezione:', this.lezioneToEdit.dataInizio);
+    console.log('Ora convertita:', dataInizio);
+    
+    // Usa getHours e getMinutes per evitare problemi di fuso orario
+    const hours = String(dataInizio.getHours()).padStart(2, '0');
+    const minutes = String(dataInizio.getMinutes()).padStart(2, '0');
+    const formatted = `${hours}:${minutes}`;
+    console.log('Ora formattata per form:', formatted);
+    return formatted;
   }
 
   private initForm() {
@@ -119,9 +145,9 @@ export class FormLezioneComponent implements OnInit {
       dataInizio: [this.getFormattedDate(), Validators.required],
       oraInizio: [this.getFormattedTime(), Validators.required],
       durata: [this.lezioneToEdit?.durata || 50, [Validators.required, Validators.min(30), Validators.max(120)]],
-      istruttoreId: [this.lezioneToEdit?.istruttoreId || null, Validators.required],
+      istruttore: [this.lezioneToEdit?.istruttore || '', Validators.required], // Cambiato da istruttoreId a istruttore
       maxPartecipanti: [this.lezioneToEdit?.maxPartecipanti || 1, [Validators.required, Validators.min(1), Validators.max(8)]],
-      prezzo: [this.lezioneToEdit?.prezzo || 0, [Validators.required, Validators.min(0)]],
+      prezzo: [this.lezioneToEdit?.prezzo || 0, [Validators.min(0)]], // Rimosso required per prezzo
       note: [this.lezioneToEdit?.note || '']
     });
 
@@ -169,9 +195,9 @@ export class FormLezioneComponent implements OnInit {
         dataInizio: dataFormatted,
         oraInizio: oraFormatted,
         durata: this.lezioneToEdit.durata,
-        istruttoreId: this.lezioneToEdit.istruttoreId,
+        istruttore: this.lezioneToEdit.istruttore || '', // Cambiato da istruttoreId a istruttore
         maxPartecipanti: this.lezioneToEdit.maxPartecipanti,
-        prezzo: this.lezioneToEdit.prezzo,
+        prezzo: this.lezioneToEdit.prezzo || 0, // Gestito prezzo opzionale
         note: this.lezioneToEdit.note || ''
       });
 
@@ -188,36 +214,64 @@ export class FormLezioneComponent implements OnInit {
       tipo: TipoLezione.PRIVATA,
       durata: 50,
       maxPartecipanti: 1,
-      prezzo: 0
+      prezzo: 0,
+      istruttore: ''
     });
   }
 
   onSubmit() {
+    console.log('📝 onSubmit chiamato, isEditMode:', this.isEditMode);
     if (this.form.valid) {
       this.isLoading = true;
       const formData = this.form.value;
       
-      // Combina data e ora
-      const dataOra = new Date(`${formData.dataInizio}T${formData.oraInizio}`);
+      // Combina data e ora mantenendo il fuso orario locale
+      const [year, month, day] = formData.dataInizio.split('-').map(Number);
+      const [hours, minutes] = formData.oraInizio.split(':').map(Number);
       
-      const lezione: Partial<ILezione> = {
+      const dataOra = new Date(year, month - 1, day, hours, minutes);
+      
+      console.log('Data creata dal form:', dataOra);
+      console.log('Dati form originali:', formData.dataInizio, formData.oraInizio);
+      
+      const lezione: ILezione = {
+        id: this.isEditMode ? this.lezioneToEdit?.id : undefined,
         tipo: formData.tipo,
         titolo: formData.titolo,
-        descrizione: formData.descrizione,
         dataInizio: dataOra,
         dataFine: new Date(dataOra.getTime() + formData.durata * 60000),
         durata: formData.durata,
-        istruttoreId: formData.istruttoreId,
+        istruttoreId: 0, // Placeholder, non più utilizzato nel backend
+        istruttore: formData.istruttore,
         maxPartecipanti: formData.maxPartecipanti,
         partecipantiIscritti: this.lezioneToEdit?.partecipantiIscritti || 0,
-        prezzo: formData.prezzo,
+        partecipanti: this.lezioneToEdit?.partecipanti || [],
+        descrizione: formData.descrizione,
+        stato: this.isEditMode ? (this.lezioneToEdit?.stato || StatoLezione.CONFERMATA) : StatoLezione.CONFERMATA,
+        prezzo: formData.prezzo || 0,
         note: formData.note,
-        attiva: true
+        attiva: this.isEditMode ? (this.lezioneToEdit?.attiva ?? true) : true
       };
 
+      console.log('🎯 Lezione creata dal form:', lezione);
+
+      // Se è in modalità modifica, usa il callback onConferma se presente
+      if (this.isEditMode) {
+        this.modaleService.config$.pipe().subscribe(config => {
+          if (config?.onConferma) {
+            console.log('🚀 Chiamando callback onConferma');
+            config.onConferma(lezione);
+            this.isLoading = false;
+            return;
+          }
+        }).unsubscribe();
+      }
+
+      // Fallback: usa il service direttamente (per creazione o se onConferma non è presente)
+      console.log('🔄 Usando service direttamente');
       const operation = this.isEditMode && this.lezioneToEdit?.id
         ? this.lezioniService.updateLezione(this.lezioneToEdit.id, lezione)
-        : this.lezioniService.createLezione(lezione as ILezione);
+        : this.lezioniService.createLezione(lezione);
 
       operation.subscribe({
         next: () => {

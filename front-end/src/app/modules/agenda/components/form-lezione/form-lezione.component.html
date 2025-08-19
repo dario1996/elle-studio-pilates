@@ -65,23 +65,18 @@
     <!-- Istruttore e Prezzo -->
     <div class="row mt-3">
         <div class="col-md-6 form-field">
-            <label for="istruttoreId" class="form-label p-0 m-0">Istruttore *</label>
-            <select id="istruttoreId" formControlName="istruttoreId" class="form-select">
-                <option value="">Seleziona un istruttore</option>
-                <option *ngFor="let istruttore of istruttori" [value]="istruttore.id">
-                    {{ istruttore.nome }} {{ istruttore.cognome }}
-                </option>
-            </select>
-            <div *ngIf="form.get('istruttoreId')?.invalid && form.get('istruttoreId')?.touched" class="invalid-feedback">
+            <label for="istruttore" class="form-label p-0 m-0">Istruttore *</label>
+            <input type="text" id="istruttore" formControlName="istruttore" class="form-control"
+                placeholder="Nome dell'istruttore">
+            <div *ngIf="form.get('istruttore')?.invalid && form.get('istruttore')?.touched" class="invalid-feedback">
                 L'istruttore è obbligatorio
             </div>
         </div>
         <div class="col-md-6 form-field">
-            <label for="prezzo" class="form-label p-0 m-0">Prezzo (€) *</label>
+            <label for="prezzo" class="form-label p-0 m-0">Prezzo (€)</label>
             <input type="number" id="prezzo" formControlName="prezzo" class="form-control" min="0" step="0.01"
                 placeholder="0.00">
             <div *ngIf="form.get('prezzo')?.invalid && form.get('prezzo')?.touched" class="invalid-feedback">
-                <span *ngIf="form.get('prezzo')?.errors?.['required']">Il prezzo è obbligatorio</span>
                 <span *ngIf="form.get('prezzo')?.errors?.['min']">Il prezzo non può essere negativo</span>
             </div>
         </div>

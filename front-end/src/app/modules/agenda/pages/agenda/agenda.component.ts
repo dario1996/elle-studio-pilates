@@ -12,9 +12,9 @@ import { ButtonConfig, PageTitleComponent } from "../../../../core/page-title/pa
 import { LoggedUserComponent } from '../../../../shared/components/logged-user/logged-user.component';
 import { NotificationComponent } from '../../../../core/notification/notification.component';
 import { ModaleService } from '../../../../core/services/modal.service';
-import { LezioniService } from '../../services/lezioni.service';
+import { LezioniService } from '../../../../core/services/lezioni.service';
 import { ToastrService } from 'ngx-toastr';
-import { ILezione, TipoLezione, TIPI_LEZIONE_CONFIG } from '../../models/lezione.model';
+import { ILezione, TipoLezione, TIPI_LEZIONE_CONFIG } from '../../../../shared/models/Lezione';
 import { FormLezioneComponent } from '../../components/form-lezione/form-lezione.component';
 import { DettaglioLezioneComponent } from '../../components/dettaglio-lezione/dettaglio-lezione.component';
 
@@ -83,14 +83,17 @@ export class AgendaComponent implements OnInit {
   }
 
   private loadLezioni(): void {
+    console.log('🔄 loadLezioni() chiamato - ricaricando tutte le lezioni dal backend');
     this.lezioniService.getLezioni().subscribe({
       next: (data) => {
+        console.log('✅ Lezioni caricate dal backend:', data.length, 'lezioni');
         this.lezioni = data;
         this.convertLezioniToEvents();
         this.updateCalendarEvents();
+        console.log('📅 Calendario aggiornato con nuovi dati');
       },
       error: (error) => {
-        console.error('Errore nel caricamento delle lezioni:', error);
+        console.error('❌ Errore nel caricamento delle lezioni:', error);
         this.toastr.error('Errore nel caricamento delle lezioni');
       }
     });
@@ -131,11 +134,12 @@ export class AgendaComponent implements OnInit {
   }
 
   private updateCalendarEvents(): void {
+    console.log('📅 updateCalendarEvents() chiamato con', this.events.length, 'eventi');
     this.calendarOptions = {
       ...this.calendarOptions,
       events: this.events
     };
-    this.cd.detectChanges();
+    console.log('✅ calendarOptions aggiornato');
   }
 
   // Handler per la selezione di una data/ora (creazione nuova lezione)
@@ -227,16 +231,28 @@ export class AgendaComponent implements OnInit {
     });
   }
 
-  aggiornaLezione(id: number, lezioneData: Partial<ILezione>): void {
+  aggiornaLezione(id: number, lezioneData: ILezione): void {
+    console.log('� METODO aggiornaLezione CHIAMATO! ID:', id, 'Dati:', lezioneData);
+    console.log('�🔧 aggiornaLezione() chiamato per ID:', id);
     this.lezioniService.updateLezione(id, lezioneData).subscribe({
-      next: () => {
+      next: (lezioneAggiornata) => {
+        console.log('✅ Lezione aggiornata nel backend:', lezioneAggiornata);
+        console.log('🔄 Ricaricando tutte le lezioni...');
+        
+        // Ricarica tutte le lezioni per essere sicuri che tutto sia sincronizzato
         this.loadLezioni();
+        
         this.toastr.success('Lezione aggiornata con successo');
-        this.modaleService.chiudi();
+        
+        // Chiudi il modale DOPO aver ricaricato i dati
+        setTimeout(() => {
+          this.modaleService.chiudi();
+        }, 100);
       },
       error: (error) => {
+        console.error('❌ Errore aggiornamento lezione:', error);
         this.toastr.error('Errore durante l\'aggiornamento della lezione');
-        console.error('Errore aggiornamento lezione:', error);
+        this.modaleService.chiudi();
       },
     });
   }
@@ -262,17 +278,45 @@ export class AgendaComponent implements OnInit {
 
   // Metodi per i bottoni del modal dettaglio
   private toggleLezioneStatus(lezione: ILezione): void {
-    const updatedLezione = { ...lezione, attiva: !lezione.attiva };
-    this.aggiornaLezione(lezione.id!, updatedLezione);
+    console.log('🔄 toggleLezioneStatus() chiamato per lezione ID:', lezione.id);
+    if (!lezione.id) {
+      this.toastr.error('ID lezione non trovato');
+      return;
+    }
+    
+    this.lezioniService.toggleLezioneStatus(lezione.id).subscribe({
+      next: () => {
+        console.log('✅ Toggle status completato nel backend');
+        // Chiudi il modale subito
+        this.modaleService.chiudi();
+        
+        console.log('🔄 Ricaricando tutte le lezioni...');
+        // Ricarica tutte le lezioni per essere sicuri che tutto sia sincronizzato
+        this.loadLezioni();
+        
+        this.toastr.success('Status della lezione aggiornato con successo');
+      },
+      error: (error) => {
+        console.error('❌ Errore nel toggle status:', error);
+        this.toastr.error('Errore durante il cambio di stato della lezione');
+      }
+    });
   }
 
   private editLezione(lezione: ILezione): void {
+    console.log('📝 editLezione chiamato per lezione:', lezione);
     import('../../components/form-lezione/form-lezione.component').then(({ FormLezioneComponent }) => {
+      const callback = (formValue: ILezione) => {
+        console.log('🎯 Callback onConferma chiamato con valori:', formValue);
+        this.aggiornaLezione(lezione.id!, formValue);
+      };
+      
+      console.log('🔧 Aprendo modale con callback:', callback);
       this.modaleService.apri({
         titolo: 'Modifica Lezione',
         componente: FormLezioneComponent,
         dati: lezione,
-        onConferma: (formValue: ILezione) => this.aggiornaLezione(lezione.id!, formValue),
+        onConferma: callback,
       });
     });
   }

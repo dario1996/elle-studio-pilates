@@ -11,7 +11,13 @@ export interface ILezione {
   stato: StatoLezione;
   prezzo?: number;
   location?: string;
-  colore?: string; // per differenziare visivamente nel calendar
+  colore?: string; // per differenziare visualmente nel calendar
+  // Campi aggiuntivi per compatibilità con il vecchio sistema
+  durata?: number;
+  partecipantiIscritti?: number;
+  istruttoreId?: number;
+  note?: string;
+  attiva?: boolean;
 }
 
 export enum TipoLezione {

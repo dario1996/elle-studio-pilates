@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
+import { ILezione, TipoLezione } from '../../shared/models/Lezione';
 
 // Backend DTOs
 export interface LezioneDto {
@@ -16,33 +17,6 @@ export interface LezioneDto {
   updatedAt?: string;
 }
 
-export enum TipoLezione {
-  PRIVATA = 'PRIVATA',
-  PRIMA_LEZIONE = 'PRIMA_LEZIONE',
-  SEMI_PRIVATA_DUETTO = 'SEMI_PRIVATA_DUETTO',
-  SEMI_PRIVATA_GRUPPO = 'SEMI_PRIVATA_GRUPPO',
-  MATWORK = 'MATWORK',
-  YOGA = 'YOGA'
-}
-
-// Frontend model (manteniamo per compatibilità)
-export interface ILezione {
-  id?: number;
-  titolo: string;
-  dataInizio: Date;
-  dataFine: Date;
-  tipo: TipoLezione;
-  durata: number;
-  maxPartecipanti: number;
-  partecipantiIscritti: number;
-  istruttoreId: number;
-  istruttore?: string;
-  descrizione?: string;
-  prezzo?: number;
-  note?: string;
-  attiva: boolean;
-}
-
 @Injectable({
   providedIn: 'root'
 })
@@ -52,9 +26,10 @@ export class LezioniService {
 
   // Converter helper methods
   private dtoToModel(dto: LezioneDto): ILezione {
+    console.log('DTO ricevuto dal backend:', dto);
     const dataInizio = new Date(dto.dataInizio);
     const dataFine = new Date(dto.dataFine);
-    const durata = Math.round((dataFine.getTime() - dataInizio.getTime()) / (1000 * 60)); // minuti
+    console.log('Date convertite - Inizio:', dataInizio, 'Fine:', dataFine);
 
     return {
       id: dto.id,
@@ -62,27 +37,45 @@ export class LezioniService {
       dataInizio,
       dataFine,
       tipo: dto.tipoLezione,
-      durata,
       maxPartecipanti: this.getMaxPartecipantiByTipo(dto.tipoLezione),
-      partecipantiIscritti: 0, // TODO: implementare gestione partecipanti
-      istruttoreId: 0, // TODO: implementare gestione istruttori
+      partecipanti: [], // TODO: implementare gestione partecipanti
       istruttore: dto.istruttore,
-      note: dto.note || '',
-      attiva: dto.attiva ?? true
-    };
+      descrizione: dto.note || '',
+      stato: dto.attiva ? 'CONFERMATA' : 'CANCELLATA',
+      attiva: dto.attiva || false, // Aggiungiamo la proprietà attiva
+      prezzo: 0, // TODO: implementare gestione prezzi
+      colore: this.getColoreByTipo(dto.tipoLezione)
+    } as ILezione;
   }
 
   private modelToDto(model: ILezione): LezioneDto {
-    return {
+    console.log('Model da convertire:', model);
+    const dto = {
       id: model.id,
       titolo: model.titolo,
-      dataInizio: model.dataInizio.toISOString(),
-      dataFine: model.dataFine.toISOString(),
-      istruttore: model.istruttore || '',
+      dataInizio: this.toLocalISOString(model.dataInizio),
+      dataFine: this.toLocalISOString(model.dataFine),
+      istruttore: model.istruttore,
       tipoLezione: model.tipo,
-      note: model.note || '',
-      attiva: model.attiva
+      note: model.descrizione || '',
+      attiva: model.attiva !== undefined ? model.attiva : (model.stato !== 'CANCELLATA')
     };
+    console.log('DTO creato per backend:', dto);
+    return dto;
+  }
+
+  // Converte una data in ISO string mantenendo l'ora locale (senza conversione UTC)
+  private toLocalISOString(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    
+    const localIso = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+    console.log(`Data locale convertita: ${date} -> ${localIso}`);
+    return localIso;
   }
 
   private getMaxPartecipantiByTipo(tipo: TipoLezione): number {
@@ -95,6 +88,7 @@ export class LezioniService {
       case TipoLezione.SEMI_PRIVATA_GRUPPO:
         return 4;
       case TipoLezione.MATWORK:
+        return 6;
       case TipoLezione.YOGA:
         return 8;
       default:
@@ -102,10 +96,35 @@ export class LezioniService {
     }
   }
 
+  private getColoreByTipo(tipo: TipoLezione): string {
+    switch (tipo) {
+      case TipoLezione.PRIVATA:
+        return '#3b82f6';
+      case TipoLezione.PRIMA_LEZIONE:
+        return '#8b5cf6';
+      case TipoLezione.SEMI_PRIVATA_DUETTO:
+        return '#10b981';
+      case TipoLezione.SEMI_PRIVATA_GRUPPO:
+        return '#f59e0b';
+      case TipoLezione.MATWORK:
+        return '#ef4444';
+      case TipoLezione.YOGA:
+        return '#84cc16';
+      default:
+        return '#6b7280';
+    }
+  }
+
   // API methods
   getLezioni(): Observable<ILezione[]> {
+    console.log('📤 Service: getLezioni chiamato - richiesta GET al backend');
     return this.http.get<LezioneDto[]>(this.apiUrl)
-      .pipe(map(dtos => dtos.map(dto => this.dtoToModel(dto))));
+      .pipe(map(dtos => {
+        console.log('📥 Service: ricevute', dtos.length, 'lezioni dal backend');
+        const result = dtos.map(dto => this.dtoToModel(dto));
+        console.log('✅ Service: lezioni convertite per frontend:', result.length);
+        return result;
+      }));
   }
 
   getLezioniByPeriodo(dataInizio: Date, dataFine: Date): Observable<ILezione[]> {
@@ -129,9 +148,16 @@ export class LezioniService {
   }
 
   updateLezione(id: number, lezione: ILezione): Observable<ILezione> {
+    console.log('🔧 Service: updateLezione chiamato per ID:', id, 'con dati:', lezione);
     const dto = this.modelToDto(lezione);
+    console.log('📤 Service: invio richiesta PUT al backend con DTO:', dto);
     return this.http.put<LezioneDto>(`${this.apiUrl}/${id}`, dto)
-      .pipe(map(responseDto => this.dtoToModel(responseDto)));
+      .pipe(map(responseDto => {
+        console.log('📥 Service: risposta ricevuta dal backend:', responseDto);
+        const result = this.dtoToModel(responseDto);
+        console.log('✅ Service: lezione convertita per frontend:', result);
+        return result;
+      }));
   }
 
   deleteLezione(id: number): Observable<void> {
