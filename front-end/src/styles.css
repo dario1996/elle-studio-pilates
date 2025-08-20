@@ -104,13 +104,10 @@ body,
 }
 
 .page-container {
-  height: 100vh; /* CORRETTO: usa tutta l'altezza viewport */
-  min-height: 0;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  padding: 13px;
-  position: relative;
+  padding: 24px;
 }
 
 .page-content {
@@ -123,6 +120,24 @@ body,
   z-index: 1;
 }
 
+.page-content-inner {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding-top: 16px;
+}
+
+.page-footer {
+  flex-shrink: 0;
+  width: 100%;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: flex-end;
+}
+
 .form-control {
   font-size: 12px;
   border-radius: 6px;
@@ -131,6 +146,87 @@ body,
     border-color 0.15s ease-in-out,
     box-shadow 0.15s ease-in-out; */
 }
+
+/* Azioni Rapide */
+.quick-actions {
+  padding-top: 30px;
+  padding-bottom: 10px;
+  /* margin-left: 20px;
+  margin-right: 20px; */
+  /* margin-bottom: 16px; */
+}
+
+.quick-actions-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.quick-actions-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quick-actions-title i {
+  color: #c99e67;
+  font-size: 16px;
+}
+
+.quick-actions-buttons {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.quick-action-btn {
+  background: white;
+  border: 1px solid #374151;
+  border-radius: 6px;
+  padding: 8px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.quick-action-btn:hover {
+  background: white;
+  color: #846843;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--color-BORDO);
+  border-radius: 6px;
+}
+
+.quick-action-btn i {
+  font-size: 11px;
+}
+
+.quick-action-btn span {
+  white-space: nowrap;
+}
+
+/* .quick-action-btn.btn-secondary {
+  background: #f8f9fa;
+  border: 1px solid #6c757d;
+  color: #6c757d;
+}
+
+.quick-action-btn.btn-secondary:hover {
+  background: #6c757d;
+  color: white;
+} */
 
 /* ================== BUTTONS =================== */
 /* Button styling */
@@ -379,7 +475,7 @@ body,
   z-index: 20;
   display: flex;
   flex-direction: column;
-  border-right: 1px solid var(--color-BORDO);
+  /* border-right: 1px solid var(--color-BORDO); */
   background: #ffffff;
   /* box-shadow:
     0 10px 15px -3px rgba(0, 0, 0, 0.1),
@@ -714,6 +810,7 @@ body,
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 12px;
 }
 
 .content-main {
@@ -810,16 +907,18 @@ app-filtri-generici {
 
 /* Tabella prende tutto lo spazio rimanente */
 app-tabella-generica {
-  flex: 1 1 auto; /* CORRETTO: prende tutto lo spazio disponibile */
-  min-height: 0;
   display: flex;
   flex-direction: column;
-  max-height: 100%; /* AGGIUNTO: altezza piena */
-  /* margin: 12px 12px 12px 12px; */
+  flex: 1 1 auto;
+  min-height: 0;
+  border-radius: 6px;
 }
 
 app-pagination-footer {
-  margin: 0px 12px 0px 12px;
+  flex-shrink: 0;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
 }
 
 /* ================== NEUTRAL TOAST STYLES =================== */

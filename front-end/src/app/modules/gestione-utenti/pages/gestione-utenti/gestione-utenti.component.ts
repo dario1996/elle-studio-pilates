@@ -29,6 +29,8 @@ import {
   UTENTI_AZIONI, 
   UTENTI_FILTRI
 } from '../../../../shared/config/utenti.config';
+import { NotificationComponent } from '../../../../core/notification/notification.component';
+import { LoggedUserComponent } from '../../../../shared/components/logged-user/logged-user.component';
 
 @Component({
   selector: 'app-gestione-utenti',
@@ -41,6 +43,8 @@ import {
     FilterPanelComponent,
     PaginationFooterComponent,
     PageTitleComponent,
+    NotificationComponent,
+    LoggedUserComponent
   ],
   templateUrl: './gestione-utenti.component.html',
   styleUrls: ['./gestione-utenti.component.css'],

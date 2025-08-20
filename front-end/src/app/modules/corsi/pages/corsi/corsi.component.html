@@ -1,62 +1,57 @@
 <div class="page-container">
   <div class="page-header">
-  <app-page-title
-    [title]="'Gestione Corsi'"
-    [buttons]="buttons"
-    [activeFiltersCount]="getActiveFiltersCount()"
-    (buttonClick)="gestioneAzione({ tipo: 'add', item: null })"
-    (buttonActionClick)="handleButtonClick($event)"
-    [searchFields]="searchFields"
-    (searchChange)="filtraTabella($event)"
-  ></app-page-title>
-      <div class="user-bar">
+    <app-page-title
+      [title]="'Gestione Corsi'"
+      [buttons]="buttons"
+      [activeFiltersCount]="getActiveFiltersCount()"
+      (buttonClick)="gestioneAzione({ tipo: 'add', item: null })"
+      (buttonActionClick)="handleButtonClick($event)"
+      [searchFields]="searchFields"
+      (searchChange)="filtraTabella($event)"
+    ></app-page-title>
+    <div class="user-bar">
       <app-notification></app-notification>
       <app-logged-user></app-logged-user>
     </div>
+    <!-- Filters Panel -->
+    <!-- <app-filter-panel
+      [filtri]="filtri"
+      [valori]="valoriFiltri"
+      [isOpen]="isFilterPanelOpen"
+      (close)="closeFilterPanel()"
+      (applyFilters)="applyFilters($event)"
+      (clearFilters)="clearFilters()">
+    </app-filter-panel> -->
   </div>
-
   <div class="page-content" #pageContentInner>
-    <!-- Content Area -->
-    <div class="content-area">
-      <!-- Filters Section -->
-      <div class="filters-section">
-        <!-- Filter Panel -->
-        <app-filter-panel
-          [filtri]="filtri"
-          [valori]="valoriFiltri"
-          [isOpen]="isFilterPanelOpen"
-          (close)="closeFilterPanel()"
-          (applyFilters)="applyFilters($event)"
-          (clearFilters)="clearFilters()"
-        >
-        </app-filter-panel>
+    <div #pageContentInner class="page-content-inner">
+        <!-- Tabella Corsi -->
+        <div class="card border-0 shadow-sm">
+          <div class="card-body p-0">
+            <app-tabella-generica
+              [data]="corsiFiltrati"
+              [columns]="columns"
+              [azioni]="actions"
+              [entityName]="'corsi'"
+              (action)="gestioneAzione($event)"
+              (paginationInfo)="aggiornaPaginazione($event)">
+            </app-tabella-generica>
+          </div>
+        </div>
       </div>
-
-      <!-- Table Container -->
-      <div class="table-container mt-3">
-        <app-tabella-generica
-          [data]="corsiFiltrati"
-          [columns]="columns"
-          [azioni]="actions"
-          [entityName]="'corsi'"
-          (action)="gestioneAzione($event)"
-          (paginationInfo)="aggiornaPaginazione($event)"
-        >
-        </app-tabella-generica>
-      </div>
-
-      <!-- Pagination Container -->
-      <app-pagination-footer
-        [currentPage]="paginationInfo.currentPage"
-        [totalPages]="paginationInfo.totalPages"
-        [pages]="paginationInfo.pages"
-        [displayedItems]="paginationInfo.displayedItems"
-        [totalItems]="paginationInfo.totalItems"
-        [pageSize]="paginationInfo.pageSize"
-        [entityName]="paginationInfo.entityName"
-        (pageChange)="cambiaPagina($event)"
-      >
-      </app-pagination-footer>
-    </div>
+  </div>
+  <div class="page-footer">
+    <!-- Pagination Container -->
+    <app-pagination-footer
+      [currentPage]="paginationInfo.currentPage"
+      [totalPages]="paginationInfo.totalPages"
+      [pages]="paginationInfo.pages"
+      [displayedItems]="paginationInfo.displayedItems"
+      [totalItems]="paginationInfo.totalItems"
+      [pageSize]="paginationInfo.pageSize"
+      [entityName]="paginationInfo.entityName"
+      (pageChange)="cambiaPagina($event)"
+    >
+    </app-pagination-footer>
   </div>
 </div>

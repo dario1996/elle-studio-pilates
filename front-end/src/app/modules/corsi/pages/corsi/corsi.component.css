@@ -106,28 +106,28 @@
 }
 
 /* ================== TABLE AND PAGINATION LAYOUT =================== */
-.table-container {
+/* .table-container {
   flex: 1;
   min-height: 0;
-  overflow: hidden; /* Prevent table from overflowing */
-}
+  overflow: hidden;
+} */
 
 /* ================== STILE TABELLA COME CALENDARIO =================== */
-.table-container app-tabella-generica .table-scroll-container {
+/* .table-container app-tabella-generica .table-scroll-container {
   background: white !important;
   border-radius: 12px !important;
   padding: 24px !important;
   margin-bottom: 16px !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
-  border: 1px solid #c99e67 !important; /* Colore bordo come sidebar/calendario */
-  border-top: 4px solid #c99e67 !important; /* Bordo superiore più spesso come calendario */
+  border: 1px solid #c99e67 !important;
+  border-top: 4px solid #c99e67 !important;
   transition: all 0.3s ease !important;
   position: relative !important;
-}
+} */
 
-.table-container app-tabella-generica .table-scroll-container:hover {
+/* .table-container app-tabella-generica .table-scroll-container:hover {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12) !important;
-}
+} */
 
 .pagination-container {
   flex-shrink: 0;

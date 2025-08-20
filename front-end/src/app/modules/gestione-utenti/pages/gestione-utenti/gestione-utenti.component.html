@@ -1,51 +1,55 @@
-<div class="container-fluid page-content">
-  <div #pageContentInner class="page-content-inner">
-    
-    <!-- Page Title -->
-    <app-page-title 
-      title="Gestione Utenti" 
-      subtitle="Gestisci gli utenti del sistema"
-      [buttons]="buttons"
-      (buttonActionClick)="handleButtonClick($event)">
-    </app-page-title>
-
-    <!-- Filter Panel -->
-    <app-filter-panel
-      *ngIf="isFilterPanelOpen"
-      [filtri]="filtri"
-      [valori]="valoriFiltri"
-      (applyFilters)="onFiltersApplied($event)"
-      (close)="closeFilterPanel()">
-    </app-filter-panel>
-
-    <!-- Tabella Utenti -->
-    <div class="card border-0 shadow-sm">
-      <div class="card-body p-0">
-        <app-tabella-generica
-          [data]="utentiFiltrati"
-          [columns]="columns"
-          [azioni]="azioni"
-          [pageSize]="paginationInfo.pageSize"
-          [entityName]="paginationInfo.entityName"
-          [rowClickable]="true"
-          (action)="gestioneAzione($event)"
-          (rowClick)="gestioneAzione({ tipo: 'view', item: $event })"
-          (paginationInfo)="aggiornaPaginazione($event)">
-        </app-tabella-generica>
+<div class="page-container">
+    <div class="page-header">
+      <!-- Page Title -->
+      <app-page-title 
+        title="Gestione Utenti" 
+        [buttons]="buttons"
+        (buttonActionClick)="handleButtonClick($event)">
+      </app-page-title>
+        <div class="user-bar">
+          <app-notification></app-notification>
+          <app-logged-user></app-logged-user>
+        </div>
+      <!-- Filter Panel -->
+      <app-filter-panel
+        *ngIf="isFilterPanelOpen"
+        [filtri]="filtri"
+        [valori]="valoriFiltri"
+        (applyFilters)="onFiltersApplied($event)"
+        (close)="closeFilterPanel()">
+      </app-filter-panel>
+    </div>
+    <div class="page-content" #pageContentInner>
+      <div #pageContentInner class="page-content-inner">
+        <!-- Tabella Utenti -->
+        <div class="card border-0 shadow-sm">
+          <div class="card-body p-0">
+            <app-tabella-generica
+              [data]="utentiFiltrati"
+              [columns]="columns"
+              [azioni]="azioni"
+              [pageSize]="paginationInfo.pageSize"
+              [entityName]="paginationInfo.entityName"
+              [rowClickable]="true"
+              (action)="gestioneAzione($event)"
+              (rowClick)="gestioneAzione({ tipo: 'view', item: $event })"
+              (paginationInfo)="aggiornaPaginazione($event)">
+            </app-tabella-generica>
+          </div>
+        </div>
       </div>
     </div>
-
-    <!-- Pagination Footer -->
-    <app-pagination-footer
-      [currentPage]="paginationInfo.currentPage"
-      [totalPages]="paginationInfo.totalPages"
-      [pages]="paginationInfo.pages"
-      [displayedItems]="paginationInfo.displayedItems"
-      [totalItems]="paginationInfo.totalItems"
-      [pageSize]="paginationInfo.pageSize"
-      [entityName]="paginationInfo.entityName"
-      (pageChange)="cambiaPagina($event)">
-    </app-pagination-footer>
-
-  </div>
+    <div class="page-footer">
+      <!-- Pagination Footer -->
+      <app-pagination-footer
+        [currentPage]="paginationInfo.currentPage"
+        [totalPages]="paginationInfo.totalPages"
+        [pages]="paginationInfo.pages"
+        [displayedItems]="paginationInfo.displayedItems"
+        [totalItems]="paginationInfo.totalItems"
+        [pageSize]="paginationInfo.pageSize"
+        [entityName]="paginationInfo.entityName"
+        (pageChange)="cambiaPagina($event)">
+      </app-pagination-footer>
+    </div>
 </div>

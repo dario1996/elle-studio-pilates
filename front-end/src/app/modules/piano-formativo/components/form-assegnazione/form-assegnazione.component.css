@@ -381,8 +381,6 @@
 /* Aggiorna gli stili esistenti per l'accordion */
 .selected-item-card .card-body {
   padding: 1.25rem;
-  /* RIMUOVI: min-height: 200px; */
-  /* AGGIUNGI: */
   min-height: auto;
 }
 

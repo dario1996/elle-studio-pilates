@@ -11,7 +11,7 @@
 
 .bell-icon {
   color: #000000;
-  font-size: 23px;
+  font-size: 20px;
 }
 
 .bell-dot {
@@ -22,7 +22,6 @@
   height: 9px;
   background: #e74c3c;
   border-radius: 50%;
-  border: 2px solid #fff;
   display: block;
   content: "";
   z-index: 2;

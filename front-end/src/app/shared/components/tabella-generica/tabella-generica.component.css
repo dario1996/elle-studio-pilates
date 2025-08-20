@@ -62,15 +62,15 @@ th .fa {
 */
 
 /* Assicura che tutte le celle possano mostrare il testo completo - MODIFICATO PER NON TRONCARE */
-.table-scroll-container .table-body td {
-  /* max-width: 0; RIMOSSO: Non limitiamo più la larghezza */
-  /* overflow: hidden; RIMOSSO: Permettiamo overflow */
-  white-space: normal; /* CAMBIATO: Permettiamo wrapping del testo */
-  /* text-overflow: ellipsis; RIMOSSO: Non vogliamo più ... */
+/*.table-scroll-container .table-body td {
+  max-width: 0;
+  overflow: hidden;
+  white-space: normal;
+  text-overflow: ellipsis;
   position: relative;
-  word-wrap: break-word; /* AGGIUNTO: Rompe parole lunghe se necessario */
-  word-break: break-word; /* AGGIUNTO: Gestisce meglio le parole lunghe */
-}
+  word-wrap: break-word;
+  word-break: break-word;
+}*/
 
 /* Responsive truncation - DISABILITATO: Non vogliamo più il troncamento
 @media (max-width: 768px) {
@@ -179,48 +179,25 @@ th .fa {
 
 /* INIZIO - contenitore per la gestione dello scrolling del contenuto tabella */
 .table-scroll-container {
-  /* flex: 1 1 auto; */
+  flex: 1 1 auto;
   min-height: 0;
-  max-height: 100%; /* AUMENTATO: ridotto da 322px a 260px per più spazio */
-  overflow-y: auto; /* Scroll verticale */
-  overflow-x: hidden; /* Nasconde scroll orizzontale se non necessario */
+  overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   background: white;
-  border-radius: 12px; /* AGGIORNATO: Come il calendario */
-  padding: 24px; /* AGGIORNATO: Come il calendario */
-  margin-bottom: 16px;
-  /* AGGIORNATO: Box shadow e bordi come il calendario */
+  border-radius: 6px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  border: 1px solid #c99e67; /* Colore bordo come sidebar/calendario */
-  border-top: 4px solid #c99e67; /* Bordo superiore più spesso come calendario */
-  transition: all 0.3s ease;
+  border: 1px solid #c99e67;
+  border-top: 4px solid #c99e67;
   position: relative;
   -ms-overflow-style: auto;
-  scrollbar-width: thin; /* Firefox: thin scrollbar */
-  scrollbar-color: #cbd5e1 #f1f5f9; /* Firefox: thumb e track colors */
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
   scroll-behavior: smooth;
-  overscroll-behavior: contain;
-  
-  /* Migliora le performance dello scroll */
   will-change: scroll-position;
-  transform: translateZ(0);
-}
-
-/* AGGIUNTO: Hover effect come il calendario */
-.table-scroll-container:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-}
-
-/* Quando ci sono pochi dati, la tabella non dovrebbe forzare l'altezza completa */
-.table-scroll-container.few-records {
-  flex: 0 1 auto; /* Permette alla tabella di comprimersi quando ci sono pochi dati */
-}
-
-/* Quando non ci sono dati, la tabella dovrebbe avere una dimensione minima */
-.table-scroll-container.no-data {
-  flex: 0 1 auto;
-  min-height: 300px;
+  max-height: calc(100vh - 180px);
+  padding: 0px 16px 16px 16px;
 }
 
 .table {
@@ -228,14 +205,8 @@ th .fa {
   table-layout: auto; /* CAMBIATO: Permette alle colonne di adattarsi al contenuto */
   width: 100%;
   margin-bottom: 0;
-  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif; /* AGGIUNTO: Font come calendario */
-  /* RIMOSSO: height: 100% - permette alla tabella di adattarsi al contenuto */
+  font-family: var(--FONT-FAMILY);
 }
-
-.table-scroll-container .pagination {
-  display: none !important; /* NASCOSTO: La paginazione interna non serve più */
-}
-/* FINE */
 
 
 /* INIZIO - effetto su singola riga della tabella */
@@ -442,9 +413,9 @@ th .fa {
 
 @media (max-width: 480px) {
   .table-scroll-container {
-    max-height: calc(100vh - 240px); /* AUMENTATO: più spazio su mobile piccolo */
-    padding: 16px; /* AGGIORNATO: Padding mantenendo stile calendario */
-    border-radius: 12px; /* MANTENUTO: Border radius come calendario */
+    max-height: calc(100vh - 240px);
+    padding: 16px;
+    border-radius: 12px;
   }
 }
 

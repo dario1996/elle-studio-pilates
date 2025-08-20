@@ -17,7 +17,13 @@
   >
     <i class="fa fa-chevron-down"></i>
   </button>
-  <div *ngIf="showDropdown" class="avatar-dropdown-menu">
+  <div
+    *ngIf="showDropdown"
+    class="avatar-dropdown-menu"
+    [ngClass]="{'dropdown-open': showDropdown}"
+    @dropdownAnim
+    (click)="$event.stopPropagation()"
+  >
     <button class="logout-btn" (click)="logout()">
       <i class="fa fa-sign-out-alt"></i> Logout
     </button>

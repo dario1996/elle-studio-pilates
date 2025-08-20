@@ -88,15 +88,22 @@
 }
 
 .pagination-info {
-  font-size: 14px;
-  color: #374151;
-  font-weight: 500;
+  margin-left: 16px;
+  font-size: 13px;
+  color: #848484;
 }
 
 .pagination-info span {
   font-size: 12px;
   color: #6b7280;
   font-weight: 400;
+}
+
+.pagination-footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
 /* Responsive */
