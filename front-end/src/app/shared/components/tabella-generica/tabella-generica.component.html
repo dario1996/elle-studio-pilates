@@ -104,9 +104,9 @@
           </div>
         </td>
       </tr>
-      <tr class="empty-rows" *ngFor="let empty of getEmptyRows()">
+      <tr class="skeleton-row" *ngFor="let empty of getEmptyRows()">
         <td [attr.colspan]="columns.length + (azioni.length ? 1 : 0)">
-          &nbsp;
+          <div class="skeleton-cell"></div>
         </td>
       </tr>
     </tbody>

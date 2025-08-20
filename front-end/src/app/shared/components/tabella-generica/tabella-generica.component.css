@@ -282,6 +282,14 @@ th .fa {
   display: none !important; /* NASCOSTO: Footer interno della tabella */
 }
 
+.skeleton-row .skeleton-cell {
+  height: 18px;
+  margin: 6px 0;
+  background: radial-gradient(ellipse at 50% 50%, #f3f3f3 60%, #e0e0e0 100%);
+  border-radius: 8px;
+  opacity: 0.8;
+}
+
 .pagination {
   display: flex;
   gap: 2px;
