@@ -118,6 +118,7 @@ body,
   overflow: hidden;
   position: relative;
   z-index: 1;
+  padding: 12px;
 }
 
 .page-content-inner {

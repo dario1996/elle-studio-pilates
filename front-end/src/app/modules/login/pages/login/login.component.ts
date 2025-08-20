@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 // import { JumbotronComponent } from '../../../../core/jumbotron/jumbotron.component';
 import { SpinnerComponent } from '../../../../core/spinner/spinner.component';
 import { CommonModule } from '@angular/common';
+import { Ruoli } from '../../../../shared/models/Ruoli';
 
 @Component({
   selector: 'app-login',
@@ -74,9 +75,23 @@ export class LoginComponent implements OnInit {
     console.log(`Lo stato di autenticazione è: (${this.autenticato()})`);
 
     if (this.autenticato()) {
-      this.route.navigate(['/gestionale-elle-studio']);
+      this.redirectBasedOnRole();
     }
   });
+
+  private redirectBasedOnRole(): void {
+    const authorities = this.Auth.getUserRoles();
+    
+    console.log('Authorities trovate:', authorities);
+
+    if (authorities.includes(Ruoli.amministratore) || authorities.includes(Ruoli.utente)) {
+      console.log('Redirect per utente autenticato');
+      this.route.navigate(['/gestionale-elle-studio']);
+    } else {
+      console.error('Ruolo non riconosciuto:', authorities);
+      this.route.navigate(['/forbidden']);
+    }
+  }
 
   gestAuth = () => {
     this.expired = false;

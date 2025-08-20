@@ -29,6 +29,8 @@ export const routes: Routes = [
           import('./modules/corsi/pages/corsi/corsi.component').then(
             m => m.CorsiComponent,
           ),
+        canActivate: [AuthGuard],
+        data: { roles: [Ruoli.amministratore] },
       },
       {
         path: 'dipendenti',
@@ -36,6 +38,8 @@ export const routes: Routes = [
           import(
             './modules/dipendenti/pages/dipendenti/dipendenti.component'
           ).then(m => m.DipendentiComponent),
+        canActivate: [AuthGuard],
+        data: { roles: [Ruoli.amministratore] },
       },
       {
         path: 'gestione-utenti',
@@ -43,6 +47,8 @@ export const routes: Routes = [
           import(
             './modules/gestione-utenti/pages/gestione-utenti/gestione-utenti.component'
           ).then(m => m.GestioneUtentiComponent),
+        canActivate: [AuthGuard],
+        data: { roles: [Ruoli.amministratore] },
       },
       {
         path: 'agenda',
@@ -50,6 +56,8 @@ export const routes: Routes = [
           import('./modules/agenda/pages/agenda/agenda.component').then(
             m => m.AgendaComponent,
           ),
+        canActivate: [AuthGuard],
+        data: { roles: [Ruoli.amministratore] },
       },
       {
         path: 'impostazioni',
@@ -60,7 +68,7 @@ export const routes: Routes = [
       },
     ],
     canActivate: [AuthGuard],
-    data: { roles: [Ruoli.amministratore] },
+    data: { roles: [Ruoli.amministratore, Ruoli.utente] },
   },
 
   {

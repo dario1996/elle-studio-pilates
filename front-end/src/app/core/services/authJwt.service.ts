@@ -217,4 +217,24 @@ export class AuthJwtService {
       return true;
     }
   }
+
+  // Method to get user roles from token
+  getUserRoles(): string[] {
+    const token = this.getAuthToken();
+    if (!token) return [];
+
+    try {
+      const decodedToken = this.helper.decodeToken(token);
+      if (!decodedToken || !decodedToken['authorities']) {
+        return [];
+      }
+
+      return Array.isArray(decodedToken['authorities'])
+        ? decodedToken['authorities']
+        : [decodedToken['authorities']];
+    } catch (error) {
+      console.error('Error decoding token for roles:', error);
+      return [];
+    }
+  }
 }

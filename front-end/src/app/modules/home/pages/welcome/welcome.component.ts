@@ -2,6 +2,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule, NgClass } from '@angular/common';
 import { AuthJwtService } from '../../../../core/services/authJwt.service';
+import { Ruoli } from '../../../../shared/models/Ruoli';
 
 @Component({
   selector: 'app-welcome',
@@ -14,7 +15,7 @@ import { AuthJwtService } from '../../../../core/services/authJwt.service';
     CommonModule],
 })
 export class WelcomeComponent implements OnInit {
-  menuItems = [
+  allMenuItems = [
     {
       title: 'Dashboard',
       icon: 'fa-solid fa-tachometer-alt fa-xl',
@@ -25,6 +26,7 @@ export class WelcomeComponent implements OnInit {
           icon: 'fa-solid fa-tachometer-alt fa-lg',
         },
       ],
+      roles: [Ruoli.amministratore, Ruoli.utente], // Accessibile a entrambi
     },
     {
       title: 'Calendario',
@@ -36,6 +38,7 @@ export class WelcomeComponent implements OnInit {
           icon: 'fa-solid fa-graduation-cap fa-lg',
         },
       ],
+      roles: [Ruoli.amministratore], // Solo amministratori
     },
     {
       title: 'Gestione utenti',
@@ -47,6 +50,7 @@ export class WelcomeComponent implements OnInit {
           icon: 'fa-solid fa-users fa-lg',
         },
       ],
+      roles: [Ruoli.amministratore], // Solo amministratori
     },
     {
       title: 'Gestione corsi',
@@ -58,20 +62,23 @@ export class WelcomeComponent implements OnInit {
           icon: 'fa-solid fa-book fa-lg',
         },
       ],
+      roles: [Ruoli.amministratore], // Solo amministratori
     },
     {
-      title: 'Statistiche',
-      icon: 'fa-solid fa-chart-simple fa-xl',
+      title: 'Il mio profilo',
+      icon: 'fa-solid fa-user fa-xl',
       links: [
         {
-          label: 'Statistiche',
+          label: 'Il mio profilo',
           url: 'impostazioni',
-          icon: 'fa-solid fa-chart-simple fa-lg',
+          icon: 'fa-solid fa-user fa-lg',
         },
       ],
+      roles: [Ruoli.amministratore, Ruoli.utente], // Accessibile a entrambi (ma sostituisce "Statistiche")
     },
   ];
 
+  menuItems: any[] = [];
   isOpen: boolean[] = [];
   selectedLink: any = null;
   utente = '';
@@ -103,9 +110,68 @@ export class WelcomeComponent implements OnInit {
   // }
 
   ngOnInit(): void {
+    this.filterMenuByRole();
     this.isOpen = Array(this.menuItems.length).fill(false);
     this.utente = this.route.snapshot.params['userid'];
     this.loadUserData();
+  }
+
+  /**
+   * Filtra i menu items in base al ruolo dell'utente
+   */
+  private filterMenuByRole(): void {
+    const userRoles = this.BasicAuth.getUserRoles();
+    console.log('Ruoli utente per filtro menu:', userRoles);
+
+    if (userRoles.includes(Ruoli.amministratore)) {
+      // Amministratore: tutti i menu tranne "Il mio profilo", aggiungi "Statistiche"
+      this.menuItems = this.allMenuItems.filter(item => 
+        item.roles.includes(Ruoli.amministratore) && item.title !== 'Il mio profilo'
+      );
+      // Aggiungi voce Statistiche per amministratori
+      this.menuItems.push({
+        title: 'Statistiche',
+        icon: 'fa-solid fa-chart-simple fa-xl',
+        links: [
+          {
+            label: 'Statistiche',
+            url: 'impostazioni',
+            icon: 'fa-solid fa-chart-simple fa-lg',
+          },
+        ],
+        roles: [Ruoli.amministratore],
+      });
+    } else if (userRoles.includes(Ruoli.utente)) {
+      // Utente normale: solo Dashboard e Il mio profilo
+      this.menuItems = [
+        {
+          title: 'Dashboard',
+          icon: 'fa-solid fa-tachometer-alt fa-xl',
+          links: [
+            {
+              label: 'Dashboard',
+              url: 'dashboard',
+              icon: 'fa-solid fa-tachometer-alt fa-lg',
+            },
+          ],
+          roles: [Ruoli.utente],
+        },
+        {
+          title: 'Il mio profilo',
+          icon: 'fa-solid fa-user fa-xl',
+          links: [
+            {
+              label: 'Il mio profilo',
+              url: 'impostazioni',
+              icon: 'fa-solid fa-user fa-lg',
+            },
+          ],
+          roles: [Ruoli.utente],
+        }
+      ];
+    }
+
+    console.log('Menu filtrati:', this.menuItems);
   }
 
   /**
