@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="014-01" author="developer">
+        <comment>Backup existing data and drop foreign key constraints</comment>
+        
+        <!-- First remove foreign key constraint from corsi table -->
+        <dropForeignKeyConstraint baseTableName="corsi" constraintName="fk_corso_piattaforma"/>
+        
+        <!-- Remove foreign key constraints from other tables that reference corsi -->
+        <dropForeignKeyConstraint baseTableName="assegnazioni" constraintName="fk_assegnazione_corso"/>
+        <dropForeignKeyConstraint baseTableName="log_login" constraintName="fk_log_corso"/>
+    </changeSet>
+
+    <changeSet id="014-02" author="developer">
+        <comment>Drop old corsi table columns and restructure for pilates</comment>
+        
+        <!-- Drop all old columns that are not needed for pilates -->
+        <dropColumn tableName="corsi">
+            <column name="argomento"/>
+        </dropColumn>
+        <dropColumn tableName="corsi">
+            <column name="modulo"/>
+        </dropColumn>
+        <dropColumn tableName="corsi">
+            <column name="formati_richiedenti"/>
+        </dropColumn>
+        <dropColumn tableName="corsi">
+            <column name="durata"/>
+        </dropColumn>
+        <dropColumn tableName="corsi">
+            <column name="data_inizio"/>
+        </dropColumn>
+        <dropColumn tableName="corsi">
+            <column name="data_fine"/>
+        </dropColumn>
+        <dropColumn tableName="corsi">
+            <column name="data_scadenza"/>
+        </dropColumn>
+        <dropColumn tableName="corsi">
+            <column name="ore"/>
+        </dropColumn>
+        <dropColumn tableName="corsi">
+            <column name="ore_rimanenti"/>
+        </dropColumn>
+        <dropColumn tableName="corsi">
+            <column name="stato"/>
+        </dropColumn>
+        <dropColumn tableName="corsi">
+            <column name="priorita"/>
+        </dropColumn>
+        <dropColumn tableName="corsi">
+            <column name="codice_corso"/>
+        </dropColumn>
+        <dropColumn tableName="corsi">
+            <column name="id_contenuto_linkedin"/>
+        </dropColumn>
+        <dropColumn tableName="corsi">
+            <column name="url_corso"/>
+        </dropColumn>
+        <dropColumn tableName="corsi">
+            <column name="costo"/>
+        </dropColumn>
+        <dropColumn tableName="corsi">
+            <column name="certificazione_rilasciata"/>
+        </dropColumn>
+        <dropColumn tableName="corsi">
+            <column name="feedback_richiesto"/>
+        </dropColumn>
+        <dropColumn tableName="corsi">
+            <column name="piattaforma_id"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="014-03" author="developer">
+        <comment>Add new pilates-specific columns</comment>
+        
+        <!-- Add description column -->
+        <addColumn tableName="corsi">
+            <column name="descrizione" type="TEXT">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        
+        <!-- Add level column -->
+        <addColumn tableName="corsi">
+            <column name="livello" type="VARCHAR(50)" defaultValue="PRINCIPIANTE">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        
+        <!-- Add duration in minutes -->
+        <addColumn tableName="corsi">
+            <column name="durata_minuti" type="INTEGER">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        
+        <!-- Add max participants -->
+        <addColumn tableName="corsi">
+            <column name="max_partecipanti" type="INTEGER">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        
+        <!-- Add price -->
+        <addColumn tableName="corsi">
+            <column name="prezzo" type="DECIMAL(10,2)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        
+        <!-- Add active flag -->
+        <addColumn tableName="corsi">
+            <column name="attivo" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="014-04" author="developer">
+        <comment>Update existing categoria values to pilates categories</comment>
+        
+        <!-- Update all existing records to have pilates-appropriate categories -->
+        <sql>
+            UPDATE corsi SET categoria = 'PILATES' WHERE categoria IS NULL OR categoria = '';
+            UPDATE corsi SET livello = 'PRINCIPIANTE' WHERE livello IS NULL;
+            UPDATE corsi SET attivo = true WHERE attivo IS NULL;
+            UPDATE corsi SET descrizione = CONCAT('Corso di Pilates: ', nome) WHERE descrizione IS NULL;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,4 +1,4 @@
-/* GESTIONE ASPETTO TABLE*/
+/* GESTIONE ASPETTO TABLE - AGGIORNATO 20/08/2025 */
 .table-container.loading {
   opacity: 0.6;
   pointer-events: none;
@@ -7,21 +7,23 @@
   width: 100%;
   border-spacing: 0;
   font-size: 12px !important;
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif; /* AGGIUNTO: Font come calendario */
   margin: 0;
-  table-layout: fixed; /* IMPORTANTE: Forza le colonne a rispettare le larghezze definite */
+  table-layout: auto; /* CAMBIATO: Permette alle colonne di adattarsi al contenuto */
 }
 .table-header th {
   position: sticky;
   top: 0;
   z-index: 10;
   background-color: #ffffff;
-  border-bottom: 2px solid #e3e6ea;
+  border-bottom: 1px solid #e3e6ea; /* RIPRISTINATO: Bordo sottile normale per separare header dalle righe */
   height: 45px; /* RIDOTTO: da auto a 45px per essere più compatto */
   vertical-align: middle;
   color: rgb(0, 0, 0);
   padding: 8px; /* RIDOTTO: da 12px a 8px */
   font-size: 12px; /* AGGIUNTO: Font leggermente più piccolo */
   font-weight: 600;
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif; /* AGGIUNTO: Font come calendario */
 }
 
 /* CSS Ordinamento colonne */
@@ -43,7 +45,7 @@ th .fa {
   font-size: 12px;
 }
 
-/* Text truncation with tooltip - SOLO PER TABELLE */
+/* Text truncation with tooltip - DISABILITATO: Non vogliamo più il troncamento
 .table-scroll-container .table-body td .truncated-text {
   max-width: 200px;
   white-space: nowrap !important;
@@ -57,17 +59,20 @@ th .fa {
 .table-scroll-container .table-body td .truncated-text:hover {
   opacity: 0.8;
 }
+*/
 
-/* Assicura che tutte le celle possano essere troncate - SOLO PER TABELLE */
+/* Assicura che tutte le celle possano mostrare il testo completo - MODIFICATO PER NON TRONCARE */
 .table-scroll-container .table-body td {
-  max-width: 0; /* Forza il contenuto a rispettare la larghezza della colonna */
-  overflow: hidden;
-  white-space: nowrap; /* Previene il wrapping del testo */
-  text-overflow: ellipsis; /* Mostra ... quando il testo è troppo lungo */
+  /* max-width: 0; RIMOSSO: Non limitiamo più la larghezza */
+  /* overflow: hidden; RIMOSSO: Permettiamo overflow */
+  white-space: normal; /* CAMBIATO: Permettiamo wrapping del testo */
+  /* text-overflow: ellipsis; RIMOSSO: Non vogliamo più ... */
   position: relative;
+  word-wrap: break-word; /* AGGIUNTO: Rompe parole lunghe se necessario */
+  word-break: break-word; /* AGGIUNTO: Gestisce meglio le parole lunghe */
 }
 
-/* Responsive truncation - SOLO PER TABELLE */
+/* Responsive truncation - DISABILITATO: Non vogliamo più il troncamento
 @media (max-width: 768px) {
   .table-scroll-container .table-body td .truncated-text {
     max-width: 150px;
@@ -79,6 +84,7 @@ th .fa {
     max-width: 100px;
   }
 }
+*/
 
 /* FINE */
 
@@ -181,12 +187,15 @@ th .fa {
   display: flex;
   flex-direction: column;
   background: white;
-  border-radius: 4px;
-  padding: 0px 13px 13px 13px;
+  border-radius: 12px; /* AGGIORNATO: Come il calendario */
+  padding: 24px; /* AGGIORNATO: Come il calendario */
   margin-bottom: 16px;
-  /* box-shadow:
-    0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05); */
+  /* AGGIORNATO: Box shadow e bordi come il calendario */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #c99e67; /* Colore bordo come sidebar/calendario */
+  border-top: 4px solid #c99e67; /* Bordo superiore più spesso come calendario */
+  transition: all 0.3s ease;
+  position: relative;
   -ms-overflow-style: auto;
   scrollbar-width: thin; /* Firefox: thin scrollbar */
   scrollbar-color: #cbd5e1 #f1f5f9; /* Firefox: thumb e track colors */
@@ -196,7 +205,11 @@ th .fa {
   /* Migliora le performance dello scroll */
   will-change: scroll-position;
   transform: translateZ(0);
+}
 
+/* AGGIUNTO: Hover effect come il calendario */
+.table-scroll-container:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
 
 /* Quando ci sono pochi dati, la tabella non dovrebbe forzare l'altezza completa */
@@ -212,9 +225,10 @@ th .fa {
 
 .table {
   border-collapse: collapse;
-  table-layout: fixed;
+  table-layout: auto; /* CAMBIATO: Permette alle colonne di adattarsi al contenuto */
   width: 100%;
   margin-bottom: 0;
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif; /* AGGIUNTO: Font come calendario */
   /* RIMOSSO: height: 100% - permette alla tabella di adattarsi al contenuto */
 }
 
@@ -371,7 +385,8 @@ th .fa {
 
 /* Bordo solo per le righe piene */
 .table-body tr:not(.empty-rows) > td {
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0; /* Bordo più sottile e coerente */
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif; /* AGGIUNTO: Font come calendario */
 }
 
 /* Nessun bordo per le righe vuote */
@@ -399,6 +414,8 @@ th .fa {
   .table-scroll-container {
     max-height: calc(100vh - 220px); /* AUMENTATO: più spazio su mobile */
     overflow-x: auto; /* Permette scroll orizzontale su mobile */
+    padding: 20px; /* AGGIORNATO: Padding ridotto su mobile ma mantenendo stile calendario */
+    border-radius: 12px; /* MANTENUTO: Border radius come calendario */
   }
   
   .table {
@@ -414,10 +431,11 @@ th .fa {
   .table-scroll-container .table-body td {
     padding: 4px 6px;
     font-size: 12px;
-    max-width: 0; /* Mantiene la troncatura su mobile */
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    /* RIMOSSO: max-width: 0; - Non limitiamo più la larghezza */
+    /* RIMOSSO: overflow: hidden; - Permettiamo overflow */
+    white-space: normal; /* CAMBIATO: Permettiamo wrapping */
+    /* RIMOSSO: text-overflow: ellipsis; - Non vogliamo più ... */
+    word-wrap: break-word; /* AGGIUNTO: Rompe parole lunghe */
   }
 
 }
@@ -425,7 +443,8 @@ th .fa {
 @media (max-width: 480px) {
   .table-scroll-container {
     max-height: calc(100vh - 240px); /* AUMENTATO: più spazio su mobile piccolo */
-    padding: 0.5rem;
+    padding: 16px; /* AGGIORNATO: Padding mantenendo stile calendario */
+    border-radius: 12px; /* MANTENUTO: Border radius come calendario */
   }
 }
 

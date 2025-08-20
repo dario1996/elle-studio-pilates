@@ -1,28 +1,13 @@
-import { IPiattaforma } from "./Piattaforma";
-
 export interface ICorsi {
-    toLowerCase(): unknown;
     id: number;
     nome: string;
-    categoria: string;
-    argomento: string;
-    modulo: string;
-    formatiRichiedenti: string;
-    durata: number;
-    dataInizio: string;
-    dataFine: string;
-    dataScadenza: string;
-    ore: number;
-    oreRimanenti: number;
-    stato: string;
-    priorita: string;
-    codiceCorso: string;
-    idContenutoLinkedin: string;
-    urlCorso: string;
-    costo: number;
-    certificazioneRilasciata: boolean;
-    feedbackRichiesto: boolean;
+    descrizione?: string;
+    categoria: string; // PILATES, YOGA, MATWORK, etc.
+    livello: string; // PRINCIPIANTE, INTERMEDIO, AVANZATO
+    durataMinuti: number; // Durata in minuti
+    maxPartecipanti: number;
+    prezzo: number;
+    attivo: boolean;
     dataCreazione: string;
-    dataModifica: string;
-    piattaforma: IPiattaforma
+    dataModifica?: string;
 }

@@ -52,13 +52,6 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'piano-formativo',
-        loadComponent: () =>
-          import(
-            './modules/piano-formativo/pages/piano-formativo/piano-formativo.component'
-          ).then(m => m.PianoFormativoComponent),
-      },
-      {
         path: 'impostazioni',
         loadComponent: () =>
           import('./modules/settings/pages/settings/settings.component').then(

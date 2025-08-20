@@ -17,13 +17,16 @@ export class StatusBadgeComponent {
   constructor(private statusBadgeService: StatusBadgeService) {}
 
   get config(): StatusBadgeConfig {
+    // Converte il valore in stringa per gestire boolean e numeri
+    const stringValue = String(this.value);
+    
     if (this.customConfig) {
-      const config = this.customConfig.find(c => c.value === this.value);
+      const config = this.customConfig.find(c => c.value === stringValue);
       if (config) {
         return config;
       }
     }
     
-    return this.statusBadgeService.getStatusBadgeConfig(this.value, this.statusType);
+    return this.statusBadgeService.getStatusBadgeConfig(stringValue, this.statusType);
   }
 }

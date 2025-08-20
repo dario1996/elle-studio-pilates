@@ -150,11 +150,11 @@
                   <div class="fw-bold text-success">
                     {{ corso.nome }}
                   </div>
-                  <div class="text-muted small" *ngIf="corso.argomento">
-                    <i class="fas fa-tag me-1"></i>{{ corso.argomento }}
+                  <div class="text-muted small" *ngIf="corso.categoria">
+                    <i class="fas fa-tag me-1"></i>{{ corso.categoria }}
                   </div>
-                  <div class="text-secondary small" *ngIf="corso.piattaforma?.nome">
-                    <i class="fas fa-laptop me-1"></i>{{ corso.piattaforma.nome }}
+                  <div class="text-secondary small" *ngIf="corso.livello">
+                    <i class="fas fa-layer-group me-1"></i>{{ corso.livello }}
                   </div>
                   <small *ngIf="showCorsiBloccoMessage" class="text-primary d-block mt-1">
                     <i class="fas fa-refresh me-1"></i>Sostituirà la selezione corrente
@@ -215,21 +215,21 @@
               <div class="collapse" [id]="'collapse-corso-' + corso.id">
                 <div class="card-body">
                   <div class="row g-2">
-                    <div class="col-12 text-muted mt-1" *ngIf="corso.argomento">
+                    <div class="col-12 text-muted mt-1" *ngIf="corso.categoria">
                       <i class="fas fa-tag"></i>
-                      {{ corso.argomento }}
-                    </div>
-                    <div class="col-12 text-muted mt-0" *ngIf="corso.piattaforma?.nome">
-                      <i class="fas fa-laptop"></i>
-                      {{ corso.piattaforma.nome }}
-                    </div>
-                    <div class="col-12 text-muted mt-0" *ngIf="corso.durata">
-                      <i class="fas fa-clock"></i>
-                      {{ corso.durata }} ore
-                    </div>
-                    <div class="col-12 text-muted mt-0" *ngIf="corso.categoria">
-                      <i class="fas fa-info-circle"></i>
                       {{ corso.categoria }}
+                    </div>
+                    <div class="col-12 text-muted mt-0" *ngIf="corso.livello">
+                      <i class="fas fa-layer-group"></i>
+                      {{ corso.livello }}
+                    </div>
+                    <div class="col-12 text-muted mt-0" *ngIf="corso.durataMinuti">
+                      <i class="fas fa-clock"></i>
+                      {{ corso.durataMinuti }} minuti
+                    </div>
+                    <div class="col-12 text-muted mt-0" *ngIf="corso.descrizione">
+                      <i class="fas fa-info-circle"></i>
+                      {{ corso.descrizione }}
                     </div>
                   </div>
                 </div>

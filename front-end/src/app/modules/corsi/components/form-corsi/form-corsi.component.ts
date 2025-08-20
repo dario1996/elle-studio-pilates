@@ -8,8 +8,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { ModaleService } from '../../../../core/services/modal.service';
-import { PiattaformeService } from '../../../../core/services/data/piattaforme.service';
-import { IPiattaforma } from '../../../../shared/models/Piattaforma';
 
 @Component({
   selector: 'app-form-corsi',
@@ -23,10 +21,24 @@ export class FormCorsiComponent implements OnInit {
   form!: FormGroup;
   submitted = false;
   dati: any;
-  piattaforme: IPiattaforma[] = []; // <-- Aggiungi questa riga
+
+  categorieOpzioni = [
+    { value: 'PRIMA_LEZIONE', label: 'Prima Lezione' },
+    { value: 'PRIVATA', label: 'Privata' },
+    { value: 'SEMI_PRIVATA', label: 'Semi Privata' },
+    { value: 'GRUPPO_MAT', label: 'Matwork' },
+    { value: 'COMBO', label: 'Combo' },
+    { value: 'YOGA', label: 'Yoga' },
+  ];
+
+  livelliOpzioni = [
+    { value: 'PRINCIPIANTE', label: 'Principiante' },
+    { value: 'INTERMEDIO', label: 'Intermedio' },
+    { value: 'AVANZATO', label: 'Avanzato' },
+    { value: 'TUTTI', label: 'Tutti i livelli' },
+  ];
 
   private modaleService = inject(ModaleService);
-  private piattaformeService = inject(PiattaformeService);
 
   ngOnInit() {
     console.log('FormCorsiComponent ngOnInit, dati:', this.dati);
@@ -36,17 +48,18 @@ export class FormCorsiComponent implements OnInit {
         if (this.form) {
           this.form.patchValue({
             nome: this.dati.nome || '',
-            argomento: this.dati.argomento || '',
-            durata: this.dati.durata || '',
-            piattaforma: this.dati.piattaforma?.id || '',
+            descrizione: this.dati.descrizione || '',
+            categoria: this.dati.categoria || '',
+            livello: this.dati.livello || '',
+            durataMinuti: this.dati.durataMinuti || '',
+            maxPartecipanti: this.dati.maxPartecipanti || '',
+            prezzo: this.dati.prezzo || '',
+            attivo: this.dati.attivo !== undefined ? this.dati.attivo : true,
           });
         }
       }
     });
     this.initForm();
-    this.piattaformeService.getListaPiattaforme().subscribe({
-      next: data => (this.piattaforme = data),
-    });
   }
 
   initForm() {
@@ -59,16 +72,33 @@ export class FormCorsiComponent implements OnInit {
           Validators.maxLength(99),
         ],
       ],
-      argomento: [
-        this.dati?.argomento || '',
-        [
-          Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(499),
-        ],
+      descrizione: [
+        this.dati?.descrizione || '',
+        [Validators.maxLength(500)],
       ],
-      durata: [this.dati?.durata || '', [Validators.required]],
-      piattaforma: [this.dati?.piattaforma?.id || '', [Validators.required]],
+      categoria: [
+        this.dati?.categoria || '',
+        [Validators.required],
+      ],
+      livello: [
+        this.dati?.livello || '',
+        [Validators.required],
+      ],
+      durataMinuti: [
+        this.dati?.durataMinuti || '',
+        [Validators.required, Validators.min(15), Validators.max(180)],
+      ],
+      maxPartecipanti: [
+        this.dati?.maxPartecipanti || '',
+        [Validators.required, Validators.min(1), Validators.max(50)],
+      ],
+      prezzo: [
+        this.dati?.prezzo || '',
+        [Validators.required, Validators.min(0)],
+      ],
+      attivo: [
+        this.dati?.attivo !== undefined ? this.dati.attivo : true,
+      ],
     });
   }
 

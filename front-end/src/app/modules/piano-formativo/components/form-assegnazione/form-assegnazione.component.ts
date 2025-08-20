@@ -139,10 +139,10 @@ export class FormAssegnazioneComponent implements OnInit {
     const term = searchTerm.toLowerCase();
     this.corsiFiltrati = this.corsi.filter(c => {
       const matchNome = c.nome?.toLowerCase().includes(term);
-      const matchArgomento = c.argomento?.toLowerCase().includes(term);
-      const matchPiattaforma = c.piattaforma?.nome?.toLowerCase().includes(term);
+      const matchCategoria = c.categoria?.toLowerCase().includes(term);
+      const matchLivello = c.livello?.toLowerCase().includes(term);
       
-      return matchNome || matchArgomento || matchPiattaforma;
+      return matchNome || matchCategoria || matchLivello;
     });
   }
 

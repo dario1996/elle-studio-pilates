@@ -47,6 +47,12 @@ export class StatusBadgeService {
       { value: 'No', displayText: 'No', colorClass: 'status-badge-secondary' },
       { value: '–', displayText: '–', colorClass: 'status-badge-secondary' }
     ],
+    boolean: [
+      { value: 'true', displayText: 'Sì', colorClass: 'status-badge-success' },
+      { value: 'false', displayText: 'No', colorClass: 'status-badge-danger' },
+      { value: '1', displayText: 'Sì', colorClass: 'status-badge-success' },
+      { value: '0', displayText: 'No', colorClass: 'status-badge-danger' }
+    ],
     esito: [
       { value: 'Superato', displayText: 'Superato', colorClass: 'status-badge-success' },
       { value: 'In corso', displayText: 'In corso', colorClass: 'status-badge-warning' },

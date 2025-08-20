@@ -16,5 +16,7 @@
     <include file="db/changelog/changes/010-add-registration-fields.xml" />
     <include file="db/changelog/changes/011-create-lezioni-table.xml" />
     <include file="db/changelog/changes/012-insert-laura-caratti-user.xml" />
-
+    <include file="db/changelog/changes/014-migrate-corsi-to-pilates.xml"/>
+    <include file="db/changelog/changes/013-insert-elle-studio-corsi.xml"/>
+    <include file="db/changelog/changes/015-replace-corsi-official-list.xml"/>
 </databaseChangeLog> 

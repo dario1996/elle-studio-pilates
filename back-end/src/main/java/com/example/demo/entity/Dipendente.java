@@ -66,11 +66,6 @@ public class Dipendente {
     @Column(name = "data_modifica")
     private LocalDateTime dataModifica;
 
-    // Relazione molti-a-molti con Corso attraverso Assegnazione
-    @OneToMany(mappedBy = "dipendente", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<Assegnazione> assegnazioni;
-
     // Relazione uno-a-molti con LogLogin
     @OneToMany(mappedBy = "dipendente", fetch = FetchType.LAZY)
     @JsonIgnore
@@ -238,14 +233,6 @@ public class Dipendente {
 
     public void setDataModifica(LocalDateTime dataModifica) {
         this.dataModifica = dataModifica;
-    }
-
-    public List<Assegnazione> getAssegnazioni() {
-        return assegnazioni;
-    }
-
-    public void setAssegnazioni(List<Assegnazione> assegnazioni) {
-        this.assegnazioni = assegnazioni;
     }
 
     public List<LogLogin> getLogLogin() {

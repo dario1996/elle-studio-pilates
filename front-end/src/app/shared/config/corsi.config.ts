@@ -4,11 +4,13 @@ import { IFiltroDef } from '../models/ui/filtro-def';
 import { ButtonConfig } from '../../core/page-title/page-title.component';
 
 export const CORSI_COLUMNS: IColumnDef[] = [
-  { key: 'nome', label: 'Nome', sortable: true, type: 'text' },
-  { key: 'argomento', label: 'Macro argomento', sortable: true, type: 'text' },
-  { key: 'isms', label: 'Impatto ISMS', sortable: true, type: 'text' },
-  { key: 'durata', label: 'Durata', sortable: true, type: 'text' },
-  { key: 'piattaformaNome', label: 'Modalità', sortable: true, type: 'text' },
+  { key: 'nome', label: 'Nome', sortable: true, type: 'text', maxLength: 9999 },
+  { key: 'categoria', label: 'Categoria', sortable: true, type: 'text', maxLength: 9999 },
+  { key: 'livello', label: 'Livello', sortable: true, type: 'text', maxLength: 9999 },
+  { key: 'durataMinuti', label: 'Durata (min)', sortable: true, type: 'text', maxLength: 9999 },
+  { key: 'maxPartecipanti', label: 'Max Partecipanti', sortable: true, type: 'text', maxLength: 9999 },
+  { key: 'prezzo', label: 'Prezzo (€)', sortable: true, type: 'text', maxLength: 9999 },
+  { key: 'attivo', label: 'Attivo', sortable: true, type: 'badge', statusType: 'boolean' },
 ];
 
 export const CORSI_AZIONI: IAzioneDef[] = [
@@ -35,35 +37,42 @@ export const CORSI_FILTRI: IFiltroDef[] = [
     colClass: 'col-12 col-md-4 col-lg-3 mb-2',
   },
   {
-    key: 'argomento',
-    label: 'Macro Argomento',
-    type: 'text',
-    placeholder: 'Cerca argomento...',
+    key: 'categoria',
+    label: 'Categoria',
+    type: 'select',
+    options: [
+      { value: '', label: 'Tutte' },
+      { value: 'PRIMA_LEZIONE', label: 'Prima Lezione' },
+      { value: 'PRIVATA', label: 'Privata' },
+      { value: 'SEMI_PRIVATA', label: 'Semi Privata' },
+      { value: 'GRUPPO_MAT', label: 'Matwork' },
+      { value: 'COMBO', label: 'Combo' },
+      { value: 'YOGA', label: 'Yoga' },
+    ],
     colClass: 'col-12 col-md-4 col-lg-3 mb-2',
   },
-  // {
-  //   key: 'durata',
-  //   label: 'Durata',
-  //   type: 'number',
-  //   placeholder: 'Cerca durata...',
-  //   colClass: 'col-12 col-md-4 col-lg-2 mb-2',
-  // },
   {
-    key: 'isms',
-    label: 'ISMS',
+    key: 'livello',
+    label: 'Livello',
     type: 'select',
     options: [
       { value: '', label: 'Tutti' },
-      { value: 'Si', label: 'Si' },
-      { value: 'No', label: 'No' },
+      { value: 'PRINCIPIANTE', label: 'Principiante' },
+      { value: 'INTERMEDIO', label: 'Intermedio' },
+      { value: 'AVANZATO', label: 'Avanzato' },
+      { value: 'TUTTI', label: 'Tutti i livelli' },
     ],
     colClass: 'col-6 col-md-3 col-lg-2 mb-2',
   },
   {
-    key: 'piattaforma',
-    label: 'Modalità',
+    key: 'attivo',
+    label: 'Stato',
     type: 'select',
-    options: [],
+    options: [
+      { value: '', label: 'Tutti' },
+      { value: 'true', label: 'Attivo' },
+      { value: 'false', label: 'Non Attivo' },
+    ],
     colClass: 'col-6 col-md-4 col-lg-3 mb-2',
   },
 ];

@@ -114,8 +114,10 @@ public class Assegnazione {
     }
 
     public boolean isInRitardo() {
-        return corso.getDataScadenza() != null &&
-                LocalDate.now().isAfter(corso.getDataScadenza()) &&
+        // Per i corsi di pilates, consideriamo "in ritardo" se l'assegnazione
+        // è stata creata da più di 30 giorni e non è ancora completata
+        return dataAssegnazione != null &&
+                LocalDate.now().isAfter(dataAssegnazione.plusDays(30)) &&
                 !isCompletato();
     }
 

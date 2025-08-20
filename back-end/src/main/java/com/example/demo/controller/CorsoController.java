@@ -1,19 +1,14 @@
 package com.example.demo.controller;
 
-// import com.example.demo.dto.CorsoCreateRequest;
 import com.example.demo.entity.Corso;
-// import com.example.demo.entity.Piattaforma;
 import com.example.demo.repository.CorsoRepository;
-import com.example.demo.repository.PiattaformaRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
-// import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-// import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,9 +35,6 @@ public class CorsoController {
     @Autowired
     private CorsoRepository corsoRepository;
 
-    @Autowired
-    private PiattaformaRepository piattaformaRepository;
-
     @Operation(summary = "Crea un nuovo corso", description = "Inserisce un nuovo corso associato a una piattaforma di formazione esistente")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Corso creato con successo", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Corso.class))),
@@ -54,12 +46,12 @@ public class CorsoController {
 
     @PostMapping(value = "/inserisci", produces = "application/json")
     public ResponseEntity<InfoMsg> createCorso(@RequestBody Corso corso) {
-        log.info("Salviamo il corso con codice " + corso.getCodiceCorso());
+        log.info("Salviamo il corso: " + corso.getNome());
  
         corsoService.InsCorso(corso);
  
         return new ResponseEntity<InfoMsg>(new InfoMsg(LocalDate.now(),
-                "Inserimento Piattaforma eseguito con successo!"), HttpStatus.CREATED);
+                "Inserimento Corso eseguito con successo!"), HttpStatus.CREATED);
     }
 
     /*@Operation(summary = "Recupera l'elenco dei corsi", description = "Restituisce tutti i corsi con possibilità di filtro per piattaforma, stato o nome")
@@ -158,20 +150,6 @@ public class CorsoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @Operation(summary = "Recupera un corso per codice corso", description = "Restituisce i dettagli di un corso tramite il suo codice identificativo")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Corso trovato"),
-            @ApiResponse(responseCode = "404", description = "Corso non trovato")
-    })
-    @GetMapping("/codice/{codiceCorso}")
-    public ResponseEntity<Corso> getCorsoByCodice(
-            @Parameter(description = "Codice identificativo del corso", required = true) @PathVariable String codiceCorso) {
-
-        Optional<Corso> corso = corsoRepository.findByCodiceCorso(codiceCorso);
-        return corso.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
     @Operation(summary = "Aggiorna un corso esistente", description = "Modifica i dati di un corso esistente")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Corso aggiornato con successo"),
@@ -187,9 +165,13 @@ public class CorsoController {
         if (optionalCorso.isPresent()) {
             Corso corso = optionalCorso.get();
             corso.setNome(corsoDetails.getNome());
-            corso.setArgomento(corsoDetails.getArgomento());
-            corso.setDurata(corsoDetails.getDurata());
-            corso.setPiattaforma(corsoDetails.getPiattaforma());
+            corso.setDescrizione(corsoDetails.getDescrizione());
+            corso.setCategoria(corsoDetails.getCategoria());
+            corso.setLivello(corsoDetails.getLivello());
+            corso.setDurataMinuti(corsoDetails.getDurataMinuti());
+            corso.setMaxPartecipanti(corsoDetails.getMaxPartecipanti());
+            corso.setPrezzo(corsoDetails.getPrezzo());
+            corso.setAttivo(corsoDetails.getAttivo());
  
             corsoRepository.save(corso);
             return new ResponseEntity<InfoMsg>(new InfoMsg(LocalDate.now(),
@@ -197,49 +179,5 @@ public class CorsoController {
         } else {
             return ResponseEntity.notFound().build();
         }
-    }
- 
-
-    /* @Operation(summary = "Elimina un corso", description = "Rimuove un corso dal sistema (solo se non ha assegnazioni attive)")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Corso eliminato con successo"),
-            @ApiResponse(responseCode = "404", description = "Corso non trovato"),
-            @ApiResponse(responseCode = "409", description = "Impossibile eliminare corso con assegnazioni attive")
-    })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCorso(
-            @Parameter(description = "ID del corso da eliminare", required = true) @PathVariable Long id) {
-
-        if (!corsoRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-
-        try {
-            corsoRepository.deleteById(id);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("Impossibile eliminare il corso: potrebbe avere assegnazioni attive");
-        }
-    } */
-
-    
-
-    @Operation(summary = "Recupera corsi per piattaforma", description = "Restituisce tutti i corsi associati a una specifica piattaforma")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lista corsi recuperata con successo"),
-            @ApiResponse(responseCode = "404", description = "Piattaforma non trovata"),
-            @ApiResponse(responseCode = "409", description = "Impossibile eliminare corso con assegnazioni attive")
-        })
-    @GetMapping("/piattaforma/{piattaformaId}")
-    public ResponseEntity<List<Corso>> getCorsiByPiattaforma(
-            @Parameter(description = "ID della piattaforma", required = true) @PathVariable Long piattaformaId) {
-
-        if (!piattaformaRepository.existsById(piattaformaId)) {
-            return ResponseEntity.notFound().build();
-        }
-
-        List<Corso> corsi = corsoRepository.findByPiattaformaId(piattaformaId);
-        return ResponseEntity.ok(corsi);
     }
 }

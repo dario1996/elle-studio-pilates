@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="13-insert-elle-studio-corsi-complete" author="developer">
+        <comment>Insert complete Elle Studio Pilates courses catalog</comment>
+        
+        <!-- Clear existing data first -->
+        <delete tableName="corsi"/>
+        
+        <comment>Insert Elle Studio Pilates courses data</comment>
+        
+        <!-- Prima Lezione - Analisi Posturale -->
+        <insert tableName="corsi">
+            <column name="nome" value="Prima Lezione - Analisi Posturale"/>
+            <column name="descrizione" value="Anamnesi e approccio al metodo Pilates. Sessione introduttiva di valutazione posturale e conoscenza del metodo."/>
+            <column name="categoria" value="PRIMA_LEZIONE"/>
+            <column name="livello" value="PRINCIPIANTE"/>
+            <column name="durata_minuti" value="55"/>
+            <column name="max_partecipanti" value="1"/>
+            <column name="prezzo" value="50.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Pilates Privato -->
+        <insert tableName="corsi">
+            <column name="nome" value="Pilates Privato"/>
+            <column name="descrizione" value="Lezione individuale personalizzata con utilizzo di tutti i macchinari studio (Cadillac, Reformer, Tower, Chair, Barrel) e piccoli attrezzi a discrezione dell'insegnante."/>
+            <column name="categoria" value="PRIVATA"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="55"/>
+            <column name="max_partecipanti" value="1"/>
+            <column name="prezzo" value="47.50"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Semi Privata Duetto -->
+        <insert tableName="corsi">
+            <column name="nome" value="Semi Privata Duetto"/>
+            <column name="descrizione" value="Lezione per 2 persone con utilizzo di Reformer, Tower, Chair e piccoli attrezzi a discrezione dell'insegnante."/>
+            <column name="categoria" value="SEMI_PRIVATA"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="2"/>
+            <column name="prezzo" value="40.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Pilates in Gravidanza -->
+        <insert tableName="corsi">
+            <column name="nome" value="Pilates in Gravidanza"/>
+            <column name="descrizione" value="Lezione individuale specifica per donne in gravidanza con focus su supporto lombare, respirazione e preparazione al parto."/>
+            <column name="categoria" value="GRAVIDANZA"/>
+            <column name="livello" value="PRINCIPIANTE"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="1"/>
+            <column name="prezzo" value="50.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Mat Class Pilates Piccoli Attrezzi -->
+        <insert tableName="corsi">
+            <column name="nome" value="Mat Class Pilates Piccoli Attrezzi"/>
+            <column name="descrizione" value="Lezione di gruppo su tappetino con utilizzo di piccoli attrezzi (palla, elastici, cerchio, roller)."/>
+            <column name="categoria" value="GRUPPO_MAT"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="8"/>
+            <column name="prezzo" value="18.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Reformer Group -->
+        <insert tableName="corsi">
+            <column name="nome" value="Reformer Group"/>
+            <column name="descrizione" value="Lezione di gruppo con utilizzo esclusivo del Reformer. Adatta a tutti i livelli con progressioni personalizzate."/>
+            <column name="categoria" value="GRUPPO_REFORMER"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="6"/>
+            <column name="prezzo" value="25.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Semi Privata Duetto -->
+        <insert tableName="corsi">
+            <column name="nome" value="Semi Privata Duetto"/>
+            <column name="descrizione" value="Lezione per 2 persone con utilizzo di Reformer, Tower, Chair e piccoli attrezzi a discrezione dell'insegnante."/>
+            <column name="categoria" value="SEMI_PRIVATA"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="2"/>
+            <column name="prezzo" value="40.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Pilates in Gravidanza -->
+        <insert tableName="corsi">
+            <column name="nome" value="Pilates in Gravidanza"/>
+            <column name="descrizione" value="Lezione individuale specifica per donne in gravidanza con focus su supporto lombare, respirazione e preparazione al parto."/>
+            <column name="categoria" value="GRAVIDANZA"/>
+            <column name="livello" value="PRINCIPIANTE"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="1"/>
+            <column name="prezzo" value="50.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Pilates Post-Parto -->
+        <insert tableName="corsi">
+            <column name="nome" value="Pilates Post-Parto"/>
+            <column name="descrizione" value="Lezione individuale per il recupero post-parto con focus su rieducazione addominale e del pavimento pelvico."/>
+            <column name="categoria" value="POST_PARTO"/>
+            <column name="livello" value="PRINCIPIANTE"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="1"/>
+            <column name="prezzo" value="50.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Pilates Terapeutico -->
+        <insert tableName="corsi">
+            <column name="nome" value="Pilates Terapeutico"/>
+            <column name="descrizione" value="Lezione individuale mirata al recupero funzionale e trattamento di specifiche problematiche posturali o ortopediche."/>
+            <column name="categoria" value="TERAPEUTICO"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="55"/>
+            <column name="max_partecipanti" value="1"/>
+            <column name="prezzo" value="55.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Mat Class Pilates Piccoli Attrezzi -->
+        <insert tableName="corsi">
+            <column name="nome" value="Mat Class Pilates Piccoli Attrezzi"/>
+            <column name="descrizione" value="Lezione di gruppo su tappetino con utilizzo di piccoli attrezzi (palla, elastici, cerchio, roller)."/>
+            <column name="categoria" value="GRUPPO_MAT"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="8"/>
+            <column name="prezzo" value="18.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Reformer Group -->
+        <insert tableName="corsi">
+            <column name="nome" value="Reformer Group"/>
+            <column name="descrizione" value="Lezione di gruppo con utilizzo esclusivo del Reformer. Adatta a tutti i livelli con progressioni personalizzate."/>
+            <column name="categoria" value="GRUPPO_REFORMER"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="6"/>
+            <column name="prezzo" value="25.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Pilates Posturale -->
+        <insert tableName="corsi">
+            <column name="nome" value="Pilates Posturale"/>
+            <column name="descrizione" value="Corso specifico per migliorare la postura attraverso esercizi mirati di allineamento e rinforzo muscolare."/>
+            <column name="categoria" value="POSTURALE"/>
+            <column name="livello" value="PRINCIPIANTE"/>
+            <column name="durata_minuti" value="55"/>
+            <column name="max_partecipanti" value="6"/>
+            <column name="prezzo" value="22.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Pilates Avanzato -->
+        <insert tableName="corsi">
+            <column name="nome" value="Pilates Avanzato"/>
+            <column name="descrizione" value="Corso per praticanti esperti con sequenze complesse e utilizzo avanzato dei macchinari."/>
+            <column name="categoria" value="AVANZATO"/>
+            <column name="livello" value="AVANZATO"/>
+            <column name="durata_minuti" value="55"/>
+            <column name="max_partecipanti" value="4"/>
+            <column name="prezzo" value="28.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Stretch & Relax -->
+        <insert tableName="corsi">
+            <column name="nome" value="Stretch &amp; Relax"/>
+            <column name="descrizione" value="Sessione di stretching profondo e rilassamento muscolare. Ideale come complemento ad altre attività o per recupero."/>
+            <column name="categoria" value="STRETCH"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="45"/>
+            <column name="max_partecipanti" value="8"/>
+            <column name="prezzo" value="15.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Pilates Wall -->
+        <insert tableName="corsi">
+            <column name="nome" value="Pilates Wall"/>
+            <column name="descrizione" value="Allenamento innovativo che utilizza la parete come supporto per esercizi di Pilates intensi ed efficaci."/>
+            <column name="categoria" value="WALL"/>
+            <column name="livello" value="INTERMEDIO"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="6"/>
+            <column name="prezzo" value="20.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Pilates Flow -->
+        <insert tableName="corsi">
+            <column name="nome" value="Pilates Flow"/>
+            <column name="descrizione" value="Sequenze fluide di Pilates che combinano movimento, respirazione e concentrazione in un flusso continuo."/>
+            <column name="categoria" value="FLOW"/>
+            <column name="livello" value="INTERMEDIO"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="8"/>
+            <column name="prezzo" value="20.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Pilates Barre -->
+        <insert tableName="corsi">
+            <column name="nome" value="Pilates Barre"/>
+            <column name="descrizione" value="Fusione tra Pilates e danza classica utilizzando la sbarra per equilibrio e supporto negli esercizi."/>
+            <column name="categoria" value="BARRE"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="8"/>
+            <column name="prezzo" value="22.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Pilates Senior -->
+        <insert tableName="corsi">
+            <column name="nome" value="Pilates Senior"/>
+            <column name="descrizione" value="Programma specifico per over 65 con focus su mantenimento della mobilità, equilibrio e forza funzionale."/>
+            <column name="categoria" value="SENIOR"/>
+            <column name="livello" value="PRINCIPIANTE"/>
+            <column name="durata_minuti" value="45"/>
+            <column name="max_partecipanti" value="6"/>
+            <column name="prezzo" value="18.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Workshop Tematici -->
+        <insert tableName="corsi">
+            <column name="nome" value="Workshop Tematici"/>
+            <column name="descrizione" value="Workshop periodici su temi specifici: anatomia, respirazione, core stability, spine mobility, etc."/>
+            <column name="categoria" value="WORKSHOP"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="90"/>
+            <column name="max_partecipanti" value="12"/>
+            <column name="prezzo" value="35.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Semi Privata Trio -->
+        <insert tableName="corsi">
+            <column name="nome" value="Semi Privata Trio"/>
+            <column name="descrizione" value="Lezione per 3 persone con utilizzo di Reformer e piccoli attrezzi. Perfetta per amiche che vogliono allenarsi insieme."/>
+            <column name="categoria" value="SEMI_PRIVATA"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="3"/>
+            <column name="prezzo" value="35.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Pilates Teen -->
+        <insert tableName="corsi">
+            <column name="nome" value="Pilates Teen"/>
+            <column name="descrizione" value="Corso dedicato agli adolescenti (13-17 anni) per sviluppare consapevolezza corporea e postura corretta."/>
+            <column name="categoria" value="TEEN"/>
+            <column name="livello" value="PRINCIPIANTE"/>
+            <column name="durata_minuti" value="45"/>
+            <column name="max_partecipanti" value="6"/>
+            <column name="prezzo" value="16.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Pilates Sportivo -->
+        <insert tableName="corsi">
+            <column name="nome" value="Pilates Sportivo"/>
+            <column name="descrizione" value="Programma intensivo per atleti e sportivi che vogliono migliorare performance, prevenire infortuni e recuperare."/>
+            <column name="categoria" value="SPORTIVO"/>
+            <column name="livello" value="AVANZATO"/>
+            <column name="durata_minuti" value="55"/>
+            <column name="max_partecipanti" value="4"/>
+            <column name="prezzo" value="30.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Cadillac Class -->
+        <insert tableName="corsi">
+            <column name="nome" value="Cadillac Class"/>
+            <column name="descrizione" value="Lezione specializzata sull'utilizzo del Cadillac per esercizi di forza, flessibilità e coordinazione avanzata."/>
+            <column name="categoria" value="CADILLAC"/>
+            <column name="livello" value="INTERMEDIO"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="4"/>
+            <column name="prezzo" value="28.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Chair Class -->
+        <insert tableName="corsi">
+            <column name="nome" value="Chair Class"/>
+            <column name="descrizione" value="Allenamento intensivo con la Pilates Chair per migliorare equilibrio, core stability e coordinazione."/>
+            <column name="categoria" value="CHAIR"/>
+            <column name="livello" value="INTERMEDIO"/>
+            <column name="durata_minuti" value="45"/>
+            <column name="max_partecipanti" value="4"/>
+            <column name="prezzo" value="26.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Pilates Rehabilitation -->
+        <insert tableName="corsi">
+            <column name="nome" value="Pilates Rehabilitation"/>
+            <column name="descrizione" value="Percorso riabilitativo post-infortunio con supervisione specializzata per il recupero funzionale completo."/>
+            <column name="categoria" value="RIABILITATIVO"/>
+            <column name="livello" value="TERAPEUTICO"/>
+            <column name="durata_minuti" value="60"/>
+            <column name="max_partecipanti" value="1"/>
+            <column name="prezzo" value="60.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Pilates Express -->
+        <insert tableName="corsi">
+            <column name="nome" value="Pilates Express"/>
+            <column name="descrizione" value="Sessione breve ma intensa per chi ha poco tempo. Focus su esercizi core e postura."/>
+            <column name="categoria" value="EXPRESS"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="30"/>
+            <column name="max_partecipanti" value="8"/>
+            <column name="prezzo" value="12.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+    </changeSet>
+
+</databaseChangeLog>

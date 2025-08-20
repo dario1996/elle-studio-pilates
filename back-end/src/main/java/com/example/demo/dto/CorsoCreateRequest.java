@@ -1,69 +1,54 @@
 package com.example.demo.dto;
 
-import com.example.demo.entity.Corso;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Max;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
-@Schema(description = "Dati richiesti per creare un nuovo corso")
+@Schema(description = "Dati richiesti per creare un nuovo corso di pilates")
 public class CorsoCreateRequest {
 
     @NotBlank(message = "Il nome del corso è obbligatorio")
-    @Size(max = 200, message = "Il nome non può superare 200 caratteri")
-    @Schema(description = "Nome del corso", example = "Project Management Base", required = true)
+    @Size(max = 100, message = "Il nome non può superare 100 caratteri")
+    @Schema(description = "Nome del corso", example = "Pilates Base", required = true)
     private String nome;
 
-    @NotNull(message = "L'ID della piattaforma è obbligatorio")
-    @Positive(message = "L'ID della piattaforma deve essere positivo")
-    @Schema(description = "ID della piattaforma di erogazione", example = "1", required = true)
-    private Long piattaformaId;
+    @Size(max = 500, message = "La descrizione non può superare 500 caratteri")
+    @Schema(description = "Descrizione del corso", example = "Corso base di pilates per principianti")
+    private String descrizione;
 
-    @Schema(description = "Stato del corso", example = "PIANIFICATO", allowableValues = { "PIANIFICATO", "IN_CORSO",
-            "COMPLETATO", "SOSPESO", "ANNULLATO", "SCADUTO" })
-    private String stato = "PIANIFICATO";
-
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Schema(description = "Data di inizio del corso", example = "2025-06-01", type = "string", format = "date")
-    private LocalDate dataInizio;
-
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Schema(description = "Data di fine del corso", example = "2025-06-15", type = "string", format = "date")
-    private LocalDate dataFine;
-
-    @Positive(message = "La durata deve essere positiva")
-    @Schema(description = "Durata del corso in ore", example = "12.0")
-    private BigDecimal durata;
-
-    @Schema(description = "Indica se è richiesto il feedback al completamento", example = "true")
-    private Boolean feedbackRichiesto = false;
-
-    @Size(max = 100, message = "La categoria non può superare 100 caratteri")
-    @Schema(description = "Categoria del corso", example = "Management")
+    @NotBlank(message = "La categoria è obbligatoria")
+    @Schema(description = "Categoria del corso", example = "PILATES", allowableValues = { "PILATES", "YOGA", "MATWORK", "REFORMER", "CARDIOLATES" }, required = true)
     private String categoria;
 
-    @Size(max = 100, message = "L'argomento non può superare 100 caratteri")
-    @Schema(description = "Argomento principale", example = "Project Management")
-    private String argomento;
+    @NotBlank(message = "Il livello è obbligatorio")
+    @Schema(description = "Livello del corso", example = "PRINCIPIANTE", allowableValues = { "PRINCIPIANTE", "INTERMEDIO", "AVANZATO" }, required = true)
+    private String livello;
 
-    @Size(max = 50, message = "La priorità non può superare 50 caratteri")
-    @Schema(description = "Priorità del corso", example = "ALTA", allowableValues = { "ALTA", "MEDIA", "BASSA" })
-    private String priorita;
+    @NotNull(message = "La durata in minuti è obbligatoria")
+    @Min(value = 15, message = "La durata minima è 15 minuti")
+    @Max(value = 180, message = "La durata massima è 180 minuti")
+    @Schema(description = "Durata del corso in minuti", example = "60", required = true)
+    private Integer durataMinuti;
 
-    @Size(max = 500, message = "L'URL non può superare 500 caratteri")
-    @Schema(description = "URL del corso", example = "https://learning.example.com/course/123")
-    private String urlCorso;
+    @NotNull(message = "Il numero massimo di partecipanti è obbligatorio")
+    @Min(value = 1, message = "Deve esserci almeno 1 partecipante")
+    @Max(value = 50, message = "Il massimo numero di partecipanti è 50")
+    @Schema(description = "Numero massimo di partecipanti", example = "10", required = true)
+    private Integer maxPartecipanti;
 
-    @Schema(description = "Costo del corso", example = "150.00")
-    private BigDecimal costo;
+    @NotNull(message = "Il prezzo è obbligatorio")
+    @Positive(message = "Il prezzo deve essere positivo")
+    @Schema(description = "Prezzo del corso", example = "25.00", required = true)
+    private BigDecimal prezzo;
 
-    @Schema(description = "Indica se viene rilasciata una certificazione", example = "false")
-    private Boolean certificazioneRilasciata = false;
+    @Schema(description = "Indica se il corso è attivo", example = "true")
+    private boolean attivo = true;
 
     public CorsoCreateRequest() {
     }
@@ -76,52 +61,12 @@ public class CorsoCreateRequest {
         this.nome = nome;
     }
 
-    public Long getPiattaformaId() {
-        return piattaformaId;
+    public String getDescrizione() {
+        return descrizione;
     }
 
-    public void setPiattaformaId(Long piattaformaId) {
-        this.piattaformaId = piattaformaId;
-    }
-
-    public String getStato() {
-        return stato;
-    }
-
-    public void setStato(String stato) {
-        this.stato = stato;
-    }
-
-    public LocalDate getDataInizio() {
-        return dataInizio;
-    }
-
-    public void setDataInizio(LocalDate dataInizio) {
-        this.dataInizio = dataInizio;
-    }
-
-    public LocalDate getDataFine() {
-        return dataFine;
-    }
-
-    public void setDataFine(LocalDate dataFine) {
-        this.dataFine = dataFine;
-    }
-
-    public BigDecimal getDurata() {
-        return durata;
-    }
-
-    public void setDurata(BigDecimal durata) {
-        this.durata = durata;
-    }
-
-    public Boolean getFeedbackRichiesto() {
-        return feedbackRichiesto;
-    }
-
-    public void setFeedbackRichiesto(Boolean feedbackRichiesto) {
-        this.feedbackRichiesto = feedbackRichiesto;
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
     }
 
     public String getCategoria() {
@@ -132,51 +77,43 @@ public class CorsoCreateRequest {
         this.categoria = categoria;
     }
 
-    public String getArgomento() {
-        return argomento;
+    public String getLivello() {
+        return livello;
     }
 
-    public void setArgomento(String argomento) {
-        this.argomento = argomento;
+    public void setLivello(String livello) {
+        this.livello = livello;
     }
 
-    public String getPriorita() {
-        return priorita;
+    public Integer getDurataMinuti() {
+        return durataMinuti;
     }
 
-    public void setPriorita(String priorita) {
-        this.priorita = priorita;
+    public void setDurataMinuti(Integer durataMinuti) {
+        this.durataMinuti = durataMinuti;
     }
 
-    public String getUrlCorso() {
-        return urlCorso;
+    public Integer getMaxPartecipanti() {
+        return maxPartecipanti;
     }
 
-    public void setUrlCorso(String urlCorso) {
-        this.urlCorso = urlCorso;
+    public void setMaxPartecipanti(Integer maxPartecipanti) {
+        this.maxPartecipanti = maxPartecipanti;
     }
 
-    public BigDecimal getCosto() {
-        return costo;
+    public BigDecimal getPrezzo() {
+        return prezzo;
     }
 
-    public void setCosto(BigDecimal costo) {
-        this.costo = costo;
+    public void setPrezzo(BigDecimal prezzo) {
+        this.prezzo = prezzo;
     }
 
-    public Boolean getCertificazioneRilasciata() {
-        return certificazioneRilasciata;
+    public boolean isAttivo() {
+        return attivo;
     }
 
-    public void setCertificazioneRilasciata(Boolean certificazioneRilasciata) {
-        this.certificazioneRilasciata = certificazioneRilasciata;
-    }
-
-    public Corso.StatoCorso getStatoEnum() {
-        try {
-            return Corso.StatoCorso.valueOf(stato.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return Corso.StatoCorso.PIANIFICATO;
-        }
+    public void setAttivo(boolean attivo) {
+        this.attivo = attivo;
     }
 }

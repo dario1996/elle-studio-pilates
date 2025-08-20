@@ -3,7 +3,6 @@ import { ICorsi } from '../../../../shared/models/Corsi';
 import { CorsiService } from '../../../../core/services/data/corsi.service';
 import { ToastrService } from 'ngx-toastr';
 import { ToastrModule } from 'ngx-toastr';
-import { IPiattaforma } from '../../../../shared/models/Piattaforma';
 import { TabellaGenericaComponent } from '../../../../shared/components/tabella-generica/tabella-generica.component';
 import { ModaleService } from '../../../../core/services/modal.service';
 import { FormCorsiComponent } from '../../components/form-corsi/form-corsi.component';
@@ -11,7 +10,6 @@ import { DeleteConfirmComponent } from '../../../../core/delete-confirm/delete-c
 import { PageTitleComponent } from '../../../../core/page-title/page-title.component';
 import { ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { PaginationFooterComponent } from '../../../../shared/components/pagination-footer/pagination-footer.component';
-import { PiattaformeService } from '../../../../core/services/data/piattaforme.service';
 import {
   CORSI_COLUMNS,
   CORSI_FILTRI,
@@ -30,8 +28,8 @@ import { NotificationComponent } from '../../../../core/notification/notificatio
     PageTitleComponent,
     FilterPanelComponent,
     LoggedUserComponent,
-    NotificationComponent
-    // PaginationFooterComponent,
+    NotificationComponent,
+    PaginationFooterComponent,
   ],
   templateUrl: './corsi.component.html',
   styleUrls: ['./corsi.component.css'],
@@ -51,7 +49,6 @@ export class CorsiComponent implements AfterViewInit, OnInit, OnChanges {
 
   corsi: ICorsi[] = [];
   corsiFiltrati: ICorsi[] = [];
-  piattaforme: IPiattaforma[] = [];
 
   columns = CORSI_COLUMNS;
   filtri = CORSI_FILTRI;
@@ -62,7 +59,7 @@ export class CorsiComponent implements AfterViewInit, OnInit, OnChanges {
 
   searchFields = [
     { key: 'nome', placeholder: 'Cerca Nome Corso' },
-    { key: 'macroArgomento', placeholder: 'Cerca Macro-Argomento' }
+    { key: 'categoria', placeholder: 'Cerca Categoria' }
   ];
 
   paginationInfo = {
@@ -77,7 +74,6 @@ export class CorsiComponent implements AfterViewInit, OnInit, OnChanges {
 
   constructor(
     private corsiService: CorsiService,
-    private piattaformeService: PiattaformeService,
     private modaleService: ModaleService,
     private toastr: ToastrService,
     private cd: ChangeDetectorRef,
@@ -93,16 +89,12 @@ export class CorsiComponent implements AfterViewInit, OnInit, OnChanges {
 
   ngOnInit(): void {
     this.loadCorsi();
-    this.loadPiattaforme();
   }
 
   private loadCorsi() {
     this.corsiService.getListaCorsi().subscribe({
       next: data => {
-        this.corsi = data.map((c: any) => ({
-          ...c,
-          piattaformaNome: c.piattaforma?.nome || '',
-        }));
+        this.corsi = data;
         this.applicaFiltri();
         this.cd.detectChanges();
         this.paginationInfo.totalItems = this.corsi.length;
@@ -127,25 +119,8 @@ export class CorsiComponent implements AfterViewInit, OnInit, OnChanges {
     });
   }
 
-  loadPiattaforme() {
-    this.piattaformeService.getListaPiattaforme().subscribe({
-      next: data => {
-        this.piattaforme = data;
-        this.setPiattaformaFilterOptions();
-      },
-      error: err => {
-        this.piattaforme = [];
-        this.setPiattaformaFilterOptions();
-      },
-    });
-  }
-
   addCorso(corsoData: any) {
-    const corsoToSave = {
-      ...corsoData,
-      piattaforma: { id: parseInt(corsoData.piattaforma) },
-    };
-    this.corsiService.createCorso(corsoToSave).subscribe({
+    this.corsiService.createCorso(corsoData).subscribe({
       next: () => {
         this.loadCorsi();
         this.toastr.success('Corso aggiunto con successo');
@@ -170,11 +145,7 @@ export class CorsiComponent implements AfterViewInit, OnInit, OnChanges {
   }
 
   updateCorso(id: number, corsoData: any) {
-    const corsoToSave = {
-      ...corsoData,
-      piattaforma: { id: parseInt(corsoData.piattaforma) },
-    };
-    this.corsiService.updateCorso(id, corsoToSave).subscribe({
+    this.corsiService.updateCorso(id, corsoData).subscribe({
       next: () => {
         this.loadCorsi();
         this.toastr.success('Corso modificato con successo');
@@ -238,47 +209,25 @@ export class CorsiComponent implements AfterViewInit, OnInit, OnChanges {
         return false;
       }
       if (
-        this.valoriFiltri['argomento'] &&
-        !c.argomento
-          .toLowerCase()
-          .includes(this.valoriFiltri['argomento'].toLowerCase())
+        this.valoriFiltri['categoria'] &&
+        c.categoria !== this.valoriFiltri['categoria']
       ) {
         return false;
-      }
-      if (this.valoriFiltri['isms']) {
-        const ismsValue = (c as any).isms ? (c as any).isms.trim() : null;
-        const filterValue = this.valoriFiltri['isms'];
-        
-        if (filterValue === 'Si' && ismsValue !== 'Si') {
-          return false;
-        }
-        if (filterValue === 'No' && ismsValue !== 'No') {
-          return false;
-        }
       }
       if (
-        this.valoriFiltri['piattaforma'] &&
-        c.piattaforma?.id != this.valoriFiltri['piattaforma']
+        this.valoriFiltri['livello'] &&
+        c.livello !== this.valoriFiltri['livello']
       ) {
         return false;
+      }
+      if (this.valoriFiltri['attivo']) {
+        const attivoValue = this.valoriFiltri['attivo'] === 'true';
+        if (c.attivo !== attivoValue) {
+          return false;
+        }
       }
       return true;
     });
-  }
-
-  setPiattaformaFilterOptions() {
-    const piattaformaOptions = [
-      { value: '', label: 'Tutti' },
-      ...this.piattaforme.map(p => ({
-        value: p.id,
-        label: p.nome,
-      })),
-    ];
-
-    const filtro = this.filtri.find(f => f.key === 'piattaforma');
-    if (filtro) {
-      filtro.options = piattaformaOptions;
-    }
   }
 
   aggiornaPaginazione(paginationData: any) {
@@ -332,7 +281,7 @@ export class CorsiComponent implements AfterViewInit, OnInit, OnChanges {
   filtraTabella(event: { [key: string]: string }) {
     this.corsiFiltrati = this.corsi.filter(row =>
       (row.nome?.toLowerCase() || '').includes((event['nome'] || '').toLowerCase()) &&
-      (row.argomento?.toLowerCase() || '').includes((event['macroArgomento'] || '').toLowerCase())
+      (row.categoria?.toLowerCase() || '').includes((event['categoria'] || '').toLowerCase())
     );
   }
 

@@ -1,7 +1,6 @@
 package com.example.demo.repository;
 
 import com.example.demo.entity.Corso;
-import com.example.demo.entity.Piattaforma;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -12,40 +11,35 @@ import java.util.Optional;
 @Repository
 public interface CorsoRepository extends JpaRepository<Corso, Long> {
 
-    // Find by platform
-    List<Corso> findByPiattaforma(Piattaforma piattaforma);
-
-    // Find by platform ID
-    List<Corso> findByPiattaformaId(Long piattaformaId);
-
-    // Find by status
-    List<Corso> findByStato(Corso.StatoCorso stato);
-
-    // Find by codice corso
-    Optional<Corso> findByCodiceCorso(String codiceCorso);
-
     // Search by name (case insensitive)
     List<Corso> findByNomeContainingIgnoreCase(String nome);
 
     // Find courses by category
-    List<Corso> findByCategoriaIgnoreCase(String categoria);
+    List<Corso> findByCategoria(String categoria);
 
-    // Find active courses (not suspended or cancelled)
-    @Query("SELECT c FROM Corso c WHERE c.stato NOT IN ('SOSPESO', 'ANNULLATO')")
-    List<Corso> findActiveCourses();
+    // Find courses by level
+    List<Corso> findByLivello(String livello);
 
-    // Find courses by platform and status
-    List<Corso> findByPiattaformaIdAndStato(Long piattaformaId, Corso.StatoCorso stato);
+    // Find active courses only
+    List<Corso> findByAttivoTrue();
 
-    // Check if codice corso exists
-    boolean existsByCodiceCorso(String codiceCorso);
+    // Find inactive courses only
+    List<Corso> findByAttivoFalse();
 
-    // Find courses requiring feedback
-    List<Corso> findByFeedbackRichiestoTrue();
+    // Find courses by category and level
+    List<Corso> findByCategoriaAndLivello(String categoria, String livello);
 
-    // Find by LinkedIn content ID
-    Optional<Corso> findByIdContenutoLinkedin(String idContenutoLinkedin);
+    // Find courses by price range
+    @Query("SELECT c FROM Corso c WHERE c.prezzo BETWEEN :minPrezzo AND :maxPrezzo")
+    List<Corso> findByPrezzoRange(Double minPrezzo, Double maxPrezzo);
 
-    // Find by name and platform
-    Optional<Corso> findByNomeAndPiattaforma(String nome, Piattaforma piattaforma);
+    // Find by name and active status
+    Optional<Corso> findByNomeAndAttivo(String nome, boolean attivo);
+
+    // Find courses with max participants greater than or equal to value
+    List<Corso> findByMaxPartecipantiGreaterThanEqual(Integer minPartecipanti);
+
+    // Find courses by duration range
+    @Query("SELECT c FROM Corso c WHERE c.durataMinuti BETWEEN :minDurata AND :maxDurata")
+    List<Corso> findByDurataRange(Integer minDurata, Integer maxDurata);
 }

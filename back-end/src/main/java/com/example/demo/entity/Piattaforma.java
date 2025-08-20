@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "piattaforme")
@@ -32,10 +31,6 @@ public class Piattaforma {
 
     @Column(nullable = false)
     private Boolean attiva = true;
-
-    @OneToMany(mappedBy = "piattaforma", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<Corso> corsi;
 
     public Piattaforma() {
         this.dataCreazione = LocalDateTime.now();
@@ -105,13 +100,5 @@ public class Piattaforma {
 
     public void setAttiva(Boolean attiva) {
         this.attiva = attiva;
-    }
-
-    public List<Corso> getCorsi() {
-        return corsi;
-    }
-
-    public void setCorsi(List<Corso> corsi) {
-        this.corsi = corsi;
     }
 }

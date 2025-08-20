@@ -15,13 +15,8 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 
-import {
-  IAssegnazione,
-  AssegnazioneStato,
-} from '../../../../shared/models/Assegnazione';
 import { IDipendenti } from '../../../../shared/models/Dipendenti';
 
-import { AssegnazioniService } from '../../../../core/services/data/assegnazioni.service';
 import { DipendentiService } from '../../../../core/services/data/dipendenti.service';
 import { TabellaGenericaComponent } from '../../../../shared/components/tabella-generica/tabella-generica.component';
 import { FilterPanelComponent } from '../../../../shared/components/filter-panel/filter-panel.component';
@@ -415,7 +410,7 @@ export class PianoFormativoComponent implements OnInit {
         if (this.valoriFiltri['dataTerminePrevista']) {
           if (
             !this.compareDates(
-              a.corso.dataScadenza,
+              a.corso.dataModifica || a.corso.dataCreazione,
               this.valoriFiltri['dataTerminePrevista'],
             )
           ) {

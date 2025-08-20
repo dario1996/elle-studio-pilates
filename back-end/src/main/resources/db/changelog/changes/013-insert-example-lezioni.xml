@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="13-insert-elle-studio-corsi" author="developer">
+        <comment>Inserisce corsi reali di Elle Studio Pilates secondo tariffario 2025</comment>
+        
+        <!-- Prima Lezione - Analisi Posturale -->
+        <insert tableName="corsi">
+            <column name="nome" value="Prima Lezione - Analisi Posturale"/>
+            <column name="descrizione" value="Anamnesi e approccio al metodo Pilates. Sessione introduttiva di valutazione posturale e conoscenza del metodo."/>
+            <column name="categoria" value="PRIMA_LEZIONE"/>
+            <column name="livello" value="PRINCIPIANTE"/>
+            <column name="durata_minuti" value="55"/>
+            <column name="max_partecipanti" value="1"/>
+            <column name="prezzo" value="50.00"/>
+            <column name="attivo" value="true"/>
+        </insert>
+
+        <!-- Pilates Privato -->
+        <insert tableName="corsi">
+            <column name="nome" value="Pilates Privato"/>
+            <column name="descrizione" value="Lezione individuale personalizzata con utilizzo di tutti i macchinari studio (Cadillac, Reformer, Tower, Chair, Barrel) e piccoli attrezzi a discrezione dell'insegnante."/>
+            <column name="categoria" value="PRIVATA"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="55"/>
+            <column name="max_partecipanti" value="1"/>
+            <column name="prezzo" value="47.50"/>
+            <column name="attivo" value="true"/>
+        </insert>
+
+        <!-- Semi Privata Duetto -->
+        <insert tableName="corsi">
+            <column name="nome" value="Semi Privata Duetto"/>
+            <column name="descrizione" value="Lezione per 2 persone con utilizzo di Reformer, Tower, Chair e piccoli attrezzi a discrezione dell'insegnante."/>
+            <column name="categoria" value="SEMI_PRIVATA"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="2"/>
+            <column name="prezzo" value="40.00"/>
+            <column name="attivo" value="true"/>
+        </insert>
+
+        <!-- Semi Privata 3-4 persone -->
+        <insert tableName="corsi">
+            <column name="nome" value="Semi Privata Reformer"/>
+            <column name="descrizione" value="Lezione per 3-4 persone con programma ad hoc. Utilizzo di Reformer, Tower, Chair e piccoli attrezzi a discrezione dell'insegnante."/>
+            <column name="categoria" value="SEMI_PRIVATA"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="4"/>
+            <column name="prezzo" value="26.25"/>
+            <column name="attivo" value="true"/>
+        </insert>
+
+        <!-- Pilates Matwork -->
+        <insert tableName="corsi">
+            <column name="nome" value="Pilates Matwork"/>
+            <column name="descrizione" value="Lezioni di gruppo max 6 partecipanti. Programma di allenamento equilibrato a corpo libero su tappetino, con l'ausilio di piccoli attrezzi esclusivi della disciplina."/>
+            <column name="categoria" value="MATWORK"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="6"/>
+            <column name="prezzo" value="16.25"/>
+            <column name="attivo" value="true"/>
+        </insert>
+
+        <!-- Yoga -->
+        <insert tableName="corsi">
+            <column name="nome" value="Yoga"/>
+            <column name="descrizione" value="Lezioni di gruppo con tutti i programmi yoga disponibili. Pratica adatta a diversi livelli e stili."/>
+            <column name="categoria" value="YOGA"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="60"/>
+            <column name="max_partecipanti" value="10"/>
+            <column name="prezzo" value="13.75"/>
+            <column name="attivo" value="true"/>
+        </insert>
+
+        <!-- Corsi Combo - Reformer + Matwork -->
+        <insert tableName="corsi">
+            <column name="nome" value="Combo Reformer + Matwork (8+4)"/>
+            <column name="descrizione" value="Abbonamento combo: 8 lezioni Reformer (semi private 3/4 persone) + 4 lezioni di Matwork. Frequenza bi-settimanale."/>
+            <column name="categoria" value="COMBO"/>
+            <column name="livello" value="INTERMEDIO"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="4"/>
+            <column name="prezzo" value="21.67"/>
+            <column name="attivo" value="true"/>
+        </insert>
+
+        <insert tableName="corsi">
+            <column name="nome" value="Combo Reformer + Matwork (4+4)"/>
+            <column name="descrizione" value="Abbonamento combo: 4 lezioni Reformer (semi private 3/4 persone) + 4 lezioni di Matwork. Frequenza settimanale."/>
+            <column name="categoria" value="COMBO"/>
+            <column name="livello" value="INTERMEDIO"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="4"/>
+            <column name="prezzo" value="20.63"/>
+            <column name="attivo" value="true"/>
+        </insert>
+
+        <!-- Corsi Combo - Reformer + Yoga -->
+        <insert tableName="corsi">
+            <column name="nome" value="Combo Reformer + Yoga"/>
+            <column name="descrizione" value="Abbonamento combo: 4 lezioni Reformer (semi private 3/4 persone) + 4 lezioni di Yoga. Equilibrio perfetto tra forza e flessibilità."/>
+            <column name="categoria" value="COMBO"/>
+            <column name="livello" value="INTERMEDIO"/>
+            <column name="durata_minuti" value="55"/>
+            <column name="max_partecipanti" value="4"/>
+            <column name="prezzo" value="19.38"/>
+            <column name="attivo" value="true"/>
+        </insert>
+
+        <!-- Corsi Combo - Matwork + Yoga -->
+        <insert tableName="corsi">
+            <column name="nome" value="Combo Matwork + Yoga"/>
+            <column name="descrizione" value="Abbonamento combo: 4 lezioni di Matwork (gruppo max 6 partecipanti) + 4 lezioni di Yoga. Approccio completo al benessere."/>
+            <column name="categoria" value="COMBO"/>
+            <column name="livello" value="PRINCIPIANTE"/>
+            <column name="durata_minuti" value="55"/>
+            <column name="max_partecipanti" value="6"/>
+            <column name="prezzo" value="14.38"/>
+            <column name="attivo" value="true"/>
+        </insert>
+
+        <!-- Corsi specifici per livello -->
+        <insert tableName="corsi">
+            <column name="nome" value="Pilates Matwork Principianti"/>
+            <column name="descrizione" value="Corso di Pilates Matwork dedicato ai principianti. Approccio graduale ai principi fondamentali del metodo Pilates."/>
+            <column name="categoria" value="MATWORK"/>
+            <column name="livello" value="PRINCIPIANTE"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="6"/>
+            <column name="prezzo" value="16.25"/>
+            <column name="attivo" value="true"/>
+        </insert>
+
+        <insert tableName="corsi">
+            <column name="nome" value="Pilates Matwork Intermedio"/>
+            <column name="descrizione" value="Corso di Pilates Matwork per praticanti con esperienza. Sequenze più complesse e sfidanti."/>
+            <column name="categoria" value="MATWORK"/>
+            <column name="livello" value="INTERMEDIO"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="6"/>
+            <column name="prezzo" value="16.25"/>
+            <column name="attivo" value="true"/>
+        </insert>
+
+        <insert tableName="corsi">
+            <column name="nome" value="Pilates Matwork Avanzato"/>
+            <column name="descrizione" value="Corso di Pilates Matwork per praticanti esperti. Esercizi avanzati e sequenze dinamiche."/>
+            <column name="categoria" value="MATWORK"/>
+            <column name="livello" value="AVANZATO"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="4"/>
+            <column name="prezzo" value="16.25"/>
+            <column name="attivo" value="true"/>
+        </insert>
+
+        <!-- Specializzazioni Yoga -->
+        <insert tableName="corsi">
+            <column name="nome" value="Yoga Vinyasa"/>
+            <column name="descrizione" value="Stile dinamico di yoga che collega movimento e respiro in sequenze fluide."/>
+            <column name="categoria" value="YOGA"/>
+            <column name="livello" value="INTERMEDIO"/>
+            <column name="durata_minuti" value="60"/>
+            <column name="max_partecipanti" value="10"/>
+            <column name="prezzo" value="13.75"/>
+            <column name="attivo" value="true"/>
+        </insert>
+
+        <insert tableName="corsi">
+            <column name="nome" value="Yoga Ristorativo"/>
+            <column name="descrizione" value="Pratica dolce e rilassante con supporti, ideale per il recupero e il rilassamento profondo."/>
+            <column name="categoria" value="YOGA"/>
+            <column name="livello" value="PRINCIPIANTE"/>
+            <column name="durata_minuti" value="60"/>
+            <column name="max_partecipanti" value="8"/>
+            <column name="prezzo" value="13.75"/>
+            <column name="attivo" value="true"/>
+        </insert>
+
+        <insert tableName="corsi">
+            <column name="nome" value="Yoga Hatha"/>
+            <column name="descrizione" value="Stile tradizionale di yoga con posizioni mantenute e focus su allineamento e respirazione."/>
+            <column name="categoria" value="YOGA"/>
+            <column name="livello" value="PRINCIPIANTE"/>
+            <column name="durata_minuti" value="60"/>
+            <column name="max_partecipanti" value="10"/>
+            <column name="prezzo" value="13.75"/>
+            <column name="attivo" value="true"/>
+        </insert>
+
+    </changeSet>
+
+</databaseChangeLog>

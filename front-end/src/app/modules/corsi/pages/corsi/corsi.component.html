@@ -1,7 +1,7 @@
 <div class="page-container">
   <div class="page-header">
   <app-page-title
-    [title]="'Gestione pacchetti'"
+    [title]="'Gestione Corsi'"
     [buttons]="buttons"
     [activeFiltersCount]="getActiveFiltersCount()"
     (buttonClick)="gestioneAzione({ tipo: 'add', item: null })"
@@ -33,7 +33,7 @@
       </div>
 
       <!-- Table Container -->
-      <div class="table-container">
+      <div class="table-container mt-3">
         <app-tabella-generica
           [data]="corsiFiltrati"
           [columns]="columns"
@@ -46,7 +46,7 @@
       </div>
 
       <!-- Pagination Container -->
-      <!-- <app-pagination-footer
+      <app-pagination-footer
         [currentPage]="paginationInfo.currentPage"
         [totalPages]="paginationInfo.totalPages"
         [pages]="paginationInfo.pages"
@@ -56,7 +56,7 @@
         [entityName]="paginationInfo.entityName"
         (pageChange)="cambiaPagina($event)"
       >
-      </app-pagination-footer> -->
+      </app-pagination-footer>
     </div>
   </div>
 </div>

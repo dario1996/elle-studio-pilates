@@ -1,7 +1,7 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
   <div class="row mt-3">
     <div class="col-md-6 form-field">
-      <label for="nome" class="form-label">Nome</label>
+      <label for="nome" class="form-label">Nome *</label>
       <input id="nome" type="text" class="form-control" formControlName="nome"
         placeholder="Inserisci il nome del corso"
         [ngClass]="{ 'is-invalid': submitted && form.controls['nome'].invalid }" />
@@ -10,37 +10,83 @@
       </div>
     </div>
     <div class="col-md-6 form-field">
-      <label for="argomento" class="form-label">Macro argomento</label>
-      <input id="argomento" type="text" class="form-control" formControlName="argomento"
-        placeholder="Inserisci il macro argomento"
-        [ngClass]="{ 'is-invalid': submitted && form.controls['argomento'].invalid }" />
-      <div *ngIf="submitted && form.controls['argomento'].invalid" class="invalid-feedback">
-        Il macro argomento è obbligatorio (min 3, max 499 caratteri).
+      <label for="categoria" class="form-label">Categoria *</label>
+      <select id="categoria" class="form-select" formControlName="categoria"
+        [ngClass]="{ 'is-invalid': submitted && form.controls['categoria'].invalid }">
+        <option value="">Seleziona categoria</option>
+        <option *ngFor="let categoria of categorieOpzioni" [value]="categoria.value">
+          {{ categoria.label }}
+        </option>
+      </select>
+      <div *ngIf="submitted && form.controls['categoria'].invalid" class="invalid-feedback">
+        Seleziona una categoria.
       </div>
     </div>
   </div>
 
-  <div class="row mt-5">
+  <div class="row mt-3">
+    <div class="col-12 form-field">
+      <label for="descrizione" class="form-label">Descrizione</label>
+      <textarea id="descrizione" class="form-control" formControlName="descrizione" rows="3"
+        placeholder="Inserisci una descrizione del corso..."
+        [ngClass]="{ 'is-invalid': submitted && form.controls['descrizione'].invalid }"></textarea>
+      <div *ngIf="submitted && form.controls['descrizione'].invalid" class="invalid-feedback">
+        Massimo 500 caratteri.
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-3">
     <div class="col-md-6 form-field">
-      <label for="durata" class="form-label">Durata</label>
-      <input id="durata" type="number" class="form-control" formControlName="durata"
-        placeholder="Ore"
-        [ngClass]="{ 'is-invalid': submitted && form.controls['durata'].invalid }" />
-      <div *ngIf="submitted && form.controls['durata'].invalid" class="invalid-feedback">
-        La durata è obbligatoria.
+      <label for="livello" class="form-label">Livello *</label>
+      <select id="livello" class="form-select" formControlName="livello"
+        [ngClass]="{ 'is-invalid': submitted && form.controls['livello'].invalid }">
+        <option value="">Seleziona livello</option>
+        <option *ngFor="let livello of livelliOpzioni" [value]="livello.value">
+          {{ livello.label }}
+        </option>
+      </select>
+      <div *ngIf="submitted && form.controls['livello'].invalid" class="invalid-feedback">
+        Seleziona un livello.
       </div>
     </div>
     <div class="col-md-6 form-field">
-      <label for="piattaforma" class="form-label">Piattaforma</label>
-      <select id="piattaforma" class="form-select" formControlName="piattaforma"
-        [ngClass]="{ 'is-invalid': submitted && form.controls['piattaforma'].invalid }">
-        <option value="">Seleziona piattaforma</option>
-        <option *ngFor="let piattaforma of piattaforme; trackBy: trackById" [value]="piattaforma.id">
-          {{ piattaforma.nome }}
-        </option>
-      </select>
-      <div *ngIf="submitted && form.controls['piattaforma'].invalid" class="invalid-feedback">
-        Seleziona una piattaforma.
+      <label for="durataMinuti" class="form-label">Durata (minuti) *</label>
+      <input id="durataMinuti" type="number" class="form-control" formControlName="durataMinuti"
+        placeholder="Es: 60"
+        [ngClass]="{ 'is-invalid': submitted && form.controls['durataMinuti'].invalid }" />
+      <div *ngIf="submitted && form.controls['durataMinuti'].invalid" class="invalid-feedback">
+        La durata è obbligatoria (min 15, max 180 minuti).
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-md-6 form-field">
+      <label for="maxPartecipanti" class="form-label">Max Partecipanti *</label>
+      <input id="maxPartecipanti" type="number" class="form-control" formControlName="maxPartecipanti"
+        placeholder="Es: 10"
+        [ngClass]="{ 'is-invalid': submitted && form.controls['maxPartecipanti'].invalid }" />
+      <div *ngIf="submitted && form.controls['maxPartecipanti'].invalid" class="invalid-feedback">
+        Il numero massimo di partecipanti è obbligatorio (min 1, max 50).
+      </div>
+    </div>
+    <div class="col-md-6 form-field">
+      <label for="prezzo" class="form-label">Prezzo (€) *</label>
+      <input id="prezzo" type="number" step="0.01" class="form-control" formControlName="prezzo"
+        placeholder="Es: 25.00"
+        [ngClass]="{ 'is-invalid': submitted && form.controls['prezzo'].invalid }" />
+      <div *ngIf="submitted && form.controls['prezzo'].invalid" class="invalid-feedback">
+        Il prezzo è obbligatorio (min 0).
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-md-6 form-field">
+      <div class="form-check">
+        <input id="attivo" type="checkbox" class="form-check-input" formControlName="attivo" />
+        <label for="attivo" class="form-check-label">Corso attivo</label>
       </div>
     </div>
   </div>
