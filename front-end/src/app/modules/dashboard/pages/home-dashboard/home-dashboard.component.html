@@ -19,7 +19,7 @@
             <i class="fas fa-plus"></i>
             <span>Aggiungi utente</span>
           </button>
-          <button class="quick-action-btn">
+          <button class="quick-action-btn" (click)="aggiungiAppuntamento()">
             <i class="fas fa-plus"></i>
             <span>Aggiungi appuntamento</span>
           </button>
@@ -120,34 +120,46 @@
     <div class="appointments-section">
       <div class="appointments-card">
         <div class="appointments-header">
-          <h3>Prossimi appuntamenti</h3>
+          <h3>Prossimi appuntamenti (Oggi)</h3>
         </div>
         <div class="appointments-content">
-          <!-- Appuntamento 1 -->
-          <div class="appointment-item">
-            <div class="appointment-info">
-              <h4>Yoga Mattina</h4>
-              <div class="appointment-time">
-                <i class="fas fa-clock"></i>
-                <span>10:00-11:00</span>
-              </div>
-            </div>
-            <button class="appointment-btn">
-              <i class="fas fa-edit"></i>
-              Modifica
-            </button>
+          <!-- Loading -->
+          <div *ngIf="loading" class="text-center p-3">
+            <i class="fas fa-spinner fa-spin"></i>
+            Caricamento...
           </div>
 
-          <!-- Appuntamento 2 -->
-          <div class="appointment-item">
+          <!-- Errore -->
+          <div *ngIf="error && !loading" class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle"></i>
+            {{ error }}
+          </div>
+
+          <!-- Nessun appuntamento -->
+          <div *ngIf="!loading && !error && appuntamentiOggi.length === 0" class="text-center p-3 text-muted">
+            <i class="fas fa-calendar-alt"></i>
+            <p>Nessun appuntamento per oggi</p>
+          </div>
+
+          <!-- Lista appuntamenti -->
+          <div *ngFor="let appuntamento of appuntamentiOggi" class="appointment-item">
             <div class="appointment-info">
-              <h4>Piscina</h4>
-              <div class="appointment-time">
-                <i class="fas fa-clock"></i>
-                <span>13:00-14:00</span>
+              <h4>{{ getLabelTipoLezione(appuntamento.tipoLezione) }}</h4>
+              <div class="appointment-details">
+                <div class="appointment-time">
+                  <i class="fas fa-clock"></i>
+                  <span>{{ formatTime(appuntamento.dataInizio, appuntamento.dataFine) }}</span>
+                </div>
+                <div class="appointment-instructor" *ngIf="appuntamento.istruttore">
+                  <i class="fas fa-user"></i>
+                  <span>{{ appuntamento.istruttore }}</span>
+                </div>
+              </div>
+              <div class="appointment-title" *ngIf="appuntamento.titolo">
+                {{ appuntamento.titolo }}
               </div>
             </div>
-            <button class="appointment-btn">
+            <button class="appointment-btn" (click)="modificaAppuntamento(appuntamento.id!)">
               <i class="fas fa-edit"></i>
               Modifica
             </button>

@@ -22,6 +22,17 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
+.quick-action-btn.btn-secondary {
+  background: #f8f9fa;
+  border: 1px solid #6c757d;
+  color: #6c757d;
+}
+
+.quick-action-btn.btn-secondary:hover {
+  background: #6c757d;
+  color: white;
+}
+
 .quick-action-btn i {
   font-size: 11px;
 }
@@ -45,9 +56,41 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
 
+/* Personalizzazioni aggiuntive per FullCalendar */
+::ng-deep .fc-popover {
+  font-family: 'Montserrat', sans-serif;
+}
+
+::ng-deep .fc-popover-title {
+  font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
+}
+
+::ng-deep .fc-list-event-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+}
+
+::ng-deep .fc-list-event-time {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+}
+
+/* Orari nella vista settimanale/giornaliera */
+::ng-deep .fc-timegrid-slot-label-cushion {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+}
+
+/* Testo "più eventi" */
+::ng-deep .fc-daygrid-more-link {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+}
+
 /* Stili personalizzati per FullCalendar */
 ::ng-deep .fc {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 ::ng-deep .fc-toolbar {
@@ -70,6 +113,24 @@
   transition: all 0.2s;
 }
 
+/* Font weight per i titoli degli eventi */
+::ng-deep .fc-event-title {
+  font-weight: 500;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Font weight per i numeri dei giorni */
+::ng-deep .fc-daygrid-day-number {
+  font-weight: 500;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Font weight per le intestazioni dei giorni */
+::ng-deep .fc-col-header-cell-cushion {
+  font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
+}
+
 ::ng-deep .fc-button:hover {
   background-color: #e5e7eb;
   border-color: #9ca3af;
@@ -90,6 +151,45 @@
   background-color: #1f2937 !important;
   border-color: #1f2937 !important;
   color: white !important;
+}
+
+/* Assicura che i bottoni abbiano una dimensione minima */
+::ng-deep .fc-prev-button,
+::ng-deep .fc-next-button {
+  min-width: 40px !important;
+  min-height: 36px !important;
+  position: relative !important;
+}
+
+/* Approccio alternativo - sovrascrive completamente il contenuto */
+::ng-deep .fc-prev-button {
+  position: relative;
+}
+
+::ng-deep .fc-prev-button:after {
+  /* content: "←" !important; */
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 16px !important;
+  font-weight: bold !important;
+  color: inherit !important;
+}
+
+::ng-deep .fc-next-button {
+  position: relative;
+}
+
+::ng-deep .fc-next-button:after {
+  /* content: "→" !important; */
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 16px !important;
+  font-weight: bold !important;
+  color: inherit !important;
 }
 
 ::ng-deep .fc-event {

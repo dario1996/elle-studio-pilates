@@ -1,0 +1,56 @@
+<div class="leggenda-container">
+  <div class="row">
+    <!-- Prima colonna - primi 3 tipi -->
+    <div class="col-6">
+      <div class="leggenda-lista">
+        <div 
+          class="leggenda-item" 
+          *ngFor="let tipo of getPrimiTreTipi()"
+        >
+          <div class="color-indicator">
+            <div 
+              class="color-circle" 
+              [style.background-color]="getColoreByTipo(tipo)"
+            ></div>
+          </div>
+          <div class="tipo-info">
+            <span class="tipo-nome">{{ getLabelByTipo(tipo) }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Seconda colonna - altri 3 tipi -->
+    <div class="col-6">
+      <div class="leggenda-lista">
+        <div 
+          class="leggenda-item" 
+          *ngFor="let tipo of getUltimiTreTipi()"
+        >
+          <div class="color-indicator">
+            <div 
+              class="color-circle" 
+              [style.background-color]="getColoreByTipo(tipo)"
+            ></div>
+          </div>
+          <div class="tipo-info">
+            <span class="tipo-nome">{{ getLabelByTipo(tipo) }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lezione disattivata separata -->
+  <div class="mt-3">
+    <hr>
+    <div class="leggenda-item">
+      <div class="color-indicator">
+        <div class="color-circle" style="background-color: #6b7280;"></div>
+      </div>
+      <div class="tipo-info">
+        <span class="tipo-nome">Lezione Disattivata</span>
+      </div>
+    </div>
+  </div>
+</div>

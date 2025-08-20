@@ -28,6 +28,10 @@ public interface LezioneRepository extends JpaRepository<Lezione, Long> {
     // Trova lezioni per tipo
     List<Lezione> findByTipoLezioneAndAttivaTrue(TipoLezione tipoLezione);
 
+    // Trova lezioni di oggi dalla data/ora corrente in poi
+    @Query("SELECT l FROM Lezione l WHERE DATE(l.dataInizio) = CURRENT_DATE AND l.dataInizio >= :now AND l.attiva = true ORDER BY l.dataInizio ASC")
+    List<Lezione> findLezioniOggiDaOra(@Param("now") LocalDateTime now);
+
     // Cambia stato attiva/disattiva
     @Modifying
     @Query("UPDATE Lezione l SET l.attiva = :attiva, l.updatedAt = CURRENT_TIMESTAMP WHERE l.id = :id")

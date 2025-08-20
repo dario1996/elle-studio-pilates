@@ -159,6 +159,16 @@
   margin: 0 0 6px 0;
   padding-bottom: 3px;
   border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.info-card-title i {
+  color: #c99e67;
+  font-size: 0.8rem;
+  width: 14px;
+  text-align: center;
 }
 
 .info-card .info-item {
@@ -354,6 +364,19 @@
 }
 
 /* Mobile responsiveness */
+/* Stili per le icone negli alert */
+.alert i {
+  margin-right: 6px;
+}
+
+.alert-info i.fa-check-circle {
+  color: #0ea5e9;
+}
+
+.alert-warning i.fa-exclamation-triangle {
+  color: #f59e0b;
+}
+
 @media (max-width: 768px) {
   .title-section {
     flex-direction: column;

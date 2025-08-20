@@ -79,9 +79,20 @@ export class DettaglioLezioneComponent implements OnInit {
   }
 
   get istruttoreNome(): string {
-    if (!this.lezione?.istruttoreId) return 'Non assegnato';
-    const istruttore = this.istruttori.find(i => i.id === this.lezione?.istruttoreId);
-    return istruttore ? `${istruttore.nome} ${istruttore.cognome}` : 'Sconosciuto';
+    // Prima prova con istruttoreId se disponibile
+    if (this.lezione?.istruttoreId) {
+      const istruttore = this.istruttori.find(i => i.id === this.lezione?.istruttoreId);
+      if (istruttore) {
+        return `${istruttore.nome} ${istruttore.cognome}`;
+      }
+    }
+    
+    // Fallback: usa il campo istruttore (string) se disponibile
+    if (this.lezione?.istruttore) {
+      return this.lezione.istruttore;
+    }
+    
+    return 'Non assegnato';
   }
 
   get dataOraFormatted(): string {
@@ -106,12 +117,30 @@ export class DettaglioLezioneComponent implements OnInit {
     });
   }
 
+  get durataFormatted(): string {
+    if (this.lezione?.durata) {
+      return `${this.lezione.durata} minuti`;
+    }
+    
+    // Calcolo fallback se la durata non è disponibile
+    if (this.lezione?.dataInizio && this.lezione?.dataFine) {
+      const inizio = new Date(this.lezione.dataInizio);
+      const fine = new Date(this.lezione.dataFine);
+      const durataMinuti = Math.round((fine.getTime() - inizio.getTime()) / (1000 * 60));
+      return `${durataMinuti} minuti`;
+    }
+    
+    return 'Non disponibile';
+  }
+
   get tipoLezioneLabel(): string {
     return this.lezione?.tipo ? this.tipiLezioneLabels[this.lezione.tipo] : '';
   }
 
   get postiDisponibili(): number {
-    return (this.lezione?.maxPartecipanti || 0) - (this.lezione?.partecipantiIscritti || 0);
+    const maxPartecipanti = this.lezione?.maxPartecipanti || 0;
+    const partecipantiIscritti = this.lezione?.partecipantiIscritti || 0;
+    return maxPartecipanti - partecipantiIscritti;
   }
 
   get isCompleta(): boolean {

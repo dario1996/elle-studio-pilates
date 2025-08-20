@@ -60,6 +60,15 @@ public class LezioneService {
         return lezioneMapper.toDtoList(lezioni);
     }
 
+    @Transactional(readOnly = true)
+    public List<LezioneDto> getLezioniOggiDaOraCorrente() {
+        LocalDateTime now = LocalDateTime.now();
+        log.info("Recupero lezioni di oggi dalle ore {}", now);
+        List<Lezione> lezioni = lezioneRepository.findLezioniOggiDaOra(now);
+        log.info("Trovate {} lezioni per oggi", lezioni.size());
+        return lezioneMapper.toDtoList(lezioni);
+    }
+
     public LezioneDto createLezione(LezioneDto lezioneDto) throws BindingException {
         log.info("Creazione nuova lezione: {}", lezioneDto.getTitolo());
         

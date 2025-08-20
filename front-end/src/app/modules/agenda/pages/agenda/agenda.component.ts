@@ -1,4 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions, EventInput, EventClickArg, DateSelectArg } from '@fullcalendar/core';
@@ -17,6 +18,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ILezione, TipoLezione, TIPI_LEZIONE_CONFIG } from '../../../../shared/models/Lezione';
 import { FormLezioneComponent } from '../../components/form-lezione/form-lezione.component';
 import { DettaglioLezioneComponent } from '../../components/dettaglio-lezione/dettaglio-lezione.component';
+import { LeggendaColoriComponent } from '../../components/leggenda-colori/leggenda-colori.component';
 
 @Component({
   selector: 'app-agenda',
@@ -75,11 +77,44 @@ export class AgendaComponent implements OnInit {
     private lezioniService: LezioniService,
     private modaleService: ModaleService,
     private toastr: ToastrService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.loadLezioni();
+    
+    // Controlla se deve aprire il form di creazione o modifica
+    this.route.queryParams.subscribe(params => {
+      if (params['openForm'] === 'true') {
+        // Rimuovi il query parameter dall'URL
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: {},
+          replaceUrl: true
+        });
+        
+        // Aspetta che il componente sia inizializzato prima di aprire il modale
+        setTimeout(() => {
+          this.apriModalCreazione();
+        }, 100);
+      } else if (params['edit']) {
+        const lezioneId = parseInt(params['edit']);
+        
+        // Rimuovi il query parameter dall'URL
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: {},
+          replaceUrl: true
+        });
+        
+        // Aspetta che le lezioni siano caricate prima di aprire il modale di modifica
+        setTimeout(() => {
+          this.apriModalModificaDaId(lezioneId);
+        }, 100);
+      }
+    });
   }
 
   private loadLezioni(): void {
@@ -276,6 +311,20 @@ export class AgendaComponent implements OnInit {
     this.apriModalCreazione();
   }
 
+  apriLeggenda(): void {
+    this.modaleService.apri({
+      titolo: 'Leggenda Colori',
+      componente: LeggendaColoriComponent,
+      dati: null,
+      showDefaultButtons: false,
+      customButtons: [{
+        text: 'Chiudi',
+        cssClass: 'btn-secondary',
+        action: () => this.modaleService.chiudi()
+      }]
+    });
+  }
+
   // Metodi per i bottoni del modal dettaglio
   private toggleLezioneStatus(lezione: ILezione): void {
     console.log('🔄 toggleLezioneStatus() chiamato per lezione ID:', lezione.id);
@@ -310,19 +359,27 @@ export class AgendaComponent implements OnInit {
         console.log('🎯 Callback onConferma chiamato con valori:', formValue);
         this.aggiornaLezione(lezione.id!, formValue);
       };
-      
-      console.log('🔧 Aprendo modale con callback:', callback);
+
       this.modaleService.apri({
         titolo: 'Modifica Lezione',
         componente: FormLezioneComponent,
         dati: lezione,
-        onConferma: callback,
+        onConferma: callback
       });
     });
   }
 
-  private confermaModifica(): void {
-    // Il form component gestirà la conferma tramite il suo metodo onSubmit
+  private apriModalModificaDaId(lezioneId: number): void {
+    console.log('🔍 Cercando lezione con ID:', lezioneId);
+    const lezione = this.lezioni.find(l => l.id === lezioneId);
+    
+    if (lezione) {
+      console.log('✅ Lezione trovata, aprendo modale di modifica:', lezione);
+      this.editLezione(lezione);
+    } else {
+      console.warn('⚠️ Lezione non trovata con ID:', lezioneId);
+      this.toastr.warning('Lezione non trovata');
+    }
   }
 
   private deleteLezione(lezione: ILezione): void {

@@ -31,19 +31,26 @@ export class LezioniService {
     const dataFine = new Date(dto.dataFine);
     console.log('Date convertite - Inizio:', dataInizio, 'Fine:', dataFine);
 
+    // Calcola la durata in minuti
+    const durataMinuti = Math.round((dataFine.getTime() - dataInizio.getTime()) / (1000 * 60));
+
     return {
       id: dto.id,
       titolo: dto.titolo,
       dataInizio,
       dataFine,
       tipo: dto.tipoLezione,
+      durata: durataMinuti,
       maxPartecipanti: this.getMaxPartecipantiByTipo(dto.tipoLezione),
       partecipanti: [], // TODO: implementare gestione partecipanti
+      partecipantiIscritti: 0, // TODO: implementare gestione partecipanti iscritti dal backend
       istruttore: dto.istruttore,
+      istruttoreId: this.getIstruttoreIdByNome(dto.istruttore), // Mappa nome → ID per compatibilità
       descrizione: dto.note || '',
+      note: dto.note || '',
       stato: dto.attiva ? 'CONFERMATA' : 'CANCELLATA',
-      attiva: dto.attiva || false, // Aggiungiamo la proprietà attiva
-      prezzo: 0, // TODO: implementare gestione prezzi
+      attiva: dto.attiva || false,
+      prezzo: 0, // TODO: implementare gestione prezzi dal backend
       colore: this.getColoreByTipo(dto.tipoLezione)
     } as ILezione;
   }
@@ -113,6 +120,19 @@ export class LezioniService {
       default:
         return '#6b7280';
     }
+  }
+
+  private getIstruttoreIdByNome(nome: string): number | undefined {
+    // Mapping temporaneo nome → ID (da sostituire con chiamata al backend in futuro)
+    const istruttoriMap: Record<string, number> = {
+      'Eleonora': 1,
+      'Eleonora Bianchi': 1,
+      'Marco': 2,
+      'Marco Rossi': 2,
+      'Sofia': 3,
+      'Sofia Verdi': 3
+    };
+    return istruttoriMap[nome];
   }
 
   // API methods

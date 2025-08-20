@@ -1,6 +1,7 @@
 /* Azioni Rapide */
 .quick-actions {
-  padding: 20px 0;
+  padding-top: 64px;
+  padding-bottom: 20px;
   /* margin-left: 20px;
   margin-right: 20px; */
   margin-bottom: 16px;
@@ -38,28 +39,28 @@
 .quick-action-btn {
   background: white;
   border: 1px solid #374151; /* Bordi neri */
-  border-radius: 8px;
-  padding: 12px 20px;
-  font-size: 14px;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 13px;
   font-weight: 500;
   color: #374151;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .quick-action-btn:hover {
   background: #374151; /* Sfondo nero al hover */
   color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .quick-action-btn i {
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .quick-action-btn span {
@@ -266,6 +267,12 @@
   margin: 0 0 8px 0;
 }
 
+.appointment-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .appointment-time {
   display: flex;
   align-items: center;
@@ -277,6 +284,26 @@
 .appointment-time i {
   color: #9ca3af;
   font-size: 12px;
+}
+
+.appointment-instructor {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.appointment-instructor i {
+  color: #9ca3af;
+  font-size: 11px;
+}
+
+.appointment-title {
+  font-size: 13px;
+  color: #9ca3af;
+  font-style: italic;
+  margin-top: 4px;
 }
 
 .appointment-btn {
@@ -360,4 +387,41 @@
   .card-header {
     margin-bottom: 16px;
   }
+}
+
+/* Stati di caricamento ed errore */
+.text-center {
+  text-align: center;
+}
+
+.text-muted {
+  color: #6b7280;
+}
+
+.p-3 {
+  padding: 24px;
+}
+
+.alert {
+  padding: 16px;
+  border-radius: 8px;
+  margin: 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.alert-danger {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+}
+
+.fa-spinner.fa-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
