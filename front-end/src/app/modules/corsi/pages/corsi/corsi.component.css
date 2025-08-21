@@ -140,24 +140,23 @@
 }
 
 /* ================== RESPONSIVE DESIGN =================== */
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
   .content-area {
     height: 100%;
     overflow: hidden;
   }
 
   .table-container {
-    margin-bottom: var(--spacing-sm); /* Reduce margin on mobile */
+    margin-bottom: var(--spacing-sm);
   }
 }
 
 @media (max-width: 480px) {
   .filters-section {
-    margin-bottom: var(--spacing-md); /* Reduce margin on small mobile */
+    margin-bottom: var(--spacing-md);
   }
 }
 
-/* Responsive design */
 @media (max-width: 768px) {
   .page-container {
     padding: 16px;
@@ -191,4 +190,4 @@
   .modal-footer-content .btn {
     width: 100%;
   }
-}
+} */

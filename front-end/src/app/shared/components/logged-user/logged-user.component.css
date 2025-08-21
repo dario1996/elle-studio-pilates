@@ -32,8 +32,8 @@ a.dropdown-toggle * {
   align-items: center;
   justify-content: flex-end;
   position: relative;
-  min-width: 260px;
-  gap: 8px;
+  min-width: 0;
+  gap: 4px;
 }
 
 .avatar-image {
@@ -107,4 +107,20 @@ a.dropdown-toggle * {
 .logout-btn:hover {
   background: #f8f8f8;
   border-radius: 6px;
+}
+
+@media (max-width: 991px) {
+  .user-bar .user-info,
+  .user-bar .user-name,
+  .user-bar .user-email {
+    display: none !important;
+  }
+  .user-bar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    min-width: 0;
+  }
 }

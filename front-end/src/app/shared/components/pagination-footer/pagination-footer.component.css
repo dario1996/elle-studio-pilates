@@ -109,7 +109,7 @@
 /* Responsive */
 @media (max-width: 768px) {
   .table-pagination-inner {
-    flex-direction: column;
+    flex-direction: row;
     gap: 12px;
   }
 

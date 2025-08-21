@@ -1,6 +1,14 @@
+/* Contenuto scrollabile per dashboard-contents */
+.dashboard-contents {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* Nessun padding/margine aggiuntivo, le spaziature restano gestite dai figli */
+}
 /* Dashboard Stats */
 .dashboard-stats {
-  padding: 20px 0;
+  padding: 6px 0px 6px 0px;
   /* margin-left: 20px;
   margin-right: 20px; */
 }
@@ -12,7 +20,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   border: 1px solid #c99e67; /* Colore bordo sidebar */
   border-top: 4px solid #c99e67; /* Bordo superiore più spesso */
-  height: 100%;
+  /* height: 100%;  RIMOSSO per evitare taglio contenuto scrollabile */
   transition: all 0.3s ease;
   position: relative;
 }

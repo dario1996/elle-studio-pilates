@@ -1,7 +1,7 @@
 .page-header-content {
   display: flex;
   /* align-items: flex-end; */
-  justify-content: space-between;
+  justify-content: center;
   flex-wrap: wrap;
   font-family: var(--font-family);
 }
@@ -72,22 +72,6 @@
     box-shadow 0.15s ease-in-out;
 }
 
-@media (max-width: 768px) {
-  .page-header-content {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 16px;
-  }
-
-  .page-actions {
-    justify-content: flex-end;
-  }
-
-  .buttons-container {
-    flex-wrap: wrap;
-  }
-}
-
 /* Effect #2 per pulsante filtri */
 .effect.effect-2 {
   position: relative;
@@ -151,4 +135,27 @@
   position: relative;
   border: 1px solid rgba(255, 255, 255, 0.2);
   transition: all 0.3s ease;
+}
+
+
+@media (max-width: 991px) {
+  .page-header-content {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .page-actions {
+    justify-content: flex-end;
+  }
+
+  .buttons-container {
+    flex-wrap: wrap;
+  }
+
+  .page-title {
+    font-size: 20px;
+    align-items: center;
+  }
 }

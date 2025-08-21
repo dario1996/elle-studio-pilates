@@ -90,14 +90,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-html,
-body,
-.container-fluid {
+html, body {
+  height: 100%;
   overflow-x: hidden;
 }
 
 .page-container {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   padding: 24px;
@@ -546,7 +545,8 @@ body,
 .page-header {
   /* margin: 12px 12px 0px 12px; */
   display: flex;
-  align-items: center;
+  flex-direction: row;
+  /* align-items: center; */
   justify-content: space-between;
   padding: 12px;
 }
@@ -928,5 +928,19 @@ app-pagination-footer {
   }
   .sidebar-toggle-btn.sidebar-toggle-btn-shift {
     left: 240px; /* stessa larghezza della sidebar */
+  }
+
+  .user-bar .user-info,
+  .user-bar .user-name,
+  .user-bar .user-email {
+    display: none !important;
+  }
+  .user-bar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    min-width: 0;
   }
 }
