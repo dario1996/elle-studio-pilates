@@ -1,6 +1,32 @@
 <div class="app-layout">
+
+  <!-- Pulsante hamburger/X mobile, sempre visibile su mobile -->
+  <button
+    class="sidebar-toggle-btn"
+    [class.sidebar-toggle-btn-shift]="isSidebarOpen"
+    type="button"
+    aria-label="Toggle menu"
+    (click)="isSidebarOpen = !isSidebarOpen"
+  >
+    <ng-container *ngIf="!isSidebarOpen; else closeIcon">
+      <!-- Icona hamburger -->
+      <svg width="24" height="24" viewBox="0 0 24 24">
+        <rect y="4" width="24" height="3" rx="1.5" fill="#333" />
+        <rect y="10.5" width="24" height="3" rx="1.5" fill="#333" />
+        <rect y="17" width="24" height="3" rx="1.5" fill="#333" />
+      </svg>
+    </ng-container>
+    <ng-template #closeIcon>
+      <!-- Icona X -->
+      <svg width="24" height="24" viewBox="0 0 24 24">
+        <line x1="5" y1="5" x2="19" y2="19" stroke="#333" stroke-width="2" stroke-linecap="round" />
+        <line x1="19" y1="5" x2="5" y2="19" stroke="#333" stroke-width="2" stroke-linecap="round" />
+      </svg>
+    </ng-template>
+  </button>
+
   <!-- Sidebar - FIXED VERSION -->
-  <aside class="sidebar">
+  <aside class="sidebar" [class.sidebar-open]="isSidebarOpen">
     <div class="sidebar-header">
       <!-- COMMENTED FOR FUTURE USE - COLLAPSED/EXPANDED MANAGEMENT -->
       <!-- 
@@ -132,20 +158,13 @@
     </div>
   </aside>
 
-  <!-- COMMENTED FOR FUTURE USE - MOBILE TOGGLE BUTTON -->
-  <!--
-  <button
-    class="sidebar-toggle-btn"
-    type="button"
-    (click)="isSidebarOpen = !isSidebarOpen"
-  >
-    <span
-      class="fa-solid"
-      [ngClass]="isSidebarOpen ? 'fa-arrow-left' : 'fa-bars'"
-    >
-    </span>
-  </button>
-  -->
+
+  <!-- Overlay mobile -->
+  <div
+    class="sidebar-overlay"
+    *ngIf="isSidebarOpen"
+    (click)="isSidebarOpen = false"
+  ></div>
 
   <!-- COMMENTED FOR FUTURE USE - MOBILE OVERLAY -->
   <!--

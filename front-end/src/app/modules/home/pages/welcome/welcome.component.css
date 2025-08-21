@@ -227,7 +227,7 @@
 }
 
 /* ================== RESPONSIVE =================== */
-@media (max-width: 991px) {
+/* @media (max-width: 991px) { */
   /* COMMENTED FOR FUTURE USE - MOBILE SIDEBAR MANAGEMENT */
   /*
   .sidebar-toggle-btn {
@@ -271,7 +271,7 @@
   */
 
   /* KEEP SIDEBAR FIXED EVEN ON MOBILE */
-  .sidebar {
+  /* .sidebar {
     width: 280px;
     position: relative;
   }
@@ -279,7 +279,7 @@
   .main-content {
     flex: 1;
     margin-left: 0;
-  }
+  } */
 
   /* COMMENTED FOR FUTURE USE - OVERLAY */
   /*
@@ -301,7 +301,7 @@
     visibility: visible;
   }
   */
-}
+/* } */
 
 /* ================== NOTIFICATIONS =================== */
 /* .notification-floating {

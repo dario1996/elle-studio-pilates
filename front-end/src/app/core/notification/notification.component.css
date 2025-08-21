@@ -65,12 +65,12 @@
   pointer-events: all;
 }
 
-@media (max-width: 991.98px) {
+/* @media (max-width: 991.98px) {
   .notification-panel {
     width: calc(100% - 60px);
     max-height: calc(100vh - 180px);
   }
-}
+} */
 
 .notification-panel.show {
   opacity: 1;
