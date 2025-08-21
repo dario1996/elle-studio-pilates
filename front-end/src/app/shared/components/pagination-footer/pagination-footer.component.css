@@ -20,9 +20,36 @@
 
 .table-pagination-inner {
   display: flex;
-  justify-content: space-between;
+  flex-direction: row;
   align-items: center;
-  gap: 20px;
+  width: 100%;
+  gap: 0;
+}
+
+.pagination {
+  flex-shrink: 0;
+  justify-content: flex-start;
+  margin-right: auto;
+}
+
+.pagination-info {
+  font-size: 13px;
+  color: #848484;
+  margin-left: auto;
+  text-align: right;
+}
+
+@media (max-width: 991px) {
+  .table-pagination-inner {
+    flex-direction: row;
+    width: 100%;
+    gap: 0;
+  }
+  .pagination-info {
+    font-size: 12px;
+    text-align: right;
+    margin-left: auto;
+  }
 }
 
 /* Pagination controls */
@@ -107,10 +134,11 @@
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
   .table-pagination-inner {
     flex-direction: row;
     gap: 12px;
+    justify-content: center;
   }
 
   .pagination-footer-container {
@@ -119,21 +147,29 @@
     margin-left: 20px;
     margin-right: 20px;
     bottom: 10px;
-    padding: 10px 16px; /* Footer ancora più compatto su mobile */
+    padding: 10px 16px;
+    justify-content: center;
   }
   
   .pagination-info {
     font-size: 13px;
+    justify-content: center;
   }
   
   .pagination-info span {
     display: block;
     margin-top: 4px;
+    justify-content: center;
   }
-}
+} */
 
 /* Responsive - Mobile */
-@media (max-width: 480px) {
+@media (max-width: 991px) {
+
+  .page-footer {
+    justify-content: center;
+  }
+
   .pagination-footer-container {
     margin-left: 10px;
     margin-right: 10px;
