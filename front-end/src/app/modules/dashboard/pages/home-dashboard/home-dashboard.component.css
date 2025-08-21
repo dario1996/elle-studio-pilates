@@ -129,6 +129,11 @@
     padding: 18px;
     margin-bottom: 16px;
   }
+
+  .appointments-section {
+    margin-top: 16px;
+    margin-bottom: 25px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -147,13 +152,16 @@
   .dashboard-stats {
     padding: 16px 0;
   }
+
+  .appointments-section {
+    margin-top: 16px;
+    margin-bottom: 25px;
+  }
 }
 
 /* Sezione Prossimi Appuntamenti */
 .appointments-section {
   margin-top: 32px;
-  /* margin-left: 20px;
-  margin-right: 20px; */
 }
 
 .appointments-card {
@@ -294,11 +302,6 @@
     min-width: 140px;
   }
   
-  .appointments-section {
-    margin-left: 0;
-    padding: 0 16px;
-  }
-  
   .appointments-card {
     padding: 20px;
   }
@@ -311,6 +314,11 @@
   
   .appointment-btn {
     align-self: flex-end;
+  }
+
+  .appointments-section {
+    margin-top: 16px;
+    margin-bottom: 25px;
   }
 }
 
@@ -325,6 +333,13 @@
   
   .card-header {
     margin-bottom: 16px;
+  }
+
+  .appointments-section {
+    margin-top: 16px;
+    margin-bottom: 25px;
+    /* margin-left: 20px;
+    margin-right: 20px; */
   }
 }
 

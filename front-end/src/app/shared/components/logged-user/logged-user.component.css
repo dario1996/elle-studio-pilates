@@ -123,4 +123,11 @@ a.dropdown-toggle * {
     gap: 8px;
     min-width: 0;
   }
+  .avatar-image {
+    border-radius: 50%;
+    /* border: 2px solid #fff; */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    width: 40px;
+    height: 40px;
+  }
 }

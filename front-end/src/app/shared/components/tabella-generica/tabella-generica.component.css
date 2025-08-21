@@ -24,6 +24,7 @@
   font-size: 12px; /* AGGIUNTO: Font leggermente più piccolo */
   font-weight: 600;
   font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif; /* AGGIUNTO: Font come calendario */
+  padding-top: 0px;
 }
 
 /* CSS Ordinamento colonne */
@@ -193,11 +194,36 @@ th .fa {
   position: relative;
   -ms-overflow-style: auto;
   scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 #f1f5f9;
+  scrollbar-color: var(--color-BORDO) #f8f8f8;
   scroll-behavior: smooth;
   will-change: scroll-position;
   max-height: calc(100vh - 180px);
   padding: 0px 16px 16px 16px;
+}
+
+/* Scrollbar personalizzata per Webkit (Chrome, Edge, Safari) */
+.table-scroll-container::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+  background: #f8f8f8;
+  border-radius: 8px;
+}
+.table-scroll-container::-webkit-scrollbar-thumb {
+  background: var(--color-BORDO);
+  border-radius: 8px;
+  border: 2px solid #f8f8f8;
+  min-height: 30px;
+  transition: background 0.2s;
+}
+.table-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: #b07d3b;
+}
+.table-scroll-container::-webkit-scrollbar-track {
+  background: #f8f8f8;
+  border-radius: 8px;
+}
+.table-scroll-container::-webkit-scrollbar-corner {
+  background: #f8f8f8;
 }
 
 .table {
@@ -395,6 +421,7 @@ th .fa {
     overflow-x: auto; /* Permette scroll orizzontale su mobile */
     padding: 20px; /* AGGIORNATO: Padding ridotto su mobile ma mantenendo stile calendario */
     border-radius: 12px; /* MANTENUTO: Border radius come calendario */
+    padding: 0px 5px 5px 5px;
   }
   
   .table {
@@ -402,9 +429,18 @@ th .fa {
   }
 
   .table-header th {
-    padding: 6px;
     font-size: 12px;
-    height: 40px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e3e6ea; /* RIPRISTINATO: Bordo sottile normale per separare header dalle righe */
+    height: 45px; /* RIDOTTO: da auto a 45px per essere più compatto */
+    vertical-align: middle;
+    color: rgb(0, 0, 0);
+    padding: 8px; /* RIDOTTO: da 12px a 8px */
+    font-weight: 600;
+    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif; /* AGGIUNTO: Font come calendario */
   }
   
   .table-scroll-container .table-body td {
@@ -422,7 +458,7 @@ th .fa {
 @media (max-width: 480px) {
   .table-scroll-container {
     max-height: calc(100vh - 240px);
-    padding: 16px;
+    padding: 0px 16px 16px 16px;
     border-radius: 12px;
   }
 }

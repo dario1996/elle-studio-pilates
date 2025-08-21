@@ -1,3 +1,8 @@
+/* Sidebar toggle button sopra la sidebar ma sotto overlay notifiche */
+.sidebar-toggle-btn {
+  z-index: 1047 !important;
+  position: fixed;
+}
 /* ================== APP LAYOUT =================== */
 .app-layout {
   display: flex;

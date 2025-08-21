@@ -10,7 +10,7 @@
   font-size: 25px !important;
   font-weight: 500 !important;
   color: #1a202c !important;
-  margin: 0 0 8px 0 !important;
+  /* margin: 0 0 8px 0 !important; */
   line-height: 1.2 !important;
   /* font-family: var(--font-family) !important; */
 }
@@ -144,6 +144,7 @@
     align-items: center;
     justify-content: center;
     gap: 16px;
+    padding-top: 16px;
   }
 
   .page-actions {
@@ -157,5 +158,6 @@
   .page-title {
     font-size: 20px;
     align-items: center;
+    margin-left: 40px
   }
 }
