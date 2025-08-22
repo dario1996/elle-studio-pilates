@@ -81,14 +81,18 @@
   font-size: 20px !important;
 }
 
+/* Toolbar buttons: solo testo nero, nessun bordo/sfondo, effetto solo su attivo */
 ::ng-deep .fc-button {
-  background-color: #f3f4f6;
-  border: 1px solid #d1d5db;
-  color: #374151;
+  background: #fff !important;
+  border: none !important;
+  color: #222 !important;
   font-weight: 500;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  transition: all 0.2s;
+  padding: 0.45rem 0.9rem;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transition: color 0.2s, background 0.2s, border 0.2s;
+  outline: none !important;
+  text-decoration: none;
 }
 
 /* Font weight per i titoli degli eventi */
@@ -111,25 +115,28 @@
 }
 
 ::ng-deep .fc-button:hover {
-  background-color: #e5e7eb;
-  border-color: #9ca3af;
+  background: #f5f5f5 !important;
+  color: #c99e67 !important;
 }
 
 ::ng-deep .fc-button-primary {
-  background-color: #3b82f6;
-  border-color: #3b82f6;
-  color: white;
+  background: #fff !important;
+  border: none !important;
+  color: #222 !important;
 }
-
 ::ng-deep .fc-button-primary:hover {
-  background-color: #2563eb;
-  border-color: #2563eb;
+  background: #f5f5f5 !important;
+  color: #c99e67 !important;
 }
-
-::ng-deep .fc-button-active {
-  background-color: #1f2937 !important;
-  border-color: #1f2937 !important;
-  color: white !important;
+::ng-deep .fc-button-active,
+::ng-deep .fc-button.fc-button-active {
+  /* background: #f8f5f1 !important; */
+  color: #c99e67 !important;
+  border: none !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+  text-decoration: underline 2px #c99e67;
+  text-underline-offset: 3px;
 }
 
 /* Assicura che i bottoni abbiano una dimensione minima */
