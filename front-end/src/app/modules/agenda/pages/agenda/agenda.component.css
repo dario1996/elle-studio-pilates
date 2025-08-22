@@ -1,3 +1,31 @@
+/* Forza la vista agenda a occupare tutta la larghezza del container */
+::ng-deep .fc-list,
+::ng-deep .fc-list-table,
+::ng-deep .fc-list-sticky,
+::ng-deep .fc-listWeek-view,
+::ng-deep .fc-listMonth-view,
+::ng-deep .fc-listDay-view {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  box-sizing: border-box;
+}
+
+::ng-deep .fc-list-table {
+  table-layout: fixed !important;
+}
+
+::ng-deep .fc-list {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+::ng-deep .fc-list-event,
+::ng-deep .fc-list-day {
+  width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box;
+}
 .calendar-container {
   background: white;
   border-radius: 6px;
@@ -57,7 +85,8 @@
 /* Orari nella vista settimanale/giornaliera */
 ::ng-deep .fc-timegrid-slot-label-cushion {
   font-family: 'Montserrat', sans-serif;
-  font-weight: 400;
+  font-weight: 600;
+  font-size: 12px !important;
 }
 
 /* Testo "più eventi" */
@@ -105,6 +134,8 @@
 ::ng-deep .fc-daygrid-day-number {
   font-weight: 500;
   font-family: 'Montserrat', sans-serif;
+  text-decoration: none !important;
+  color: #3e3e3e;
 }
 
 /* Font weight per le intestazioni dei giorni */
@@ -113,6 +144,11 @@
   font-family: 'Montserrat', sans-serif;
   color: #3e3e3e;
   text-decoration: none !important;
+  font-size: 12px !important;
+}
+
+::ng-deep .fc-scrollgrid-section-header {
+  background-color: #10b981;
 }
 
 ::ng-deep .fc-button:hover {
