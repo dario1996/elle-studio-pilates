@@ -19,9 +19,9 @@
             <i class="fas fa-plus"></i>
             <span>Aggiungi utente</span>
           </button>
-          <button class="quick-action-btn" (click)="aggiungiAppuntamento()">
+          <button class="quick-action-btn" (click)="aggiungiLezione()">
             <i class="fas fa-plus"></i>
-            <span>Aggiungi appuntamento</span>
+            <span>Aggiungi lezione</span>
           </button>
         </div>
       </div>
@@ -118,11 +118,11 @@
         </div>
       </div>
 
-      <!-- Prossimi Appuntamenti -->
+      <!-- Prossime Lezioni -->
       <div class="appointments-section">
         <div class="appointments-card">
           <div class="appointments-header">
-            <h3>Prossimi appuntamenti (Oggi)</h3>
+            <h3>Prossime lezioni (Oggi)</h3>
           </div>
           <div class="appointments-content">
             <!-- Loading -->
@@ -137,10 +137,10 @@
               {{ error }}
             </div>
 
-            <!-- Nessun appuntamento -->
+            <!-- Nessuna lezione -->
             <div *ngIf="!loading && !error && appuntamentiOggi.length === 0" class="text-center p-3 text-muted">
               <i class="fas fa-calendar-alt"></i>
-              <p>Nessun appuntamento per oggi</p>
+              <p>Nessuna lezione per oggi</p>
             </div>
 
             <!-- Lista appuntamenti -->
@@ -161,7 +161,7 @@
                   {{ appuntamento.titolo }}
                 </div>
               </div>
-              <button class="appointment-btn" (click)="modificaAppuntamento(appuntamento.id!)">
+              <button class="appointment-btn" (click)="modificaLezione(appuntamento.id!)">
                 <i class="fas fa-edit"></i>
                 Modifica
               </button>

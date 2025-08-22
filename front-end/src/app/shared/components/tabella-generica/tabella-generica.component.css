@@ -281,13 +281,13 @@ th .fa {
   background: linear-gradient(180deg, #64748b 0%, #475569 100%); /* Ancora più scuro quando premuto */
 }
 
-/* 🔥 Corner dove si incontrano scrollbar verticale e orizzontale */
+/* Corner dove si incontrano scrollbar verticale e orizzontale */
 .table-scroll-container::-webkit-scrollbar-corner {
   background: #f8fafc;
   border: 1px solid #e2e8f0;
 }
 
-/* 🔥 Scrollbar orizzontale (se necessario) */
+/* Scrollbar orizzontale (se necessario) */
 .table-scroll-container::-webkit-scrollbar:horizontal {
   height: 12px;
 }
