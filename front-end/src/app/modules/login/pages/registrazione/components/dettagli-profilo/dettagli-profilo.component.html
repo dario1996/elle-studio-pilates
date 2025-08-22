@@ -83,12 +83,15 @@
         />
         <div
           class="invalid-feedback"
-          *ngIf="
-            profiloForm.get('codiceFiscale')?.invalid &&
-            profiloForm.get('codiceFiscale')?.touched
-          "
+          *ngIf="profiloForm.get('codiceFiscale')?.invalid && profiloForm.get('codiceFiscale')?.touched"
         >
-          Il codice fiscale è obbligatorio.
+          <ng-container *ngIf="profiloForm.get('codiceFiscale')?.errors as errors">
+            <div *ngIf="errors['required']">Il codice fiscale è obbligatorio.</div>
+            <div *ngIf="errors['length']">Il codice fiscale deve essere di 16 caratteri.</div>
+            <div *ngIf="errors['format']">Il codice fiscale può contenere solo lettere maiuscole e numeri.</div>
+            <div *ngIf="errors['structure']">Il formato del codice fiscale non è valido.</div>
+            <div *ngIf="errors['checkdigit']">Il codice fiscale non è valido (carattere di controllo errato).</div>
+          </ng-container>
         </div>
       </div>
       <div class="mb-4">

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { codiceFiscaleValidator } from './codice-fiscale.validator';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -20,7 +21,7 @@ export class DettagliProfiloComponent implements OnInit {
     this.profiloForm = this.fb.group({
       nome: ['', Validators.required],
       cognome: ['', Validators.required],
-      codiceFiscale: ['', Validators.required]
+      codiceFiscale: ['', [Validators.required, codiceFiscaleValidator()]]
     });
   }
 
