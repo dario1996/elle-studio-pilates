@@ -109,13 +109,14 @@
 
 /* Font weight per le intestazioni dei giorni */
 ::ng-deep .fc-col-header-cell-cushion {
-  font-weight: 600;
+  font-weight: 500;
   font-family: 'Montserrat', sans-serif;
   color: #3e3e3e;
+  text-decoration: none !important;
 }
 
 ::ng-deep .fc-button:hover {
-  background: #f5f5f5 !important;
+  /* background: #f5f5f5 !important; */
   color: #c99e67 !important;
 }
 
@@ -125,7 +126,7 @@
   color: #222 !important;
 }
 ::ng-deep .fc-button-primary:hover {
-  background: #f5f5f5 !important;
+  /* background: #f5f5f5 !important; */
   color: #c99e67 !important;
 }
 ::ng-deep .fc-button-active,
@@ -135,8 +136,9 @@
   border: none !important;
   border-radius: 6px !important;
   box-shadow: none !important;
-  text-decoration: underline 2px #c99e67;
+  /* text-decoration: underline 2px #c99e67; */
   text-underline-offset: 3px;
+  font-weight: 550;
 }
 
 /* Assicura che i bottoni abbiano una dimensione minima */
@@ -189,11 +191,17 @@
 
 ::ng-deep .fc-event:hover {
   opacity: 0.8;
-  transform: translateY(-1px);
+  /* transform: translateY(-1px); */
 }
 
 ::ng-deep .fc-event-title {
   font-weight: 600;
+  font-size: 10px !important;
+}
+
+::ng-deep .fc-event-time {
+  font-weight: 600;
+  font-size: 10px !important;
 }
 
 /* Stili per le diverse tipologie di lezione */
