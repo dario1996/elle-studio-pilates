@@ -19,9 +19,9 @@
             <i class="fas fa-plus"></i>
             <span>Aggiungi utente</span>
           </button>
-          <button class="quick-action-btn" (click)="aggiungiAppuntamento()">
+          <button class="quick-action-btn" (click)="aggiungiLezione()">
             <i class="fas fa-plus"></i>
-            <span>Aggiungi appuntamento</span>
+            <span>Aggiungi lezione</span>
           </button>
         </div>
       </div>
@@ -161,7 +161,7 @@
                   {{ appuntamento.titolo }}
                 </div>
               </div>
-              <button class="appointment-btn" (click)="modificaAppuntamento(appuntamento.id!)">
+              <button class="appointment-btn" (click)="modificaLezione(appuntamento.id!)">
                 <i class="fas fa-edit"></i>
                 Modifica
               </button>

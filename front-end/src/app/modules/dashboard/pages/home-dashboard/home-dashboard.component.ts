@@ -52,11 +52,11 @@ export class HomeDashboardComponent implements OnInit {
     });
   }
 
-  aggiungiAppuntamento(): void {
+  aggiungiLezione(): void {
     this.router.navigate(['/gestionale-elle-studio/agenda'], { queryParams: { openForm: 'true' } });
   }
 
-  modificaAppuntamento(id: number): void {
+  modificaLezione(id: number): void {
     this.router.navigate(['/gestionale-elle-studio/agenda'], { 
       queryParams: { 
         edit: id.toString()

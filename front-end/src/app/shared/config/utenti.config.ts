@@ -43,12 +43,12 @@ export const UTENTI_COLUMNS: IColumnDef[] = [
 ];
 
 export const UTENTI_AZIONI: IAzioneDef[] = [
-  {
-    label: 'Dettagli',
-    icon: 'fa fa-eye',
-    action: AzioneType.View,
-    color: AzioneColor.Primary,
-  },
+  // {
+  //   label: 'Dettagli',
+  //   icon: 'fa fa-eye',
+  //   action: AzioneType.View,
+  //   color: AzioneColor.Primary,
+  // },
   {
     label: 'Modifica',
     icon: 'fa fa-pen',

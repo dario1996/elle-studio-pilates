@@ -1,16 +1,37 @@
 .calendar-container {
   background: white;
-  border-radius: 12px;
-  padding: 24px;
+  border-radius: 6px;
+  padding: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  border: 1px solid #c99e67; /* Colore bordo sidebar */
-  border-top: 4px solid #c99e67; /* Bordo superiore più spesso */
+  border: 1px solid #c99e67;
+  border-top: 4px solid #c99e67;
   transition: all 0.3s ease;
   position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-BORDO) #f8f8f8;
 }
 
-.calendar-container:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+.fc-view-harness {
+    background: white;
+  border-radius: 6px;
+  padding: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #c99e67;
+  border-top: 4px solid #c99e67;
+  transition: all 0.3s ease;
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-BORDO) #f8f8f8;
 }
 
 /* Personalizzazioni aggiuntive per FullCalendar */
@@ -55,9 +76,9 @@
 }
 
 ::ng-deep .fc-toolbar-title {
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 15px;
   color: #374151;
+  font-size: 20px !important;
 }
 
 ::ng-deep .fc-button {
@@ -86,6 +107,7 @@
 ::ng-deep .fc-col-header-cell-cushion {
   font-weight: 600;
   font-family: 'Montserrat', sans-serif;
+  color: #3e3e3e;
 }
 
 ::ng-deep .fc-button:hover {
@@ -218,6 +240,64 @@
   background-color: #eff6ff !important;
 }
 
+/* Rende scrollabile solo la parte interna dell'agenda (vista calendario), bloccando la toolbar/header */
+::ng-deep .fc-header-toolbar,
+::ng-deep .fc-toolbar,
+::ng-deep .fc-toolbar-ltr {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: white;
+}
+
+::ng-deep .fc-view-harness,
+::ng-deep .fc-view-harness-passive {
+  overflow-y: auto !important;
+  max-height: calc(100vh - 220px); /* regola questo valore se serve più/meno spazio sopra */
+  min-height: 300px;
+}
+
+/* ================== SCROLLBAR =================== */
+/* Hide scrollbar for Chrome, Safari and Opera */
+.table-scroll-container::-webkit-scrollbar {
+  display: none;
+  width: 12px; /* Larghezza scrollbar verticale */
+  height: 12px; /* Altezza scrollbar orizzontale */
+}
+
+.table-scroll-container::-webkit-scrollbar-track {
+  background: #f8fafc; /* Colore track (sfondo) */
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.table-scroll-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #cbd5e1 0%, #94a3b8 100%); /* Gradiente thumb */
+  border-radius: 8px;
+  border: 2px solid #f8fafc; /* Bordo per creare spazio */
+  min-height: 30px; /* Altezza minima del thumb */
+}
+
+.table-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #94a3b8 0%, #64748b 100%); /* Più scuro su hover */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table-scroll-container::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(180deg, #64748b 0%, #475569 100%); /* Ancora più scuro quando premuto */
+}
+
+/* Corner dove si incontrano scrollbar verticale e orizzontale */
+.table-scroll-container::-webkit-scrollbar-corner {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+/* Scrollbar orizzontale (se necessario) */
+.table-scroll-container::-webkit-scrollbar:horizontal {
+  height: 12px;
+}
+
 /* Mobile responsiveness */
 @media (max-width: 768px) {
   .page-content {
@@ -251,10 +331,10 @@
   }
   
   ::ng-deep .fc-toolbar-title {
-    font-size: 1.25rem;
+    font-size: 12px;
   }
   
   ::ng-deep .fc-event {
-    font-size: 0.75rem;
+    font-size: 12px;
   }
 }
