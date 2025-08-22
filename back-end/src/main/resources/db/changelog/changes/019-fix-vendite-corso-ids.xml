@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="019-fix-vendite-corso-ids" author="system">
+        <comment>Corregge i corso_id delle vendite per usare gli ID reali dei corsi (30-44)</comment>
+        
+        <!-- Prima pulisco tutti i dati delle vendite -->
+        <sql>DELETE FROM vendite;</sql>
+        
+        <!-- Poi inserisco i dati corretti -->
+        <sql>
+            INSERT INTO vendite (utente_id, corso_id, importo, stato, data_acquisto, data_pagamento, note) VALUES
+            ('d.biffero', 30, 25.00, 'PAID', '2025-01-03 10:30:00', '2025-01-04 14:20:00', 'Prima lezione di prova - Pagamento confermato'),
+            ('d.biffero', 32, 160.00, 'PAID', '2025-01-05 16:45:00', '2025-01-06 09:15:00', 'Pacchetto 4 lezioni semi privata'),
+            ('d.biffero', 35, 600.00, 'PAID', '2025-01-10 11:20:00', '2025-01-11 08:30:00', 'Pacchetto 10 lezioni private'),
+            ('d.biffero', 37, 80.00, 'PAID', '2025-01-15 14:30:00', '2025-01-16 09:20:00', 'Lezioni Yoga'),
+            ('d.biffero', 40, 300.00, 'PAID', '2025-01-20 11:45:00', '2025-01-21 10:15:00', 'Pacchetto mensile'),
+            ('d.biffero', 32, 160.00, 'PAID', '2025-02-03 09:30:00', '2025-02-04 11:45:00', 'Rinnovo pacchetto'),
+            ('d.biffero', 35, 600.00, 'PAID', '2025-02-10 15:20:00', '2025-02-11 08:40:00', 'Secondo pacchetto privato'),
+            ('d.biffero', 30, 25.00, 'PAID', '2025-02-15 16:30:00', '2025-02-16 09:20:00', 'Lezione singola'),
+            ('d.biffero', 42, 220.00, 'PAID', '2025-02-20 13:45:00', '2025-02-21 10:30:00', 'Combo mensile'),
+            ('d.biffero', 38, 400.00, 'PAID', '2025-02-25 11:15:00', '2025-02-26 14:20:00', 'Pacchetto premium'),
+            ('d.biffero', 30, 25.00, 'PAID', '2025-03-05 10:45:00', '2025-03-06 11:30:00', 'Lezione di prova marzo'),
+            ('d.biffero', 33, 70.00, 'PAID', '2025-03-10 14:20:00', '2025-03-11 09:45:00', 'Lezioni gruppo'),
+            ('d.biffero', 36, 1100.00, 'PAID', '2025-03-15 16:45:00', '2025-03-16 10:20:00', 'Pacchetto annuale'),
+            ('d.biffero', 41, 150.00, 'PAID', '2025-03-20 13:30:00', '2025-03-21 11:15:00', 'Combo speciale'),
+            ('d.biffero', 44, 320.00, 'PAID', '2025-03-25 15:10:00', '2025-03-26 09:40:00', 'Pacchetto yoga avanzato'),
+            ('d.biffero', 31, 40.00, 'PENDING', '2025-08-15 14:30:00', NULL, 'Ultima vendita in attesa'),
+            ('d.biffero', 33, 70.00, 'CANCELLED', '2025-07-24 14:30:00', NULL, 'Annullato per impegni'),
+            ('d.biffero', 39, 150.00, 'CANCELLED', '2025-07-08 13:30:00', NULL, 'Cancellato per feste');
+        </sql>
+        
+        <rollback>
+            <sql>DELETE FROM vendite;</sql>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

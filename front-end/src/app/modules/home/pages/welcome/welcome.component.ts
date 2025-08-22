@@ -135,7 +135,7 @@ export class WelcomeComponent implements OnInit {
         links: [
           {
             label: 'Statistiche',
-            url: 'impostazioni',
+            url: 'statistiche',
             icon: 'fa-solid fa-chart-simple fa-lg',
           },
         ],

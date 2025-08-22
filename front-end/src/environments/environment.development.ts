@@ -8,5 +8,6 @@ export const environment = {
   port: '8080',
   //Auth Server JWT EndPoint
   authServerUri: 'http://localhost:8080/auth',
+  apiUrl: 'http://localhost:8080/api',
   imageUrl: 'http://www.loyapp.cloud',
 };

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="019-update-vendite-data-with-username" author="system">
+        <comment>Aggiorna i dati delle vendite esistenti sostituendo utente_id=1 con d.biffero</comment>
+
+        <!-- Aggiorna tutti i record esistenti con utente_id=1 a d.biffero -->
+        <update tableName="vendite">
+            <column name="utente_id" value="d.biffero"/>
+            <where>utente_id = '1'</where>
+        </update>
+
+    </changeSet>
+
+</databaseChangeLog>

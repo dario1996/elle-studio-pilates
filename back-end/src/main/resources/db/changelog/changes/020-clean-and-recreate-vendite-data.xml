@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
+
+    <changeSet id="020-clean-and-recreate-vendite-data" author="system">
+        <comment>Modifica la struttura della tabella vendite e ricrea i dati</comment>
+        
+        <!-- Cancella tutti i dati esistenti -->
+        <delete tableName="vendite"/>
+        
+        <!-- Rimuoviamo eventuali constraint e indici esistenti in modo sicuro -->
+        <sql>
+            SET @constraint_exists = (SELECT COUNT(*) FROM information_schema.KEY_COLUMN_USAGE 
+                                    WHERE TABLE_SCHEMA = 'elle-studio' 
+                                    AND TABLE_NAME = 'vendite' 
+                                    AND CONSTRAINT_NAME LIKE '%fk%' 
+                                    AND COLUMN_NAME = 'utente_id');
+            
+            SET @sql = IF(@constraint_exists > 0, 
+                         'ALTER TABLE `elle-studio`.vendite DROP FOREIGN KEY fk_vendite_utente', 
+                         'SELECT 1');
+            
+            PREPARE stmt FROM @sql;
+            EXECUTE stmt;
+            DEALLOCATE PREPARE stmt;
+        </sql>
+
+        <!-- Rimuoviamo eventuali indici esistenti -->
+        <sql>
+            SET @index_exists = (SELECT COUNT(*) FROM information_schema.STATISTICS 
+                               WHERE TABLE_SCHEMA = 'elle-studio' 
+                               AND TABLE_NAME = 'vendite' 
+                               AND INDEX_NAME = 'idx_vendite_utente');
+            
+            SET @sql = IF(@index_exists > 0, 
+                         'DROP INDEX idx_vendite_utente ON `elle-studio`.vendite', 
+                         'SELECT 1');
+            
+            PREPARE stmt FROM @sql;
+            EXECUTE stmt;
+            DEALLOCATE PREPARE stmt;
+        </sql>
+        
+        <!-- Modifichiamo il tipo di colonna -->
+        <modifyDataType tableName="vendite" columnName="utente_id" newDataType="VARCHAR(255)"/>
+        
+        <!-- Aggiungiamo la nuova foreign key -->
+        <addForeignKeyConstraint 
+            constraintName="fk_vendite_utente_username"
+            baseTableName="vendite" 
+            baseColumnNames="utente_id"
+            referencedTableName="utenti" 
+            referencedColumnNames="username"
+            onDelete="CASCADE"/>
+        
+        <!-- Aggiungiamo il nuovo indice -->
+        <createIndex indexName="idx_vendite_utente_username" tableName="vendite">
+            <column name="utente_id"/>
+        </createIndex>
+        
+        <!-- Inserisce i nuovi dati con username corretto -->
+        <insert tableName="vendite">
+            <column name="utente_id" value="d.biffero"/>
+            <column name="corso_id" value="1"/>
+            <column name="importo" value="25.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-09-15 10:30:00"/>
+            <column name="data_pagamento" value="2024-09-16 11:15:00"/>
+            <column name="note" value="Prima lezione individuale"/>
+        </insert>
+        
+        <insert tableName="vendite">
+            <column name="utente_id" value="d.biffero"/>
+            <column name="corso_id" value="2"/>
+            <column name="importo" value="70.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-09-08 10:00:00"/>
+            <column name="data_pagamento" value="2024-09-09 09:30:00"/>
+            <column name="note" value="Pilates Base"/>
+        </insert>
+        
+        <insert tableName="vendite">
+            <column name="utente_id" value="d.biffero"/>
+            <column name="corso_id" value="3"/>
+            <column name="importo" value="160.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-11-03 09:30:00"/>
+            <column name="data_pagamento" value="2024-11-04 11:45:00"/>
+            <column name="note" value="Pilates Intermedio"/>
+        </insert>
+        
+        <insert tableName="vendite">
+            <column name="utente_id" value="d.biffero"/>
+            <column name="corso_id" value="4"/>
+            <column name="importo" value="300.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-11-07 11:20:00"/>
+            <column name="data_pagamento" value="2024-11-08 09:30:00"/>
+            <column name="note" value="Corso di Gruppo"/>
+        </insert>
+        
+        <insert tableName="vendite">
+            <column name="utente_id" value="d.biffero"/>
+            <column name="corso_id" value="5"/>
+            <column name="importo" value="1100.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-12-12 16:45:00"/>
+            <column name="data_pagamento" value="2024-12-13 09:30:00"/>
+            <column name="note" value="Pacchetto Annuale Premium"/>
+        </insert>
+        
+        <insert tableName="vendite">
+            <column name="utente_id" value="d.biffero"/>
+            <column name="corso_id" value="6"/>
+            <column name="importo" value="600.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-08-01 09:20:00"/>
+            <column name="data_pagamento" value="2025-08-02 10:45:00"/>
+            <column name="note" value="Abbonamento Semestrale"/>
+        </insert>
+        
+        <insert tableName="vendite">
+            <column name="utente_id" value="d.biffero"/>
+            <column name="corso_id" value="7"/>
+            <column name="importo" value="40.00"/>
+            <column name="stato" value="PENDING"/>
+            <column name="data_acquisto" value="2024-12-30 15:20:00"/>
+            <column name="note" value="Fine anno - in attesa"/>
+        </insert>
+        
+        <insert tableName="vendite">
+            <column name="utente_id" value="d.biffero"/>
+            <column name="corso_id" value="8"/>
+            <column name="importo" value="80.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-10-20 12:45:00"/>
+            <column name="data_pagamento" value="2024-10-21 10:15:00"/>
+            <column name="note" value="Pilates Mat"/>
+        </insert>
+        
+        <insert tableName="vendite">
+            <column name="utente_id" value="d.biffero"/>
+            <column name="corso_id" value="9"/>
+            <column name="importo" value="150.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-10-17 13:45:00"/>
+            <column name="data_pagamento" value="2024-10-18 10:20:00"/>
+            <column name="note" value="Reformer Principianti"/>
+        </insert>
+        
+        <insert tableName="vendite">
+            <column name="utente_id" value="d.biffero"/>
+            <column name="corso_id" value="10"/>
+            <column name="importo" value="360.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-11-14 15:15:00"/>
+            <column name="data_pagamento" value="2024-11-15 08:45:00"/>
+            <column name="note" value="Programma Wellness"/>
+        </insert>
+        
+        <insert tableName="vendite">
+            <column name="utente_id" value="d.biffero"/>
+            <column name="corso_id" value="11"/>
+            <column name="importo" value="320.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-09-22 14:15:00"/>
+            <column name="data_pagamento" value="2024-09-23 11:20:00"/>
+            <column name="note" value="Torre Training"/>
+        </insert>
+        
+        <insert tableName="vendite">
+            <column name="utente_id" value="d.biffero"/>
+            <column name="corso_id" value="12"/>
+            <column name="importo" value="220.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-11-21 10:45:00"/>
+            <column name="data_pagamento" value="2024-11-22 11:30:00"/>
+            <column name="note" value="Cadillac Avanzato"/>
+        </insert>
+        
+        <insert tableName="vendite">
+            <column name="utente_id" value="d.biffero"/>
+            <column name="corso_id" value="13"/>
+            <column name="importo" value="400.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-12-19 11:15:00"/>
+            <column name="data_pagamento" value="2024-12-20 08:45:00"/>
+            <column name="note" value="Chair Specialized"/>
+        </insert>
+        
+        <insert tableName="vendite">
+            <column name="utente_id" value="d.biffero"/>
+            <column name="corso_id" value="14"/>
+            <column name="importo" value="25.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-10-06 16:30:00"/>
+            <column name="data_pagamento" value="2024-10-07 08:45:00"/>
+            <column name="note" value="Sessione Prova"/>
+        </insert>
+        
+        <insert tableName="vendite">
+            <column name="utente_id" value="d.biffero"/>
+            <column name="corso_id" value="15"/>
+            <column name="importo" value="70.00"/>
+            <column name="stato" value="CANCELLED"/>
+            <column name="data_acquisto" value="2024-10-24 14:30:00"/>
+            <column name="note" value="Annullato per impegni"/>
+        </insert>
+        
+        <insert tableName="vendite">
+            <column name="utente_id" value="d.biffero"/>
+            <column name="corso_id" value="15"/>
+            <column name="importo" value="70.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-11-17 15:20:00"/>
+            <column name="data_pagamento" value="2024-11-18 09:40:00"/>
+            <column name="note" value="Barrel Dynamics"/>
+        </insert>
+        
+        <insert tableName="vendite">
+            <column name="utente_id" value="d.biffero"/>
+            <column name="corso_id" value="16"/>
+            <column name="importo" value="150.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-11-28 13:20:00"/>
+            <column name="data_pagamento" value="2024-11-29 09:15:00"/>
+            <column name="note" value="Springboard Focus"/>
+        </insert>
+        
+        <insert tableName="vendite">
+            <column name="utente_id" value="d.biffero"/>
+            <column name="corso_id" value="9"/>
+            <column name="importo" value="150.00"/>
+            <column name="stato" value="CANCELLED"/>
+            <column name="data_acquisto" value="2024-12-08 13:30:00"/>
+            <column name="note" value="Cancellato per feste"/>
+        </insert>
+        
+        <insert tableName="vendite">
+            <column name="utente_id" value="d.biffero"/>
+            <column name="corso_id" value="16"/>
+            <column name="importo" value="150.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-12-22 10:15:00"/>
+            <column name="data_pagamento" value="2024-12-23 11:30:00"/>
+            <column name="note" value="Lezione Natalizia"/>
+        </insert>
+        
+        <insert tableName="vendite">
+            <column name="utente_id" value="d.biffero"/>
+            <column name="corso_id" value="1"/>
+            <column name="importo" value="25.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-12-05 14:30:00"/>
+            <column name="data_pagamento" value="2024-12-06 10:20:00"/>
+            <column name="note" value="Lezione di Recovery"/>
+        </insert>
+        
+        <insert tableName="vendite">
+            <column name="utente_id" value="d.biffero"/>
+            <column name="corso_id" value="4"/>
+            <column name="importo" value="300.00"/>
+            <column name="stato" value="PENDING"/>
+            <column name="data_acquisto" value="2025-08-15 14:30:00"/>
+            <column name="note" value="Ultima vendita in attesa"/>
+        </insert>
+        
+    </changeSet>
+</databaseChangeLog>

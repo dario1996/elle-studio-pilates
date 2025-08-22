@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="016-create-vendite-table" author="system">
+        <comment>Crea tabella vendite per gestire acquisti corsi</comment>
+
+        <createTable tableName="vendite">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="utente_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="corso_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="importo" type="DECIMAL(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="stato" type="VARCHAR(20)" defaultValue="PENDING">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data_acquisto" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data_pagamento" type="TIMESTAMP">
+                <constraints nullable="true"/>
+            </column>
+            <column name="note" type="TEXT">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+
+        <!-- Aggiungi foreign keys -->
+        <addForeignKeyConstraint 
+            baseTableName="vendite" 
+            baseColumnNames="utente_id"
+            constraintName="fk_vendite_utente"
+            referencedTableName="utenti"
+            referencedColumnNames="id"
+            onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint 
+            baseTableName="vendite" 
+            baseColumnNames="corso_id"
+            constraintName="fk_vendite_corso"
+            referencedTableName="corsi"
+            referencedColumnNames="id"
+            onDelete="CASCADE"/>
+
+        <!-- Aggiungi indici per performance -->
+        <createIndex tableName="vendite" indexName="idx_vendite_utente">
+            <column name="utente_id"/>
+        </createIndex>
+
+        <createIndex tableName="vendite" indexName="idx_vendite_corso">
+            <column name="corso_id"/>
+        </createIndex>
+
+        <createIndex tableName="vendite" indexName="idx_vendite_stato">
+            <column name="stato"/>
+        </createIndex>
+
+        <createIndex tableName="vendite" indexName="idx_vendite_data_acquisto">
+            <column name="data_acquisto"/>
+        </createIndex>
+
+        <createIndex tableName="vendite" indexName="idx_vendite_data_pagamento">
+            <column name="data_pagamento"/>
+        </createIndex>
+
+    </changeSet>
+
+</databaseChangeLog>

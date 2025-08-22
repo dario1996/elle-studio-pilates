@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="018-fix-vendite-utente-reference" author="system">
+        <comment>Corregge la foreign key della tabella vendite per riferirsi al username invece che all'id</comment>
+
+        <!-- Prima verifichiamo e rimuoviamo eventuali foreign key esistenti -->
+        <sql>
+            SET @constraint_exists = (SELECT COUNT(*) FROM information_schema.KEY_COLUMN_USAGE 
+                                    WHERE TABLE_SCHEMA = 'elle-studio' 
+                                    AND TABLE_NAME = 'vendite' 
+                                    AND CONSTRAINT_NAME LIKE '%fk%' 
+                                    AND COLUMN_NAME = 'utente_id');
+            
+            SET @sql = IF(@constraint_exists > 0, 
+                         'ALTER TABLE `elle-studio`.vendite DROP FOREIGN KEY fk_vendite_utente', 
+                         'SELECT 1');
+            
+            PREPARE stmt FROM @sql;
+            EXECUTE stmt;
+            DEALLOCATE PREPARE stmt;
+        </sql>
+
+        <!-- Rimuoviamo eventuali indici esistenti -->
+        <sql>
+            SET @index_exists = (SELECT COUNT(*) FROM information_schema.STATISTICS 
+                               WHERE TABLE_SCHEMA = 'elle-studio' 
+                               AND TABLE_NAME = 'vendite' 
+                               AND INDEX_NAME = 'idx_vendite_utente');
+            
+            SET @sql = IF(@index_exists > 0, 
+                         'DROP INDEX idx_vendite_utente ON `elle-studio`.vendite', 
+                         'SELECT 1');
+            
+            PREPARE stmt FROM @sql;
+            EXECUTE stmt;
+            DEALLOCATE PREPARE stmt;
+        </sql>
+
+        <!-- Modifica la colonna utente_id da BIGINT a VARCHAR per contenere username -->
+        <modifyDataType tableName="vendite" columnName="utente_id" newDataType="VARCHAR(255)"/>
+
+        <!-- Aggiungi la nuova foreign key che fa riferimento al username -->
+        <addForeignKeyConstraint 
+            baseTableName="vendite" 
+            baseColumnNames="utente_id"
+            constraintName="fk_vendite_utente_username"
+            referencedTableName="utenti"
+            referencedColumnNames="username"
+            onDelete="CASCADE"/>
+
+        <!-- Ricrea l'indice -->
+        <createIndex tableName="vendite" indexName="idx_vendite_utente_username">
+            <column name="utente_id"/>
+        </createIndex>
+
+    </changeSet>
+
+</databaseChangeLog>

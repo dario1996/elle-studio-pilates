@@ -19,4 +19,7 @@
     <include file="db/changelog/changes/014-migrate-corsi-to-pilates.xml"/>
     <include file="db/changelog/changes/013-insert-elle-studio-corsi.xml"/>
     <include file="db/changelog/changes/015-replace-corsi-official-list.xml"/>
+    <include file="db/changelog/changes/016-create-vendite-table.xml"/>
+    <include file="db/changelog/changes/019-fix-vendite-corso-ids.xml"/>
+    <include file="db/changelog/changes/020-clean-and-recreate-vendite-data.xml"/>
 </databaseChangeLog> 

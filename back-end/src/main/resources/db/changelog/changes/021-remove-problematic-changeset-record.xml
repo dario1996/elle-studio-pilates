@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
+
+    <changeSet id="021-remove-problematic-changeset-record" author="system" runOnChange="true">
+        <comment>Rimuove il record del changeset problematico dalla cronologia di Liquibase</comment>
+        <sql>
+            DELETE FROM DATABASECHANGELOG 
+            WHERE ID = '017-insert-vendite-test-data' 
+            AND FILENAME = 'db/changelog/changes/017-insert-vendite-test-data.xml';
+        </sql>
+    </changeSet>
+</databaseChangeLog>
