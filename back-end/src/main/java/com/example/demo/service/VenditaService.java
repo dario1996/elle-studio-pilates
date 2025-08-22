@@ -354,8 +354,20 @@ public class VenditaService {
         } else if ("ultimi_3_mesi".equals(periodo)) {
             // Per ultimi 3 mesi, mostra dati mensili aggregati
             return calcolaAndamentoMensile(inizioPeriodo, finePeriodo);
+        } else if ("personalizzato".equals(periodo)) {
+            // Per personalizzato, determina in base alla durata
+            long giorni = java.time.Duration.between(inizioPeriodo, finePeriodo).toDays();
+            if (giorni <= 31) {
+                // Se il range è <= 31 giorni, usa dati giornalieri
+                System.out.println("Periodo personalizzato: " + giorni + " giorni - usando dati giornalieri");
+                return calcolaAndamentoGiornaliero(inizioPeriodo, finePeriodo);
+            } else {
+                // Altrimenti usa dati mensili
+                System.out.println("Periodo personalizzato: " + giorni + " giorni - usando dati mensili");
+                return calcolaAndamentoMensile(inizioPeriodo, finePeriodo);
+            }
         } else {
-            // Per anno/personalizzato, mostra dati mensili
+            // Per anno, mostra dati mensili
             return calcolaAndamentoMensile(inizioPeriodo, finePeriodo);
         }
     }
@@ -383,14 +395,8 @@ public class VenditaService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
             
             Map<String, Object> datiGiorno = new HashMap<>();
-            // Se è una settimana, mostra anche il giorno della settimana
-            long giorni = java.time.Duration.between(inizio, fine).toDays();
-            if (giorni <= 7) {
-                String giornoSettimana = getGiornoSettimanaItaliano(dataCorrente.getDayOfWeek().getValue());
-                datiGiorno.put("mese", giornoSettimana + " " + dataCorrente.getDayOfMonth());
-            } else {
-                datiGiorno.put("mese", dataCorrente.getDayOfMonth() + " " + getMeseNomeItaliano(dataCorrente.getMonthValue()));
-            }
+            // Usa sempre il formato ISO per le date, così il frontend può formattarle come vuole
+            datiGiorno.put("mese", dataCorrente.toLocalDate().toString()); // Formato YYYY-MM-DD
             datiGiorno.put("vendite", numeroVendite);
             datiGiorno.put("fatturato", fatturato);
             andamento.add(datiGiorno);

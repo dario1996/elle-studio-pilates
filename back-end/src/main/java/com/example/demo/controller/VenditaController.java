@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -175,11 +174,17 @@ public class VenditaController {
      */
     @GetMapping("/range")
     public ResponseEntity<List<Vendita>> getVenditeInRange(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataInizio,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataFine) {
-        
-        List<Vendita> vendite = venditaService.trovaVenditeInRange(dataInizio, dataFine);
-        return ResponseEntity.ok(vendite);
+            @RequestParam String dataInizio,
+            @RequestParam String dataFine) {
+        try {
+            LocalDateTime dataInizioConverted = LocalDateTime.parse(dataInizio + "T00:00:00");
+            LocalDateTime dataFineConverted = LocalDateTime.parse(dataFine + "T23:59:59");
+            
+            List<Vendita> vendite = venditaService.trovaVenditeInRange(dataInizioConverted, dataFineConverted);
+            return ResponseEntity.ok(vendite);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     /**
@@ -199,10 +204,22 @@ public class VenditaController {
     @GetMapping("/statistiche")
     public ResponseEntity<Map<String, Object>> getStatisticheComplete(
             @RequestParam(defaultValue = "ultimo_anno") String periodo,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataInizio,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataFine) {
+            @RequestParam(required = false) String dataInizio,
+            @RequestParam(required = false) String dataFine) {
         try {
-            Map<String, Object> stats = venditaService.getStatisticheComplete(periodo, dataInizio, dataFine);
+            LocalDateTime dataInizioConverted = null;
+            LocalDateTime dataFineConverted = null;
+            
+            // Converti le date dal formato string (YYYY-MM-DD) a LocalDateTime
+            if (dataInizio != null && !dataInizio.trim().isEmpty()) {
+                dataInizioConverted = LocalDateTime.parse(dataInizio + "T00:00:00");
+            }
+            
+            if (dataFine != null && !dataFine.trim().isEmpty()) {
+                dataFineConverted = LocalDateTime.parse(dataFine + "T23:59:59");
+            }
+            
+            Map<String, Object> stats = venditaService.getStatisticheComplete(periodo, dataInizioConverted, dataFineConverted);
             System.out.println("Stats generated successfully: " + (stats != null ? stats.size() + " keys" : "null"));
             return ResponseEntity.ok(stats);
         } catch (Exception e) {
@@ -244,11 +261,17 @@ public class VenditaController {
      */
     @GetMapping("/statistiche/per-mese")
     public ResponseEntity<List<Map<String, Object>>> getStatistichePerMese(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataInizio,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataFine) {
-        
-        List<Map<String, Object>> stats = venditaService.getStatistichePerMese(dataInizio, dataFine);
-        return ResponseEntity.ok(stats);
+            @RequestParam String dataInizio,
+            @RequestParam String dataFine) {
+        try {
+            LocalDateTime dataInizioConverted = LocalDateTime.parse(dataInizio + "T00:00:00");
+            LocalDateTime dataFineConverted = LocalDateTime.parse(dataFine + "T23:59:59");
+            
+            List<Map<String, Object>> stats = venditaService.getStatistichePerMese(dataInizioConverted, dataFineConverted);
+            return ResponseEntity.ok(stats);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     /**
@@ -256,11 +279,17 @@ public class VenditaController {
      */
     @GetMapping("/statistiche/per-corso")
     public ResponseEntity<List<Map<String, Object>>> getStatistichePerCorso(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataInizio,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataFine) {
-        
-        List<Map<String, Object>> stats = venditaService.getStatistichePerCorso(dataInizio, dataFine);
-        return ResponseEntity.ok(stats);
+            @RequestParam String dataInizio,
+            @RequestParam String dataFine) {
+        try {
+            LocalDateTime dataInizioConverted = LocalDateTime.parse(dataInizio + "T00:00:00");
+            LocalDateTime dataFineConverted = LocalDateTime.parse(dataFine + "T23:59:59");
+            
+            List<Map<String, Object>> stats = venditaService.getStatistichePerCorso(dataInizioConverted, dataFineConverted);
+            return ResponseEntity.ok(stats);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     /**
@@ -268,11 +297,17 @@ public class VenditaController {
      */
     @GetMapping("/statistiche/periodo")
     public ResponseEntity<Map<String, Object>> getStatistichePeriodo(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataInizio,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataFine) {
-        
-        Map<String, Object> stats = venditaService.getStatistichePeriodo(dataInizio, dataFine);
-        return ResponseEntity.ok(stats);
+            @RequestParam String dataInizio,
+            @RequestParam String dataFine) {
+        try {
+            LocalDateTime dataInizioConverted = LocalDateTime.parse(dataInizio + "T00:00:00");
+            LocalDateTime dataFineConverted = LocalDateTime.parse(dataFine + "T23:59:59");
+            
+            Map<String, Object> stats = venditaService.getStatistichePeriodo(dataInizioConverted, dataFineConverted);
+            return ResponseEntity.ok(stats);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     /**

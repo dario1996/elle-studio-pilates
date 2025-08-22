@@ -93,16 +93,24 @@ export class StatisticheComponent implements OnInit, OnDestroy, AfterViewInit {
     this.errorMessage = null;
     
     // Prepara i filtri
-    const filtri = {
-      periodo: this.filtri.periodo,
-      dataInizio: this.filtri.dataInizio,
-      dataFine: this.filtri.dataFine
+    const filtri: any = {
+      periodo: this.filtri.periodo
     };
+    
+    // Aggiungi le date solo se è selezionato il filtro personalizzato
+    if (this.filtri.periodo === 'personalizzato') {
+      filtri.dataInizio = this.filtri.dataInizio;
+      filtri.dataFine = this.filtri.dataFine;
+    }
+    
+    console.log('Filtri inviati:', filtri);
     
     this.venditeService.getStatistiche(filtri)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data) => {
+          console.log('Dati statistiche ricevuti:', data);
+          console.log('andamentoMensile:', data.andamentoMensile);
           this.statistiche = data;
           this.isLoading = false;
           setTimeout(() => this.creaGrafici(), 100);
@@ -127,6 +135,20 @@ export class StatisticheComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   applicaFiltri(): void {
+    // Validazione per filtro personalizzato
+    if (this.filtri.periodo === 'personalizzato') {
+      if (!this.filtri.dataInizio || !this.filtri.dataFine) {
+        this.errorMessage = 'Per il filtro personalizzato sono obbligatorie la data di inizio e la data di fine';
+        return;
+      }
+      
+      if (new Date(this.filtri.dataInizio) > new Date(this.filtri.dataFine)) {
+        this.errorMessage = 'La data di inizio non può essere successiva alla data di fine';
+        return;
+      }
+    }
+    
+    this.errorMessage = null;
     this.caricaStatistiche();
   }
 
@@ -154,8 +176,10 @@ export class StatisticheComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.distruggiGrafico(this.andamentoGuadagniChart);
 
-    const labels = this.statistiche.andamentoMensile.map(item => item.mese);
+    const labels = this.statistiche.andamentoMensile.map(item => this.formattaLabelGrafico(item.mese));
     const fatturatoData = this.statistiche.andamentoMensile.map(item => item.fatturato);
+    
+    console.log('Creazione grafico fatturato - Labels formattate:', labels);
 
     const config: ChartConfiguration = {
       type: 'line',
@@ -163,7 +187,7 @@ export class StatisticheComponent implements OnInit, OnDestroy, AfterViewInit {
         labels: labels,
         datasets: [
           {
-            label: 'Fatturato (€)',
+            label: this.getLabelDataset('fatturato'),
             data: fatturatoData,
             borderColor: '#28a745',
             backgroundColor: 'rgba(40, 167, 69, 0.1)',
@@ -200,7 +224,7 @@ export class StatisticheComponent implements OnInit, OnDestroy, AfterViewInit {
             display: true,
             title: {
               display: true,
-              text: 'Periodo'
+              text: this.getTitoloAsseX()
             }
           },
           y: {
@@ -234,7 +258,7 @@ export class StatisticheComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.distruggiGrafico(this.andamentoCorsiChart);
 
-    const labels = this.statistiche.andamentoMensile.map(item => item.mese);
+    const labels = this.statistiche.andamentoMensile.map(item => this.formattaLabelGrafico(item.mese));
     const venditeData = this.statistiche.andamentoMensile.map(item => item.vendite);
 
     const config: ChartConfiguration = {
@@ -243,7 +267,7 @@ export class StatisticheComponent implements OnInit, OnDestroy, AfterViewInit {
         labels: labels,
         datasets: [
           {
-            label: 'Corsi Venduti',
+            label: this.getLabelDataset('vendite'),
             data: venditeData,
             borderColor: '#007bff',
             backgroundColor: 'rgba(0, 123, 255, 0.1)',
@@ -280,7 +304,7 @@ export class StatisticheComponent implements OnInit, OnDestroy, AfterViewInit {
             display: true,
             title: {
               display: true,
-              text: 'Periodo'
+              text: this.getTitoloAsseX()
             }
           },
           y: {
@@ -413,5 +437,124 @@ export class StatisticheComponent implements OnInit, OnDestroy, AfterViewInit {
       return 'main-number large-number';
     }
     return 'main-number';
+  }
+
+  /**
+   * Formatta i label dei grafici in base al periodo selezionato
+   */
+  formattaLabelGrafico(label: string): string {
+    // Determina se siamo in modalità giornaliera o mensile
+    const isGiornaliero = this.isPerGraficoGiornaliero();
+    
+    if (isGiornaliero) {
+      // Per dati giornalieri, formatta come data leggibile
+      if (label.includes('-')) {
+        try {
+          const date = new Date(label);
+          return date.toLocaleDateString('it-IT', { 
+            day: '2-digit', 
+            month: '2-digit' 
+          });
+        } catch (e) {
+          // Fallback manuale se la data non è valida
+          const parts = label.split('-');
+          if (parts.length === 3) {
+            return `${parts[2]}/${parts[1]}`;
+          }
+        }
+      }
+      return label;
+    } else {
+      // Per dati mensili, mostra solo mese/anno
+      if (label.includes('-')) {
+        try {
+          const date = new Date(label + '-01'); // Aggiungi giorno per parsare il mese
+          return date.toLocaleDateString('it-IT', { 
+            month: 'short', 
+            year: 'numeric' 
+          });
+        } catch (e) {
+          return label;
+        }
+      }
+      return label;
+    }
+  }
+
+  /**
+   * Determina se il grafico deve mostrare dati giornalieri o mensili
+   */
+  private isPerGraficoGiornaliero(): boolean {
+    if (this.filtri.periodo === 'ultima_settimana' || this.filtri.periodo === 'ultimo_mese') {
+      return true;
+    }
+    
+    if (this.filtri.periodo === 'personalizzato' && this.filtri.dataInizio && this.filtri.dataFine) {
+      // Calcola la differenza in giorni
+      const inizio = new Date(this.filtri.dataInizio);
+      const fine = new Date(this.filtri.dataFine);
+      const diffGiorni = Math.ceil((fine.getTime() - inizio.getTime()) / (1000 * 60 * 60 * 24));
+      
+      // Se il range è <= 31 giorni, usa dati giornalieri
+      return diffGiorni <= 31;
+    }
+    
+    return false;
+  }
+
+  /**
+   * Ottiene il label per i dataset dei grafici in base al periodo
+   */
+  getLabelDataset(tipo: 'fatturato' | 'vendite'): string {
+    const isGiornaliero = this.isPerGraficoGiornaliero();
+    const basePeriodo = isGiornaliero ? 'giornaliero' : 'mensile';
+    
+    if (tipo === 'fatturato') {
+      return `Fatturato ${basePeriodo} (€)`;
+    } else {
+      return `Corsi venduti ${basePeriodo}`;
+    }
+  }
+
+  /**
+   * Ottiene il titolo per l'asse X dei grafici in base al periodo
+   */
+  getTitoloAsseX(): string {
+    const isGiornaliero = this.isPerGraficoGiornaliero();
+    
+    if (isGiornaliero) {
+      return 'Giorni';
+    } else {
+      return 'Mesi';
+    }
+  }
+
+  /**
+   * Ottiene il titolo dinamico per i grafici in base al periodo
+   */
+  getTitoloGrafico(tipo: 'fatturato' | 'vendite'): string {
+    const baseTipo = tipo === 'fatturato' ? 'Andamento Guadagni' : 'Andamento Corsi Venduti';
+    
+    if (this.filtri.periodo === 'personalizzato') {
+      if (this.filtri.dataInizio && this.filtri.dataFine) {
+        // Formatta le date in modo più leggibile
+        const dataInizio = new Date(this.filtri.dataInizio).toLocaleDateString('it-IT', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        });
+        const dataFine = new Date(this.filtri.dataFine).toLocaleDateString('it-IT', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        });
+        return `${baseTipo} (${dataInizio} - ${dataFine})`;
+      } else {
+        return `${baseTipo} (Periodo personalizzato)`;
+      }
+    } else {
+      const periodoLabel = this.getPeriodoLabel();
+      return `${baseTipo} - ${periodoLabel}`;
+    }
   }
 }
