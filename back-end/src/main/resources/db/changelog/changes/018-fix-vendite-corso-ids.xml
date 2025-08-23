@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="018-fix-vendite-corso-ids" author="system">
+        <comment>Fix corso_id references in vendite table to match actual corso IDs (30-44)</comment>
+        
+        <!-- Delete all existing vendite -->
+        <delete tableName="vendite">
+            <where>1=1</where>
+        </delete>
+        
+        <!-- Re-run the vendite insert with correct corso_id values -->
+        <!-- This is automatically handled by marking the previous changeset as runAlways="false" -->
+        <!-- and modifying the original changeset, then forcing a re-run -->
+        
+    </changeSet>
+
+</databaseChangeLog>

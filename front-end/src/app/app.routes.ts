@@ -60,6 +60,15 @@ export const routes: Routes = [
         data: { roles: [Ruoli.amministratore] },
       },
       {
+        path: 'statistiche',
+        loadComponent: () =>
+          import('./modules/statistiche/pages/statistiche/statistiche.component').then(
+            m => m.StatisticheComponent,
+          ),
+        canActivate: [AuthGuard],
+        data: { roles: [Ruoli.amministratore] },
+      },
+      {
         path: 'impostazioni',
         loadComponent: () =>
           import('./modules/settings/pages/settings/settings.component').then(

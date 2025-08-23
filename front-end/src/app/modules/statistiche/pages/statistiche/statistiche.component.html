@@ -1,0 +1,240 @@
+<div class="page-container">
+  <div class="page-header">
+    <app-page-title
+      [title]="'Statistiche Vendite'"
+      [buttons]="buttons"
+      (buttonActionClick)="onButtonClick($event)"
+    ></app-page-title>
+    <div class="user-bar">
+      <app-notification></app-notification>
+      <app-logged-user></app-logged-user>
+    </div>
+  </div>
+
+  <div class="page-content" #pageContentInner>
+    <!-- Content Area -->
+    <div class="content-area">
+      
+      <!-- Loading Spinner -->
+      <div *ngIf="isLoading" class="d-flex justify-content-center py-5">
+        <app-spinner></app-spinner>
+      </div>
+
+      <!-- Contenuto principale -->
+      <div *ngIf="!isLoading">
+        
+        <!-- Filtri -->
+        <div class="row mb-4">
+          <div class="col-md-3">
+            <label for="periodoSelect" class="form-label">Periodo</label>
+            <select id="periodoSelect" 
+                    class="form-select" 
+                    [(ngModel)]="filtri.periodo" 
+                    (change)="applicaFiltri()">
+              <option value="ultima_settimana">Ultima settimana</option>
+              <option value="ultimo_mese">Ultimo mese</option>
+              <option value="ultimi_3_mesi">Ultimi 3 mesi</option>
+              <option value="ultimo_anno">Ultimo anno</option>
+              <option value="personalizzato">Personalizzato</option>
+            </select>
+          </div>
+          
+          <div class="col-md-3" *ngIf="filtri.periodo === 'personalizzato'">
+            <label for="dataInizio" class="form-label">Data Inizio</label>
+            <input type="date" 
+                   id="dataInizio" 
+                   class="form-control" 
+                   [(ngModel)]="filtri.dataInizio"
+                   (change)="applicaFiltri()">
+          </div>
+          
+          <div class="col-md-3" *ngIf="filtri.periodo === 'personalizzato'">
+            <label for="dataFine" class="form-label">Data Fine</label>
+            <input type="date" 
+                   id="dataFine" 
+                   class="form-control" 
+                   [(ngModel)]="filtri.dataFine"
+                   (change)="applicaFiltri()">
+          </div>
+        </div>
+
+        <!-- Cards riassuntive -->
+        <div class="dashboard-stats">
+          <div class="row g-4" *ngIf="statistiche">
+            <!-- Card 1: Fatturato -->
+            <div class="col-md-3">
+              <div class="stats-card">
+                <div class="card-header">
+                  <h3>{{ getCardTitle('fatturato') }}</h3>
+                  <i class="fas fa-euro-sign card-icon"></i>
+                </div>
+                <div class="card-content">
+                  <div class="main-stats">
+                    <span [ngClass]="getNumberClass(formattaImporto(statistiche.totaleFatturato))">{{ formattaImporto(statistiche.totaleFatturato) }}</span>
+                  </div>
+                  <div class="trend-info positive">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>+15%</span>
+                    <span class="trend-text">{{ getTrendLabel('fatturato') }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2: Vendite -->
+            <div class="col-md-3">
+              <div class="stats-card">
+                <div class="card-header">
+                  <h3>{{ getCardTitle('vendite') }}</h3>
+                  <i class="fas fa-shopping-cart card-icon"></i>
+                </div>
+                <div class="card-content">
+                  <div class="main-stats">
+                    <span [ngClass]="getNumberClass(statistiche.totaleVendite.toString())">{{ statistiche.totaleVendite }}</span>
+                  </div>
+                  <div class="trend-info positive">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>+{{ statistiche.venditeMese }}</span>
+                    <span class="trend-text">{{ getTrendLabel('vendite') }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3: Performance -->
+            <div class="col-md-3">
+              <div class="stats-card">
+                <div class="card-header">
+                  <h3>{{ getCardTitle('performance') }}</h3>
+                  <i class="fas fa-chart-line card-icon"></i>
+                </div>
+                <div class="card-content">
+                  <div class="main-stats">
+                    <span [ngClass]="getNumberClass(statistiche.venditeMese.toString())">{{ statistiche.venditeMese }}</span>
+                  </div>
+                  <div class="trend-info positive">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>{{ formattaImportoBreve(statistiche.fatturateMese) }}</span>
+                    <span class="trend-text">{{ getTrendLabel('performance') }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 4: Media -->
+            <div class="col-md-3">
+              <div class="stats-card">
+                <div class="card-header">
+                  <h3>{{ getCardTitle('media') }}</h3>
+                  <i class="fas fa-analytics card-icon"></i>
+                </div>
+                <div class="card-content">
+                  <div class="main-stats">
+                    <span [ngClass]="getNumberClass(formattaImportoBreve(statistiche.mediaVenditaGiornaliera))">{{ formattaImportoBreve(statistiche.mediaVenditaGiornaliera) }}</span>
+                  </div>
+                  <div class="trend-info positive">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>Stabile</span>
+                    <span class="trend-text">{{ getTrendLabel('media') }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Grafici principali -->
+        <div class="row mb-2">
+          <!-- Grafico Andamento Guadagni -->
+          <div class="col-6 mb-4">
+            <div class="appointments-card">
+              <div class="appointments-header">
+                <h3>
+                  <!-- <i class="fas fa-chart-line me-2" style="color: #28a745;"></i> -->
+                  {{ getTitoloGrafico('fatturato') }}
+                </h3>
+              </div>
+              <div class="appointments-content">
+                <div style="position: relative; height: 300px;">
+                  <canvas #andamentoGuadagniChart id="andamentoGuadagniChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Grafico Andamento Corsi Venduti -->
+          <div class="col-6 mb-4">
+            <div class="appointments-card">
+              <div class="appointments-header">
+                <h3>
+                  <!-- <i class="fas fa-chart-area me-2" style="color: #007bff;"></i> -->
+                  {{ getTitoloGrafico('vendite') }}
+                </h3>
+              </div>
+              <div class="appointments-content">
+                <div style="position: relative; height: 300px;">
+                  <canvas #andamentoCorsiChart id="andamentoCorsiChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabella vendite recenti -->
+        <div class="appointments-card">
+          <div class="appointments-header">
+            <h3>
+              <i class="fas fa-history me-2"></i>
+              Vendite Recenti
+            </h3>
+          </div>
+          <div class="appointments-content">
+            <div class="table-responsive">
+              <table class="table table-hover mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th class="border-0">Data</th>
+                    <th class="border-0">Cliente</th>
+                    <th class="border-0">Corso</th>
+                    <th class="border-0">Importo</th>
+                    <th class="border-0">Stato</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let vendita of statistiche?.venditePiuRecenti">
+                    <td>{{ vendita.dataAcquisto | date:'dd/MM/yyyy' }}</td>
+                    <td>{{ vendita.utenteId }}</td>
+                    <td>Corso {{ vendita.corsoId }}</td>
+                    <td class="fw-bold">{{ formattaImporto(vendita.importo) }}</td>
+                    <td>
+                      <span class="badge"
+                            [ngClass]="{
+                              'bg-success': vendita.stato === 'PAID',
+                              'bg-danger': vendita.stato === 'CANCELLED',
+                              'bg-warning': vendita.stato === 'PENDING'
+                            }">
+                        {{ getStatusLabel(vendita.stato) }}
+                      </span>
+                    </td>
+                  </tr>
+                  <tr *ngIf="!statistiche || !statistiche.venditePiuRecenti || statistiche.venditePiuRecenti.length === 0">
+                    <td colspan="5" class="text-center text-muted py-4">
+                      Nessuna vendita recente disponibile
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Messaggio di errore -->
+      <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+        <i class="material-icons me-2">error</i>
+        {{ errorMessage }}
+      </div>
+    </div>
+  </div>
+</div>
