@@ -5,7 +5,7 @@
   <div class="modal-header">
     <h5 class="modal-title">
       <i class="fas fa-user me-2"></i>
-      {{ dati?.username || (dati?.nome + ' ' + dati?.cognome) }}
+      {{ (dati?.nome && dati?.cognome) ? (dati?.nome + ' ' + dati?.cognome) : dati?.username }}
     </h5>
   </div>
 
@@ -15,55 +15,42 @@
       <div class="detail-section">
         <div class="detail-field">
           <div class="detail-field-label">
-            <i class="fa fa-user"></i>
-            <span>Username</span>
+            <i class="fa fa-id-card"></i>
+            <span>Codice Fiscale</span>
           </div>
-          <div class="detail-field-value">{{ dati?.username || '–' }}</div>
+          <div class="detail-field-value">{{ dati?.codiceFiscale || '–' }}</div>
         </div>
         
         <div class="detail-field">
           <div class="detail-field-label">
-            <i class="fa fa-envelope"></i>
-            <span>Email</span>
+            <i class="fa fa-file-medical"></i>
+            <span>Certificato Medico</span>
           </div>
-          <div class="detail-field-value">{{ dati?.email || '–' }}</div>
+          <div class="detail-field-value">{{ dati?.certificatoMedico || '–' }}</div>
         </div>
         
         <div class="detail-field">
           <div class="detail-field-label">
-            <i class="fa fa-id-badge"></i>
-            <span>Nome</span>
+            <i class="fa fa-heartbeat"></i>
+            <span>Patologie</span>
           </div>
-          <div class="detail-field-value">{{ dati?.nome || '–' }}</div>
+          <div class="detail-field-value">{{ dati?.patologie ? 'Si' : 'No' }}</div>
         </div>
         
         <div class="detail-field">
           <div class="detail-field-label">
-            <i class="fa fa-id-badge"></i>
-            <span>Cognome</span>
+            <i class="fa fa-notes-medical"></i>
+            <span>Descrizione Patologie</span>
           </div>
-          <div class="detail-field-value">{{ dati?.cognome || '–' }}</div>
+          <div class="detail-field-value">{{ dati?.descrizionePatologie || '–' }}</div>
         </div>
         
         <div class="detail-field">
           <div class="detail-field-label">
-            <i class="fa fa-shield-alt"></i>
-            <span>Ruolo</span>
+            <i class="fa fa-bullseye"></i>
+            <span>Obiettivi</span>
           </div>
-          <div class="detail-field-value">{{ getRuoliDisplay() }}</div>
-        </div>
-        
-        <div class="detail-field">
-          <div class="detail-field-label">
-            <i class="fa fa-toggle-on"></i>
-            <span>Stato</span>
-          </div>
-          <div class="detail-field-value">
-            <app-status-badge 
-              [value]="dati?.attivo === 'Si' ? 'Attivo' : (dati?.attivo === 'No' ? 'Non attivo' : dati?.attivo) || '–'"
-              [statusType]="'dipendente'">
-            </app-status-badge>
-          </div>
+          <div class="detail-field-value">{{ dati?.obiettivi || '–' }}</div>
         </div>
       </div>
     </div>

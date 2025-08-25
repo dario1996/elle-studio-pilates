@@ -64,6 +64,7 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
   valoriFiltri: { [key: string]: any } = {};
 
   utenti: IUsers[] = [];
+  utentiOriginali: IUsers[] = []; // Dati originali dal server
   utentiFiltrati: IUsers[] = [];
 
   buttons: ButtonConfig[] = [
@@ -120,13 +121,23 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
   private loadUtenti() {
     this.userService.getListaUtenti().subscribe({
       next: data => {
-        this.utenti = data.map((u: any) => ({
-          ...u,
-          nominativo: `${u.nome || ''} ${u.cognome || ''}`.trim() || u.username,
-          attivo: u.attivo === 'Si' ? 'Attivo' : 'Non attivo',
-          ruoli: Array.isArray(u.ruoli) ? u.ruoli.join(', ') : (u.ruoli || ''),
-          dataCreazione: u.dataCreazione ? new Date(u.dataCreazione).toLocaleDateString('it-IT') : ''
-        }));
+        console.log('Dati utenti ricevuti:', data); // Debug per vedere il formato
+        
+        // Salvo i dati originali
+        this.utentiOriginali = [...data];
+        
+        // Creo la versione formattata per la tabella
+        this.utenti = data.map((u: any) => {
+          const formattedUser = {
+            ...u,
+            nominativo: `${u.nome || ''} ${u.cognome || ''}`.trim() || u.username,
+            attivo: u.attivo === 'Si' ? 'Attivo' : 'Non attivo',
+            ruoli: Array.isArray(u.ruoli) ? u.ruoli.join(', ') : (u.ruoli || ''),
+            dataCreazione: this.formatDataCreazione(u.dataCreazione)
+          };
+          console.log('User mapped:', u.username, 'dataCreazione original:', u.dataCreazione, 'formatted:', formattedUser.dataCreazione);
+          return formattedUser;
+        });
         this.applicaFiltri();
         this.cd.detectChanges();
         this.paginationInfo.totalItems = this.utenti.length;
@@ -189,7 +200,7 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
   }
 
   deleteUtente(username: string) {
-    this.userService.permanentDeleteUtente(username).subscribe({
+    this.userService.delUtente(username).subscribe({
       next: () => {
         this.loadUtenti();
         this.toastr.success('Utente eliminato con successo');
@@ -215,7 +226,14 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
   }
 
   updateUtente(username: string, utenteData: any) {
-    this.userService.updUtente(username, utenteData).subscribe({
+    // Trova l'utente originale per preservare il campo attivo
+    const utenteOriginale = this.utentiOriginali.find(u => u.username === username);
+    const dataCompleta = {
+      ...utenteData,
+      attivo: utenteOriginale?.attivo || 'Si' // Preserva lo stato attivo originale
+    };
+    
+    this.userService.updUtente(username, dataCompleta).subscribe({
       next: () => {
         this.loadUtenti();
         this.toastr.success('Utente modificato con successo');
@@ -283,10 +301,12 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
         break;
       case 'edit':
         import('../../components/form-utenti/form-utenti.component').then(({ FormUtentiComponent }) => {
+          // Trova l'utente originale corrispondente
+          const utenteOriginale = this.utentiOriginali.find(u => u.username === e.item.username);
           this.modaleService.apri({
             titolo: 'Modifica utente',
             componente: FormUtentiComponent,
-            dati: e.item,
+            dati: utenteOriginale || e.item, // Usa dati originali se disponibili
             onConferma: (formValue: any) =>
               this.updateUtente(e.item.username, formValue),
           });
@@ -360,5 +380,22 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
     return Object.values(this.valoriFiltri).filter(
       value => value !== null && value !== undefined && value !== '',
     ).length;
+  }
+
+  private formatDataCreazione(dataCreazione: any): string {
+    if (!dataCreazione) {
+      return '–';
+    }
+    
+    try {
+      const date = new Date(dataCreazione);
+      if (isNaN(date.getTime())) {
+        return '–';
+      }
+      return date.toLocaleDateString('it-IT');
+    } catch (error) {
+      console.error('Errore nel parsing della data:', dataCreazione, error);
+      return '–';
+    }
   }
 }

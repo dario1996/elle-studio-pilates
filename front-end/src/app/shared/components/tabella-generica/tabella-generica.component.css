@@ -484,12 +484,12 @@ th .fa {
 
 .action-buttons .btn-outline-warning *,
 .action-buttons .btn-warning * {
-  color: #de8a8a !important;
+  color: #ffb84d !important;
 }
 
 .action-buttons .btn-outline-warning:hover *,
 .action-buttons .btn-warning:hover * {
-  color: #ff5353 !important;
+  color: #ff8c00 !important;
   transform: translateY(-2px);
   transition: all 0.25s ease !important;
 }

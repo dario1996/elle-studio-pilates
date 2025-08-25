@@ -38,7 +38,7 @@ export const UTENTI_COLUMNS: IColumnDef[] = [
     key: 'dataCreazione', 
     label: 'Data Creazione', 
     sortable: true, 
-    type: 'date' 
+    type: 'text'
   }
 ];
 

@@ -1,17 +1,9 @@
-<div class="form-utenti-container">
-  <form [formGroup]="utenteForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="utenteForm" (ngSubmit)="onSubmit()">
     
     <!-- Informazioni Base -->
-    <div class="section-header">
-      <h5 class="section-title">
-        <i class="fas fa-user me-2"></i>
-        Informazioni Base
-      </h5>
-    </div>
-
     <div class="row">
-      <div class="col-md-6 mb-3">
-        <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
+      <div class="col-md-6 form-field">
+        <label for="username" class="form-label p-0 m-0">Username <span class="text-danger">*</span></label>
         <input
           type="text"
           id="username"
@@ -25,8 +17,8 @@
         </div>
       </div>
 
-      <div class="col-md-6 mb-3">
-        <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+      <div class="col-md-6 form-field">
+        <label for="email" class="form-label p-0 m-0">Email <span class="text-danger">*</span></label>
         <input
           type="email"
           id="email"
@@ -40,9 +32,9 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-md-6 mb-3">
-        <label for="nome" class="form-label">Nome <span class="text-danger">*</span></label>
+    <div class="row mt-3">
+      <div class="col-md-6 form-field">
+        <label for="nome" class="form-label p-0 m-0">Nome <span class="text-danger">*</span></label>
         <input
           type="text"
           id="nome"
@@ -55,8 +47,8 @@
         </div>
       </div>
 
-      <div class="col-md-6 mb-3">
-        <label for="cognome" class="form-label">Cognome <span class="text-danger">*</span></label>
+      <div class="col-md-6 form-field">
+        <label for="cognome" class="form-label p-0 m-0">Cognome <span class="text-danger">*</span></label>
         <input
           type="text"
           id="cognome"
@@ -70,9 +62,9 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-md-6 mb-3">
-        <label for="codiceFiscale" class="form-label">Codice Fiscale</label>
+    <div class="row mt-3">
+      <div class="col-md-6 form-field">
+        <label for="codiceFiscale" class="form-label p-0 m-0">Codice Fiscale</label>
         <input
           type="text"
           id="codiceFiscale"
@@ -82,8 +74,8 @@
           style="text-transform: uppercase;">
       </div>
 
-      <div class="col-md-6 mb-3">
-        <label for="ruoli" class="form-label">Ruoli <span class="text-danger">*</span></label>
+      <div class="col-md-6 form-field">
+        <label for="ruoli" class="form-label p-0 m-0">Ruoli <span class="text-danger">*</span></label>
         <select
           id="ruoli"
           class="form-select"
@@ -101,89 +93,8 @@
       </div>
     </div>
 
-    <!-- Password Section -->
-    <div class="section-header mt-4">
-      <h5 class="section-title">
-        <i class="fas fa-lock me-2"></i>
-        {{ isEditMode ? 'Cambia Password (opzionale)' : 'Password' }}
-      </h5>
-    </div>
-
-    <div class="row">
-      <div class="col-md-6 mb-3">
-        <label for="password" class="form-label">
-          Password <span *ngIf="!isEditMode" class="text-danger">*</span>
-        </label>
-        <div class="input-group">
-          <input
-            [type]="showPassword ? 'text' : 'password'"
-            id="password"
-            class="form-control"
-            formControlName="password"
-            [class.is-invalid]="isFieldInvalid('password')"
-            [placeholder]="isEditMode ? 'Lascia vuoto per non modificare' : 'Inserisci password'">
-          <button
-            type="button"
-            class="btn btn-outline-secondary"
-            (click)="togglePasswordVisibility()">
-            <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
-          </button>
-        </div>
-        <div class="invalid-feedback" *ngIf="isFieldInvalid('password')">
-          {{ getFieldErrorMessage('password') }}
-        </div>
-      </div>
-
-      <div class="col-md-6 mb-3" *ngIf="!isEditMode || utenteForm.get('password')?.value">
-        <label for="confirmPassword" class="form-label">
-          Conferma Password <span *ngIf="!isEditMode" class="text-danger">*</span>
-        </label>
-        <div class="input-group">
-          <input
-            [type]="showConfirmPassword ? 'text' : 'password'"
-            id="confirmPassword"
-            class="form-control"
-            formControlName="confirmPassword"
-            [class.is-invalid]="isFieldInvalid('confirmPassword')"
-            placeholder="Conferma password">
-          <button
-            type="button"
-            class="btn btn-outline-secondary"
-            (click)="toggleConfirmPasswordVisibility()">
-            <i [class]="showConfirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
-          </button>
-        </div>
-        <div class="invalid-feedback" *ngIf="isFieldInvalid('confirmPassword')">
-          {{ getFieldErrorMessage('confirmPassword') }}
-        </div>
-      </div>
-    </div>
-
-    <!-- Informazioni Aggiuntive -->
-    <div class="section-header mt-4">
-      <h5 class="section-title">
-        <i class="fas fa-info-circle me-2"></i>
-        Informazioni Aggiuntive
-      </h5>
-    </div>
-
-    <div class="row">
-      <div class="col-md-6 mb-3">
-        <label for="attivo" class="form-label">Stato <span class="text-danger">*</span></label>
-        <select
-          id="attivo"
-          class="form-select"
-          formControlName="attivo"
-          [class.is-invalid]="isFieldInvalid('attivo')">
-          <option value="Si">Attivo</option>
-          <option value="No">Non attivo</option>
-        </select>
-        <div class="invalid-feedback" *ngIf="isFieldInvalid('attivo')">
-          {{ getFieldErrorMessage('attivo') }}
-        </div>
-      </div>
-
-      <div class="col-md-6 mb-3">
+    <div class="row mt-3">
+      <div class="col-md-6 form-field">
         <div class="form-check mt-4">
           <input
             type="checkbox"
@@ -197,9 +108,9 @@
       </div>
     </div>
 
-    <div class="row" *ngIf="utenteForm.get('patologie')?.value">
-      <div class="col-12 mb-3">
-        <label for="descrizionePatologie" class="form-label">Descrizione Patologie</label>
+    <div class="row mt-3" *ngIf="utenteForm.get('patologie')?.value">
+      <div class="col-12 form-field">
+        <label for="descrizionePatologie" class="form-label p-0 m-0">Descrizione Patologie</label>
         <textarea
           id="descrizionePatologie"
           class="form-control"
@@ -209,9 +120,9 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-12 mb-3">
-        <label for="obiettivi" class="form-label">Obiettivi</label>
+    <div class="row mt-3">
+      <div class="col-12 form-field">
+        <label for="obiettivi" class="form-label p-0 m-0">Obiettivi</label>
         <textarea
           id="obiettivi"
           class="form-control"
@@ -221,23 +132,4 @@
       </div>
     </div>
 
-    <!-- Buttons -->
-    <div class="d-flex justify-content-end gap-2 mt-4">
-      <button
-        type="button"
-        class="btn btn-secondary"
-        (click)="onCancel()">
-        <i class="fas fa-times me-1"></i>
-        Annulla
-      </button>
-      <button
-        type="submit"
-        class="btn btn-primary"
-        [disabled]="utenteForm.invalid">
-        <i class="fas fa-save me-1"></i>
-        {{ isEditMode ? 'Modifica' : 'Aggiungi' }}
-      </button>
-    </div>
-
   </form>
-</div>

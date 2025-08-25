@@ -53,14 +53,9 @@ export class UserService {
     );
 
   toggleUtenteStatus = (username: string) =>
-    this.httpClient.patch<IUsers>(
+    this.httpClient.put<IUsers>(
       `http://${this.server}:${this.port}/api/utenti/${username}/toggle-status`,
       {},
-    );
-
-  permanentDeleteUtente = (username: string) =>
-    this.httpClient.delete<void>(
-      `http://${this.server}:${this.port}/api/utenti/${username}/permanent`,
     );
 
   searchUtenti = (

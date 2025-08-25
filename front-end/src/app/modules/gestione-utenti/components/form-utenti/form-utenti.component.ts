@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { IUsers } from '../../../../shared/models/Users';
+import { ModaleService } from '../../../../core/services/modal.service';
 
 @Component({
   selector: 'app-form-utenti',
@@ -11,124 +12,105 @@ import { IUsers } from '../../../../shared/models/Users';
   styleUrls: ['./form-utenti.component.css']
 })
 export class FormUtentiComponent implements OnInit {
-  @Input() utente: IUsers | null = null;
-  @Output() conferma = new EventEmitter<IUsers>();
-  @Output() annulla = new EventEmitter<void>();
-
-  utenteForm: FormGroup;
+  @Output() conferma = new EventEmitter<any>();
+  
+  utenteForm!: FormGroup;
+  submitted = false;
+  dati: IUsers | null = null;
   isEditMode = false;
-  showPassword = false;
-  showConfirmPassword = false;
+
+  private modaleService = inject(ModaleService);
 
   ruoliDisponibili = [
     { value: 'utente', label: 'Utente' },
     { value: 'amministratore', label: 'Amministratore' }
   ];
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder) {}
+
+  ngOnInit(): void {
+    this.modaleService.config$.subscribe(config => {
+      if (config?.dati) {
+        this.dati = config.dati;
+        this.isEditMode = !!this.dati && !!this.dati.username;
+        if (this.utenteForm) {
+          this.patchFormValues();
+        }
+      }
+    });
+    this.initForm();
+  }
+
+  initForm(): void {
     this.utenteForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(3)]],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', Validators.required],
-      nome: ['', Validators.required],
-      cognome: ['', Validators.required],
-      codiceFiscale: [''],
-      ruoli: [['utente'], Validators.required],
-      attivo: ['Si', Validators.required],
-      patologie: [false],
-      descrizionePatologie: [''],
-      obiettivi: ['']
-    }, { 
-      validators: this.passwordMatchValidator 
+      username: [
+        this.dati?.username || '',
+        [Validators.required, Validators.minLength(3)]
+      ],
+      email: [
+        this.dati?.email || '',
+        [Validators.required, Validators.email]
+      ],
+      nome: [
+        this.dati?.nome || '',
+        [Validators.required]
+      ],
+      cognome: [
+        this.dati?.cognome || '',
+        [Validators.required]
+      ],
+      codiceFiscale: [
+        this.dati?.codiceFiscale || ''
+      ],
+      certificatoMedico: [
+        this.dati?.certificatoMedico || false
+      ],
+      ruoli: [
+        this.dati?.ruoli || ['utente'],
+        [Validators.required]
+      ],
+      patologie: [
+        this.dati?.patologie || false
+      ],
+      descrizionePatologie: [
+        this.dati?.descrizionePatologie || ''
+      ],
+      obiettivi: [
+        this.dati?.obiettivi || ''
+      ]
     });
   }
 
-  ngOnInit(): void {
-    if (this.utente) {
-      this.isEditMode = true;
-      this.setupEditMode();
-    }
-  }
-
-  private setupEditMode(): void {
-    if (this.utente) {
-      // In modalità edit, la password non è obbligatoria
-      this.utenteForm.get('password')?.clearValidators();
-      this.utenteForm.get('confirmPassword')?.clearValidators();
-      this.utenteForm.get('username')?.disable(); // Username non modificabile
-      
-      this.utenteForm.patchValue({
-        username: this.utente.username,
-        email: this.utente.email,
-        nome: this.utente.nome || '',
-        cognome: this.utente.cognome || '',
-        codiceFiscale: this.utente.codiceFiscale || '',
-        ruoli: Array.isArray(this.utente.ruoli) ? this.utente.ruoli : [this.utente.ruoli || 'utente'],
-        attivo: this.utente.attivo || 'Si',
-        patologie: this.utente.patologie || false,
-        descrizionePatologie: this.utente.descrizionePatologie || '',
-        obiettivi: this.utente.obiettivi || ''
-      });
-    }
-  }
-
-  passwordMatchValidator(form: FormGroup) {
-    const password = form.get('password');
-    const confirmPassword = form.get('confirmPassword');
-    
-    if (password && confirmPassword && password.value !== confirmPassword.value) {
-      confirmPassword.setErrors({ passwordMismatch: true });
-      return { passwordMismatch: true };
-    } else {
-      if (confirmPassword?.errors?.['passwordMismatch']) {
-        delete confirmPassword.errors['passwordMismatch'];
-        if (Object.keys(confirmPassword.errors).length === 0) {
-          confirmPassword.setErrors(null);
-        }
-      }
-    }
-    return null;
+  private patchFormValues(): void {
+    this.utenteForm.patchValue({
+      username: this.dati?.username || '',
+      email: this.dati?.email || '',
+      nome: this.dati?.nome || '',
+      cognome: this.dati?.cognome || '',
+      codiceFiscale: this.dati?.codiceFiscale || '',
+      certificatoMedico: this.dati?.certificatoMedico || false,
+      ruoli: this.dati?.ruoli || ['utente'],
+      patologie: this.dati?.patologie || false,
+      descrizionePatologie: this.dati?.descrizionePatologie || '',
+      obiettivi: this.dati?.obiettivi || ''
+    });
   }
 
   onSubmit(): void {
-    if (this.utenteForm.valid) {
-      const formValue = this.utenteForm.getRawValue(); // getRawValue per includere campi disabilitati
-      
-      // Se è edit mode e la password è vuota, non includerla
-      if (this.isEditMode && !formValue.password) {
-        delete formValue.password;
-        delete formValue.confirmPassword;
-      }
-      
-      this.conferma.emit(formValue);
-    } else {
-      this.markFormGroupTouched();
+    this.submitted = true;
+    if (this.utenteForm.invalid) {
+      return;
     }
+    this.conferma.emit(this.utenteForm.value);
   }
 
-  onCancel(): void {
-    this.annulla.emit();
-  }
-
-  togglePasswordVisibility(): void {
-    this.showPassword = !this.showPassword;
-  }
-
-  toggleConfirmPasswordVisibility(): void {
-    this.showConfirmPassword = !this.showConfirmPassword;
-  }
-
-  private markFormGroupTouched(): void {
-    Object.keys(this.utenteForm.controls).forEach(key => {
-      const control = this.utenteForm.get(key);
-      control?.markAsTouched();
-    });
+  confermaForm(): void {
+    this.onSubmit();
   }
 
   isFieldInvalid(fieldName: string): boolean {
     const field = this.utenteForm.get(fieldName);
-    return !!(field && field.invalid && (field.dirty || field.touched));
+    return !!(field && field.invalid && (field.dirty || field.touched || this.submitted));
   }
 
   getFieldErrorMessage(fieldName: string): string {
@@ -137,7 +119,7 @@ export class FormUtentiComponent implements OnInit {
       if (field.errors['required']) return `${fieldName} è obbligatorio`;
       if (field.errors['email']) return 'Email non valida';
       if (field.errors['minlength']) return `${fieldName} troppo corto`;
-      if (field.errors['passwordMismatch']) return 'Le password non coincidono';
+      if (field.errors['maxlength']) return `${fieldName} troppo lungo`;
     }
     return '';
   }

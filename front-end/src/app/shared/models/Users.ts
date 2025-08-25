@@ -10,10 +10,11 @@ export interface IUsers {
   nome?: string;
   cognome?: string;
   codiceFiscale?: string;
-  certificatoMedico?: string;
+  certificatoMedico?: boolean;
   patologie?: boolean;
   descrizionePatologie?: string;
   obiettivi?: string;
+  dataCreazione?: string;
   
   // Campo aggiuntivo per la conferma password (solo frontend)
   confirmPassword?: string;

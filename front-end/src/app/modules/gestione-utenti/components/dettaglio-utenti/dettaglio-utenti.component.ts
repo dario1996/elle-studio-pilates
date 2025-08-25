@@ -3,12 +3,11 @@ import { CommonModule } from '@angular/common';
 import { IUsers } from '../../../../shared/models/Users';
 import { UserService } from '../../../../core/services/data/user.service';
 import { ModaleService } from '../../../../core/services/modal.service';
-import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge.component';
 
 @Component({
   selector: 'app-dettaglio-utenti',
   standalone: true,
-  imports: [CommonModule, StatusBadgeComponent],
+  imports: [CommonModule],
   templateUrl: './dettaglio-utenti.component.html',
   styleUrl: './dettaglio-utenti.component.css'
 })
