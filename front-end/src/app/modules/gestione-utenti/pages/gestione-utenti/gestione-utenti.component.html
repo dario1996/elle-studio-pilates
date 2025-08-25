@@ -21,6 +21,32 @@
     </div>
     <div class="page-content" #pageContentInner>
       <div #pageContentInner class="page-content-inner">
+        <!-- Campo di Ricerca Rapida -->
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="fas fa-search"></i>
+              </span>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Ricerca rapida per username, nome, email o codice fiscale..."
+                [value]="searchTerm"
+                (input)="onSearchChange($event)"
+                #searchInput>
+              <button
+                *ngIf="searchTerm"
+                class="btn btn-outline-secondary"
+                type="button"
+                (click)="clearSearch(); searchInput.value = ''"
+                title="Cancella ricerca">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
         <!-- Tabella Utenti -->
         <div class="card border-0 shadow-sm">
           <div class="card-body p-0">

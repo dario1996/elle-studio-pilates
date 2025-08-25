@@ -6,6 +6,8 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { PageTitleComponent, ButtonConfig } from '../../../../core/page-title/page-title.component';
 import { IUsers } from '../../../../shared/models/Users';
 import { UserService } from '../../../../core/services/data/user.service';
@@ -67,6 +69,10 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
   utentiOriginali: IUsers[] = []; // Dati originali dal server
   utentiFiltrati: IUsers[] = [];
 
+  // Ricerca rapida
+  searchTerm = '';
+  private searchSubject = new Subject<string>();
+
   buttons: ButtonConfig[] = [
     {
       text: 'Filtri',
@@ -115,6 +121,14 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    // Setup ricerca con debounce
+    this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(term => {
+      this.performSearch(term);
+    });
+    
     this.loadUtenti();
   }
 
@@ -161,6 +175,19 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
 
   applicaFiltri() {
     this.utentiFiltrati = this.utenti.filter(u => {
+      // Filtro di ricerca rapida
+      if (this.searchTerm) {
+        const searchTermLower = this.searchTerm.toLowerCase();
+        const matches = u.username?.toLowerCase().includes(searchTermLower) ||
+                       u.email?.toLowerCase().includes(searchTermLower) ||
+                       u.codiceFiscale?.toLowerCase().includes(searchTermLower) ||
+                       `${u.nome || ''} ${u.cognome || ''}`.trim().toLowerCase().includes(searchTermLower);
+        
+        if (!matches) {
+          return false;
+        }
+      }
+
       const nominativo = `${u.nome || ''} ${u.cognome || ''}`.trim().toLowerCase() || u.username.toLowerCase();
 
       if (
@@ -397,5 +424,20 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
       console.error('Errore nel parsing della data:', dataCreazione, error);
       return '–';
     }
+  }
+
+  // Metodi per la ricerca rapida
+  onSearchChange(event: any): void {
+    this.searchSubject.next(event.target.value);
+  }
+
+  performSearch(term: string): void {
+    this.searchTerm = term;
+    this.applicaFiltri(); // Riapplica i filtri che ora includono anche la ricerca
+  }
+
+  clearSearch(): void {
+    this.searchTerm = '';
+    this.applicaFiltri();
   }
 }
