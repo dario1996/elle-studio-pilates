@@ -1,0 +1,44 @@
+<!-- Modal Content -->
+<div class="modal-content">
+  
+  <!-- Modal Header -->
+  <div class="modal-header">
+    <h5 class="modal-title">
+      <i class="fas fa-graduation-cap me-2"></i>
+      {{ dati?.nome || 'Dettaglio Corso' }}
+    </h5>
+  </div>
+
+  <!-- Modal Body -->
+  <div class="modal-body">
+    <div class="detail-content">
+      <div class="detail-section">
+        <!-- Prima riga: Solo descrizione -->
+        <div class="detail-field full-width">
+          <div class="detail-field-label">
+            <i class="fa fa-align-left"></i>
+            <span>Descrizione</span>
+          </div>
+          <div class="detail-field-value">{{ dati?.descrizione || '–' }}</div>
+        </div>
+        
+        <!-- Seconda riga: Le due date -->
+        <div class="detail-field">
+          <div class="detail-field-label">
+            <i class="fa fa-calendar-plus"></i>
+            <span>Data Creazione</span>
+          </div>
+          <div class="detail-field-value">{{ (dati?.dataCreazione) ? (dati?.dataCreazione | date:'dd/MM/yyyy HH:mm') : '–' }}</div>
+        </div>
+        
+        <div class="detail-field">
+          <div class="detail-field-label">
+            <i class="fa fa-calendar-check"></i>
+            <span>Data Modifica</span>
+          </div>
+          <div class="detail-field-value">{{ (dati?.dataModifica) ? (dati?.dataModifica | date:'dd/MM/yyyy HH:mm') : '–' }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

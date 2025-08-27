@@ -16,7 +16,6 @@ import {
   CORSI_AZIONI,
   CORSI_AZIONI_PAGINA,
 } from '../../../../shared/config/corsi.config';
-import { FilterPanelComponent } from '../../../../shared/components/filter-panel/filter-panel.component';
 import { LoggedUserComponent } from '../../../../shared/components/logged-user/logged-user.component';
 import { NotificationComponent } from '../../../../core/notification/notification.component';
 
@@ -26,7 +25,6 @@ import { NotificationComponent } from '../../../../core/notification/notificatio
     ToastrModule,
     TabellaGenericaComponent,
     PageTitleComponent,
-    FilterPanelComponent,
     LoggedUserComponent,
     NotificationComponent,
     PaginationFooterComponent,
@@ -184,6 +182,16 @@ export class CorsiComponent implements AfterViewInit, OnInit, OnChanges {
             messaggio: 'Vuoi davvero eliminare il corso "' + e.item.nome + '"?',
           },
           onConferma: () => this.deleteCorso(e.item.id),
+        });
+        break;
+      case 'view':
+        import('../../components/dettaglio-corsi/dettaglio-corsi.component').then(({ DettaglioCorsiComponent }) => {
+          this.modaleService.apri({
+            titolo: 'Dettagli corso',
+            componente: DettaglioCorsiComponent,
+            dati: e.item,
+            showCloseButton: false,
+          });
         });
         break;
       default:

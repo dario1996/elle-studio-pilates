@@ -24,6 +24,16 @@
     </app-filter-panel> -->
   </div>
   <div class="page-content" #pageContentInner>
+    <!-- Pulsanti azioni -->
+    <div class="row mb-3 mt-3">
+      <div class="col d-flex justify-content-start">
+        <button class="quick-action-btn" (click)="gestioneAzione({ tipo: 'add', item: null })">
+          <i class="fas fa-plus"></i>
+          <span>Aggiungi corso</span>
+        </button>
+      </div>
+    </div>
+
     <div #pageContentInner class="page-content-inner">
         <!-- Tabella Corsi -->
         <div class="card border-0 shadow-sm">
@@ -33,7 +43,9 @@
               [columns]="columns"
               [azioni]="actions"
               [entityName]="'corsi'"
+              [rowClickable]="true"
               (action)="gestioneAzione($event)"
+              (rowClick)="gestioneAzione({ tipo: 'view', item: $event })"
               (paginationInfo)="aggiornaPaginazione($event)">
             </app-tabella-generica>
           </div>
