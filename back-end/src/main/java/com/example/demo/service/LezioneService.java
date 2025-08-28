@@ -2,11 +2,14 @@ package com.example.demo.service;
 
 import com.example.demo.dto.LezioneDto;
 import com.example.demo.entity.Lezione;
+import com.example.demo.entity.Utenti;
 import com.example.demo.enums.TipoLezione;
 import com.example.demo.exceptions.NotFoundException;
 import com.example.demo.exceptions.BindingException;
 import com.example.demo.mapper.LezioneMapper;
 import com.example.demo.repository.LezioneRepository;
+import com.example.demo.services.UtentiService;
+import com.example.demo.services.CorsoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +28,8 @@ public class LezioneService {
 
     private final LezioneRepository lezioneRepository;
     private final LezioneMapper lezioneMapper;
+    private final UtentiService utentiService;
+    private final CorsoService corsoService;
 
     @Transactional(readOnly = true)
     public List<LezioneDto> getAllLezioni() {
@@ -85,8 +92,24 @@ public class LezioneService {
         lezione.setId(null); // Assicuriamo che sia una nuova entità
         lezione.setAttiva(true);
         
+        // Gestione partecipanti
+        if (lezioneDto.getPartecipanti() != null && !lezioneDto.getPartecipanti().isEmpty()) {
+            List<Utenti> partecipanti = new ArrayList<>();
+            for (String username : lezioneDto.getPartecipanti()) {
+                Utenti utente = utentiService.SelUser(username);
+                if (utente != null) {
+                    partecipanti.add(utente);
+                } else {
+                    log.warn("Utente non trovato: " + username);
+                }
+            }
+            lezione.setPartecipanti(partecipanti);
+        }
+        
         Lezione savedLezione = lezioneRepository.save(lezione);
-        log.info("Lezione creata con ID: {}", savedLezione.getId());
+        log.info("Lezione creata con ID: {} e {} partecipanti", 
+                savedLezione.getId(), 
+                savedLezione.getPartecipanti().size());
         
         return lezioneMapper.toDto(savedLezione);
     }
@@ -118,8 +141,24 @@ public class LezioneService {
             existingLezione.setAttiva(lezioneDto.getAttiva());
         }
 
+        // Aggiorna partecipanti
+        if (lezioneDto.getPartecipanti() != null) {
+            List<Utenti> partecipanti = new ArrayList<>();
+            for (String username : lezioneDto.getPartecipanti()) {
+                Utenti utente = utentiService.SelUser(username);
+                if (utente != null) {
+                    partecipanti.add(utente);
+                } else {
+                    log.warn("Utente non trovato durante update: " + username);
+                }
+            }
+            existingLezione.setPartecipanti(partecipanti);
+        }
+
         Lezione updatedLezione = lezioneRepository.save(existingLezione);
-        log.info("Lezione aggiornata con ID: {}", updatedLezione.getId());
+        log.info("Lezione aggiornata con ID: {} e {} partecipanti", 
+                updatedLezione.getId(), 
+                updatedLezione.getPartecipanti().size());
         
         return lezioneMapper.toDto(updatedLezione);
     }
@@ -160,6 +199,37 @@ public class LezioneService {
         // Validazione date nel passato (solo per nuove lezioni)
         if (lezioneId == null && lezioneDto.getDataInizio().isBefore(LocalDateTime.now())) {
             throw new BindingException("Non è possibile creare lezioni nel passato");
+        }
+        
+        // Validazione numero partecipanti basata sul tipo lezione
+        if (lezioneDto.getPartecipanti() != null) {
+            int maxPartecipantiPerTipo = getMaxPartecipantiByTipoLezione(lezioneDto.getTipoLezione());
+            if (lezioneDto.getPartecipanti().size() > maxPartecipantiPerTipo) {
+                throw new BindingException(String.format(
+                    "Il tipo lezione '%s' ammette massimo %d partecipanti, ma ne sono stati selezionati %d",
+                    lezioneDto.getTipoLezione().name(),
+                    maxPartecipantiPerTipo,
+                    lezioneDto.getPartecipanti().size()
+                ));
+            }
+        }
+    }
+    
+    private int getMaxPartecipantiByTipoLezione(TipoLezione tipoLezione) {
+        switch (tipoLezione) {
+            case PRIVATA:
+            case PRIMA_LEZIONE:
+                return 1;
+            case SEMI_PRIVATA_DUETTO:
+                return 2;
+            case SEMI_PRIVATA_GRUPPO:
+                return 4;
+            case MATWORK:
+                return 6;
+            case YOGA:
+                return 8;
+            default:
+                return 1;
         }
     }
 

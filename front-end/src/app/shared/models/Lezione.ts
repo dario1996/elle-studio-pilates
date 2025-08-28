@@ -7,12 +7,10 @@ export interface ILezione {
   maxPartecipanti?: number; // solo per tipi di gruppo
   partecipanti: string[]; // usernames degli utenti
   istruttore: string; // username istruttore
-  descrizione?: string;
   stato: StatoLezione;
   prezzo?: number;
   location?: string;
   colore?: string; // per differenziare visualmente nel calendar
-  // Campi aggiuntivi per compatibilità con il vecchio sistema
   durata?: number;
   partecipantiIscritti?: number;
   istruttoreId?: number;

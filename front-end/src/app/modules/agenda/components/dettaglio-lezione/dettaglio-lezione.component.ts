@@ -1,11 +1,14 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ModaleService } from '../../../../core/services/modal.service';
 import { LezioniService } from '../../../../core/services/lezioni.service';
+import { UserService } from '../../../../core/services/data/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { ILezione, TipoLezione } from '../../../../shared/models/Lezione';
+import { IUsers } from '../../../../shared/models/Users';
 import { IModalButton } from '../../../../shared/models/ui/modal-config';
 import { FormLezioneComponent } from '../form-lezione/form-lezione.component';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-dettaglio-lezione',
@@ -14,13 +17,17 @@ import { FormLezioneComponent } from '../form-lezione/form-lezione.component';
   templateUrl: './dettaglio-lezione.component.html',
   styleUrl: './dettaglio-lezione.component.css'
 })
-export class DettaglioLezioneComponent implements OnInit {
+export class DettaglioLezioneComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   private modaleService = inject(ModaleService);
   private toastr = inject(ToastrService);
   private lezioniService = inject(LezioniService);
+  private userService = inject(UserService);
 
   lezione?: ILezione;
+  partecipantiDettagli: IUsers[] = [];
   isLoading = false;
+  private partecipantiLoaded = false;
 
   tipiLezioneLabels = {
     [TipoLezione.PRIVATA]: 'Lezione Privata',
@@ -37,16 +44,44 @@ export class DettaglioLezioneComponent implements OnInit {
     { id: 3, nome: 'Sofia', cognome: 'Verdi' }
   ];
 
-  ngOnInit() {
-    this.setupModalSubscription();
-  }
 
   private setupModalSubscription() {
-    this.modaleService.config$.subscribe(config => {
-      if (config && config.dati) {
-        this.lezione = config.dati as ILezione;
-      }
-    });
+    this.modaleService.config$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(config => {
+        if (config && config.dati) {
+          this.lezione = config.dati as ILezione;
+          this.partecipantiLoaded = false;
+        }
+      });
+  }
+  ngOnInit() {
+    this.setupModalSubscription();
+    // Carica i dettagli partecipanti solo una volta per apertura
+    this.loadPartecipantiDettagli();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private loadPartecipantiDettagli() {
+    if (this.partecipantiLoaded) return;
+    this.partecipantiLoaded = true;
+    if (this.lezione?.partecipanti && this.lezione.partecipanti.length > 0) {
+      this.userService.getUtentiByUsernames(this.lezione.partecipanti).subscribe({
+        next: (utenti) => {
+          this.partecipantiDettagli = utenti;
+        },
+        error: (error) => {
+          console.error('Errore nel caricamento dettagli partecipanti:', error);
+          this.partecipantiDettagli = [];
+        }
+      });
+    } else {
+      this.partecipantiDettagli = [];
+    }
   }
 
   getCustomButtons(): IModalButton[] {
@@ -72,8 +107,7 @@ export class DettaglioLezioneComponent implements OnInit {
       {
         text: 'Elimina',
         cssClass: 'btn-danger',
-        action: () => this.onDelete(),
-        disabled: !this.canCancel
+        action: () => this.onDelete()
       }
     ];
   }
@@ -139,8 +173,12 @@ export class DettaglioLezioneComponent implements OnInit {
 
   get postiDisponibili(): number {
     const maxPartecipanti = this.lezione?.maxPartecipanti || 0;
-    const partecipantiIscritti = this.lezione?.partecipantiIscritti || 0;
-    return maxPartecipanti - partecipantiIscritti;
+    const partecipantiAttuali = this.lezione?.partecipanti?.length || 0;
+    return maxPartecipanti - partecipantiAttuali;
+  }
+
+  get partecipantiIscritti(): number {
+    return this.lezione?.partecipanti?.length || 0;
   }
 
   get isCompleta(): boolean {
@@ -166,9 +204,9 @@ export class DettaglioLezioneComponent implements OnInit {
         tipo: this.lezione.tipo,
         durata: this.lezione.durata,
         maxPartecipanti: this.lezione.maxPartecipanti,
-        partecipantiIscritti: this.lezione.partecipantiIscritti,
+        partecipanti: this.lezione.partecipanti || [],
         istruttoreId: this.lezione.istruttoreId,
-        descrizione: this.lezione.descrizione,
+        // descrizione: this.lezione.descrizione,
         prezzo: this.lezione.prezzo,
         note: this.lezione.note,
         attiva: this.lezione.attiva
@@ -192,6 +230,7 @@ export class DettaglioLezioneComponent implements OnInit {
       this.lezioniService.deleteLezione(this.lezione.id).subscribe({
         next: () => {
           this.toastr.success('Lezione eliminata con successo');
+          this.modaleService.emitRefreshList();
           this.modaleService.chiudi();
         },
         error: (error) => {
@@ -218,6 +257,7 @@ export class DettaglioLezioneComponent implements OnInit {
         this.toastr.success(
           `Lezione ${this.lezione?.attiva ? 'disattivata' : 'attivata'} con successo`
         );
+        this.modaleService.emitRefreshList();
         this.isLoading = false;
       },
       error: (error) => {

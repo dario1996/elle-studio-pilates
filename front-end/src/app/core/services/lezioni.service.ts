@@ -15,6 +15,7 @@ export interface LezioneDto {
   attiva?: boolean;
   createdAt?: string;
   updatedAt?: string;
+  partecipanti?: string[]; // Lista di username
 }
 
 @Injectable({
@@ -42,11 +43,10 @@ export class LezioniService {
       tipo: dto.tipoLezione,
       durata: durataMinuti,
       maxPartecipanti: this.getMaxPartecipantiByTipo(dto.tipoLezione),
-      partecipanti: [], // TODO: implementare gestione partecipanti
+      partecipanti: dto.partecipanti || [], // Lista di username
       partecipantiIscritti: 0, // TODO: implementare gestione partecipanti iscritti dal backend
       istruttore: dto.istruttore,
       istruttoreId: this.getIstruttoreIdByNome(dto.istruttore), // Mappa nome → ID per compatibilità
-      descrizione: dto.note || '',
       note: dto.note || '',
       stato: dto.attiva ? 'CONFERMATA' : 'CANCELLATA',
       attiva: dto.attiva || false,
@@ -64,8 +64,9 @@ export class LezioniService {
       dataFine: this.toLocalISOString(model.dataFine),
       istruttore: model.istruttore,
       tipoLezione: model.tipo,
-      note: model.descrizione || '',
-      attiva: model.attiva !== undefined ? model.attiva : (model.stato !== 'CANCELLATA')
+      note: model.note || '',
+      attiva: model.attiva !== undefined ? model.attiva : (model.stato !== 'CANCELLATA'),
+      partecipanti: model.partecipanti || []
     };
     console.log('DTO creato per backend:', dto);
     return dto;

@@ -437,3 +437,56 @@
     justify-content: center;
   }
 }
+
+/* Stili per i partecipanti */
+.participants-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.participant-badge {
+  background-color: #e0f2fe;
+  color: #0277bd;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #b3e5fc;
+}
+
+.participant-badge i {
+  font-size: 0.75rem;
+  color: #0288d1;
+}
+
+.participants-summary {
+  padding-top: 8px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.participants-summary small {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+}
+
+.participants-summary i {
+  color: #94a3b8;
+}
+
+@media (max-width: 768px) {
+  .participants-list {
+    gap: 6px;
+  }
+  
+  .participant-badge {
+    font-size: 0.8rem;
+    padding: 4px 10px;
+  }
+}

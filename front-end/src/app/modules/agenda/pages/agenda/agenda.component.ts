@@ -85,6 +85,12 @@ export class AgendaComponent implements OnInit {
   ngOnInit(): void {
     this.loadLezioni();
     
+    // Ascolta l'evento di refresh per ricaricare le lezioni
+    this.modaleService.refreshList$.subscribe(() => {
+      console.log('🔄 Ricevuto evento refresh, ricaricando lezioni...');
+      this.loadLezioni();
+    });
+    
     // Controlla se deve aprire il form di creazione o modifica
     this.route.queryParams.subscribe(params => {
       if (params['openForm'] === 'true') {
@@ -147,7 +153,7 @@ export class AgendaComponent implements OnInit {
         lezione: lezione,
         tipo: lezione.tipo,
         attiva: lezione.attiva,
-        partecipanti: lezione.partecipantiIscritti,
+        partecipanti: lezione.partecipanti?.length || 0,
         maxPartecipanti: lezione.maxPartecipanti
       }
     }));
@@ -156,7 +162,7 @@ export class AgendaComponent implements OnInit {
   private getEventTitle(lezione: ILezione): string {
     const config = TIPI_LEZIONE_CONFIG[lezione.tipo];
     const partecipantiInfo = lezione.maxPartecipanti 
-      ? `(${lezione.partecipantiIscritti}/${lezione.maxPartecipanti})`
+      ? `(${lezione.partecipanti?.length || 0}/${lezione.maxPartecipanti})`
       : '';
     return `${config.label} ${partecipantiInfo}`;
   }
@@ -236,8 +242,7 @@ export class AgendaComponent implements OnInit {
         {
           text: 'Elimina',
           cssClass: 'btn-danger',
-          action: () => this.deleteLezione(lezione),
-          disabled: !canCancel
+          action: () => this.deleteLezione(lezione)
         }
       ];
 

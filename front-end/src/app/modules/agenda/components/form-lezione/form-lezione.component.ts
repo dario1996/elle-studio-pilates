@@ -1,10 +1,15 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ModaleService } from '../../../../core/services/modal.service';
 import { ToastrService } from 'ngx-toastr';
 import { LezioniService } from '../../../../core/services/lezioni.service';
+import { CorsiService } from '../../../../core/services/data/corsi.service';
+import { UserService } from '../../../../core/services/data/user.service';
 import { ILezione, TipoLezione, StatoLezione } from '../../../../shared/models/Lezione';
+import { ICorsi } from '../../../../shared/models/Corsi';
+import { IUtenteAutocomplete } from '../../../../shared/models/utente-autocomplete.model';
+import { debounceTime, distinctUntilChanged, switchMap, of } from 'rxjs';
 
 @Component({
   selector: 'app-form-lezione',
@@ -18,6 +23,8 @@ export class FormLezioneComponent implements OnInit {
   private modaleService = inject(ModaleService);
   private toastr = inject(ToastrService);
   private lezioniService = inject(LezioniService);
+  private corsiService = inject(CorsiService);
+  private userService = inject(UserService);
   private cdr = inject(ChangeDetectorRef);
 
   form!: FormGroup;
@@ -25,48 +32,118 @@ export class FormLezioneComponent implements OnInit {
   isEditMode = false;
   isLoading = false;
 
-  tipiLezione = [
-    { value: TipoLezione.PRIVATA, label: 'Lezione Privata', maxPartecipanti: 1, durata: 50 },
-    { value: TipoLezione.PRIMA_LEZIONE, label: 'Prima Lezione', maxPartecipanti: 1, durata: 60 },
-    { value: TipoLezione.SEMI_PRIVATA_DUETTO, label: 'Semi-Privata Duetto', maxPartecipanti: 2, durata: 50 },
-    { value: TipoLezione.SEMI_PRIVATA_GRUPPO, label: 'Semi-Privata Gruppo', maxPartecipanti: 4, durata: 50 },
-    { value: TipoLezione.MATWORK, label: 'Matwork', maxPartecipanti: 8, durata: 50 },
-    { value: TipoLezione.YOGA, label: 'Yoga', maxPartecipanti: 8, durata: 60 }
-  ];
+  // Sostituiamo i mock con i corsi reali
+  corsiDisponibili: ICorsi[] = [];
+  
+  // Istruttore fisso: Laura Caratti
+  readonly ISTRUTTORE_FISSO = 'Laura Caratti';
 
-  istruttori = [
-    { id: 1, nome: 'Eleonora', cognome: 'Bianchi' },
-    { id: 2, nome: 'Marco', cognome: 'Rossi' },
-    { id: 3, nome: 'Sofia', cognome: 'Verdi' }
-  ];
+  // Gestione partecipanti
+  autocompleteSearch = new FormControl('');
+  utentiSuggestions: IUtenteAutocomplete[] = [];
+  partecipantiSelezionati: IUtenteAutocomplete[] = [];
+  showAutocomplete = false;
+  maxPartecipantiCorrente = 0;
+
+  // Mapping categoria corso -> tipo lezione
+  private mapCategoriaToTipoLezione(categoria: string): TipoLezione {
+    switch (categoria.toUpperCase()) {
+      case 'PRIMA_LEZIONE':
+        return TipoLezione.PRIMA_LEZIONE;
+      case 'PRIVATA':
+        return TipoLezione.PRIVATA;
+      case 'SEMI_PRIVATA':
+        return TipoLezione.SEMI_PRIVATA_DUETTO; // Default per semi-privata
+      case 'GRUPPO_MAT':
+      case 'MATWORK':
+        return TipoLezione.MATWORK;
+      case 'COMBO':
+        return TipoLezione.SEMI_PRIVATA_GRUPPO; // Mappiamo COMBO a gruppo
+      case 'YOGA':
+        return TipoLezione.YOGA;
+      default:
+        console.warn('Categoria corso non riconosciuta:', categoria, '- usando PRIVATA come default');
+        return TipoLezione.PRIVATA;
+    }
+  }
 
   ngOnInit() {
     console.log('FormLezioneComponent ngOnInit, dati:', this.lezioneToEdit);
-    this.modaleService.config$.subscribe(config => {
-      console.log('📦 Config ricevuto nel form:', config);
-      if (config?.dati && Object.keys(config.dati).length > 0) {
-        this.lezioneToEdit = config.dati;
-        this.isEditMode = true;
-        if (this.form && this.lezioneToEdit) {
-          this.populateFormForEdit();
+    
+    // Carica i corsi e solo dopo gestisci la precompilazione
+    this.loadCorsi = this.loadCorsi.bind(this);
+    this.loadCorsi(() => {
+      this.modaleService.config$.subscribe(config => {
+        console.log('📦 Config ricevuto nel form:', config);
+        if (config?.dati && Object.keys(config.dati).length > 0) {
+          this.lezioneToEdit = config.dati;
+          this.isEditMode = true;
+          if (this.form && this.lezioneToEdit) {
+            this.populateFormForEdit();
+          }
+        } else {
+          this.isEditMode = false;
+          this.lezioneToEdit = undefined;
         }
-      } else {
-        this.isEditMode = false;
-        this.lezioneToEdit = undefined;
-      }
-      
-      if (config?.onConferma) {
-        console.log('✅ Callback onConferma trovato:', config.onConferma);
-      } else {
-        console.log('❌ Nessun callback onConferma trovato');
-      }
+        if (config?.onConferma) {
+          console.log('✅ Callback onConferma trovato:', config.onConferma);
+        } else {
+          console.log('❌ Nessun callback onConferma trovato');
+        }
+      });
     });
     this.initForm();
-    
+    this.setupAutocomplete();
     // Subscribe to form status changes to update button state
     this.form.statusChanges?.subscribe(() => {
       // Trigger change detection when form status changes
       this.cdr.detectChanges();
+    });
+  }
+
+  private setupAutocomplete() {
+    // Setup autocomplete per utenti
+    this.autocompleteSearch.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(term => {
+        if (!term || term.length < 2) {
+          return of([]);
+        }
+        return this.userService.getUtentiAutocomplete(term);
+      })
+    ).subscribe({
+      next: (utenti) => {
+        this.utentiSuggestions = utenti.map(u => ({
+          username: u.username,
+          nome: u.nome,
+          cognome: u.cognome,
+          email: u.email,
+          nominativo: u.nome && u.cognome ? `${u.nome} ${u.cognome}` : u.username,
+          displayText: u.nome && u.cognome ? `${u.nome} ${u.cognome} (${u.username})` : u.username
+        }));
+        this.showAutocomplete = this.utentiSuggestions.length > 0;
+      },
+      error: (error) => {
+        console.error('Errore autocomplete utenti:', error);
+        this.utentiSuggestions = [];
+        this.showAutocomplete = false;
+      }
+    });
+  }
+
+  private loadCorsi(callback?: () => void) {
+    this.corsiService.getListaCorsi().subscribe({
+      next: (corsi) => {
+        this.corsiDisponibili = corsi.filter(c => c.attivo); // Solo corsi attivi
+        console.log('📚 Corsi caricati:', this.corsiDisponibili);
+        if (callback) callback();
+      },
+      error: (error) => {
+        console.error('Errore nel caricamento corsi:', error);
+        this.toastr.error('Errore nel caricamento dei corsi');
+        if (callback) callback();
+      }
     });
   }
 
@@ -78,30 +155,74 @@ export class FormLezioneComponent implements OnInit {
 
     // Formatta la data per l'input solo se è valida
     const dataInizio = new Date(this.lezioneToEdit.dataInizio);
-    
-    // Controlla se la data è valida
     if (isNaN(dataInizio.getTime())) {
       console.error('Data non valida:', this.lezioneToEdit.dataInizio);
       this.toastr.error('Errore nel formato della data');
       return;
     }
-    
     const dataFormatted = dataInizio.toISOString().split('T')[0];
     const oraFormatted = dataInizio.toTimeString().slice(0, 5);
-    
+
+    // Trova il corso corrispondente al tipo della lezione (se possibile)
+    let corsoSelezionato = null;
+    if (this.lezioneToEdit.tipo && this.corsiDisponibili.length > 0) {
+      // Prova a trovare il corso che mappa il tipo/categoria
+      corsoSelezionato = this.corsiDisponibili.find(corso => {
+        // Mappiamo la categoria del corso con il tipo della lezione
+        return this.mapCategoriaToTipoLezione(corso.categoria) === this.lezioneToEdit!.tipo;
+      });
+    }
+    // Fallback: primo corso disponibile
+    if (!corsoSelezionato && this.corsiDisponibili.length > 0) {
+      corsoSelezionato = this.corsiDisponibili[0];
+    }
+
     this.form.patchValue({
-      tipo: this.lezioneToEdit.tipo || '',
-      titolo: this.lezioneToEdit.titolo || '',
-      descrizione: this.lezioneToEdit.descrizione || '',
-      dataInizio: dataFormatted,
-      oraInizio: oraFormatted,
-      durata: this.lezioneToEdit.durata || 50,
-      istruttoreId: this.lezioneToEdit.istruttoreId || null,
-      maxPartecipanti: this.lezioneToEdit.maxPartecipanti || 1,
-      prezzo: this.lezioneToEdit.prezzo || 0,
-      note: this.lezioneToEdit.note || ''
+  corsoId: corsoSelezionato ? corsoSelezionato.id : '',
+  titolo: this.lezioneToEdit.titolo || '',
+  dataInizio: dataFormatted,
+  oraInizio: oraFormatted,
+  durata: corsoSelezionato ? corsoSelezionato.durataMinuti : '',
+  maxPartecipanti: corsoSelezionato ? corsoSelezionato.maxPartecipanti : '',
+  prezzo: corsoSelezionato ? corsoSelezionato.prezzo : '',
+  note: this.lezioneToEdit.note || ''
     });
-    console.log('Form popolato con patchValue:', this.form.value);
+
+    this.maxPartecipantiCorrente = corsoSelezionato ? corsoSelezionato.maxPartecipanti : 0;
+
+    // Carica i dati completi dei partecipanti (se presenti)
+    if (this.lezioneToEdit.partecipanti && this.lezioneToEdit.partecipanti.length > 0) {
+      this.userService.getUtentiByUsernames(this.lezioneToEdit.partecipanti).subscribe({
+        next: (utenti) => {
+          this.partecipantiSelezionati = utenti.map(u => ({
+            username: u.username,
+            nome: u.nome,
+            cognome: u.cognome,
+            email: u.email,
+            nominativo: u.nome && u.cognome ? `${u.nome} ${u.cognome}` : u.username,
+            displayText: u.nome && u.cognome ? `${u.nome} ${u.cognome} (${u.username})` : u.username
+          }));
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          console.error('Errore nel caricamento dati partecipanti:', err);
+          // Fallback: mostra solo username
+          this.partecipantiSelezionati = this.lezioneToEdit!.partecipanti.map(username => ({
+            username,
+            email: '',
+            nominativo: username,
+            displayText: username
+          }));
+          this.cdr.detectChanges();
+        }
+      });
+    } else {
+      this.partecipantiSelezionati = [];
+      this.cdr.detectChanges();
+    }
+
+    // I campi disabilitati si popolano automaticamente quando cambia corsoId
+    console.log('Form popolato per edit con patchValue:', this.form.value);
   }
 
   private getFormattedDate(): string {
@@ -139,83 +260,42 @@ export class FormLezioneComponent implements OnInit {
 
   private initForm() {
     this.form = this.fb.group({
-      tipo: [this.lezioneToEdit?.tipo || TipoLezione.PRIVATA, Validators.required],
+      corsoId: [this.lezioneToEdit?.tipo || '', Validators.required],
       titolo: [this.lezioneToEdit?.titolo || '', [Validators.required, Validators.minLength(3)]],
-      descrizione: [this.lezioneToEdit?.descrizione || ''],
       dataInizio: [this.getFormattedDate(), Validators.required],
       oraInizio: [this.getFormattedTime(), Validators.required],
-      durata: [this.lezioneToEdit?.durata || 50, [Validators.required, Validators.min(30), Validators.max(120)]],
-      istruttore: [this.lezioneToEdit?.istruttore || '', Validators.required], // Cambiato da istruttoreId a istruttore
-      maxPartecipanti: [this.lezioneToEdit?.maxPartecipanti || 1, [Validators.required, Validators.min(1), Validators.max(8)]],
-      prezzo: [this.lezioneToEdit?.prezzo || 0, [Validators.min(0)]], // Rimosso required per prezzo
+      durata: [{value: this.lezioneToEdit?.durata || 0, disabled: true}, [Validators.required, Validators.min(15), Validators.max(180)]],
+      istruttore: [{value: this.ISTRUTTORE_FISSO, disabled: true}, Validators.required],
+      maxPartecipanti: [{value: this.lezioneToEdit?.maxPartecipanti || 0, disabled: true}, [Validators.required, Validators.min(1), Validators.max(50)]],
+      prezzo: [{value: this.lezioneToEdit?.prezzo || 0, disabled: true}, [Validators.required, Validators.min(0)]],
       note: [this.lezioneToEdit?.note || '']
     });
 
-    // Aggiorna durata e maxPartecipanti quando cambia il tipo
-    this.form.get('tipo')?.valueChanges.subscribe(tipo => {
-      const tipoInfo = this.tipiLezione.find(t => t.value === tipo);
-      if (tipoInfo) {
-        this.form.patchValue({
-          durata: tipoInfo.durata,
-          maxPartecipanti: tipoInfo.maxPartecipanti
+    // Auto-compilazione quando cambia il corso selezionato
+    this.form.get('corsoId')?.valueChanges.subscribe(corsoId => {
+      const corsoSelezionato = this.corsiDisponibili.find(c => c.id === parseInt(corsoId));
+      if (corsoSelezionato) {
+        // Auto-compila i campi disabilitati
+        this.form.get('durata')?.setValue(corsoSelezionato.durataMinuti);
+        this.form.get('maxPartecipanti')?.setValue(corsoSelezionato.maxPartecipanti);
+        this.form.get('prezzo')?.setValue(corsoSelezionato.prezzo);
+        
+        // Aggiorna il limite partecipanti corrente
+        this.maxPartecipantiCorrente = corsoSelezionato.maxPartecipanti || 1;
+        
+        // Verifica se i partecipanti selezionati superano il nuovo limite
+        if (this.partecipantiSelezionati.length > this.maxPartecipantiCorrente) {
+          this.toastr.warning(`Il corso selezionato permette massimo ${this.maxPartecipantiCorrente} partecipanti. Alcuni partecipanti sono stati rimossi.`);
+          this.partecipantiSelezionati = this.partecipantiSelezionati.slice(0, this.maxPartecipantiCorrente);
+          this.updatePartecipantiFormValue();
+        }
+        
+        console.log('🎯 Auto-compilato da corso:', {
+          durata: corsoSelezionato.durataMinuti,
+          maxPartecipanti: corsoSelezionato.maxPartecipanti,
+          prezzo: corsoSelezionato.prezzo
         });
       }
-    });
-  }
-
-  private populateForm() {
-    if (this.lezioneToEdit) {
-      console.log('Populating form with data:', this.lezioneToEdit);
-      
-      // Gestione più robusta della data
-      let dataInizio: Date;
-      if (typeof this.lezioneToEdit.dataInizio === 'string') {
-        dataInizio = new Date(this.lezioneToEdit.dataInizio);
-      } else {
-        dataInizio = this.lezioneToEdit.dataInizio;
-      }
-      
-      // Controllo se la data è valida
-      if (isNaN(dataInizio.getTime())) {
-        console.error('Data non valida:', this.lezioneToEdit.dataInizio);
-        this.toastr.error('Errore nel formato della data');
-        return;
-      }
-      
-      const dataFormatted = dataInizio.toISOString().split('T')[0];
-      const oraFormatted = dataInizio.toTimeString().slice(0, 5);
-      
-      console.log('Data formattata:', dataFormatted, 'Ora formattata:', oraFormatted);
-
-      // Usa setValue invece di patchValue per essere più espliciti
-      this.form.setValue({
-        tipo: this.lezioneToEdit.tipo,
-        titolo: this.lezioneToEdit.titolo,
-        descrizione: this.lezioneToEdit.descrizione || '',
-        dataInizio: dataFormatted,
-        oraInizio: oraFormatted,
-        durata: this.lezioneToEdit.durata,
-        istruttore: this.lezioneToEdit.istruttore || '', // Cambiato da istruttoreId a istruttore
-        maxPartecipanti: this.lezioneToEdit.maxPartecipanti,
-        prezzo: this.lezioneToEdit.prezzo || 0, // Gestito prezzo opzionale
-        note: this.lezioneToEdit.note || ''
-      });
-
-      // Forza il change detection
-      this.cdr.detectChanges();
-      
-      console.log('Form values after setting:', this.form.value);
-    }
-  }
-
-  private resetForm() {
-    this.form.reset();
-    this.form.patchValue({
-      tipo: TipoLezione.PRIVATA,
-      durata: 50,
-      maxPartecipanti: 1,
-      prezzo: 0,
-      istruttore: ''
     });
   }
 
@@ -224,6 +304,14 @@ export class FormLezioneComponent implements OnInit {
     if (this.form.valid) {
       this.isLoading = true;
       const formData = this.form.value;
+      
+      // Trova il corso selezionato per ottenere il nome/tipo
+      const corsoSelezionato = this.corsiDisponibili.find(c => c.id === parseInt(formData.corsoId));
+      if (!corsoSelezionato) {
+        this.toastr.error('Corso selezionato non valido');
+        this.isLoading = false;
+        return;
+      }
       
       // Combina data e ora mantenendo il fuso orario locale
       const [year, month, day] = formData.dataInizio.split('-').map(Number);
@@ -234,65 +322,79 @@ export class FormLezioneComponent implements OnInit {
       console.log('Data creata dal form:', dataOra);
       console.log('Dati form originali:', formData.dataInizio, formData.oraInizio);
       
+      // Ottieni i valori dai campi disabilitati
+      const durata = this.form.get('durata')?.value || corsoSelezionato.durataMinuti;
+      const maxPartecipanti = this.form.get('maxPartecipanti')?.value || corsoSelezionato.maxPartecipanti;
+      const prezzo = this.form.get('prezzo')?.value || corsoSelezionato.prezzo;
+      
       const lezione: ILezione = {
         id: this.isEditMode ? this.lezioneToEdit?.id : undefined,
-        tipo: formData.tipo,
+        tipo: this.mapCategoriaToTipoLezione(corsoSelezionato.categoria), // Uso la funzione di mapping
         titolo: formData.titolo,
         dataInizio: dataOra,
-        dataFine: new Date(dataOra.getTime() + formData.durata * 60000),
-        durata: formData.durata,
+        dataFine: new Date(dataOra.getTime() + durata * 60000),
+        durata: durata,
         istruttoreId: 0, // Placeholder, non più utilizzato nel backend
-        istruttore: formData.istruttore,
-        maxPartecipanti: formData.maxPartecipanti,
-        partecipantiIscritti: this.lezioneToEdit?.partecipantiIscritti || 0,
-        partecipanti: this.lezioneToEdit?.partecipanti || [],
-        descrizione: formData.descrizione,
-        stato: this.isEditMode ? (this.lezioneToEdit?.stato || StatoLezione.CONFERMATA) : StatoLezione.CONFERMATA,
-        prezzo: formData.prezzo || 0,
-        note: formData.note,
-        attiva: this.isEditMode ? (this.lezioneToEdit?.attiva ?? true) : true
+        istruttore: this.ISTRUTTORE_FISSO, // Sempre Laura Caratti
+        maxPartecipanti: maxPartecipanti,
+        partecipantiIscritti: this.partecipantiSelezionati.length,
+  partecipanti: this.partecipantiSelezionati.map(p => p.username),
+  stato: this.isEditMode ? (this.lezioneToEdit?.stato || StatoLezione.CONFERMATA) : StatoLezione.CONFERMATA,
+  prezzo: prezzo,
+  note: formData.note || '',
+  attiva: this.isEditMode ? (this.lezioneToEdit?.attiva ?? true) : true
       };
 
       console.log('🎯 Lezione creata dal form:', lezione);
 
-      // Se è in modalità modifica, usa il callback onConferma se presente
+      // Se è in modalità modifica, usa SOLO il callback onConferma se presente
       if (this.isEditMode) {
-        this.modaleService.config$.pipe().subscribe(config => {
+        const sub = this.modaleService.config$.subscribe(config => {
           if (config?.onConferma) {
             console.log('🚀 Chiamando callback onConferma');
             config.onConferma(lezione);
             this.isLoading = false;
-            return;
+            sub.unsubscribe();
+          } else {
+            // Fallback: se non c'è callback, aggiorna direttamente
+            // this.eseguiSalvataggioDiretto(lezione, true);
+            sub.unsubscribe();
           }
-        }).unsubscribe();
+        });
+        return;
       }
-
-      // Fallback: usa il service direttamente (per creazione o se onConferma non è presente)
-      console.log('🔄 Usando service direttamente');
-      const operation = this.isEditMode && this.lezioneToEdit?.id
-        ? this.lezioniService.updateLezione(this.lezioneToEdit.id, lezione)
-        : this.lezioniService.createLezione(lezione);
-
-      operation.subscribe({
-        next: () => {
-          this.toastr.success(
-            this.isEditMode ? 'Lezione aggiornata con successo' : 'Lezione creata con successo'
-          );
-          this.modaleService.chiudi();
-        },
-        error: (error: any) => {
-          console.error('Errore nel salvataggio della lezione:', error);
-          this.toastr.error('Errore nel salvataggio della lezione');
-          this.isLoading = false;
-        },
-        complete: () => {
-          this.isLoading = false;
-        }
-      });
+      // Creazione: sempre diretto
+      // this.eseguiSalvataggioDiretto(lezione, false);
     } else {
       this.markFormGroupTouched();
     }
   }
+
+  /**
+   * Esegue la chiamata diretta al service per creazione o modifica
+   */
+  // private eseguiSalvataggioDiretto(lezione: ILezione, isEdit: boolean) {
+  //   const operation = isEdit && this.lezioneToEdit?.id
+  //     ? this.lezioniService.updateLezione(this.lezioneToEdit.id, lezione)
+  //     : this.lezioniService.createLezione(lezione);
+  //   operation.subscribe({
+  //     next: () => {
+  //       this.toastr.success(
+  //         isEdit ? 'Lezione aggiornata con successo' : 'Lezione creata con successo'
+  //       );
+  //       // Il refresh della lista viene gestito da agenda.component.ts
+  //       this.modaleService.chiudi();
+  //     },
+  //     error: (error: any) => {
+  //       console.error('Errore nel salvataggio della lezione:', error);
+  //       this.toastr.error('Errore nel salvataggio della lezione');
+  //       this.isLoading = false;
+  //     },
+  //     complete: () => {
+  //       this.isLoading = false;
+  //     }
+  //   });
+  // }
 
   private markFormGroupTouched() {
     Object.keys(this.form.controls).forEach(key => {
@@ -308,6 +410,58 @@ export class FormLezioneComponent implements OnInit {
   // Metodo chiamato dal modal component per la conferma
   confermaForm() {
     this.onSubmit();
+  }
+
+  // Metodi per gestione partecipanti
+  aggiungiPartecipante(utente: IUtenteAutocomplete) {
+    // Verifica se già selezionato
+    if (this.partecipantiSelezionati.find(p => p.username === utente.username)) {
+      this.toastr.warning('Partecipante già aggiunto');
+      return;
+    }
+
+    // Verifica limite massimo partecipanti
+    if (this.partecipantiSelezionati.length >= this.maxPartecipantiCorrente) {
+      this.toastr.error(`Massimo ${this.maxPartecipantiCorrente} partecipanti per questo tipo di lezione`);
+      return;
+    }
+
+    this.partecipantiSelezionati.push(utente);
+    this.autocompleteSearch.setValue('');
+    this.showAutocomplete = false;
+    this.updatePartecipantiFormValue();
+  }
+
+  rimuoviPartecipante(username: string) {
+    this.partecipantiSelezionati = this.partecipantiSelezionati.filter(p => p.username !== username);
+    this.updatePartecipantiFormValue();
+  }
+
+  private updatePartecipantiFormValue() {
+    const usernames = this.partecipantiSelezionati.map(p => p.username);
+    // Se abbiamo un campo partecipanti nel form, aggiorniamolo
+    // Altrimenti teniamo la lista aggiornata per l'invio
+  }
+
+  onAutocompleteClick(utente: IUtenteAutocomplete) {
+    this.aggiungiPartecipante(utente);
+  }
+
+  onAutocompleteBlur() {
+    // Delay per permettere il click sulle suggestions
+    setTimeout(() => {
+      this.showAutocomplete = false;
+    }, 200);
+  }
+
+  onAutocompleteFocus() {
+    if (this.autocompleteSearch.value && this.utentiSuggestions.length > 0) {
+      this.showAutocomplete = true;
+    }
+  }
+
+  get postiDisponibili(): number {
+    return this.maxPartecipantiCorrente - this.partecipantiSelezionati.length;
   }
 
 }

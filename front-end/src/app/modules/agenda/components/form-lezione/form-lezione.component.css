@@ -21,3 +21,126 @@
       border-color 0.15s ease-in-out,
       box-shadow 0.15s ease-in-out;
 }
+
+/* Stili per autocomplete partecipanti */
+.autocomplete-dropdown {
+  z-index: 1050;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #ced4da;
+}
+
+.autocomplete-item {
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.autocomplete-item:hover {
+  background-color: #f8f9fa !important;
+}
+
+.autocomplete-item:last-child {
+  border-bottom: none;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* Badge per partecipanti */
+.badge {
+  font-size: 0.85rem;
+}
+
+.btn-close-white {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Nuovi stili per la sezione partecipanti migliorata */
+.selected-participants-container {
+  min-height: 120px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.participants-list {
+  padding: 8px;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  background-color: #f8f9fa;
+}
+
+.participant-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background-color: white;
+  border: 1px solid #e3e6ea;
+  border-radius: 5px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s ease;
+}
+
+.participant-card:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.participant-info {
+  flex: 1;
+}
+
+.participant-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #495057;
+  margin-bottom: 2px;
+}
+
+.participant-email {
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+.btn-remove {
+  background: none;
+  border: none;
+  color: #dc3545;
+  padding: 4px 6px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+}
+
+.btn-remove:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+.no-participants {
+  padding: 20px;
+  text-align: center;
+  border: 2px dashed #dee2e6;
+  border-radius: 6px;
+  background-color: #f8f9fa;
+}
+
+/* Responsività */
+@media (max-width: 768px) {
+  .participants-list {
+    max-height: 200px;
+  }
+  
+  .participant-card {
+    padding: 8px 10px;
+  }
+  
+  .participant-name {
+    font-size: 0.85rem;
+  }
+  
+  .participant-email {
+    font-size: 0.75rem;
+  }
+}

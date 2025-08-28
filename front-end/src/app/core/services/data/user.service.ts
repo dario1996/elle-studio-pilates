@@ -74,6 +74,24 @@ export class UserService {
       },
     );
 
+  // Autocomplete utenti per form lezioni
+  getUtentiAutocomplete = (search?: string) =>
+    this.httpClient.get<any[]>(
+      `http://${this.server}:${this.port}/api/utenti/autocomplete`,
+      {
+        params: {
+          ...(search && { search }),
+        },
+      },
+    );
+
+  // Ottieni dati utenti per username multipli
+  getUtentiByUsernames = (usernames: string[]) =>
+    this.httpClient.post<IUsers[]>(
+      `http://${this.server}:${this.port}/api/utenti/by-usernames`,
+      { usernames }
+    );
+
   // Download certificato medico
   downloadCertificatoMedico = (username: string) =>
     this.httpClient.get(

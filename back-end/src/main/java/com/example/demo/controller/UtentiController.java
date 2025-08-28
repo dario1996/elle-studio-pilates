@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.UtenteAutocompleteDto;
 import com.example.demo.entity.Utenti;
 import com.example.demo.exceptions.BindingException;
 import com.example.demo.services.UtentiService;
@@ -119,6 +121,73 @@ public class UtentiController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new InfoMsg(LocalDate.now(), "Errore nell'eliminazione dell'utente"));
         }
+    }
+
+    // 🆕 ENDPOINT GET per autocomplete utenti
+    @GetMapping(value = "/autocomplete", produces = "application/json")
+    public ResponseEntity<List<UtenteAutocompleteDto>> getUtentiAutocomplete(
+            @RequestParam(required = false) String search) {
+        log.info("Richiesta autocomplete utenti con search: " + search);
+        try {
+            List<Utenti> utenti = utentiService.SelPreloadUsers();
+            
+            // Filtra per utenti attivi e opzionalmente per termine di ricerca
+            List<UtenteAutocompleteDto> risultati = utenti.stream()
+                    .filter(u -> "Si".equals(u.getAttivo())) // Solo utenti attivi
+                    .filter(u -> search == null || search.isEmpty() || 
+                            matchesSearch(u, search.toLowerCase()))
+                    .map(u -> new UtenteAutocompleteDto(
+                            u.getUsername(),
+                            u.getNome(),
+                            u.getCognome(),
+                            u.getEmail()
+                    ))
+                    .limit(10) // Limita risultati per performance
+                    .collect(java.util.stream.Collectors.toList());
+            
+            return ResponseEntity.ok(risultati);
+        } catch (Exception e) {
+            log.severe("Errore nell'autocomplete utenti: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    // 🆕 ENDPOINT POST per ottenere utenti per username multipli
+    @PostMapping(value = "/by-usernames", produces = "application/json")
+    public ResponseEntity<List<Utenti>> getUtentiByUsernames(@RequestBody java.util.Map<String, java.util.List<String>> payload) {
+        log.info("Richiesta utenti per usernames multipli");
+        try {
+            java.util.List<String> usernames = payload.get("usernames");
+            if (usernames == null || usernames.isEmpty()) {
+                return ResponseEntity.ok(java.util.Collections.emptyList());
+            }
+            
+            List<Utenti> tuttiUtenti = utentiService.SelPreloadUsers();
+            List<Utenti> utentiFiltrati = tuttiUtenti.stream()
+                    .filter(u -> usernames.contains(u.getUsername()))
+                    .collect(java.util.stream.Collectors.toList());
+            
+            return ResponseEntity.ok(utentiFiltrati);
+        } catch (Exception e) {
+            log.severe("Errore nel recupero utenti per usernames: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+    
+    private boolean matchesSearch(Utenti utente, String search) {
+        if (utente.getUsername() != null && utente.getUsername().toLowerCase().contains(search)) {
+            return true;
+        }
+        if (utente.getNome() != null && utente.getNome().toLowerCase().contains(search)) {
+            return true;
+        }
+        if (utente.getCognome() != null && utente.getCognome().toLowerCase().contains(search)) {
+            return true;
+        }
+        if (utente.getEmail() != null && utente.getEmail().toLowerCase().contains(search)) {
+            return true;
+        }
+        return false;
     }
 
     // 🆕 ENDPOINT PUT per cambiare stato utente (attivo/non attivo)

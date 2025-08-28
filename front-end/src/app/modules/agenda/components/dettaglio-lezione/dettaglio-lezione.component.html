@@ -48,7 +48,7 @@
             <span class="participants" 
                   [class.full]="isCompleta"
                   [class.available]="!isCompleta">
-              {{ lezione.partecipantiIscritti || 0 }} / {{ lezione.maxPartecipanti || 0 }}
+              {{ partecipantiIscritti }} / {{ lezione.maxPartecipanti || 0 }}
             </span>
           </div>
           <div class="info-item">
@@ -58,70 +58,58 @@
       </div>
     </div>
 
-    <!-- Informazioni Commerciali -->
-    <div class="row mb-2">
-      <div class="col-md-6">
+    <!-- Partecipanti -->
+    <div class="row mb-2" *ngIf="lezione.partecipanti && lezione.partecipanti.length > 0">
+      <div class="col-12">
         <div class="info-card">
-          <h5 class="info-card-title"><i class="fas fa-euro-sign"></i> Dettagli Commerciali</h5>
-          <div class="info-item">
-            <strong>Prezzo:</strong> €{{ lezione.prezzo | number:'1.2-2' }}
-          </div>
-          <div class="info-item">
-            <strong>Tipo lezione:</strong> {{ tipoLezioneLabel }}
+          <h5 class="info-card-title"><i class="fas fa-users"></i> Partecipanti Iscritti</h5>
+          <div class="participants-list">
+            <div class="participant-badge" *ngFor="let partecipante of partecipantiDettagli">
+              <i class="fas fa-user"></i>
+              {{ partecipante.nome }} {{ partecipante.cognome }}
+            </div>
           </div>
         </div>
       </div>
-      <div class="col-md-6">
+    </div>
+
+
+    <!-- Informazioni Importanti -->
+    <div class="row mb-2">
+      <div class="col-12">
         <div class="info-card">
-          <h5 class="info-card-title"><i class="fas fa-info-circle"></i> Stato</h5>
-          <div class="info-item">
-            <strong>Status:</strong> 
-            <span class="status-badge" 
-                  [class.active]="lezione.attiva"
-                  [class.inactive]="!lezione.attiva">
-              {{ lezione.attiva ? 'Attiva' : 'Non Attiva' }}
-            </span>
-          </div>
+          <h5 class="info-card-title"><i class="fas fa-info-circle"></i> Informazioni Importanti</h5>
           <div class="info-item" *ngIf="isCompleta">
             <span class="full-badge">🔴 Lezione al Completo</span>
+          </div>
+          <div class="info-item">
+            <span *ngIf="canCancel" class="text-success">
+              <i class="fas fa-check-circle"></i> Cancellazione consentita
+            </span>
+            <span *ngIf="!canCancel" class="text-warning">
+              <i class="fas fa-exclamation-triangle"></i> Cancellazione non consentita (< 24h)
+            </span>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Descrizioni (se presenti) -->
-    <div class="row mb-2" *ngIf="lezione.descrizione || lezione.note">
-      <div class="col-md-6" *ngIf="lezione.descrizione">
+    <div class="row mb-2" *ngIf="lezione.note">
+      <!-- <div class="col-md-6" *ngIf="lezione.descrizione">
         <div class="info-card">
           <h5 class="info-card-title"><i class="fas fa-edit"></i> Descrizione</h5>
           <div class="info-item">
             {{ lezione.descrizione }}
           </div>
         </div>
-      </div>
-      <div class="col-md-6" *ngIf="lezione.note">
+      </div> -->
+      <div class="col-md-12" *ngIf="lezione.note">
         <div class="info-card">
           <h5 class="info-card-title"><i class="fas fa-sticky-note"></i> Note</h5>
           <div class="info-item">
             {{ lezione.note }}
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Informazioni di Sistema -->
-  <div class="row">
-    <div class="col-12">
-      <div class="info-card">
-        <h5 class="info-card-title"><i class="fas fa-exclamation-triangle"></i> Informazioni Importanti</h5>
-        <div class="alert" [class.alert-warning]="!canCancel" [class.alert-info]="canCancel">
-          <span *ngIf="canCancel">
-            <i class="fas fa-check-circle"></i> Cancellazione consentita (oltre 24 ore dall'inizio)
-          </span>
-          <span *ngIf="!canCancel">
-            <i class="fas fa-exclamation-triangle"></i> Cancellazione non consentita (meno di 24 ore dall'inizio)
-          </span>
         </div>
       </div>
     </div>

@@ -9,6 +9,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "lezioni")
@@ -53,6 +55,15 @@ public class Lezione {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    // Relazione Many-to-Many con Utenti (partecipanti)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "lezione_partecipanti",
+        joinColumns = @JoinColumn(name = "lezione_id"),
+        inverseJoinColumns = @JoinColumn(name = "partecipanti_username")
+    )
+    private List<Utenti> partecipanti = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
