@@ -347,24 +347,22 @@ export class FormLezioneComponent implements OnInit {
 
       console.log('🎯 Lezione creata dal form:', lezione);
 
-      // Se è in modalità modifica, usa SOLO il callback onConferma se presente
-      if (this.isEditMode) {
-        const sub = this.modaleService.config$.subscribe(config => {
-          if (config?.onConferma) {
-            console.log('🚀 Chiamando callback onConferma');
-            config.onConferma(lezione);
-            this.isLoading = false;
-            sub.unsubscribe();
-          } else {
-            // Fallback: se non c'è callback, aggiorna direttamente
-            // this.eseguiSalvataggioDiretto(lezione, true);
-            sub.unsubscribe();
+      // In entrambi i casi (creazione o modifica), chiama il callback onConferma se presente
+      const sub = this.modaleService.config$.subscribe(config => {
+        if (config?.onConferma) {
+          console.log('🚀 Chiamando callback onConferma');
+          config.onConferma(lezione);
+          this.isLoading = false;
+          sub.unsubscribe();
+        } else {
+          // Fallback: se non c'è callback, esegui la chiamata diretta solo in creazione
+          if (!this.isEditMode) {
+            // this.eseguiSalvataggioDiretto(lezione, false);
           }
-        });
-        return;
-      }
-      // Creazione: sempre diretto
-      // this.eseguiSalvataggioDiretto(lezione, false);
+          sub.unsubscribe();
+        }
+      });
+      return;
     } else {
       this.markFormGroupTouched();
     }
