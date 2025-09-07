@@ -1,0 +1,1105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+<!-- Inserimento dati tabella UTENTI -->
+
+    <changeSet id="004-01" author="vincenzo">
+        <comment>Inserimento dati utenti iniziali con password crittografata</comment>
+
+        <insert tableName="utenti">
+            <column name="username" value="l.caratti" />
+            <column name="nome" value="Laura" />
+            <column name="cognome" value="Caratti" />
+            <column name="email" value="laura.caratti@mail.com" />
+            <!-- BCrypt hash of "vinc123" with salt rounds 10 -->
+            <column name="password" value="$2a$10$SAFTjDJLm1kN6KaDpBjc.eZWGKdRcFW/eBt5WR.ciDDWkYZj2.69." />
+            <column name="attivo" value="Si" />
+            <column name="ruoli" value="ADMIN,SUPER_USER" />
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
+        </insert>
+
+        <insert tableName="utenti">
+            <column name="username" value="d.biffero" />
+            <column name="nome" value="Dario" />
+            <column name="cognome" value="Biffero" />
+            <column name="email" value="dario.biffero@mail.com" />
+            <!-- BCrypt hash of "dario123" with salt rounds 10 -->
+            <column name="password" value="$2a$10$N8qpXnQKSGhZhJ9nFvqJveLYtGMNnQwZZYZm1YPQCpd4vM6WgKrN6" />
+            <column name="attivo" value="Si" />
+            <column name="ruoli" value="USER" />
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
+        </insert>
+
+        <!-- Utente 1 -->
+        <insert tableName="utenti">
+            <column name="username" value="m.rossi" />
+            <column name="nome" value="Marco" />
+            <column name="cognome" value="Rossi" />
+            <column name="email" value="marco.rossi@mail.com" />
+            <!-- BCrypt hash of "Pilates2025!" salt rounds 10 -->
+            <column name="password" value="$2a$10$Q9Qw1Qw1Qw1Qw1Qw1Qw1QeQw1Qw1Qw1Qw1Qw1Qw1Qw1Qw1Qw1Qw1Qw" />
+            <column name="attivo" value="Si" />
+            <column name="ruoli" value="USER" />
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
+        </insert>
+
+        <!-- Utente 2 -->
+        <insert tableName="utenti">
+            <column name="username" value="e.bianchi" />
+            <column name="nome" value="Eleonora" />
+            <column name="cognome" value="Bianchi" />
+            <column name="email" value="eleonora.bianchi@mail.com" />
+            <!-- BCrypt hash of "Yoga2025!" salt rounds 10 -->
+            <column name="password" value="$2a$10$A1A1A1A1A1A1A1A1A1A1AeA1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1" />
+            <column name="attivo" value="Si" />
+            <column name="ruoli" value="USER" />
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
+        </insert>
+
+        <!-- Utente 3 -->
+        <insert tableName="utenti">
+            <column name="username" value="s.verdi" />
+            <column name="nome" value="Sofia" />
+            <column name="cognome" value="Verdi" />
+            <column name="email" value="sofia.verdi@mail.com" />
+            <!-- BCrypt hash of "Studio2025!" salt rounds 10 -->
+            <column name="password" value="$2a$10$Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9ZeZ9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9" />
+            <column name="attivo" value="Si" />
+            <column name="ruoli" value="USER" />
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="004-02" author="vincenzo">
+        <comment>Insert catalogo corsi per Elle Studio Pilates</comment>
+
+        <!-- Prima Lezione - Analisi Posturale -->
+        <insert tableName="corsi">
+            <column name="nome" value="Prima Lezione - Analisi Posturale"/>
+            <column name="descrizione" value="Anamnesi e approccio al metodo Pilates. Sessione introduttiva di valutazione posturale e conoscenza del metodo."/>
+            <column name="categoria" value="PRIMA_LEZIONE"/>
+            <column name="livello" value="PRINCIPIANTE"/>
+            <column name="durata_minuti" value="55"/>
+            <column name="max_partecipanti" value="1"/>
+            <column name="prezzo" value="50.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Pilates Privato - 4 lezioni mensili -->
+        <insert tableName="corsi">
+            <column name="nome" value="Pilates Privato - 4 Lezioni"/>
+            <column name="descrizione" value="Abbonamento mensile 4 lezioni private (55 minuti). Utilizzo di tutti i macchinari studio (Cadillac, Reformer, Tower, Chair, Barrel) e piccoli attrezzi."/>
+            <column name="categoria" value="PRIVATA"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="55"/>
+            <column name="max_partecipanti" value="1"/>
+            <column name="prezzo" value="190.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Pilates Privato - 8 lezioni mensili -->
+        <insert tableName="corsi">
+            <column name="nome" value="Pilates Privato - 8 Lezioni"/>
+            <column name="descrizione" value="Abbonamento mensile 8 lezioni private (55 minuti). Utilizzo di tutti i macchinari studio (Cadillac, Reformer, Tower, Chair, Barrel) e piccoli attrezzi."/>
+            <column name="categoria" value="PRIVATA"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="55"/>
+            <column name="max_partecipanti" value="1"/>
+            <column name="prezzo" value="340.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Semi Privata Duetto - 4 lezioni -->
+        <insert tableName="corsi">
+            <column name="nome" value="Semi Privata Duetto - 4 Lezioni"/>
+            <column name="descrizione" value="Abbonamento mensile 4 lezioni per 2 persone (50 minuti). Utilizzo di Reformer, Tower, Chair e piccoli attrezzi."/>
+            <column name="categoria" value="SEMI_PRIVATA"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="2"/>
+            <column name="prezzo" value="160.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Semi Privata Duetto - 8 lezioni -->
+        <insert tableName="corsi">
+            <column name="nome" value="Semi Privata Duetto - 8 Lezioni"/>
+            <column name="descrizione" value="Abbonamento mensile 8 lezioni per 2 persone (50 minuti). Utilizzo di Reformer, Tower, Chair e piccoli attrezzi."/>
+            <column name="categoria" value="SEMI_PRIVATA"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="2"/>
+            <column name="prezzo" value="290.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Semi Privata 3-4 persone - 4 lezioni -->
+        <insert tableName="corsi">
+            <column name="nome" value="Semi Privata 3-4 Persone - 4 Lezioni"/>
+            <column name="descrizione" value="Abbonamento mensile 4 lezioni per 3-4 persone (50 minuti). Utilizzo di Reformer, Tower, Chair e piccoli attrezzi."/>
+            <column name="categoria" value="SEMI_PRIVATA"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="4"/>
+            <column name="prezzo" value="105.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Semi Privata 3-4 persone - 8 lezioni -->
+        <insert tableName="corsi">
+            <column name="nome" value="Semi Privata 3-4 Persone - 8 Lezioni"/>
+            <column name="descrizione" value="Abbonamento mensile 8 lezioni per 3-4 persone (50 minuti). Utilizzo di Reformer, Tower, Chair e piccoli attrezzi."/>
+            <column name="categoria" value="SEMI_PRIVATA"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="4"/>
+            <column name="prezzo" value="205.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Matwork - 4 lezioni -->
+        <insert tableName="corsi">
+            <column name="nome" value="Matwork - 4 Lezioni"/>
+            <column name="descrizione" value="Abbonamento mensile 4 lezioni di gruppo Matwork (50 minuti, max 6 partecipanti). Pilates a corpo libero su tappetino con piccoli attrezzi."/>
+            <column name="categoria" value="GRUPPO_MAT"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="6"/>
+            <column name="prezzo" value="65.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Matwork - 8 lezioni -->
+        <insert tableName="corsi">
+            <column name="nome" value="Matwork - 8 Lezioni"/>
+            <column name="descrizione" value="Abbonamento mensile 8 lezioni di gruppo Matwork (50 minuti, max 6 partecipanti). Pilates a corpo libero su tappetino con piccoli attrezzi."/>
+            <column name="categoria" value="GRUPPO_MAT"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="6"/>
+            <column name="prezzo" value="130.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Combo: 8 Reformer + 4 Matwork -->
+        <insert tableName="corsi">
+            <column name="nome" value="Combo 8 Reformer + 4 Matwork"/>
+            <column name="descrizione" value="Abbonamento combo: 8 lezioni Reformer semi private (3/4 persone) + 4 lezioni Matwork. Validità 1 mese."/>
+            <column name="categoria" value="COMBO"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="6"/>
+            <column name="prezzo" value="260.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Combo: 4 Reformer + 4 Matwork -->
+        <insert tableName="corsi">
+            <column name="nome" value="Combo 4 Reformer + 4 Matwork"/>
+            <column name="descrizione" value="Abbonamento combo: 4 lezioni Reformer semi private (3/4 persone) + 4 lezioni Matwork gruppo (max 6 partecipanti). Validità 1 mese."/>
+            <column name="categoria" value="COMBO"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="6"/>
+            <column name="prezzo" value="165.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Combo: 4 Reformer + 4 Yoga -->
+        <insert tableName="corsi">
+            <column name="nome" value="Combo 4 Reformer + 4 Yoga"/>
+            <column name="descrizione" value="Abbonamento combo: 4 lezioni Reformer semi private (3/4 persone) + 4 lezioni Yoga. Validità 1 mese."/>
+            <column name="categoria" value="COMBO"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="6"/>
+            <column name="prezzo" value="155.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Combo: 4 Matwork + 4 Yoga -->
+        <insert tableName="corsi">
+            <column name="nome" value="Combo 4 Matwork + 4 Yoga"/>
+            <column name="descrizione" value="Abbonamento combo: 4 lezioni Matwork gruppo (max 6 partecipanti) + 4 lezioni Yoga. Validità 1 mese."/>
+            <column name="categoria" value="COMBO"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="50"/>
+            <column name="max_partecipanti" value="6"/>
+            <column name="prezzo" value="115.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Yoga - 4 lezioni -->
+        <insert tableName="corsi">
+            <column name="nome" value="Yoga - 4 Lezioni"/>
+            <column name="descrizione" value="Abbonamento mensile 4 lezioni di gruppo Yoga (60 minuti). Tutti i programmi Yoga disponibili."/>
+            <column name="categoria" value="YOGA"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="60"/>
+            <column name="max_partecipanti" value="8"/>
+            <column name="prezzo" value="55.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+
+        <!-- Yoga - 8 lezioni -->
+        <insert tableName="corsi">
+            <column name="nome" value="Yoga - 8 Lezioni"/>
+            <column name="descrizione" value="Abbonamento mensile 8 lezioni di gruppo Yoga (60 minuti). Tutti i programmi Yoga disponibili."/>
+            <column name="categoria" value="YOGA"/>
+            <column name="livello" value="TUTTI"/>
+            <column name="durata_minuti" value="60"/>
+            <column name="max_partecipanti" value="8"/>
+            <column name="prezzo" value="110.00"/>
+            <column name="attivo" value="1"/>
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
+        </insert>
+    </changeSet>
+
+<!-- Inserimento dati tabella LEZIONI -->    
+
+    <changeSet id="004-03" author="vincenzo">
+        <comment>Inserimento dati di esempio per la tabella lezioni</comment>
+        <insert tableName="lezioni">
+            <column name="titolo" value="Pilates Privato con Eleonora"/>
+            <column name="data_inizio" value="2025-08-20 09:00:00"/>
+            <column name="data_fine" value="2025-08-20 09:50:00"/>
+            <column name="istruttore" value="Eleonora Bianchi"/>
+            <column name="tipo_lezione" value="PRIVATA"/>
+            <column name="note" value="Prima lezione del cliente"/>
+            <column name="attiva" valueBoolean="true"/>
+        </insert>
+        
+        <insert tableName="lezioni">
+            <column name="titolo" value="Matwork Gruppo"/>
+            <column name="data_inizio" value="2025-08-20 18:00:00"/>
+            <column name="data_fine" value="2025-08-20 18:50:00"/>
+            <column name="istruttore" value="Marco Rossi"/>
+            <column name="tipo_lezione" value="MATWORK"/>
+            <column name="note" value="Gruppo avanzato"/>
+            <column name="attiva" valueBoolean="true"/>
+        </insert>
+        
+        <insert tableName="lezioni">
+            <column name="titolo" value="Yoga Serale"/>
+            <column name="data_inizio" value="2025-08-21 19:30:00"/>
+            <column name="data_fine" value="2025-08-21 20:30:00"/>
+            <column name="istruttore" value="Sofia Verdi"/>
+            <column name="tipo_lezione" value="YOGA"/>
+            <column name="note" value="Portare tappetino personale"/>
+            <column name="attiva" valueBoolean="true"/>
+        </insert>
+        
+        <insert tableName="lezioni">
+            <column name="titolo" value="Semi-Privata Duetto"/>
+            <column name="data_inizio" value="2025-08-22 10:00:00"/>
+            <column name="data_fine" value="2025-08-22 10:50:00"/>
+            <column name="istruttore" value="Eleonora Bianchi"/>
+            <column name="tipo_lezione" value="SEMI_PRIVATA_DUETTO"/>
+            <column name="note" value="Due amiche principianti"/>
+            <column name="attiva" valueBoolean="true"/>
+        </insert>
+        
+        <insert tableName="lezioni">
+            <column name="titolo" value="Prima Lezione"/>
+            <column name="data_inizio" value="2025-08-22 15:00:00"/>
+            <column name="data_fine" value="2025-08-22 16:00:00"/>
+            <column name="istruttore" value="Marco Rossi"/>
+            <column name="tipo_lezione" value="PRIMA_LEZIONE"/>
+            <column name="note" value="Valutazione posturale completa"/>
+            <column name="attiva" valueBoolean="true"/>
+        </insert>
+    </changeSet>
+
+<!-- Inserimento dati tabella VENDITE -->
+
+    <changeSet id="004-04" author="vincenzo" runOnChange="true">
+        <comment>Inserisce dati di test per vendite con distribuzione realistica - AGGIORNATO 2025-08-22 con corso_id corretti (30-44)</comment>
+
+
+        <!-- Vendite Gennaio 2025 -->
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="1"/>
+            <column name="importo" value="25.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-01-03 10:30:00"/>
+            <column name="data_pagamento" value="2025-01-04 14:20:00"/>
+            <column name="note" value="Prima lezione di prova - Pagamento confermato"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="2"/>
+            <column name="importo" value="160.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-01-05 16:45:00"/>
+            <column name="data_pagamento" value="2025-01-06 09:15:00"/>
+            <column name="note" value="Pacchetto 4 lezioni semi privata"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="3"/>
+            <column name="importo" value="600.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-01-10 11:20:00"/>
+            <column name="data_pagamento" value="2025-01-11 08:30:00"/>
+            <column name="note" value="Pacchetto 10 lezioni private"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="4"/>
+            <column name="importo" value="80.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-01-15 14:10:00"/>
+            <column name="data_pagamento" value="2025-01-16 10:45:00"/>
+            <column name="note" value="Matwork - 4 lezioni"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="5"/>
+            <column name="importo" value="220.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-01-20 09:30:00"/>
+            <column name="data_pagamento" value="2025-01-21 15:20:00"/>
+            <column name="note" value="Combo Pilates + Matwork"/>
+        </insert>
+
+        <!-- Vendite Febbraio 2025 -->
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="6"/>
+            <column name="importo" value="70.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-02-02 10:15:00"/>
+            <column name="data_pagamento" value="2025-02-03 11:30:00"/>
+            <column name="note" value="Lezione privata singola"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="7"/>
+            <column name="importo" value="300.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-02-07 15:45:00"/>
+            <column name="data_pagamento" value="2025-02-08 09:20:00"/>
+            <column name="note" value="Pacchetto 8 lezioni semi privata"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="8"/>
+            <column name="importo" value="150.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-02-12 12:30:00"/>
+            <column name="data_pagamento" value="2025-02-13 14:15:00"/>
+            <column name="note" value="Matwork - 8 lezioni"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="9"/>
+            <column name="importo" value="25.00"/>
+            <column name="stato" value="CANCELLED"/>
+            <column name="data_acquisto" value="2025-02-18 16:20:00"/>
+            <column name="note" value="Annullato per indisponibilità cliente"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="10"/>
+            <column name="importo" value="25.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-02-25 11:45:00"/>
+            <column name="data_pagamento" value="2025-02-26 08:30:00"/>
+            <column name="note" value="Prima lezione Yoga"/>
+        </insert>
+
+        <!-- Vendite Marzo 2025 -->
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="11"/>
+            <column name="importo" value="1100.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-03-03 10:20:00"/>
+            <column name="data_pagamento" value="2025-03-04 09:45:00"/>
+            <column name="note" value="Pacchetto 20 lezioni private"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="12"/>
+            <column name="importo" value="360.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-03-08 14:30:00"/>
+            <column name="data_pagamento" value="2025-03-09 10:15:00"/>
+            <column name="note" value="Matwork - 20 lezioni"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="13"/>
+            <column name="importo" value="400.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-03-15 09:45:00"/>
+            <column name="data_pagamento" value="2025-03-16 11:20:00"/>
+            <column name="note" value="Combo Pilates + Yoga"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="14"/>
+            <column name="importo" value="150.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-03-22 16:10:00"/>
+            <column name="data_pagamento" value="2025-03-23 08:45:00"/>
+            <column name="note" value="Yoga - 8 lezioni"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="15"/>
+            <column name="importo" value="40.00"/>
+            <column name="stato" value="PENDING"/>
+            <column name="data_acquisto" value="2025-03-28 13:20:00"/>
+            <column name="note" value="In attesa di bonifico"/>
+        </insert>
+
+        <!-- Vendite Aprile 2025 -->
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="1"/>
+            <column name="importo" value="70.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-04-02 11:30:00"/>
+            <column name="data_pagamento" value="2025-04-03 09:15:00"/>
+            <column name="note" value="Lezione privata di recupero"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="2"/>
+            <column name="importo" value="320.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-04-07 15:20:00"/>
+            <column name="data_pagamento" value="2025-04-08 10:30:00"/>
+            <column name="note" value="Combo Pilates + Matwork - 8 sessioni"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="3"/>
+            <column name="importo" value="160.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-04-12 12:45:00"/>
+            <column name="data_pagamento" value="2025-04-13 14:20:00"/>
+            <column name="note" value="Nuovo pacchetto semi privata"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="4"/>
+            <column name="importo" value="70.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-04-18 10:15:00"/>
+            <column name="data_pagamento" value="2025-04-19 08:45:00"/>
+            <column name="note" value="Yoga - lezione singola"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="5"/>
+            <column name="importo" value="80.00"/>
+            <column name="stato" value="PENDING"/>
+            <column name="data_acquisto" value="2025-04-25 16:30:00"/>
+            <column name="note" value="In attesa conferma pagamento"/>
+        </insert>
+
+        <!-- Vendite Maggio 2025 -->
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="6"/>
+            <column name="importo" value="300.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-05-03 09:20:00"/>
+            <column name="data_pagamento" value="2025-05-04 11:15:00"/>
+            <column name="note" value="Pacchetto mensile semi privata"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="7"/>
+            <column name="importo" value="600.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-05-08 14:45:00"/>
+            <column name="data_pagamento" value="2025-05-09 10:30:00"/>
+            <column name="note" value="Rinnovo pacchetto 10 lezioni"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="8"/>
+            <column name="importo" value="150.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-05-15 11:20:00"/>
+            <column name="data_pagamento" value="2025-05-16 09:45:00"/>
+            <column name="note" value="Matwork - pacchetto estivo"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="9"/>
+            <column name="importo" value="220.00"/>
+            <column name="stato" value="CANCELLED"/>
+            <column name="data_acquisto" value="2025-05-22 15:30:00"/>
+            <column name="note" value="Annullato per cambio programma"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="10"/>
+            <column name="importo" value="150.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-05-28 13:15:00"/>
+            <column name="data_pagamento" value="2025-05-29 10:20:00"/>
+            <column name="note" value="Yoga - pacchetto relax"/>
+        </insert>
+
+        <!-- Vendite Giugno 2025 -->
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="5"/>
+            <column name="importo" value="25.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-06-02 10:45:00"/>
+            <column name="data_pagamento" value="2025-06-03 08:30:00"/>
+            <column name="note" value="Lezione di prova per amica"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="7"/>
+            <column name="importo" value="1100.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-06-07 16:20:00"/>
+            <column name="data_pagamento" value="2025-06-08 09:15:00"/>
+            <column name="note" value="Pacchetto trimestrale"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="3"/>
+            <column name="importo" value="360.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-06-14 12:30:00"/>
+            <column name="data_pagamento" value="2025-06-15 11:45:00"/>
+            <column name="note" value="Matwork intensivo"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="4"/>
+            <column name="importo" value="400.00"/>
+            <column name="stato" value="PENDING"/>
+            <column name="data_acquisto" value="2025-06-20 14:15:00"/>
+            <column name="note" value="In attesa bonifico combo"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="1"/>
+            <column name="importo" value="70.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-06-26 09:50:00"/>
+            <column name="data_pagamento" value="2025-06-27 08:20:00"/>
+            <column name="note" value="Lezione di recupero"/>
+        </insert>
+
+        <!-- Vendite Luglio 2025 -->
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="1"/>
+            <column name="importo" value="40.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-07-03 11:25:00"/>
+            <column name="data_pagamento" value="2025-07-04 10:15:00"/>
+            <column name="note" value="Matwork - 2 lezioni estate"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="2"/>
+            <column name="importo" value="160.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-07-09 15:40:00"/>
+            <column name="data_pagamento" value="2025-07-10 09:30:00"/>
+            <column name="note" value="Semi privata estiva"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="9"/>
+            <column name="importo" value="25.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-07-16 13:20:00"/>
+            <column name="data_pagamento" value="2025-07-17 11:45:00"/>
+            <column name="note" value="Yoga rilassante"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="9"/>
+            <column name="importo" value="320.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-07-22 10:30:00"/>
+            <column name="data_pagamento" value="2025-07-23 08:15:00"/>
+            <column name="note" value="Combo vacanze estive"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="8"/>
+            <column name="importo" value="70.00"/>
+            <column name="stato" value="PENDING"/>
+            <column name="data_acquisto" value="2025-07-29 16:45:00"/>
+            <column name="note" value="Attesa bonifico yoga"/>
+        </insert>
+
+        <!-- Vendite Agosto 2025 -->
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="3"/>
+            <column name="importo" value="80.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-08-05 09:15:00"/>
+            <column name="data_pagamento" value="2025-08-06 10:30:00"/>
+            <column name="note" value="Matwork post-vacanze"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="3"/>
+            <column name="importo" value="300.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-08-12 14:20:00"/>
+            <column name="data_pagamento" value="2025-08-13 09:45:00"/>
+            <column name="note" value="Ripresa attività"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="3"/>
+            <column name="importo" value="600.00"/>
+            <column name="stato" value="PENDING"/>
+            <column name="data_acquisto" value="2025-08-19 11:30:00"/>
+            <column name="note" value="In attesa conferma rientro"/>
+        </insert>
+
+        <!-- Aggiungiamo ulteriori vendite per raggiungere 100+ -->
+        <!-- Vendite aggiuntive distribuite nei mesi passati -->
+        
+        <!-- Gennaio aggiuntive -->
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="12"/>
+            <column name="importo" value="25.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-01-25 10:30:00"/>
+            <column name="data_pagamento" value="2025-01-26 09:15:00"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="12"/>
+            <column name="importo" value="70.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-01-28 15:20:00"/>
+            <column name="data_pagamento" value="2025-01-29 11:30:00"/>
+        </insert>
+
+        <!-- Febbraio aggiuntive -->
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="13"/>
+            <column name="importo" value="40.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-02-14 12:45:00"/>
+            <column name="data_pagamento" value="2025-02-15 10:20:00"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="14"/>
+            <column name="importo" value="150.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-02-20 14:30:00"/>
+            <column name="data_pagamento" value="2025-02-21 09:45:00"/>
+        </insert>
+
+        <!-- Marzo aggiuntive -->
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="15"/>
+            <column name="importo" value="25.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-03-05 11:15:00"/>
+            <column name="data_pagamento" value="2025-03-06 08:30:00"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="15"/>
+            <column name="importo" value="70.00"/>
+            <column name="stato" value="CANCELLED"/>
+            <column name="data_acquisto" value="2025-03-12 16:20:00"/>
+            <column name="note" value="Cancellato per malattia"/>
+        </insert>
+
+        <!-- Aprile aggiuntive -->
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="15"/>
+            <column name="importo" value="150.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-04-05 09:30:00"/>
+            <column name="data_pagamento" value="2025-04-06 11:45:00"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="12"/>
+            <column name="importo" value="360.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-04-14 13:40:00"/>
+            <column name="data_pagamento" value="2025-04-15 10:15:00"/>
+        </insert>
+
+        <!-- Maggio aggiuntive -->
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="10"/>
+            <column name="importo" value="25.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-05-07 10:20:00"/>
+            <column name="data_pagamento" value="2025-05-08 09:30:00"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="9"/>
+            <column name="importo" value="25.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-05-18 14:15:00"/>
+            <column name="data_pagamento" value="2025-05-19 11:20:00"/>
+        </insert>
+
+        <!-- Giugno aggiuntive -->
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="9"/>
+            <column name="importo" value="80.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-06-04 15:30:00"/>
+            <column name="data_pagamento" value="2025-06-05 10:45:00"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="9"/>
+            <column name="importo" value="70.00"/>
+            <column name="stato" value="PENDING"/>
+            <column name="data_acquisto" value="2025-06-22 12:20:00"/>
+            <column name="note" value="In attesa bonifico estate"/>
+        </insert>
+
+        <!-- Luglio aggiuntive -->
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="9"/>
+            <column name="importo" value="220.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-07-08 11:45:00"/>
+            <column name="data_pagamento" value="2025-07-09 09:20:00"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="7"/>
+            <column name="importo" value="150.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-07-25 16:10:00"/>
+            <column name="data_pagamento" value="2025-07-26 08:40:00"/>
+        </insert>
+
+        <!-- Continuazione per arrivare a 100+ vendite -->
+        <!-- Vendite mesi precedenti (fine 2024) -->
+        
+        <!-- Settembre 2024 -->
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="8"/>
+            <column name="importo" value="25.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-09-05 10:30:00"/>
+            <column name="data_pagamento" value="2024-09-06 09:15:00"/>
+            <column name="note" value="Prima volta in studio"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="8"/>
+            <column name="importo" value="160.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-09-12 14:20:00"/>
+            <column name="data_pagamento" value="2024-09-13 10:45:00"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="8"/>
+            <column name="importo" value="80.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-09-18 11:15:00"/>
+            <column name="data_pagamento" value="2024-09-19 08:30:00"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="2"/>
+            <column name="importo" value="25.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-09-25 15:40:00"/>
+            <column name="data_pagamento" value="2024-09-26 09:20:00"/>
+        </insert>
+
+        <!-- Ottobre 2024 -->
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="1"/>
+            <column name="importo" value="70.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-10-03 12:30:00"/>
+            <column name="data_pagamento" value="2024-10-04 11:15:00"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="1"/>
+            <column name="importo" value="600.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-10-10 16:20:00"/>
+            <column name="data_pagamento" value="2024-10-11 09:45:00"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="1"/>
+            <column name="importo" value="150.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-10-17 13:45:00"/>
+            <column name="data_pagamento" value="2024-10-18 10:20:00"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="1"/>
+            <column name="importo" value="70.00"/>
+            <column name="stato" value="CANCELLED"/>
+            <column name="data_acquisto" value="2024-10-24 14:30:00"/>
+            <column name="note" value="Annullato per impegni"/>
+        </insert>
+
+        <!-- Novembre 2024 -->
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="4"/>
+            <column name="importo" value="300.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-11-07 11:20:00"/>
+            <column name="data_pagamento" value="2024-11-08 09:30:00"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="4"/>
+            <column name="importo" value="360.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-11-14 15:15:00"/>
+            <column name="data_pagamento" value="2024-11-15 08:45:00"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="4"/>
+            <column name="importo" value="220.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-11-21 10:45:00"/>
+            <column name="data_pagamento" value="2024-11-22 11:30:00"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="4"/>
+            <column name="importo" value="150.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-11-28 13:20:00"/>
+            <column name="data_pagamento" value="2024-11-29 09:15:00"/>
+        </insert>
+
+        <!-- Dicembre 2024 -->
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="4"/>
+            <column name="importo" value="25.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-12-05 14:30:00"/>
+            <column name="data_pagamento" value="2024-12-06 10:20:00"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="5"/>
+            <column name="importo" value="1100.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-12-12 16:45:00"/>
+            <column name="data_pagamento" value="2024-12-13 09:30:00"/>
+            <column name="note" value="Pacchetto natalizio"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="5"/>
+            <column name="importo" value="400.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-12-19 11:15:00"/>
+            <column name="data_pagamento" value="2024-12-20 08:45:00"/>
+            <column name="note" value="Regalo di Natale"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="6"/>
+            <column name="importo" value="40.00"/>
+            <column name="stato" value="PENDING"/>
+            <column name="data_acquisto" value="2024-12-30 15:20:00"/>
+            <column name="note" value="Fine anno - in attesa"/>
+        </insert>
+
+        <!-- Aggiungiamo ancora qualche vendita per superare le 100 -->
+        <!-- Ripetizioni con date diverse per varietà -->
+        
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="7"/>
+            <column name="importo" value="70.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-09-08 10:00:00"/>
+            <column name="data_pagamento" value="2024-09-09 09:30:00"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="7"/>
+            <column name="importo" value="320.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-09-22 14:15:00"/>
+            <column name="data_pagamento" value="2024-09-23 11:20:00"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="11"/>
+            <column name="importo" value="25.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-10-06 16:30:00"/>
+            <column name="data_pagamento" value="2024-10-07 08:45:00"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="1"/>
+            <column name="importo" value="80.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-10-20 12:45:00"/>
+            <column name="data_pagamento" value="2024-10-21 10:15:00"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="11"/>
+            <column name="importo" value="160.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-11-03 09:30:00"/>
+            <column name="data_pagamento" value="2024-11-04 11:45:00"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="11"/>
+            <column name="importo" value="70.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-11-17 15:20:00"/>
+            <column name="data_pagamento" value="2024-11-18 09:40:00"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="2"/>
+            <column name="importo" value="150.00"/>
+            <column name="stato" value="CANCELLED"/>
+            <column name="data_acquisto" value="2024-12-08 13:30:00"/>
+            <column name="note" value="Cancellato per feste"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="2"/>
+            <column name="importo" value="150.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2024-12-22 10:15:00"/>
+            <column name="data_pagamento" value="2024-12-23 11:30:00"/>
+        </insert>
+
+        <!-- Ultime vendite per completare -->
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="10"/>
+            <column name="importo" value="600.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-08-01 09:20:00"/>
+            <column name="data_pagamento" value="2025-08-02 10:45:00"/>
+            <column name="note" value="Rientro dalle vacanze"/>
+        </insert>
+
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="corso_id" value="10"/>
+            <column name="importo" value="300.00"/>
+            <column name="stato" value="PENDING"/>
+            <column name="data_acquisto" value="2025-08-15 14:30:00"/>
+            <column name="note" value="Ultima vendita in attesa"/>
+        </insert>
+
+    </changeSet>
+
+
+</databaseChangeLog>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+<changeSet id="002-01" author="vincenzo">
+        <comment>Create foreign key constraints</comment>
+
+        <addForeignKeyConstraint 
+            baseTableName="vendite" 
+            baseColumnNames="utente_id"
+            constraintName="fk_vendite_utente"
+            referencedTableName="utenti"
+            referencedColumnNames="id"
+            onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint 
+            baseTableName="vendite" 
+            baseColumnNames="corso_id"
+            constraintName="fk_vendite_corso"
+            referencedTableName="corsi"
+            referencedColumnNames="id"
+            onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint 
+            baseTableName="lezione_partecipanti"
+            baseColumnNames="lezione_id"
+            constraintName="fk_lezione_partecipanti_lezione"
+            referencedTableName="lezioni"
+            referencedColumnNames="id"
+            onDelete="CASCADE"/>
+        
+        <addForeignKeyConstraint 
+            baseTableName="lezione_partecipanti"
+            baseColumnNames="partecipanti_username"
+            constraintName="fk_lezione_partecipanti_utenti"
+            referencedTableName="utenti"
+            referencedColumnNames="username"
+            onDelete="CASCADE"/>
+
+    </changeSet>
+
+</databaseChangeLog> 

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="003-01" author="sistema-formazione">
+        <comment>Create indexes for better performance</comment>
+
+<!-- Indici per la tabella utenti -->
+
+        <createIndex tableName="utenti" indexName="idx_utenti_email">
+            <column name="email" />
+        </createIndex>
+
+        <createIndex tableName="utenti" indexName="idx_utenti_attivo">
+            <column name="attivo" />
+        </createIndex>
+
+        <createIndex tableName="utenti" indexName="idx_utenti_codice_fiscale">
+            <column name="codice_fiscale" />
+        </createIndex>
+
+<!-- Indici per la tabella corsi -->
+
+        <createIndex indexName="idx_corso_stato" tableName="corsi">
+            <column name="stato" />
+        </createIndex>
+
+        <createIndex indexName="idx_corso_categoria" tableName="corsi">
+            <column name="categoria" />
+        </createIndex>
+
+<!-- Indici per la tabella lezioni -->
+
+        <createIndex tableName="lezioni" indexName="idx_lezioni_data_inizio">
+            <column name="data_inizio"/>
+        </createIndex>
+        
+        <createIndex tableName="lezioni" indexName="idx_lezioni_istruttore">
+            <column name="istruttore"/>
+        </createIndex>
+        
+        <createIndex tableName="lezioni" indexName="idx_lezioni_tipo_lezione">
+            <column name="tipo_lezione"/>
+        </createIndex>
+        
+        <createIndex tableName="lezioni" indexName="idx_lezioni_attiva">
+            <column name="attiva"/>
+        </createIndex>
+        
+        <createIndex tableName="lezioni" indexName="idx_lezioni_range_date">
+            <column name="data_inizio"/>
+            <column name="data_fine"/>
+        </createIndex>
+    
+<!-- Indici per la tabella lezione_partecipanti -->
+
+        <createIndex tableName="lezione_partecipanti" indexName="idx_lezione_partecipanti_lezione">
+            <column name="lezione_id"/>
+        </createIndex>
+        
+        <createIndex tableName="lezione_partecipanti" indexName="idx_lezione_partecipanti_utenti">
+            <column name="partecipanti_username"/>
+        </createIndex>
+
+<!-- Indici per la tabella vendite -->
+
+        <createIndex tableName="vendite" indexName="idx_vendite_utente">
+            <column name="utente_id"/>
+        </createIndex>
+
+        <createIndex tableName="vendite" indexName="idx_vendite_corso">
+            <column name="corso_id"/>
+        </createIndex>
+
+        <createIndex tableName="vendite" indexName="idx_vendite_stato">
+            <column name="stato"/>
+        </createIndex>
+
+        <createIndex tableName="vendite" indexName="idx_vendite_data_acquisto">
+            <column name="data_acquisto"/>
+        </createIndex>
+
+        <createIndex tableName="vendite" indexName="idx_vendite_data_pagamento">
+            <column name="data_pagamento"/>
+        </createIndex>
+
+<!-- Indici per la tabella learning_data -->
+
+        <createIndex tableName="learning_data" indexName="idx_learning_data_email">
+            <column name="email" />
+        </createIndex>
+
+        <createIndex tableName="learning_data" indexName="idx_learning_data_content">
+            <column name="content_name" />
+        </createIndex>
+
+        <createIndex tableName="learning_data" indexName="idx_learning_data_processed_at">
+            <column name="processed_at" />
+        </createIndex>
+
+        <createIndex tableName="learning_data" indexName="idx_learning_data_completion_date">
+            <column name="completion_date" />
+        </createIndex>
+
+        <createIndex tableName="learning_data" indexName="idx_learning_data_employee_id">
+            <column name="employee_id" />
+        </createIndex>
+
+        <createIndex tableName="learning_data" indexName="idx_learning_data_content_id">
+            <column name="content_id" />
+        </createIndex>
+
+        <createIndex tableName="learning_data" indexName="idx_learning_data_processed">
+            <column name="processed" />
+        </createIndex>
+    
+<!-- Indici per la tabella PROCESSING_LOG -->
+
+        <createIndex tableName="processing_log" indexName="idx_processing_log_file_name">
+            <column name="file_name" />
+        </createIndex>
+
+        <createIndex tableName="processing_log" indexName="idx_processing_log_status">
+            <column name="processing_status" />
+        </createIndex>
+
+        <createIndex tableName="processing_log" indexName="idx_processing_log_created_at">
+            <column name="created_at" />
+        </createIndex>        
+
+    </changeSet>
+
+</databaseChangeLog> 

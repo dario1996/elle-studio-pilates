@@ -5,7 +5,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
     <!-- Include all changesets -->
-    <include file="db/changelog/changes/001-create-initial-schema.xml" />
+    <!-- <include file="db/changelog/changes/001-create-initial-schema.xml" />
     <include file="db/changelog/changes/002-create-indexes.xml" />
     <include file="db/changelog/changes/004-create-users-table.xml" />
     <include file="db/changelog/changes/005-create-learning-data-tables.xml" />
@@ -22,5 +22,12 @@
     <include file="db/changelog/changes/016-create-vendite-table.xml"/>
     <include file="db/changelog/changes/019-fix-vendite-corso-ids.xml"/>
     <include file="db/changelog/changes/020-clean-and-recreate-vendite-data.xml"/>
-    <include file="db/changelog/changes/022-create-lezione-partecipanti-table.xml"/>
-</databaseChangeLog> 
+    <include file="db/changelog/changes/022-create-lezione-partecipanti-table.xml"/> -->
+
+    
+    <!-- <include file="db/changelog/changes/000-elimina-tabelle.xml" /> -->
+    <include file="db/changelog/changes/001-crea-schema-iniziale.xml" />
+    <include file="db/changelog/changes/002-crea-foreign-key.xml" />
+    <include file="db/changelog/changes/003-crea-indici.xml" />
+    <include file="db/changelog/changes/004-popola-tabelle.xml" />
+</databaseChangeLog>
