@@ -26,12 +26,26 @@
             <column name="nome" value="Dario" />
             <column name="cognome" value="Biffero" />
             <column name="email" value="dario.biffero@mail.com" />
-            <!-- BCrypt hash of "dario123" with salt rounds 10 -->
-            <column name="password" value="$2a$10$N8qpXnQKSGhZhJ9nFvqJveLYtGMNnQwZZYZm1YPQCpd4vM6WgKrN6" />
+            <!-- BCrypt hash of "dario1234" with salt rounds 10 -->
+            <column name="password" value="$2a$10$PvPcRCwDmkcS7hvJ88ZW.OWVSUWjGbZ392kVLodXvKa1VQ9tkpa5q" />
             <column name="attivo" value="Si" />
             <column name="ruoli" value="USER" />
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
         </insert>
+
+
+        <insert tableName="utenti">
+            <column name="username" value="v.cusaniello" />
+            <column name="nome" value="Vincenzo" />
+            <column name="cognome" value="Cusaniello" />
+            <column name="email" value="vincenzo.cusaniello@mail.com" />
+            <!-- BCrypt hash of "vinc1234" with salt rounds 10 -->
+            <column name="password" value="$2a$10$s.WiawnI82GBVDIhpcpgJObJN1W8vk6b68BtenhTn2FwDsJo8/Aqa" />
+            <column name="attivo" value="Si" />
+            <column name="ruoli" value="USER" />
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
+        </insert>
+        
 
         <!-- Utente 1 -->
         <insert tableName="utenti">
@@ -40,7 +54,7 @@
             <column name="cognome" value="Rossi" />
             <column name="email" value="marco.rossi@mail.com" />
             <!-- BCrypt hash of "Pilates2025!" salt rounds 10 -->
-            <column name="password" value="$2a$10$Q9Qw1Qw1Qw1Qw1Qw1Qw1QeQw1Qw1Qw1Qw1Qw1Qw1Qw1Qw1Qw1Qw1Qw" />
+            <column name="password" value="$2a$10$.Nx7AuyLC0iDwmXudIeE4.DI/io9wbMQ843UsFg1WuTGZhHJt5rPO" />
             <column name="attivo" value="Si" />
             <column name="ruoli" value="USER" />
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
@@ -53,7 +67,7 @@
             <column name="cognome" value="Bianchi" />
             <column name="email" value="eleonora.bianchi@mail.com" />
             <!-- BCrypt hash of "Yoga2025!" salt rounds 10 -->
-            <column name="password" value="$2a$10$A1A1A1A1A1A1A1A1A1A1AeA1A1A1A1A1A1A1A1A1A1A1A1A1A1A1A1" />
+            <column name="password" value="$2a$10$mB576Og6h2nRZnN8YEhuQeYJgBPWa5JktpU94/U9VDxZHnqBGrZLu" />
             <column name="attivo" value="Si" />
             <column name="ruoli" value="USER" />
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
@@ -66,7 +80,7 @@
             <column name="cognome" value="Verdi" />
             <column name="email" value="sofia.verdi@mail.com" />
             <!-- BCrypt hash of "Studio2025!" salt rounds 10 -->
-            <column name="password" value="$2a$10$Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9ZeZ9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9" />
+            <column name="password" value="$2a$10$mr0KceDH2tFL7iBBtWWFt.cO90StEzDUEMi5D5BSD0kSmFnr0fnFC" />
             <column name="attivo" value="Si" />
             <column name="ruoli" value="USER" />
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
