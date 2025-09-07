@@ -26,7 +26,19 @@ export class WelcomeComponent implements OnInit {
           icon: 'fa-solid fa-tachometer-alt fa-lg',
         },
       ],
-      roles: [Ruoli.amministratore, Ruoli.utente], // Accessibile a entrambi
+      roles: [Ruoli.amministratore], // Solo amministratori
+    },
+    {
+      title: 'Area personale',
+      icon: 'fa-solid fa-user fa-xl',
+      links: [
+        {
+          label: 'Area personale',
+          url: 'area-personale',
+          icon: 'fa-solid fa-user fa-lg',
+        },
+      ],
+      roles: [Ruoli.utente],
     },
     {
       title: 'Calendario',
@@ -74,7 +86,7 @@ export class WelcomeComponent implements OnInit {
           icon: 'fa-solid fa-user fa-lg',
         },
       ],
-      roles: [Ruoli.amministratore, Ruoli.utente], // Accessibile a entrambi (ma sostituisce "Statistiche")
+      roles: [Ruoli.amministratore], // Accessibile solo agli amministratori
     },
   ];
 
@@ -114,6 +126,16 @@ export class WelcomeComponent implements OnInit {
     this.isOpen = Array(this.menuItems.length).fill(false);
     this.utente = this.route.snapshot.params['userid'];
     this.loadUserData();
+
+    // Se l'utente è solo 'utente' e si trova sulla dashboard, reindirizza ad area-personale
+    const userRoles = this.BasicAuth.getUserRoles();
+    if (
+      userRoles.length === 1 &&
+      userRoles.includes(Ruoli.utente) &&
+      this.router.url.includes('dashboard')
+    ) {
+      this.router.navigate(['/gestionale-elle-studio/area-personale']);
+    }
   }
 
   /**
@@ -142,32 +164,20 @@ export class WelcomeComponent implements OnInit {
         roles: [Ruoli.amministratore],
       });
     } else if (userRoles.includes(Ruoli.utente)) {
-      // Utente normale: solo Dashboard e Il mio profilo
+      // Utente normale: solo Area personale
       this.menuItems = [
         {
-          title: 'Dashboard',
-          icon: 'fa-solid fa-tachometer-alt fa-xl',
-          links: [
-            {
-              label: 'Dashboard',
-              url: 'dashboard',
-              icon: 'fa-solid fa-tachometer-alt fa-lg',
-            },
-          ],
-          roles: [Ruoli.utente],
-        },
-        {
-          title: 'Il mio profilo',
+          title: 'Area personale',
           icon: 'fa-solid fa-user fa-xl',
           links: [
             {
-              label: 'Il mio profilo',
-              url: 'impostazioni',
+              label: 'Area personale',
+              url: 'area-personale',
               icon: 'fa-solid fa-user fa-lg',
             },
           ],
           roles: [Ruoli.utente],
-        }
+        },
       ];
     }
 

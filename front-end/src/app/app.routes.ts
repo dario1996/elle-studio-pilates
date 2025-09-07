@@ -1,6 +1,7 @@
 import { AuthGuard } from './core/services/route-guard.service';
 import { Routes } from '@angular/router';
 import { Ruoli } from './shared/models/Ruoli';
+import { AreaPersonaleComponent } from './modules/area-personale/pages/area-personale/area-personale.component';
 
 export const routes: Routes = [
   {
@@ -22,6 +23,12 @@ export const routes: Routes = [
           import(
             './modules/dashboard/pages/home-dashboard/home-dashboard.component'
           ).then(m => m.HomeDashboardComponent),
+      },
+      {
+        path: 'area-personale',
+        component: AreaPersonaleComponent,
+        canActivate: [AuthGuard],
+        data: { roles: [Ruoli.utente] },
       },
       {
         path: 'corsi',
