@@ -24,6 +24,9 @@
     @dropdownAnim
     (click)="$event.stopPropagation()"
   >
+    <button class="account-info-btn" (click)="goToAccountPanel()">
+      <i class="fa fa-user"></i> Informazioni account
+    </button>
     <button class="logout-btn" (click)="logout()">
       <i class="fa fa-sign-out-alt"></i> Logout
     </button>

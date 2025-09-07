@@ -2,6 +2,7 @@ import { AuthGuard } from './core/services/route-guard.service';
 import { Routes } from '@angular/router';
 import { Ruoli } from './shared/models/Ruoli';
 import { AreaPersonaleComponent } from './modules/area-personale/pages/area-personale/area-personale.component';
+import { AccountPanelComponent } from './modules/account-panel/account-panel.component';
 
 export const routes: Routes = [
   {
@@ -74,6 +75,12 @@ export const routes: Routes = [
           ),
         canActivate: [AuthGuard],
         data: { roles: [Ruoli.amministratore] },
+      },
+      {
+        path: 'account-panel',
+        component: AccountPanelComponent,
+        canActivate: [AuthGuard],
+        data: { roles: [Ruoli.utente] },
       },
       {
         path: 'impostazioni',

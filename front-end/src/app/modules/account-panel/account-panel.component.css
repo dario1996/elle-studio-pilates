@@ -1,0 +1,72 @@
+.account-panel-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 32px;
+  height: 100%;
+}
+.account-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border: 1px solid #c99e67;
+  border-top: 4px solid #c99e67;
+  padding: 24px;
+  min-width: 340px;
+  flex: 1 1 340px;
+}
+.account-card.big-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border: 1px solid #c99e67;
+  border-top: 4px solid #c99e67;
+  padding: 32px 40px;
+  width: 100%;
+  max-width: 700px;
+  min-width: 320px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+.account-card h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 18px;
+}
+.account-card.big-card h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 24px;
+}
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 15px;
+}
+.info-row:last-child {
+  border-bottom: none;
+}
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 16px;
+}
+.info-row:last-child {
+  border-bottom: none;
+}
+.status-disabled {
+  color: #dc2626;
+  font-weight: 600;
+}
+@media (max-width: 768px) {
+  .account-card.big-card {
+    padding: 18px 8px;
+    max-width: 98vw;
+  }
+}

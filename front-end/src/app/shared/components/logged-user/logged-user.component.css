@@ -92,6 +92,18 @@ a.dropdown-toggle * {
   pointer-events: auto;
 }
 
+.account-info-btn {
+  background: none;
+  border: none;
+  color: #333;
+  width: 100%;
+  font-weight: 500;
+  font-size: 12px;
+  text-align: left;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
 .logout-btn {
   background: none;
   border: none;

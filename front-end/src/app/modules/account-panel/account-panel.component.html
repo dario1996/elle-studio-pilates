@@ -1,0 +1,30 @@
+<div class="page-container">
+  <div class="page-header">
+    <app-page-title [title]="title" [showButton]="false"></app-page-title>
+    <div class="user-bar">
+      <app-notification></app-notification>
+      <app-logged-user></app-logged-user>
+    </div>
+  </div>
+  <div class="page-content">
+    
+<div class="account-panel-container">
+  <div class="account-card big-card">
+    <h2>Informazioni account</h2>
+    <div class="info-row"><span>Nome</span><span>{{ user.nome }}</span></div>
+    <div class="info-row"><span>Email</span><span>{{ user.email }}</span></div>
+    <div class="info-row"><span>Indirizzo</span><span>{{ user.indirizzo }}</span></div>
+    <div class="info-row"><span>Numero di telefono</span><span>{{ user.telefono }}</span></div>
+    <div class="info-row"><span>Azienda</span><span>{{ user.azienda }}</span></div>
+    <div class="info-row"><span>Stato</span><span class="status-disabled">{{ user.stato }}</span></div>
+    <div class="info-row"><span>Membro dal</span><span>{{ user.dataIscrizione }}</span></div>
+    <div class="info-row"><span>Password</span><span>{{ user.password }}</span></div>
+    <div class="info-row"><span>Accessi social</span><span>-</span></div>
+  </div>
+</div>
+    
+  </div>
+</div>
+
+
+
