@@ -1,13 +1,76 @@
 <div class="page-container">
   <div class="page-header">
-    <app-page-title [title]="'Statistiche'" [showButton]="false"></app-page-title>
+    <app-page-title [title]="title" [showButton]="false"></app-page-title>
     <div class="user-bar">
       <app-notification></app-notification>
       <app-logged-user></app-logged-user>
     </div>
   </div>
-
-  <div class="page-content" #pageContentInner>
-
+  <div class="page-content">
+    <div class="area-personale-cards row g-4">
+      <!-- Card 1: Lezioni prenotate -->
+      <div class="col-md-4">
+        <div class="stats-card">
+          <div class="card-header">
+            <h3>Lezioni prenotate</h3>
+            <i class="fas fa-calendar-check card-icon"></i>
+          </div>
+          <div class="card-content">
+            <div *ngIf="lezioniPrenotate.length === 0" class="text-muted">Nessuna lezione prenotata</div>
+            <div *ngFor="let lezione of lezioniPrenotate">
+              <div>
+                <strong>{{ lezione.titolo }}</strong> <br>
+                {{ getLabelTipoLezione(lezione.tipoLezione) }}<br>
+                {{ formatTime(lezione.dataInizio, lezione.dataFine) }}<br>
+                Istruttore: {{ lezione.istruttore }}
+              </div>
+              <hr>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Card 2: Lezioni prenotabili -->
+      <div class="col-md-4">
+        <div class="stats-card">
+          <div class="card-header">
+            <h3>Lezioni prenotabili</h3>
+            <i class="fas fa-calendar-plus card-icon"></i>
+          </div>
+          <div class="card-content">
+            <div *ngIf="lezioniPrenotabili.length === 0" class="text-muted">Nessuna lezione prenotabile</div>
+            <div *ngFor="let lezione of lezioniPrenotabili">
+              <div>
+                <strong>{{ lezione.titolo }}</strong> <br>
+                {{ getLabelTipoLezione(lezione.tipoLezione) }}<br>
+                {{ formatTime(lezione.dataInizio, lezione.dataFine) }}<br>
+                Istruttore: {{ lezione.istruttore }}
+                <button class="btn btn-primary btn-sm mt-2">Prenota</button>
+              </div>
+              <hr>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Card 3: Pagamenti da effettuare -->
+      <div class="col-md-4">
+        <div class="stats-card">
+          <div class="card-header">
+            <h3>Pagamenti da effettuare</h3>
+            <i class="fas fa-credit-card card-icon"></i>
+          </div>
+          <div class="card-content">
+            <div *ngIf="pagamentiPendenti.length === 0" class="text-muted">Nessun pagamento in sospeso</div>
+            <div *ngFor="let pagamento of pagamentiPendenti">
+              <div>
+                <strong>{{ pagamento.titolo }}</strong> <br>
+                Importo: {{ pagamento.importo | currency:'EUR' }}<br>
+                <button class="btn btn-warning btn-sm mt-2">Paga ora</button>
+              </div>
+              <hr>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

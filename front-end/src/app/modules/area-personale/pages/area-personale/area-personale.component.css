@@ -1,3 +1,169 @@
+/* Stile cards area personale, simile alla dashboard */
+.area-personale-cards {
+  margin-top: 32px;
+}
+
+.stats-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #c99e67;
+  border-top: 4px solid #c99e67;
+  transition: all 0.3s ease;
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.stats-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.card-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+
+.card-icon {
+  width: 20px;
+  height: 20px;
+  color: #9ca3af;
+  font-size: 18px;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.btn-primary {
+  background: #374151;
+  color: white;
+}
+.btn-primary:hover {
+  background: #1f2937;
+}
+.btn-warning {
+  background: #c99e67;
+  color: #fff;
+}
+.btn-warning:hover {
+  background: #a67c52;
+}
+.mt-2 {
+  margin-top: 8px;
+}
+.text-muted {
+  color: #6b7280;
+}
+hr {
+  border: none;
+  border-top: 1px solid #eee;
+  margin: 8px 0;
+}
+/* Stile cards area personale, simile alla dashboard */
+.area-personale-cards {
+  margin-top: 32px;
+}
+
+.stats-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #c99e67;
+  border-top: 4px solid #c99e67;
+  transition: all 0.3s ease;
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.stats-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.card-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+
+.card-icon {
+  width: 20px;
+  height: 20px;
+  color: #9ca3af;
+  font-size: 18px;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.btn-primary {
+  background: #374151;
+  color: white;
+}
+.btn-primary:hover {
+  background: #1f2937;
+}
+.btn-warning {
+  background: #c99e67;
+  color: #fff;
+}
+.btn-warning:hover {
+  background: #a67c52;
+}
+.mt-2 {
+  margin-top: 8px;
+}
+.text-muted {
+  color: #6b7280;
+}
+hr {
+  border: none;
+  border-top: 1px solid #eee;
+  margin: 8px 0;
+}
 /* ================== MODERN TABS (Radix UI Inspired) =================== */
 .tabs-container {
   width: 100%;

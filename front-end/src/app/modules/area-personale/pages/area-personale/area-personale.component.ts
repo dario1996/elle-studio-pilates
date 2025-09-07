@@ -4,35 +4,60 @@ import { CommonModule } from '@angular/common';
 import { PageTitleComponent } from "../../../../core/page-title/page-title.component";
 import { LoggedUserComponent } from '../../../../shared/components/logged-user/logged-user.component';
 import { NotificationComponent } from '../../../../core/notification/notification.component';
-import { DashboardService } from '../../../../shared/services/dashboard.service';
 import { LezioniService, LezioneDto } from '../../../../core/services/lezioni.service';
 import { TIPI_LEZIONE_CONFIG } from '../../../../modules/agenda/models/lezione.model';
+import { ILezione, TipoLezione, StatoLezione } from '../../../../shared/models/Lezione';
 
 @Component({
   selector: 'app-area-personale',
   standalone: true,
   templateUrl: './area-personale.component.html',
   styleUrls: ['./area-personale.component.css'],
-  imports: [CommonModule, PageTitleComponent, LoggedUserComponent, NotificationComponent, RouterModule],
+  imports: [CommonModule, PageTitleComponent, LoggedUserComponent, NotificationComponent],
 })
 export class AreaPersonaleComponent implements OnInit {
 
   title: string = 'Area Personale';
-  icon: string = 'fa-solid fa-user';
+  icon: string = 'fas fa-user';
 
   loading = false;
   error: string | null = null;
 
-  
+  lezioniPrenotate: LezioneDto[] = [];
+  lezioniPrenotabili: LezioneDto[] = [];
+  pagamentiPendenti: { titolo: string; importo: number }[] = [];
+
   constructor(
     private router: Router,
     private lezioniService: LezioniService
-
   ) {}
-  
 
   ngOnInit(): void {
-    
+    // Mock dati per la bozza
+    this.lezioniPrenotate = [
+      {
+        titolo: 'Yoga Relax',
+        tipoLezione: TipoLezione.YOGA,
+        dataInizio: '2025-09-09T18:00:00',
+        dataFine: '2025-09-09T19:00:00',
+        istruttore: 'Laura Caratti',
+      }
+    ];
+    this.lezioniPrenotabili = [
+      {
+        titolo: 'Matwork Group',
+        tipoLezione: TipoLezione.MATWORK,
+        dataInizio: '2025-09-10T08:00:00',
+        dataFine: '2025-09-10T09:00:00',
+        istruttore: 'Laura Caratti',
+      }
+    ];
+    this.pagamentiPendenti = [
+      {
+        titolo: 'Corso Pilates Mensile',
+        importo: 49.99
+      }
+    ];
   }
 
   formatTime(dataInizio: string, dataFine: string): string {
