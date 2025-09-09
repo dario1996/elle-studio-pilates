@@ -1,0 +1,17 @@
+
+.fade-in-modal {
+	opacity: 0;
+	transform: translateY(40px);
+	animation: fadeInModal 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+@keyframes fadeInModal {
+	0% {
+		opacity: 0;
+		transform: translateY(40px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
