@@ -5,68 +5,97 @@
       <app-notification></app-notification>
       <app-logged-user></app-logged-user>
     </div>
+
+    <!-- ...existing code... -->
   </div>
   <div class="page-content">
-    <div class="dashboard-utente-cards row g-4">
+    <div class="dashboard-utente-cards">
       <!-- Card 1: Lezioni prenotate -->
-      <div class="col-md-4">
-        <div class="stats-card">
+      <div class="stats-card">
           <div class="card-header">
             <h3>Lezioni prenotate</h3>
             <i class="fas fa-calendar-check card-icon"></i>
           </div>
           <div class="card-content">
             <div *ngIf="lezioniPrenotate.length === 0" class="text-muted">Nessuna lezione prenotata</div>
-            <div *ngFor="let lezione of lezioniPrenotate">
-              <div>
-                <strong>{{ lezione.titolo }}</strong> <br>
-                {{ getLabelTipoLezione(lezione.tipo) }}<br>
-                {{ formatTime(lezione.dataInizio, lezione.dataFine) }}<br>
-                Istruttore: {{ lezione.istruttore }}
+            <ng-container *ngIf="lezioniCorrenti.length > 0">
+              <div class="d-flex align-items-center justify-content-between">
+                <button class="btn btn-link p-0" (click)="prevLezione()" [disabled]="lezioneIndex === 0">
+                  <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="d-flex flex-column flex-grow-1 align-items-center">
+                  <div class="row w-100">
+                    <div class="col-12 col-md-12" *ngFor="let lezione of lezioniCorrenti">
+                      <div class="suggested-lessons-small text-center mb-3">
+                        <strong>{{ lezione.titolo }}</strong> <br>
+                        {{ getLabelTipoLezione(lezione.tipo) }}<br>
+                        {{ formatTime(lezione.dataInizio, lezione.dataFine) }}<br>
+                        Istruttore: {{ lezione.istruttore }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <button class="btn btn-link p-0" (click)="nextLezione()" [disabled]="lezioneIndex >= lezioniPrenotate.length - 2">
+                  <i class="fas fa-chevron-right"></i>
+                </button>
+              </div>
+              <div class="text-center mt-2 text-muted" *ngIf="lezioniPrenotate.length > 2">
+                {{ lezioneIndex + 1 }} - {{ getLezioneIndexEnd() }} / {{ lezioniPrenotate.length }}
               </div>
               <hr>
+            </ng-container>
           </div>
-        </div>
       </div>
-      <!-- Card 2: Lezioni prenotabili -->
-      <div class="col-md-4">
-        <div class="stats-card">
-          <div class="card-header">
-            <h3>Lezioni prenotabili</h3>
-            <i class="fas fa-calendar-plus card-icon"></i>
+      <!-- Card 2: Ti potrebbero interessare (suggerite + prenotabili) -->
+      <div class="stats-card">
+        <div class="card-header">
+          <h3>Ti potrebbero interessare</h3>
+          <i class="fas fa-calendar-plus card-icon"></i>
+        </div>
+        <div class="card-content">
+          <div *ngIf="lezioniPrenotabili.length === 0 && lezioniSuggerite.length === 0 && lezioniPrenotate.length === 0" class="text-muted">Nessuna lezione prenotabile</div>
+          <div *ngFor="let lezione of lezioniPrenotabili">
+            <div>
+              <strong>{{ lezione.titolo }}</strong> <br>
+              {{ getLabelTipoLezione(lezione.tipoLezione) }}<br>
+              {{ formatTime(lezione.dataInizio, lezione.dataFine) }}<br>
+              Istruttore: {{ lezione.istruttore }}
+              <button class="btn btn-primary btn-sm mt-2">Prenota</button>
+            </div>
+            <hr>
           </div>
-          <div class="card-content">
-            <div *ngIf="lezioniPrenotabili.length === 0" class="text-muted">Nessuna lezione prenotabile</div>
-            <div *ngFor="let lezione of lezioniPrenotabili">
-              <div>
-                <strong>{{ lezione.titolo }}</strong> <br>
-                {{ getLabelTipoLezione(lezione.tipoLezione) }}<br>
-                {{ formatTime(lezione.dataInizio, lezione.dataFine) }}<br>
-                Istruttore: {{ lezione.istruttore }}
-                <button class="btn btn-primary btn-sm mt-2">Prenota</button>
+          <!-- SUGGERIMENTI: Lezioni consigliate -->
+          <div *ngIf="lezioniSuggerite.length > 0">
+            <div class="suggested-lessons-small">
+              <div *ngFor="let lezione of lezioniSuggerite" class="suggested-row d-flex align-items-center justify-content-between mb-2" (click)="openSuggerimentoPopup(lezione)" style="cursor:pointer;">
+                <div>
+                  <strong>{{ lezione.titolo }}</strong> <br>
+                  <span>{{ getLabelTipoLezione(lezione.tipo) }}</span><br>
+                  <span>{{ formatTime(lezione.dataInizio, lezione.dataFine) }}</span><br>
+                  <span>Istruttore: {{ lezione.istruttore }}</span>
+                </div>
+                <button class="btn btn-primary btn-sm ms-2" style="font-size: 0.85em; padding: 0.25em 0.8em;" (click)="$event.stopPropagation(); prenotaSuggerita(lezione)">Prenota</button>
               </div>
-              <hr>
             </div>
           </div>
+          <div *ngIf="lezioniSuggerite.length === 0 && lezioniPrenotabili.length > 0" class="text-muted" style="font-size:0.9em;">Nessun suggerimento disponibile</div>
         </div>
       </div>
       <!-- Card 3: Pagamenti da effettuare -->
-      <div class="col-md-4">
-        <div class="stats-card">
-          <div class="card-header">
-            <h3>Pagamenti da effettuare</h3>
-            <i class="fas fa-credit-card card-icon"></i>
-          </div>
-          <div class="card-content">
-            <div *ngIf="pagamentiPendenti.length === 0" class="text-muted">Nessun pagamento in sospeso</div>
-            <div *ngFor="let pagamento of pagamentiPendenti">
-              <div>
-                <strong>{{ pagamento.titolo }}</strong> <br>
-                Importo: {{ pagamento.importo | currency:'EUR' }}<br>
-                <button class="btn btn-warning btn-sm mt-2">Paga ora</button>
-              </div>
-              <hr>
+      <div class="stats-card">
+        <div class="card-header">
+          <h3>Pagamenti da effettuare</h3>
+          <i class="fas fa-credit-card card-icon"></i>
+        </div>
+        <div class="card-content">
+          <div *ngIf="pagamentiPendenti.length === 0" class="text-muted">Nessun pagamento in sospeso</div>
+          <div *ngFor="let pagamento of pagamentiPendenti">
+            <div>
+              <strong>{{ pagamento.titolo }}</strong> <br>
+              Importo: {{ pagamento.importo | currency:'EUR' }}<br>
+              <button class="btn btn-warning btn-sm mt-2">Paga ora</button>
             </div>
+            <hr>
           </div>
         </div>
       </div>
