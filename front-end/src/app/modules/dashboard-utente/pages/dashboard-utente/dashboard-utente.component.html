@@ -11,12 +11,12 @@
   <div class="page-content">
     <div class="dashboard-utente-cards">
       <!-- Card 1: Lezioni prenotate -->
-      <div class="stats-card">
+      <div class="user-cards">
           <div class="card-header">
             <h3>Lezioni prenotate</h3>
             <i class="fas fa-calendar-check card-icon"></i>
           </div>
-          <div class="card-content">
+          <div class="card-content mt-3">
             <div *ngIf="lezioniPrenotate.length === 0" class="text-muted">Nessuna lezione prenotata</div>
             <ng-container *ngIf="lezioniCorrenti.length > 0">
               <div class="d-flex align-items-center justify-content-between">
@@ -47,7 +47,7 @@
           </div>
       </div>
       <!-- Card 2: Ti potrebbero interessare (suggerite + prenotabili) -->
-      <div class="stats-card">
+      <div class="user-cards">
         <div class="card-header">
           <h3>Ti potrebbero interessare</h3>
           <i class="fas fa-calendar-plus card-icon"></i>
@@ -82,7 +82,7 @@
         </div>
       </div>
       <!-- Card 3: Pagamenti da effettuare -->
-      <div class="stats-card">
+      <div class="user-cards">
         <div class="card-header">
           <h3>Pagamenti da effettuare</h3>
           <i class="fas fa-credit-card card-icon"></i>
