@@ -62,6 +62,13 @@ public class LezioneController {
         return ResponseEntity.ok(lezioni);
     }
 
+    @GetMapping("/prenotate")
+    public ResponseEntity<List<LezioneDto>> getLezioniPrenotate(@RequestParam String username) {
+        log.info("GET /api/lezioni/prenotate - Lezioni prenotate per utente: {}", username);
+        List<LezioneDto> lezioni = lezioneService.getLezioniPrenotate(username);
+        return ResponseEntity.ok(lezioni);
+    }
+
     @PostMapping
     public ResponseEntity<LezioneDto> createLezione(@Valid @RequestBody LezioneDto lezioneDto) throws BindingException {
         log.info("POST /api/lezioni - Creazione lezione: {}", lezioneDto.getTitolo());

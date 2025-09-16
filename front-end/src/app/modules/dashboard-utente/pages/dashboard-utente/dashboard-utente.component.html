@@ -20,12 +20,11 @@
             <div *ngFor="let lezione of lezioniPrenotate">
               <div>
                 <strong>{{ lezione.titolo }}</strong> <br>
-                {{ getLabelTipoLezione(lezione.tipoLezione) }}<br>
+                {{ getLabelTipoLezione(lezione.tipo) }}<br>
                 {{ formatTime(lezione.dataInizio, lezione.dataFine) }}<br>
                 Istruttore: {{ lezione.istruttore }}
               </div>
               <hr>
-            </div>
           </div>
         </div>
       </div>

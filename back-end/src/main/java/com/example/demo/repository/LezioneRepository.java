@@ -47,4 +47,8 @@ public interface LezioneRepository extends JpaRepository<Lezione, Long> {
                             @Param("dataInizio") LocalDateTime dataInizio,
                             @Param("dataFine") LocalDateTime dataFine,
                             @Param("lezioneId") Long lezioneId);
+
+    // Trova tutte le lezioni prenotate da uno username (usando la join table lezione_partecipanti)
+    @Query("SELECT l FROM Lezione l JOIN l.partecipanti p WHERE p.username = :username")
+    List<Lezione> findLezioniPrenotateByUsername(@Param("username") String username);
 }

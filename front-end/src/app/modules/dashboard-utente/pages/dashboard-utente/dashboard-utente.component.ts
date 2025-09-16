@@ -7,6 +7,7 @@ import { NotificationComponent } from '../../../../core/notification/notificatio
 import { LezioniService, LezioneDto } from '../../../../core/services/lezioni.service';
 import { TIPI_LEZIONE_CONFIG } from '../../../../modules/agenda/models/lezione.model';
 import { ILezione, TipoLezione, StatoLezione } from '../../../../shared/models/Lezione';
+import { AuthJwtService } from '../../../../core/services/authJwt.service';
 
 @Component({
   selector: 'app-area-personale',
@@ -23,46 +24,38 @@ export class DashboardUtenteComponent implements OnInit {
   loading = false;
   error: string | null = null;
 
-  lezioniPrenotate: LezioneDto[] = [];
+  lezioniPrenotate: ILezione[] = [];
   lezioniPrenotabili: LezioneDto[] = [];
   pagamentiPendenti: { titolo: string; importo: number }[] = [];
 
   constructor(
     private router: Router,
-    private lezioniService: LezioniService
+    private lezioniService: LezioniService,
+    private authService: AuthJwtService,
+    private lezioniServ: LezioniService
   ) {}
 
   ngOnInit(): void {
-    // Mock dati per la bozza
-    this.lezioniPrenotate = [
-      {
-        titolo: 'Yoga Relax',
-        tipoLezione: TipoLezione.YOGA,
-        dataInizio: '2025-09-09T18:00:00',
-        dataFine: '2025-09-09T19:00:00',
-        istruttore: 'Laura Caratti',
-      }
-    ];
-    this.lezioniPrenotabili = [
-      {
-        titolo: 'Matwork Group',
-        tipoLezione: TipoLezione.MATWORK,
-        dataInizio: '2025-09-10T08:00:00',
-        dataFine: '2025-09-10T09:00:00',
-        istruttore: 'Laura Caratti',
-      }
-    ];
-    this.pagamentiPendenti = [
-      {
-        titolo: 'Corso Pilates Mensile',
-        importo: 49.99
-      }
-    ];
+
+    const username = this.authService.loggedUser(); // recupera username utente loggato
+    if (username) {
+      this.lezioniService.getLezioniPrenotate(username).subscribe({
+        next: (lezioni) => {
+          this.lezioniPrenotate = lezioni;
+        },
+        error: (err) => {
+          this.error = 'Errore nel caricamento delle lezioni prenotate';
+        }
+      });
+    } else {
+      this.error = 'Utente non autenticato';
+    }
+    
   }
 
-  formatTime(dataInizio: string, dataFine: string): string {
-    const inizio = new Date(dataInizio);
-    const fine = new Date(dataFine);
+  formatTime(dataInizio: string | Date, dataFine: string | Date): string {
+    const inizio = typeof dataInizio === 'string' ? new Date(dataInizio) : dataInizio;
+    const fine = typeof dataFine === 'string' ? new Date(dataFine) : dataFine;
     return `${inizio.getHours().toString().padStart(2, '0')}:${inizio.getMinutes().toString().padStart(2, '0')}-${fine.getHours().toString().padStart(2, '0')}:${fine.getMinutes().toString().padStart(2, '0')}`;
   }
 

@@ -201,4 +201,10 @@ export class LezioniService {
     return this.http.get<LezioneDto[]>(`${this.apiUrl}/tipo`, { params })
       .pipe(map(dtos => dtos.map(dto => this.dtoToModel(dto))));
   }
+
+  getLezioniPrenotate(username: string): Observable<ILezione[]> {
+    const params = new HttpParams().set('username', username);
+    return this.http.get<LezioneDto[]>(`${this.apiUrl}/prenotate`, { params })
+      .pipe(map(dtos => dtos.map(dto => this.dtoToModel(dto))));
+  }
 }

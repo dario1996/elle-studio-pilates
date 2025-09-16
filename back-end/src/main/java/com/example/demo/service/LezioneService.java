@@ -76,6 +76,16 @@ public class LezioneService {
         return lezioneMapper.toDtoList(lezioni);
     }
 
+    @Transactional(readOnly = true)
+    public List<LezioneDto> getLezioniPrenotate(String username) {
+        log.info("Recupero lezioni prenotate per utente (username): {}", username);
+        List<Lezione> lezioni = lezioneRepository.findLezioniPrenotateByUsername(username);
+        log.info("Trovate {} lezioni prenotate per utente: {}", lezioni.size(), username);
+        return lezioni.stream()
+                .map(lezioneMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
     public LezioneDto createLezione(LezioneDto lezioneDto) throws BindingException {
         log.info("Creazione nuova lezione: {}", lezioneDto.getTitolo());
         
