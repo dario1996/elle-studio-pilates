@@ -29,12 +29,12 @@ export class WelcomeComponent implements OnInit {
       roles: [Ruoli.amministratore], // Solo amministratori
     },
     {
-      title: 'Area personale',
+      title: 'Dashboard',
       icon: 'fa-solid fa-user fa-xl',
       links: [
         {
-          label: 'Area personale',
-          url: 'area-personale',
+          label: 'Dashboard',
+          url: 'dashboard-utente',
           icon: 'fa-solid fa-user fa-lg',
         },
       ],
@@ -127,14 +127,14 @@ export class WelcomeComponent implements OnInit {
     this.utente = this.route.snapshot.params['userid'];
     this.loadUserData();
 
-    // Se l'utente è solo 'utente' e si trova sulla dashboard, reindirizza ad area-personale
+    // Se l'utente è solo 'utente' e si trova sulla dashboard, reindirizza a dashboard utente
     const userRoles = this.BasicAuth.getUserRoles();
     if (
       userRoles.length === 1 &&
       userRoles.includes(Ruoli.utente) &&
       this.router.url.includes('dashboard')
     ) {
-      this.router.navigate(['/gestionale-elle-studio/area-personale']);
+      this.router.navigate(['/gestionale-elle-studio/dashboard-utente']);
     }
   }
 
@@ -146,10 +146,19 @@ export class WelcomeComponent implements OnInit {
     console.log('Ruoli utente per filtro menu:', userRoles);
 
     if (userRoles.includes(Ruoli.amministratore)) {
-      // Amministratore: tutti i menu tranne "Il mio profilo", aggiungi "Statistiche"
+      // Amministratore: tutti i menu tranne "Il mio profilo", aggiungi "Gestione Prenotazioni" e "Statistiche"
       this.menuItems = this.allMenuItems.filter(item => 
         item.roles.includes(Ruoli.amministratore) && item.title !== 'Il mio profilo'
       );
+      // Trova la voce Dashboard e aggiungi Gestione Prenotazioni come link secondario
+      const dashboardMenu = this.menuItems.find(item => item.title === 'Dashboard');
+      if (dashboardMenu) {
+        dashboardMenu.links.push({
+          label: 'Prenotazioni',
+          url: 'gestione-prenotazioni',
+          icon: 'fa-solid fa-calendar-check fa-lg',
+        });
+      }
       // Aggiungi voce Statistiche per amministratori
       this.menuItems.push({
         title: 'Statistiche',
@@ -164,16 +173,28 @@ export class WelcomeComponent implements OnInit {
         roles: [Ruoli.amministratore],
       });
     } else if (userRoles.includes(Ruoli.utente)) {
-      // Utente normale: solo Area personale
+      // Utente normale: dashboard utente + prenotazioni
       this.menuItems = [
         {
-          title: 'Area personale',
+          title: 'Dashboard',
           icon: 'fa-solid fa-user fa-xl',
           links: [
             {
-              label: 'Area personale',
-              url: 'area-personale',
+              label: 'Dashboard',
+              url: 'dashboard-utente',
               icon: 'fa-solid fa-user fa-lg',
+            },
+          ],
+          roles: [Ruoli.utente],
+        },
+        {
+          title: 'Prenotazioni',
+          icon: 'fa-regular fa-calendar-days fa-xl',
+          links: [
+            {
+              label: 'Prenotazioni',
+              url: 'gestione-prenotazioni',
+              icon: 'fa-regular fa-calendar-days fa-lg',
             },
           ],
           roles: [Ruoli.utente],

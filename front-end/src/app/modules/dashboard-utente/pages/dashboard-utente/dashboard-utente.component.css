@@ -1,5 +1,5 @@
-/* Stile cards area personale, simile alla dashboard */
-.area-personale-cards {
+/* Stile cards dashboard utente, simile alla dashboard */
+.dashboard-utente-cards {
   margin-top: 32px;
 }
 
@@ -81,8 +81,8 @@ hr {
   border-top: 1px solid #eee;
   margin: 8px 0;
 }
-/* Stile cards area personale, simile alla dashboard */
-.area-personale-cards {
+/* Stile cards dashboard utente, simile alla dashboard */
+.dashboard-utente-cards {
   margin-top: 32px;
 }
 

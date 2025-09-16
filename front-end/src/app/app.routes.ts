@@ -1,7 +1,7 @@
 import { AuthGuard } from './core/services/route-guard.service';
 import { Routes } from '@angular/router';
 import { Ruoli } from './shared/models/Ruoli';
-import { AreaPersonaleComponent } from './modules/area-personale/pages/area-personale/area-personale.component';
+import { DashboardUtenteComponent } from './modules/dashboard-utente/pages/dashboard-utente/dashboard-utente.component';
 import { AccountPanelComponent } from './modules/account-panel/account-panel.component';
 
 export const routes: Routes = [
@@ -26,8 +26,8 @@ export const routes: Routes = [
           ).then(m => m.HomeDashboardComponent),
       },
       {
-        path: 'area-personale',
-        component: AreaPersonaleComponent,
+        path: 'dashboard-utente',
+        component: DashboardUtenteComponent,
         canActivate: [AuthGuard],
         data: { roles: [Ruoli.utente] },
       },
@@ -75,6 +75,15 @@ export const routes: Routes = [
           ),
         canActivate: [AuthGuard],
         data: { roles: [Ruoli.amministratore] },
+      },
+      {
+        path: 'gestione-prenotazioni',
+        loadComponent: () =>
+          import('./modules/gestione-prenotazioni/pages/gestione-prenotazioni/gestione-prenotazioni.component').then(
+            m => m.GestionePrenotazioniComponent,
+          ),
+        canActivate: [AuthGuard],
+        data: { roles: [Ruoli.utente] },
       },
       {
         path: 'account-panel',

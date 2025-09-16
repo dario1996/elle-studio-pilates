@@ -11,13 +11,13 @@ import { ILezione, TipoLezione, StatoLezione } from '../../../../shared/models/L
 @Component({
   selector: 'app-area-personale',
   standalone: true,
-  templateUrl: './area-personale.component.html',
-  styleUrls: ['./area-personale.component.css'],
+  templateUrl: './dashboard-utente.component.html',
+  styleUrls: ['./dashboard-utente.component.css'],
   imports: [CommonModule, PageTitleComponent, LoggedUserComponent, NotificationComponent],
 })
-export class AreaPersonaleComponent implements OnInit {
+export class DashboardUtenteComponent implements OnInit {
 
-  title: string = 'Area Personale';
+  title: string = 'Dashboard';
   icon: string = 'fas fa-user';
 
   loading = false;
