@@ -67,7 +67,14 @@ export class HomeDashboardComponent implements OnInit {
   formatTime(dataInizio: string, dataFine: string): string {
     const inizio = new Date(dataInizio);
     const fine = new Date(dataFine);
-    return `${inizio.getHours().toString().padStart(2, '0')}:${inizio.getMinutes().toString().padStart(2, '0')}-${fine.getHours().toString().padStart(2, '0')}:${fine.getMinutes().toString().padStart(2, '0')}`;
+    const dd = inizio.getDate().toString().padStart(2, '0');
+    const mm = (inizio.getMonth() + 1).toString().padStart(2, '0');
+    const yyyy = inizio.getFullYear();
+    const h1 = inizio.getHours().toString().padStart(2, '0');
+    const min1 = inizio.getMinutes().toString().padStart(2, '0');
+    const h2 = fine.getHours().toString().padStart(2, '0');
+    const min2 = fine.getMinutes().toString().padStart(2, '0');
+    return `${dd}-${mm}-${yyyy} ${h1}:${min1}-${h2}:${min2}`;
   }
 
   getLabelTipoLezione(tipo: string): string {

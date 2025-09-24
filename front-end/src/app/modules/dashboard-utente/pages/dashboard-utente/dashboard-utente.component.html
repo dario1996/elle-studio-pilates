@@ -11,7 +11,7 @@
   <div class="page-content">
     <div class="dashboard-utente-cards">
       <!-- Card 1: Lezioni prenotate -->
-      <div class="user-cards">
+  <div class="user-cards" #userCard>
           <div class="card-header">
             <h3>Lezioni prenotate</h3>
             <i class="fas fa-calendar-check card-icon"></i>
@@ -26,11 +26,12 @@
                 <div class="d-flex flex-column flex-grow-1 align-items-center">
                   <div class="row w-100">
                     <div class="col-12 col-md-12" *ngFor="let lezione of lezioniCorrenti">
-                      <div class="suggested-lessons-small text-center mb-3">
-                        <strong>{{ lezione.titolo }}</strong> <br>
-                        {{ getLabelTipoLezione(lezione.tipo) }}<br>
-                        {{ formatTime(lezione.dataInizio, lezione.dataFine) }}<br>
-                        Istruttore: {{ lezione.istruttore }}
+                      <div class="suggested-lessons-small mb-3">
+                        <div class="lesson-row"><span class="label">Tipo corso</span><span class="value">{{ getLabelTipoLezione(lezione.tipo) }}</span></div>
+                        <div class="lesson-row"><span class="label">Nome lezione</span><span class="value"><strong>{{ lezione.titolo }}</strong></span></div>
+                        <div class="lesson-row"><span class="label">Data</span><span class="value">{{ formatDateOnly(lezione.dataInizio) }}</span></div>
+                        <div class="lesson-row"><span class="label">Inizio-Fine</span><span class="value">{{ formatTimeRange(lezione.dataInizio, lezione.dataFine) }}</span></div>
+                        <div class="lesson-row"><span class="label">Istruttore</span><span class="value">{{ lezione.istruttore }}</span></div>
                       </div>
                     </div>
                   </div>
@@ -47,7 +48,7 @@
           </div>
       </div>
       <!-- Card 2: Ti potrebbero interessare (suggerite + prenotabili) -->
-      <div class="user-cards">
+  <div class="user-cards" #userCard>
         <div class="card-header">
           <h3>Ti potrebbero interessare</h3>
           <i class="fas fa-calendar-plus card-icon"></i>
@@ -82,7 +83,7 @@
         </div>
       </div>
       <!-- Card 3: Pagamenti da effettuare -->
-      <div class="user-cards">
+  <div class="user-cards" #userCard>
         <div class="card-header">
           <h3>Pagamenti da effettuare</h3>
           <i class="fas fa-credit-card card-icon"></i>

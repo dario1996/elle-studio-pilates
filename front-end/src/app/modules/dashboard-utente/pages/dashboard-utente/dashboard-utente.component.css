@@ -15,7 +15,7 @@
   flex-wrap: wrap;
   gap: 4rem;
   justify-content: center;
-  align-items: center; /* center vertically inside the container */
+  align-items: flex-start; /* align cards to top so taller cards don't overflow visually */
   width: 100%;
   margin: 0 auto;
   padding: 64px 12px 48px 12px; /* more top padding to push cards lower */
@@ -37,10 +37,10 @@
   /* margin-bottom: 16px; */
   display: flex;
   flex-direction: column;
-  min-width: 300px;
+  min-width: 260px;
   max-width: 380px;
   flex: 0 1 340px;
-  height: 360px;
+  height: auto; /* allow card to grow with content */
   box-sizing: border-box;
 }
 
@@ -48,7 +48,7 @@
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .btn-link:not([disabled]) .fa-chevron-left,
@@ -61,6 +61,27 @@
 
 .suggested-lessons-small {
   font-size: 12px;
+}
+.suggested-lessons-small .lesson-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 0;
+  align-items: center;
+}
+.suggested-lessons-small .lesson-row .label {
+  color: #6b7280;
+  font-weight: 600;
+  font-size: 12px;
+  flex: 0 0 40%;
+  text-align: left;
+}
+.suggested-lessons-small .lesson-row .value {
+  color: #374151;
+  font-size: 13px;
+  flex: 1 1 60%;
+  text-align: right;
+  word-break: break-word;
 }
 .suggested-lessons-small .suggested-row {
   border-bottom: 1px solid #eee;
@@ -90,6 +111,13 @@
     min-width: unset;
     margin-left: auto;
     margin-right: auto;
+  }
+  .suggested-lessons-small .lesson-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .suggested-lessons-small .lesson-row .value {
+    text-align: left;
   }
 }
 

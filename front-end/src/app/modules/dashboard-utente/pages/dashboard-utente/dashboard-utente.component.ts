@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, ElementRef, ViewChildren, QueryList, HostListener } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { PageTitleComponent } from "../../../../core/page-title/page-title.component";
@@ -16,7 +17,7 @@ import { AuthJwtService } from '../../../../core/services/authJwt.service';
   styleUrls: ['./dashboard-utente.component.css'],
   imports: [CommonModule, PageTitleComponent, LoggedUserComponent, NotificationComponent],
 })
-export class DashboardUtenteComponent implements OnInit {
+export class DashboardUtenteComponent implements OnInit, AfterViewInit {
 
   title: string = 'Dashboard';
   icon: string = 'fas fa-user';
@@ -35,6 +36,8 @@ export class DashboardUtenteComponent implements OnInit {
     private lezioniService: LezioniService,
     private authService: AuthJwtService
   ) {}
+
+  @ViewChildren('userCard', { read: ElementRef }) userCardEls!: QueryList<ElementRef>;
 
   ngOnInit(): void {
     const username = this.authService.loggedUser();
@@ -62,6 +65,31 @@ export class DashboardUtenteComponent implements OnInit {
     } else {
       this.error = 'Utente non autenticato';
     }
+  }
+
+  ngAfterViewInit(): void {
+    // initial equalization after view init
+    setTimeout(() => this.equalizeCardHeights(), 50);
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    // recompute heights on resize
+    this.equalizeCardHeights();
+  }
+
+  private equalizeCardHeights(): void {
+    if (!this.userCardEls || this.userCardEls.length === 0) return;
+    // reset min-heights
+    this.userCardEls.forEach(el => (el.nativeElement.style.minHeight = '0px'));
+    // find max height
+    let max = 0;
+    this.userCardEls.forEach(el => {
+      const h = el.nativeElement.getBoundingClientRect().height;
+      if (h > max) max = h;
+    });
+    // apply max height to all
+    this.userCardEls.forEach(el => (el.nativeElement.style.minHeight = `${max}px`));
   }
 
 
@@ -95,9 +123,36 @@ export class DashboardUtenteComponent implements OnInit {
   }
 
   formatTime(dataInizio: string | Date, dataFine: string | Date): string {
-    const inizio = typeof dataInizio === 'string' ? new Date(dataInizio) : dataInizio;
-    const fine = typeof dataFine === 'string' ? new Date(dataFine) : dataFine;
-    return `${inizio.getHours().toString().padStart(2, '0')}:${inizio.getMinutes().toString().padStart(2, '0')}-${fine.getHours().toString().padStart(2, '0')}:${fine.getMinutes().toString().padStart(2, '0')}`;
+    const inizio = typeof dataInizio === 'string' ? new Date(dataInizio) : dataInizio as Date;
+    const fine = typeof dataFine === 'string' ? new Date(dataFine) : dataFine as Date;
+    const dd = inizio.getDate().toString().padStart(2, '0');
+    const mm = (inizio.getMonth() + 1).toString().padStart(2, '0');
+    const yyyy = inizio.getFullYear();
+    const h1 = inizio.getHours().toString().padStart(2, '0');
+    const min1 = inizio.getMinutes().toString().padStart(2, '0');
+    const h2 = fine.getHours().toString().padStart(2, '0');
+    const min2 = fine.getMinutes().toString().padStart(2, '0');
+    return `${dd}-${mm}-${yyyy} ${h1}:${min1}-${h2}:${min2}`;
+  }
+
+  /** Restituisce solo la data in formato dd-MM-yyyy */
+  formatDateOnly(data: string | Date): string {
+    const d = typeof data === 'string' ? new Date(data) : data as Date;
+    const dd = d.getDate().toString().padStart(2, '0');
+    const mm = (d.getMonth() + 1).toString().padStart(2, '0');
+    const yyyy = d.getFullYear();
+    return `${dd}-${mm}-${yyyy}`;
+  }
+
+  /** Restituisce solo l'intervallo orario HH:mm-HH:mm */
+  formatTimeRange(dataInizio: string | Date, dataFine: string | Date): string {
+    const inizio = typeof dataInizio === 'string' ? new Date(dataInizio) : dataInizio as Date;
+    const fine = typeof dataFine === 'string' ? new Date(dataFine) : dataFine as Date;
+    const h1 = inizio.getHours().toString().padStart(2, '0');
+    const min1 = inizio.getMinutes().toString().padStart(2, '0');
+    const h2 = fine.getHours().toString().padStart(2, '0');
+    const min2 = fine.getMinutes().toString().padStart(2, '0');
+    return `${h1}:${min1}-${h2}:${min2}`;
   }
 
   getLabelTipoLezione(tipo: string): string {
