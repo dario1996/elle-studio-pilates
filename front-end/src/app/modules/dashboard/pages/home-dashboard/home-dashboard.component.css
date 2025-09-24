@@ -15,31 +15,84 @@
     transform: translateY(0);
   }
 }
+
+.page-content {
+  flex: 1 1 auto; /* CORRETTO: prende tutto lo spazio rimanente */
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  padding: 12px;
+}
+
+
 /* Contenuto scrollabile per dashboard-contents */
 .dashboard-contents {
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  /* Nessun padding/margine aggiuntivo, le spaziature restano gestite dai figli */
+  /* Aggiungiamo padding-top per posizionare il contenuto (cards) più in basso nella pagina */
+  padding-top: 42px; /* base offset, finer control via component-scoped .page-content below */
 }
 /* Dashboard Stats */
 .dashboard-stats {
-  padding: 6px 0px 6px 0px;
-  /* margin-left: 20px;
-  margin-right: 20px; */
+  padding: 24px; /* keep internal padding small; vertical placement handled by container */
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+  margin-bottom: 24px;
+  align-items: center;
+}
+
+/* Dashboard-specific override: when this component's host contains .page-content, make
+   the page-content take extra top padding to lower the cards and vertically center
+   .dashboard-stats within the viewport minus header. This keeps the rule scoped to
+   the dashboard component (component CSS is already encapsulated by Angular). */
+.page-content {
+  /* Use a larger top padding for the dashboard page content only */
+  padding-top: 120px; /* bumps the whole content down on large screens */
+}
+
+/* Make the stats row vertically centered within the available area */
+.dashboard-contents {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dashboard-stats .row {
+  justify-content: center;
+  align-items: center;
+}
+
+.dashboard-stats .row {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 32px;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.dashboard-stats .col-md-3 {
+  flex: 1;
+  max-width: 350px;
+  min-width: 280px;
 }
 
 .stats-card {
   background: white;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   border: 1px solid #c99e67; /* Colore bordo sidebar */
   border-top: 4px solid #c99e67; /* Bordo superiore più spesso */
-  /* height: 100%;  RIMOSSO per evitare taglio contenuto scrollabile */
   transition: all 0.3s ease;
   position: relative;
+  height: 180px;
 }
 
 .stats-card:hover {
@@ -82,7 +135,7 @@
 }
 
 .main-number {
-  font-size: 48px;
+  font-size: 56px;
   font-weight: 700;
   color: #111827;
   line-height: 1;
@@ -124,8 +177,16 @@
 
 /* Responsive design */
 @media (max-width: 1200px) {
+  .dashboard-stats .row {
+    gap: 24px;
+  }
+  
+  .dashboard-stats .col-md-3 {
+    max-width: 320px;
+  }
+  
   .main-number {
-    font-size: 42px;
+    font-size: 50px;
   }
   
   .card-header h3 {
@@ -133,18 +194,29 @@
   }
   
   .stats-card {
-    padding: 20px;
+    padding: 28px;
   }
 }
 
 @media (max-width: 992px) {
+  .dashboard-stats .row {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .dashboard-stats .col-md-3 {
+    max-width: 100%;
+    width: 100%;
+  }
+  
   .main-number {
-    font-size: 36px;
+    font-size: 44px;
   }
   
   .stats-card {
-    padding: 18px;
-    margin-bottom: 16px;
+    padding: 24px;
+    height: auto;
   }
 
   .appointments-section {
@@ -154,8 +226,12 @@
 }
 
 @media (max-width: 768px) {
+  .dashboard-stats {
+    padding: 16px;
+  }
+  
   .main-number {
-    font-size: 32px;
+    font-size: 38px;
   }
   
   .card-header h3 {
@@ -163,11 +239,7 @@
   }
   
   .stats-card {
-    padding: 16px;
-  }
-  
-  .dashboard-stats {
-    padding: 16px 0;
+    padding: 20px;
   }
 
   .appointments-section {

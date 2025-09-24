@@ -4,6 +4,8 @@
   align-items: center;
   margin-top: 32px;
   height: 100%;
+  width: 100%;
+  padding: 0 24px; /* outer container padding like calendar */
 }
 .account-card {
   background: white;
@@ -12,7 +14,8 @@
   border: 1px solid #c99e67;
   border-top: 4px solid #c99e67;
   padding: 24px;
-  min-width: 340px;
+  min-width: 0;
+  width: 100%;
   flex: 1 1 340px;
 }
 .account-card.big-card {
@@ -21,24 +24,25 @@
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   border: 1px solid #c99e67;
   border-top: 4px solid #c99e67;
-  padding: 32px 40px;
+  padding: 12px; /* inner padding like calendar inner container */
   width: 100%;
-  max-width: 700px;
-  min-width: 320px;
-  max-height: 70vh;
+  max-width: 100%; /* ensure card never exceeds container */
+  min-width: 0; /* allow shrinking on mobile */
+  max-height: 80vh;
   overflow-y: auto;
 }
 .account-card h2 {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   color: #374151;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 .account-card.big-card h2 {
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 700;
   color: #374151;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
+  width: 100%;
 }
 .info-row {
   display: flex;
@@ -52,10 +56,11 @@
 }
 .info-row {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  padding: 12px 0;
+  padding: 10px 0;
   border-bottom: 1px solid #eee;
-  font-size: 16px;
+  font-size: 14px;
 }
 .info-row:last-child {
   border-bottom: none;
@@ -64,9 +69,71 @@
   color: #dc2626;
   font-weight: 600;
 }
+/* 3-column grid inside the card */
+.account-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 360px; /* slightly wider right column for actions */
+  gap: 36px; /* more breathing room between columns */
+  align-items: start;
+  padding: 12px;;
+}
+.account-grid .col {
+  min-width: 0;
+}
+.info-row > span:first-child {
+  color: #6b7280;
+  flex: 0 0 140px; /* label column fixed width so values align */
+  font-weight: 600;
+}
+.info-row > span:last-child {
+  flex: 1 1 auto;
+  text-align: right;
+  color: #374151;
+  word-break: break-word;
+}
+.account-grid h3 {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  color: #374151;
+  font-weight: 700;
+}
+.btn-change {
+  background: transparent;
+  border: 1px solid #c99e67;
+  color: #7a4f2a;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.btn-change:hover {
+  background: #f7efe6;
+}
+.btn-row {
+  padding-top: 16px;
+}
 @media (max-width: 768px) {
-  .account-card.big-card {
-    padding: 18px 8px;
-    max-width: 98vw;
+  .account-panel-container {
+    padding: 0 12px; /* reduce outer padding on mobile like calendar */
   }
+  .account-card.big-card {
+    padding: 10px; /* reduce inner padding on mobile */
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  .account-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .account-grid h3 {
+    font-size: 15px;
+  }
+  /* on mobile make labels smaller and allow values to flow beneath if needed */
+  .info-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 8px 0;
+  }
+  .info-row > span:first-child { flex: 0 0 auto; width: 100%; font-size: 13px; }
+  .info-row > span:last-child { text-align: left; width: 100%; word-break: break-word; }
 }

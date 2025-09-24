@@ -20,6 +20,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addResolver(new PathResourceResolver() {
                     @Override
                     protected Resource getResource(String resourcePath, Resource location) throws IOException {
+                        // If the request is for our API do not try to resolve a static resource here.
+                        // Let the DispatcherServlet / controllers handle /api/** paths.
+                        if (resourcePath != null && resourcePath.startsWith("api/")) {
+                            return null;
+                        }
+
                         Resource requestedResource = location.createRelative(resourcePath);
                         // If the requested resource exists, return it. Otherwise, return index.html.
                         return requestedResource.exists() && requestedResource.isReadable() ? requestedResource

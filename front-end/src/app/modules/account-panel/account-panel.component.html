@@ -10,16 +10,34 @@
     
 <div class="account-panel-container">
   <div class="account-card big-card">
-    <h2>Informazioni account</h2>
-    <div class="info-row"><span>Nome</span><span>{{ user.nome }}</span></div>
-    <div class="info-row"><span>Email</span><span>{{ user.email }}</span></div>
-    <div class="info-row"><span>Indirizzo</span><span>{{ user.indirizzo }}</span></div>
-    <div class="info-row"><span>Numero di telefono</span><span>{{ user.telefono }}</span></div>
-    <div class="info-row"><span>Azienda</span><span>{{ user.azienda }}</span></div>
-    <div class="info-row"><span>Stato</span><span class="status-disabled">{{ user.stato }}</span></div>
-    <div class="info-row"><span>Membro dal</span><span>{{ user.dataIscrizione }}</span></div>
-    <div class="info-row"><span>Password</span><span>{{ user.password }}</span></div>
-    <div class="info-row"><span>Accessi social</span><span>-</span></div>
+    <!-- <h2>Informazioni account</h2> -->
+    <div class="account-grid">
+      <div class="col col-left">
+        <h3>Dati personali</h3>
+        <div class="info-row"><span>Nome</span><span>{{ display(user.nome) }}</span></div>
+        <div class="info-row"><span>Cognome</span><span>{{ display(user.cognome) }}</span></div>
+        <div class="info-row"><span>Codice fiscale</span><span>{{ display(user.codice_fiscale) }}</span></div>
+        <div class="info-row"><span>Telefono</span><span>{{ display(user.telefono) }}</span></div>
+        <div class="info-row"><span>Email</span><span>{{ display(user.email) }}</span></div>
+        <div class="info-row"><span>Azienda</span><span>{{ display(user.azienda) }}</span></div>
+      </div>
+
+      <div class="col col-center">
+        <h3>Altri dettagli</h3>
+        <div class="info-row"><span>Certificato medico</span><span>{{ user.certificato_medico ? display(user.certificato_medico) : 'Assente' }}</span></div>
+        <div class="info-row"><span>Patologie</span><span>{{ user.patologie ? "Presenti" : 'Nessuna' }}</span></div>
+        <div class="info-row"><span>Descrizione patologie</span><span>{{ display(user.descrizione_patologie) }}</span></div>
+        <div class="info-row"><span>Obiettivi</span><span>{{ display(user.obiettivi) }}</span></div>
+      </div>
+
+      <div class="col col-right">
+        <h3>Stato account</h3>
+        <div class="info-row"><span>Stato</span><span [ngClass]="{'status-disabled': user.attivo !== 'Si'}">{{ displayStatus(user.attivo) }}</span></div>
+        <div class="info-row"><span>Membro dal</span><span>{{ display(user.data_creazione) }}</span></div>
+        <div class="info-row"><span>Password</span><span>********</span></div>
+        <div class="info-row btn-row"><span></span><span><button class="btn-change" (click)="changePassword()">Cambia password</button></span></div>
+      </div>
+    </div>
   </div>
 </div>
     

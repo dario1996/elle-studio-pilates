@@ -55,6 +55,22 @@ public class UtentiController {
         }
     }
 
+    // 🆕 ENDPOINT GET per ottenere un utente tramite username
+    @GetMapping(value = "/username/{username}", produces = "application/json")
+    public ResponseEntity<Utenti> getUtenteByUsername(@PathVariable String username) {
+        log.info("Richiesta utente by username: " + username);
+        try {
+            Utenti utente = utentiService.SelUser(username);
+            if (utente == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+            return ResponseEntity.ok(utente);
+        } catch (Exception e) {
+            log.severe("Errore nel recupero utente: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
     // 🆕 ENDPOINT PUT per modificare un utente
     @PutMapping(value = "/{username}", produces = "application/json")
     @SneakyThrows
