@@ -103,7 +103,7 @@ html, body {
 }
 
 .page-content {
-  flex: 1 1 auto; /* CORRETTO: prende tutto lo spazio rimanente */
+  flex: 1 1 auto;
   min-height: 0;
   display: flex;
   flex-direction: column;
@@ -119,6 +119,44 @@ html, body {
   flex: 1 1 auto;
   min-height: 0;
   /* padding-top: 12px; */
+}
+
+/* ===================== FIX MARGINI PULSANTI AZIONI ===================== */
+/* Fix per i contenitori dei pulsanti che escono dal page-content */
+.page-content .row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.page-content .row .col,
+.page-content .row [class*="col-"] {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Assicura che i pulsanti di azione rapida rispettino i margini del page-content */
+.page-content .quick-action-btn {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* Fix specifico per le pagine con tabelle generiche */
+.page-content .mb-3.mt-3 {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Assicura che le card con bordo dorato rispettino i margini del page-content */
+.page-content .card.border-0.shadow-sm,
+.page-content .card.fade-in-modal {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Fix per il page-content-inner che potrebbe contenere elementi fuori margini */
+.page-content .page-content-inner {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }
 
 .form-control {

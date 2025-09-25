@@ -197,8 +197,9 @@ th .fa {
   scrollbar-color: var(--color-BORDO) #f8f8f8;
   scroll-behavior: smooth;
   will-change: scroll-position;
-  max-height: calc(100vh - 180px);
-  padding: 0px 16px 16px 16px;
+  max-height: calc(100vh - 220px);
+  /* margin-bottom: 24px; */
+  padding: 0px 5px 0px 5px;
 }
 
 /* Scrollbar personalizzata per Webkit (Chrome, Edge, Safari) */
@@ -401,13 +402,15 @@ th .fa {
 
 @media (max-width: 1400px) {
   .table-scroll-container {
-    max-height: calc(100vh - 180px); /* AUMENTATO: più spazio su schermi grandi */
+    max-height: calc(100vh - 220px); /* AUMENTATO: più spazio per paginazione su schermi grandi */
+    margin-bottom: 20px;
   }
 }
 
 @media (max-width: 1200px) {
   .table-scroll-container {
-    max-height: calc(100vh - 200px); /* AUMENTATO: più spazio su schermi medi */
+    max-height: calc(100vh - 240px); /* AUMENTATO: più spazio per paginazione su schermi medi */
+    margin-bottom: 20px;
   }
 }
 
@@ -417,11 +420,11 @@ th .fa {
   /* .table-header th, .table-body td { padding: 8px; font-size: 13px; } */
   .action-buttons { gap: 2px; }
   .table-scroll-container {
-    max-height: calc(100vh - 220px); /* AUMENTATO: più spazio su mobile */
+    max-height: calc(100vh - 260px); /* AUMENTATO: più spazio per paginazione su mobile */
     overflow-x: auto; /* Permette scroll orizzontale su mobile */
-    padding: 20px; /* AGGIORNATO: Padding ridotto su mobile ma mantenendo stile calendario */
+    margin-bottom: 16px;
+    padding: 0px 5px 20px 5px;
     border-radius: 12px; /* MANTENUTO: Border radius come calendario */
-    padding: 0px 5px 5px 5px;
   }
   
   .table {
@@ -457,8 +460,9 @@ th .fa {
 
 @media (max-width: 480px) {
   .table-scroll-container {
-    max-height: calc(100vh - 240px);
-    padding: 0px 16px 16px 16px;
+    max-height: calc(100vh - 280px);
+    margin-bottom: 16px;
+    padding: 0px 16px 24px 16px;
     border-radius: 12px;
   }
 }

@@ -27,7 +27,7 @@
   font-weight: 500;
   color: #495057;
   margin-bottom: 4px;
-  font-size: 0.9rem;
+  font-size: 13px;
 }
 
 .form-control,
@@ -35,7 +35,7 @@
   border: 1px solid #ced4da;
   border-radius: 6px;
   padding: 8px 10px;
-  font-size: 0.9rem;
+  font-size: 13px;
   transition: all 0.15s ease-in-out;
 }
 
@@ -73,6 +73,7 @@
   border-left: none;
   background-color: #f8f9fa;
   border-color: #ced4da;
+  font-size: 13px;
 }
 
 .input-group .btn:hover {

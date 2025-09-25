@@ -1,11 +1,10 @@
 .account-panel-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   margin-top: 32px;
   height: 100%;
   width: 100%;
-  padding: 0 24px; /* outer container padding like calendar */
 }
 .account-card {
   background: white;
@@ -32,16 +31,16 @@
   overflow-y: auto;
 }
 .account-card h2 {
-  font-size: 16px;
+  font-size: 13px; /* Ridotto da 16px a 13px */
   font-weight: 600;
   color: #374151;
-  margin-bottom: 16px;
+  margin-bottom: 14px; /* Ridotto da 16px */
 }
 .account-card.big-card h2 {
-  font-size: 18px;
+  font-size: 14px; /* Ridotto da 18px a 14px */
   font-weight: 700;
   color: #374151;
-  margin-bottom: 20px;
+  margin-bottom: 16px; /* Ridotto da 20px */
   width: 100%;
 }
 .info-row {
@@ -49,7 +48,7 @@
   justify-content: space-between;
   padding: 8px 0;
   border-bottom: 1px solid #eee;
-  font-size: 15px;
+  font-size: 12px; /* Ridotto da 15px a 12px */
 }
 .info-row:last-child {
   border-bottom: none;
@@ -58,9 +57,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 0;
+  padding: 8px 0; /* Ridotto da 10px */
   border-bottom: 1px solid #eee;
-  font-size: 14px;
+  font-size: 12px; /* Ridotto da 14px a 12px */
 }
 .info-row:last-child {
   border-bottom: none;
@@ -92,8 +91,8 @@
   word-break: break-word;
 }
 .account-grid h3 {
-  margin: 0 0 10px 0;
-  font-size: 14px;
+  margin: 0 0 8px 0; /* Ridotto da 10px */
+  font-size: 12px; /* Ridotto da 14px a 12px */
   color: #374151;
   font-weight: 700;
 }
@@ -101,15 +100,16 @@
   background: transparent;
   border: 1px solid #c99e67;
   color: #7a4f2a;
-  padding: 8px 12px;
+  padding: 6px 10px; /* Ridotto da 8px 12px */
   border-radius: 6px;
   cursor: pointer;
+  font-size: 11px; /* Aggiunto font-size ridotto */
 }
 .btn-change:hover {
   background: #f7efe6;
 }
 .btn-row {
-  padding-top: 16px;
+  padding-top: 12px; /* Ridotto da 16px */
 }
 @media (max-width: 768px) {
   .account-panel-container {
@@ -125,15 +125,15 @@
     gap: 12px;
   }
   .account-grid h3 {
-    font-size: 15px;
+    font-size: 13px; /* Ridotto da 15px a 13px */
   }
   /* on mobile make labels smaller and allow values to flow beneath if needed */
   .info-row {
     flex-direction: column;
     align-items: flex-start;
-    gap: 6px;
-    padding: 8px 0;
+    gap: 4px; /* Ridotto da 6px */
+    padding: 6px 0; /* Ridotto da 8px */
   }
-  .info-row > span:first-child { flex: 0 0 auto; width: 100%; font-size: 13px; }
-  .info-row > span:last-child { text-align: left; width: 100%; word-break: break-word; }
+  .info-row > span:first-child { flex: 0 0 auto; width: 100%; font-size: 11px; } /* Ridotto da 13px */
+  .info-row > span:last-child { text-align: left; width: 100%; word-break: break-word; font-size: 12px; } /* Aggiunto font-size */
 }

@@ -14,11 +14,11 @@
   display: flex;
   flex-wrap: wrap;
   gap: 4rem;
-  justify-content: center;
-  align-items: flex-start; /* align cards to top so taller cards don't overflow visually */
+  justify-content: stretch;
+  align-items: stretch; /* align cards to top so taller cards don't overflow visually */
   width: 100%;
   margin: 0 auto;
-  padding: 64px 12px 48px 12px; /* more top padding to push cards lower */
+  padding: 20px 12px 48px 12px; /* more top padding to push cards lower */
   box-sizing: border-box;
   min-height: calc(100vh - 260px); /* ensure cards sit roughly mid-page */
   max-width: 1400px;

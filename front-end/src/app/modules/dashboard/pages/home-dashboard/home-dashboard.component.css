@@ -17,70 +17,38 @@
 }
 
 .page-content {
-  flex: 1 1 auto; /* CORRETTO: prende tutto lo spazio rimanente */
+  flex: 1 1 auto;
   min-height: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   position: relative;
   z-index: 1;
-  padding: 12px;
 }
 
-
-/* Contenuto scrollabile per dashboard-contents */
-.dashboard-contents {
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  /* Aggiungiamo padding-top per posizionare il contenuto (cards) più in basso nella pagina */
-  padding-top: 42px; /* base offset, finer control via component-scoped .page-content below */
-}
-/* Dashboard Stats */
-.dashboard-stats {
-  padding: 24px; /* keep internal padding small; vertical placement handled by container */
-  display: flex;
-  justify-content: center;
-  margin-top: 12px;
-  margin-bottom: 24px;
-  align-items: center;
-}
-
-/* Dashboard-specific override: when this component's host contains .page-content, make
-   the page-content take extra top padding to lower the cards and vertically center
-   .dashboard-stats within the viewport minus header. This keeps the rule scoped to
-   the dashboard component (component CSS is already encapsulated by Angular). */
-.page-content {
-  /* Use a larger top padding for the dashboard page content only */
-  padding-top: 120px; /* bumps the whole content down on large screens */
-}
-
-/* Make the stats row vertically centered within the available area */
 .dashboard-contents {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
 }
 
 .dashboard-stats .row {
-  justify-content: center;
-  align-items: center;
-}
-
-.dashboard-stats .row {
-  display: flex;
   justify-content: center;
   align-items: stretch;
-  gap: 32px;
-  max-width: 1200px;
+  display: flex;
+  align-items: stretch;
+  max-width: 1300px;
   width: 100%;
 }
 
 .dashboard-stats .col-md-3 {
   flex: 1;
   max-width: 350px;
-  min-width: 280px;
+  min-width: 260px;
+}
+
+.dashboard-stats .col-md-3:not(:last-child) {
+  margin-right: 20px; /* Gap solo tra le card, non sui bordi esterni */
 }
 
 .stats-card {
@@ -108,7 +76,7 @@
 }
 
 .card-header h3 {
-  font-size: 16px;
+  font-size: 13px; /* Ridotto da 16px a 13px per coerenza */
   font-weight: 600;
   color: #374151;
   margin: 0;
@@ -135,7 +103,7 @@
 }
 
 .main-number {
-  font-size: 56px;
+  font-size: 24px; /* Ridotto da 56px a 24px per coerenza */
   font-weight: 700;
   color: #111827;
   line-height: 1;
@@ -176,42 +144,65 @@
 }
 
 /* Responsive design */
-@media (max-width: 1200px) {
-  .dashboard-stats .row {
-    gap: 24px;
+@media (max-width: 1400px) {
+  .dashboard-stats .col-md-3:not(:last-child) {
+    margin-right: 18px;
   }
   
   .dashboard-stats .col-md-3 {
-    max-width: 320px;
+    max-width: 280px;
   }
   
   .main-number {
-    font-size: 50px;
+    font-size: 22px; /* Ridotto da 50px per coerenza */
   }
   
   .card-header h3 {
-    font-size: 15px;
+    font-size: 12px; /* Ridotto da 15px */
   }
   
   .stats-card {
-    padding: 28px;
+    padding: 26px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .dashboard-stats .col-md-3:not(:last-child) {
+    margin-right: 16px;
+  }
+  
+  .dashboard-stats .col-md-3 {
+    max-width: 260px;
+  }
+  
+  .main-number {
+    font-size: 20px; /* Ridotto da 46px per coerenza */
+  }
+  
+  .card-header h3 {
+    font-size: 12px; /* Ridotto da 14px */
+  }
+  
+  .stats-card {
+    padding: 24px;
   }
 }
 
 @media (max-width: 992px) {
   .dashboard-stats .row {
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
   }
   
   .dashboard-stats .col-md-3 {
-    max-width: 100%;
-    width: 100%;
+    flex: 1 1 calc(50% - 8px); /* 2 card per riga su tablet */
+    max-width: 300px;
+    min-width: 250px;
   }
   
   .main-number {
-    font-size: 44px;
+    font-size: 18px; /* Ridotto da 44px per coerenza */
   }
   
   .stats-card {
@@ -231,11 +222,11 @@
   }
   
   .main-number {
-    font-size: 38px;
+    font-size: 16px; /* Ridotto da 38px per coerenza */
   }
   
   .card-header h3 {
-    font-size: 14px;
+    font-size: 12px; /* Mantenuto 12px */
   }
   
   .stats-card {
@@ -248,9 +239,10 @@
   }
 }
 
-/* Sezione Prossimi Appuntamenti */
+/* Sezione Prossimi Appuntamenti - Full Width */
 .appointments-section {
   margin-top: 32px;
+  width: 100%;
 }
 
 .appointments-card {
@@ -261,6 +253,9 @@
   border: 1px solid #c99e67;
   border-top: 4px solid #c99e67;
   transition: all 0.3s ease;
+  width: 100%;
+  max-width: 1300px; /* Allineato con le card superiori */
+  margin: 0 auto;
 }
 
 .appointments-header {
@@ -268,7 +263,7 @@
 }
 
 .appointments-header h3 {
-  font-size: 18px;
+  font-size: 14px; /* Ridotto da 18px a 14px per coerenza */
   font-weight: 600;
   color: #374151;
   margin: 0;
