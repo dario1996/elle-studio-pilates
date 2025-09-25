@@ -52,9 +52,22 @@
   height: 100%;
 }
 
-.stats-card:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-  transform: translateY(-2px);
+/* Animazione di ingresso per le card */
+.stats-card.fade-in-modal {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInCard 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes fadeInCard {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .stats-card .card-header {
@@ -282,6 +295,13 @@
   transition: all 0.3s ease;
 }
 
+/* Animazione di ingresso per le card dei grafici */
+.appointments-card.fade-in-modal {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInCard 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
 /* Gap tra i grafici */
 .col-6:not(:last-child) .appointments-card {
   margin-right: 10px; /* Gap tra le card dei grafici */
@@ -331,6 +351,7 @@ canvas {
   color: #495057;
   border-top: none;
   padding: 1rem 0.75rem;
+  background-color: #f8f9fa;
 }
 
 .table td {
@@ -340,6 +361,13 @@ canvas {
 
 .table-hover tbody tr:hover {
   background-color: rgba(0, 0, 0, 0.025);
+}
+
+/* Card container con fade-in effect */
+.card.fade-in-modal {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInCard 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
 /* Badge styling */

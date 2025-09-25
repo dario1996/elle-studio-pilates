@@ -63,3 +63,14 @@
 ::ng-deep .badge.bg-danger {
   background-color: #dc3545 !important;
 }
+
+/* Stili specifici per il campo di ricerca */
+.form-control::placeholder {
+  font-size: 12px;
+  color: #6c757d;
+}
+
+/* Stile per il form-control stesso per coerenza */
+.form-control {
+  font-size: 12px;
+}
