@@ -324,7 +324,7 @@ export class AgendaComponent implements OnInit {
       showDefaultButtons: false,
       customButtons: [{
         text: 'Chiudi',
-        cssClass: 'btn-secondary',
+        cssClass: 'btn-cancel',
         action: () => this.modaleService.chiudi()
       }]
     });

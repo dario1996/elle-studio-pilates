@@ -1,6 +1,6 @@
 .modifica-lezione-container {
   padding: 0;
-  height: 450px; /* Altezza ridotta per contenere tutto nella finestra */
+  height: 100%; /* Occupa tutta l'altezza del modal-body */
   display: flex;
   flex-direction: column;
   overflow: hidden; /* Impedisce lo scroll del container principale */
@@ -78,10 +78,9 @@
 /* Lista Lezioni */
 .lezioni-list {
   padding: 1rem;
-  height: 70%; /* Altezza fissa per mostrare circa 3-4 lezioni */
+  flex: 1; /* Occupa tutto lo spazio disponibile rimanente */
   overflow-y: auto; /* Solo questa sezione ha lo scroll */
-  flex-shrink: 0; /* Non si riduce */
-  /* background: #ffffff; */
+  min-height: 0; /* Permette al flex item di essere più piccolo del contenuto */
 }
 
 .lezione-item {
@@ -172,6 +171,11 @@
   margin-bottom: 1.5rem;
   padding: 1.5rem 1.5rem 0;
   flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .lezione-form {
@@ -187,8 +191,8 @@
 }
 
 .back-btn {
-  margin-bottom: 1rem;
   font-size: 0.85rem;
+  margin: 0; /* Rimosso margin-bottom */
 }
 
 .form-label {
@@ -302,6 +306,12 @@
 @media (max-width: 768px) {
   .modifica-lezione-container {
     height: 70vh; /* Su mobile usa meno spazio per evitare problemi */
+  }
+  
+  .form-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
   }
   
   .lezioni-list {

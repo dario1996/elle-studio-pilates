@@ -168,11 +168,26 @@ html, body {
     box-shadow 0.15s ease-in-out; */
 }
 
+/* PULSANTI MODALE */
 
-btn-primary {
-  background-color: var(--color-BORDO);
-  /* border-color: #0d6efd; */
-  color: #000000;
+.btn-confirm {
+  background-color: #f2f2f2 !important;
+  color: #000000 !important;
+}
+
+.btn-confirm:hover {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+.btn-cancel {
+  background-color: #f2f2f2 !important;
+  color: #000000 !important;
+}
+
+.btn-cancel:hover {
+  background-color: #e54747 !important;
+  color: #ffffff !important;
 }
 
 /* Azioni Rapide */

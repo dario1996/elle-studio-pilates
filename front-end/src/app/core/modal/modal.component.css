@@ -57,7 +57,10 @@
   padding: 12px !important;
   display: flex !important; 
   flex-direction: column !important;
-  /* gap: 1rem; */
+  flex: 1 !important; /* Fa espandere il modal-body per occupare tutto lo spazio disponibile */
+  overflow: auto !important; /* Previene overflow del body stesso */
+  height: 100% !important; /* Assicura che occupi tutta l'altezza disponibile */
+  min-height: 0 !important; /* Permette al contenuto di essere più piccolo se necessario */
   width: 100% !important;
 }
 
@@ -67,8 +70,10 @@
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
   display: flex !important;
   flex-direction: column !important;
-  max-height: 80vh !important;
-  overflow: auto !important; /* <-- Cambiato da hidden a auto */
+  height: 100% !important;
+  max-height: 95vh !important; /* Aumentato da 85vh a 95vh per più spazio */
+  min-height: 80vh !important; /* Aggiunto min-height per garantire altezza minima */
+  overflow: auto !important;
   border: 1px solid #e2e8f0 !important;
   width: 100% !important;
   position: fixed !important;
@@ -129,10 +134,11 @@
   .modal-dialog {
     width: 95% !important;
     max-width: none !important;
-    max-height: 90vh !important;
-    margin: 1rem !important;
+    max-height: 95vh !important; /* Aumentato da 90vh a 95vh */
+    margin: 0.5rem !important; /* Ridotto margine per più spazio */
   }
   .modal-content {
-    max-height: 90vh !important;
+    max-height: 95vh !important; /* Aumentato da 90vh a 95vh */
+    min-height: 85vh !important; /* Aggiunto min-height anche per mobile */
   }
 }
