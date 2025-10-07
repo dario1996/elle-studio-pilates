@@ -15,9 +15,13 @@
           Azioni rapide
         </h3>
         <div class="quick-actions-buttons">
-          <button class="quick-action-btn">
-            <i class="fas fa-plus"></i>
-            <span>Aggiungi utente</span>
+          <button class="quick-action-btn" (click)="router.navigate(['/gestionale-elle-studio/corsi'])">
+            <i class="fas fa-edit"></i>
+            <span>Modifica lezione</span>
+          </button>
+          <button class="quick-action-btn" (click)="router.navigate(['/gestionale-elle-studio/gestione-utenti'])">
+            <i class="fas fa-edit"></i>
+            <span>Modifica utente</span>
           </button>
           <button class="quick-action-btn" (click)="aggiungiLezione()">
             <i class="fas fa-plus"></i>

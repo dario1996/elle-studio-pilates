@@ -25,7 +25,7 @@ export class HomeDashboardComponent implements OnInit {
   error: string | null = null;
 
   constructor(
-    private router: Router,
+    public router: Router,
     private dashboardService: DashboardService,
     private lezioniService: LezioniService
   ) {}
