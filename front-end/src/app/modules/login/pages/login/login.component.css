@@ -17,10 +17,25 @@
   font-family: var(--font-family) !important;
 }
 
+.form-check-label {
+  color: var(--color-NERO);
+  text-decoration: none;
+  font-family: var(--font-family) !important;
+  font-size: 13px;
+}
+
 .forgot-link {
   color: var(--color-NERO);
   text-decoration: none;
   font-family: var(--font-family) !important;
+  font-size: 13px;
+}
+
+.text-center {
+  color: var(--color-NERO);
+  text-decoration: none;
+  font-family: var(--font-family) !important;
+  font-size: 13px;
 }
 
 .form-control {
@@ -40,7 +55,7 @@
   justify-content: center;
   gap: 8px;
   padding: 8px 16px;
-  font-size: 16px !important;
+  font-size: 13px !important;
   font-weight: 500;
   line-height: 1;
   border-radius: 6px;

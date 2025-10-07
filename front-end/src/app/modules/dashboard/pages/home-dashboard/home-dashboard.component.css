@@ -21,9 +21,13 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-y: auto; /* Cambiato da hidden ad auto per consentire lo scroll */
+  overflow-x: hidden; /* Evita lo scroll orizzontale indesiderato */
   position: relative;
   z-index: 1;
+  padding-bottom: 2rem; /* Aggiunto padding in fondo per distanziare il contenuto dal bordo */
+  -webkit-overflow-scrolling: touch; /* Scroll fluido su iOS */
+  scroll-behavior: smooth; /* Scroll animato */
 }
 
 .dashboard-contents {
@@ -363,6 +367,13 @@
 
 /* Responsive per appuntamenti */
 @media (max-width: 768px) {
+  .page-content {
+    /* Assicura che il contenuto sia sempre scrollabile su mobile */
+    overflow-y: auto !important;
+    height: 100%;
+    max-height: calc(100vh - 120px); /* Lascia spazio per header e footer */
+  }
+
   .quick-actions {
     margin-left: 0;
     margin-right: 0;
@@ -407,6 +418,12 @@
 }
 
 @media (max-width: 576px) {
+  .page-content {
+    /* Assicura che il contenuto sia sempre scrollabile anche su schermi piccoli */
+    overflow-y: auto !important;
+    max-height: calc(100vh - 100px); /* Meno spazio per header su schermi piccoli */
+  }
+
   .main-number {
     font-size: 28px;
   }

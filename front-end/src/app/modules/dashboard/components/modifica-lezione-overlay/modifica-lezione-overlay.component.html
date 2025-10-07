@@ -1,0 +1,256 @@
+<div class="modifica-lezione-container">
+  <!-- Fase 1: Selezione della lezione -->
+  <div *ngIf="step === 'selection'" class="selection-step">
+    <div class="search-section">
+      <!-- <h4 class="section-title">
+        <i class="fas fa-search me-2"></i>
+        Seleziona la lezione da modificare
+      </h4> -->
+      
+      <div class="search-input-container">
+        <input 
+          type="text" 
+          class="form-control search-input"
+          placeholder="Cerca per titolo, istruttore o tipo di lezione..."
+          (input)="onSearchLezioni($event)"
+        >
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="loading" class="loading-container">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Caricamento...</span>
+      </div>
+      <p class="mt-2 text-muted">Caricamento lezioni...</p>
+    </div>
+
+    <!-- Lista lezioni -->
+    <div *ngIf="!loading" class="lezioni-list">
+      <div *ngIf="lezioniFiltered.length === 0" class="no-results">
+        <i class="fas fa-calendar-alt fa-3x text-muted mb-3"></i>
+        <p class="text-muted">Nessuna lezione trovata</p>
+      </div>
+
+      <div 
+        *ngFor="let lezione of lezioniFiltered" 
+        class="lezione-item"
+        (click)="onLezioneSelected(lezione)"
+      >
+        <div class="lezione-info">
+          <div class="lezione-header">
+            <h5 class="lezione-titolo">{{ lezione.titolo }}</h5>
+            <span class="tipo-badge" [ngClass]="'tipo-' + lezione.tipo.toLowerCase()">
+              {{ getLabelTipoLezione(lezione.tipo) }}
+            </span>
+          </div>
+          
+          <div class="lezione-details">
+            <div class="detail-item">
+              <i class="fas fa-calendar-alt text-primary"></i>
+              <span>{{ formatDataLezione(lezione.dataInizio) }}</span>
+            </div>
+            <div class="detail-item">
+              <i class="fas fa-user text-success"></i>
+              <span>{{ lezione.istruttore }}</span>
+            </div>
+            <div class="detail-item" *ngIf="lezione.note">
+              <i class="fas fa-sticky-note text-warning"></i>
+              <span>{{ lezione.note }}</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="lezione-actions">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fase 2: Form di modifica -->
+  <div *ngIf="step === 'form'" class="form-step">
+    <div class="form-header">
+      <button 
+        type="button" 
+        class="btn btn-outline-secondary btn-sm back-btn"
+        (click)="backToSelection()"
+      >
+        <i class="fas fa-arrow-left me-1"></i>
+        Torna alla selezione
+      </button>
+      
+      <h4 class="section-title">
+        <i class="fas fa-edit me-2"></i>
+        Modifica Lezione: {{ selectedLezione?.titolo }}
+      </h4>
+    </div>
+
+    <form [formGroup]="form" class="lezione-form">
+      <!-- Titolo -->
+      <div class="mb-3">
+        <label for="titolo" class="form-label">
+          <i class="fas fa-heading me-1"></i>
+          Titolo *
+        </label>
+        <input 
+          type="text" 
+          id="titolo"
+          class="form-control"
+          [class.is-invalid]="isFieldInvalid('titolo')"
+          formControlName="titolo"
+          placeholder="Inserisci il titolo della lezione"
+        >
+        <div *ngIf="isFieldInvalid('titolo')" class="invalid-feedback">
+          {{ getFieldError('titolo') }}
+        </div>
+      </div>
+
+      <!-- Date e Orari -->
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="dataInizio" class="form-label">
+            <i class="fas fa-play me-1"></i>
+            Data e Ora Inizio *
+          </label>
+          <input 
+            type="datetime-local" 
+            id="dataInizio"
+            class="form-control"
+            [class.is-invalid]="isFieldInvalid('dataInizio')"
+            formControlName="dataInizio"
+          >
+          <div *ngIf="isFieldInvalid('dataInizio')" class="invalid-feedback">
+            {{ getFieldError('dataInizio') }}
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="dataFine" class="form-label">
+            <i class="fas fa-stop me-1"></i>
+            Data e Ora Fine *
+          </label>
+          <input 
+            type="datetime-local" 
+            id="dataFine"
+            class="form-control"
+            [class.is-invalid]="isFieldInvalid('dataFine')"
+            formControlName="dataFine"
+          >
+          <div *ngIf="isFieldInvalid('dataFine')" class="invalid-feedback">
+            {{ getFieldError('dataFine') }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Errore range date -->
+      <div *ngIf="form.errors?.['dateRange'] && submitted" class="alert alert-danger mb-3">
+        <i class="fas fa-exclamation-triangle me-1"></i>
+        La data di fine deve essere successiva alla data di inizio
+      </div>
+
+      <!-- Tipo Lezione e Istruttore -->
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="tipo" class="form-label">
+            <i class="fas fa-tag me-1"></i>
+            Tipo Lezione *
+          </label>
+          <select 
+            id="tipo"
+            class="form-select"
+            [class.is-invalid]="isFieldInvalid('tipo')"
+            formControlName="tipo"
+          >
+            <option value="">Seleziona tipo lezione</option>
+            <option *ngFor="let tipo of tipiLezione" [value]="tipo">
+              {{ getLabelTipoLezione(tipo) }}
+            </option>
+          </select>
+          <div *ngIf="isFieldInvalid('tipo')" class="invalid-feedback">
+            {{ getFieldError('tipo') }}
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="istruttore" class="form-label">
+            <i class="fas fa-user me-1"></i>
+            Istruttore *
+          </label>
+          <select 
+            id="istruttore"
+            class="form-select"
+            [class.is-invalid]="isFieldInvalid('istruttore')"
+            formControlName="istruttore"
+          >
+            <option value="">Seleziona istruttore</option>
+            <option *ngFor="let istruttore of istruttori" [value]="istruttore">
+              {{ istruttore }}
+            </option>
+          </select>
+          <div *ngIf="isFieldInvalid('istruttore')" class="invalid-feedback">
+            {{ getFieldError('istruttore') }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Note -->
+      <div class="mb-3">
+        <label for="note" class="form-label">
+          <i class="fas fa-sticky-note me-1"></i>
+          Note
+        </label>
+        <textarea 
+          id="note"
+          class="form-control"
+          formControlName="note"
+          rows="3"
+          placeholder="Inserisci eventuali note per la lezione"
+        ></textarea>
+      </div>
+
+      <!-- Stato Attiva -->
+      <div class="mb-3">
+        <div class="form-check">
+          <input 
+            class="form-check-input" 
+            type="checkbox" 
+            id="attiva"
+            formControlName="attiva"
+          >
+          <label class="form-check-label" for="attiva">
+            <i class="fas fa-eye me-1"></i>
+            Lezione attiva
+          </label>
+          <small class="form-text text-muted d-block">
+            Le lezioni non attive non saranno visibili nel calendario
+          </small>
+        </div>
+      </div>
+    </form>
+
+    <!-- Pulsanti azione -->
+    <div class="form-actions">
+      <button 
+        type="button" 
+        class="btn btn-secondary"
+        (click)="annulla()"
+        [disabled]="loadingForm"
+      >
+        <i class="fas fa-times me-1"></i>
+        Cancella
+      </button>
+      
+      <button 
+        type="button" 
+        class="btn btn-primary"
+        (click)="confermaForm()"
+        [disabled]="loadingForm"
+      >
+        <span *ngIf="loadingForm" class="spinner-border spinner-border-sm me-2" role="status"></span>
+        <i *ngIf="!loadingForm" class="fas fa-check me-1"></i>
+        {{ loadingForm ? 'Salvataggio...' : 'Applica' }}
+      </button>
+    </div>
+  </div>
+</div>

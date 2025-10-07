@@ -721,7 +721,7 @@ textarea.form-control {
 
 .modal-footer {
   padding: 16px 24px;
-  border-top: 1px solid #e5e7eb;
+  /* border-top: 1px solid #e5e7eb; */
   background: #f9fafb;
   display: flex;
   justify-content: flex-end;

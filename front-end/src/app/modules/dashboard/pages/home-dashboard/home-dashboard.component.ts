@@ -6,7 +6,10 @@ import { LoggedUserComponent } from '../../../../shared/components/logged-user/l
 import { NotificationComponent } from '../../../../core/notification/notification.component';
 import { DashboardService } from '../../../../shared/services/dashboard.service';
 import { LezioniService, LezioneDto } from '../../../../core/services/lezioni.service';
-import { TIPI_LEZIONE_CONFIG } from '../../../../modules/agenda/models/lezione.model';
+import { TIPI_LEZIONE_CONFIG } from '../../../../shared/models/Lezione';
+import { ModaleService } from '../../../../core/services/modal.service';
+import { ModificaLezioneOverlayComponent } from '../../components/modifica-lezione-overlay/modifica-lezione-overlay.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-home-dashboard',
@@ -27,7 +30,9 @@ export class HomeDashboardComponent implements OnInit {
   constructor(
     public router: Router,
     private dashboardService: DashboardService,
-    private lezioniService: LezioniService
+    private lezioniService: LezioniService,
+    private modaleService: ModaleService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -56,11 +61,33 @@ export class HomeDashboardComponent implements OnInit {
     this.router.navigate(['/gestionale-elle-studio/agenda'], { queryParams: { openForm: 'true' } });
   }
 
+  apriOverlayModificaLezione(): void {
+    // Apro l'overlay per la modifica delle lezioni
+    this.modaleService.apri({
+      titolo: 'Modifica Lezione',
+      componente: ModificaLezioneOverlayComponent,
+      dimensione: 'lg',
+      onConferma: (lezioneModificata: any) => {
+        console.log('Lezione modificata:', lezioneModificata);
+        this.toastr.success('Lezione modificata con successo!');
+        // Ricarica gli appuntamenti per aggiornare la dashboard
+        this.caricaAppuntamentiOggi();
+      }
+    });
+  }
+
   modificaLezione(id: number): void {
-    this.router.navigate(['/gestionale-elle-studio/agenda'], { 
-      queryParams: { 
-        edit: id.toString()
-      } 
+    // Apro l'overlay per la modifica delle lezioni
+    this.modaleService.apri({
+      titolo: 'Modifica Lezione',
+      componente: ModificaLezioneOverlayComponent,
+      dimensione: 'lg',
+      onConferma: (lezioneModificata: any) => {
+        console.log('Lezione modificata:', lezioneModificata);
+        this.toastr.success('Lezione modificata con successo!');
+        // Ricarica gli appuntamenti per aggiornare la dashboard
+        this.caricaAppuntamentiOggi();
+      }
     });
   }
 

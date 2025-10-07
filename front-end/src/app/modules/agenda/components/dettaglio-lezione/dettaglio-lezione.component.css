@@ -281,7 +281,7 @@
 
 .modal-footer {
   padding: 24px;
-  border-top: 1px solid #e5e7eb;
+  /* border-top: 1px solid #e5e7eb; */
   flex-shrink: 0;
 }
 

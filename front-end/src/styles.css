@@ -168,6 +168,13 @@ html, body {
     box-shadow 0.15s ease-in-out; */
 }
 
+
+btn-primary {
+  background-color: var(--color-BORDO);
+  /* border-color: #0d6efd; */
+  color: #000000;
+}
+
 /* Azioni Rapide */
 .quick-actions {
   padding-top: 16px;
@@ -257,7 +264,7 @@ html, body {
 }
 
 .form-label {
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 500;
   color: var(--color-foreground);
   margin: 0;
