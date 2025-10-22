@@ -35,6 +35,12 @@ export const UTENTI_COLUMNS: IColumnDef[] = [
     statusType: 'utente'
   },
   { 
+    key: 'gruppo', 
+    label: 'Gruppo', 
+    sortable: true, 
+    type: 'text',
+  },
+  { 
     key: 'dataCreazione', 
     label: 'Data Creazione', 
     sortable: true, 

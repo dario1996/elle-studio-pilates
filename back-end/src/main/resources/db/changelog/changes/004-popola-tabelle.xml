@@ -1115,5 +1115,40 @@
 
     </changeSet>
 
+    <!-- POPOLA GRUPPI INIZIALI -->
+    <changeSet id="004-05" author="vincenzo">
+        <comment>Inserisce gruppi iniziali</comment>
+        
+        <insert tableName="gruppi">
+            <column name="nome" value="Posturale"/>
+            <column name="descrizione" value=""/>
+            <column name="colore" value="#4A90E2"/>
+        </insert>
+        
+        <insert tableName="gruppi">
+            <column name="nome" value="Pilates livello 1"/>
+            <column name="descrizione" value=""/>
+            <column name="colore" value="#F5A623"/>
+        </insert>
+        
+        <insert tableName="gruppi">
+            <column name="nome" value="Ginnastica"/>
+            <column name="descrizione" value=""/>
+            <column name="colore" value="#7ED321"/>
+        </insert>
+        
+        <insert tableName="gruppi">
+            <column name="nome" value="Avanzati"/>
+            <column name="descrizione" value="Utenti con esperienza"/>
+            <column name="colore" value="#BD10E0"/>
+        </insert>
+        
+        <insert tableName="gruppi">
+            <column name="nome" value="Staff"/>
+            <column name="descrizione" value="Personale amministrativo"/>
+            <column name="colore" value="#50E3C2"/>
+        </insert>
+    </changeSet>
+
 
 </databaseChangeLog>

@@ -46,6 +46,9 @@
             <column name="attivo" type="VARCHAR(10)" defaultValue="Si">
                 <constraints nullable="false" />
             </column>
+            <column name="gruppo" type="VARCHAR(250)">
+                <constraints nullable="true" />
+            </column>
             <column name="ruoli" type="VARCHAR(500)">
                 <constraints nullable="true" />
             </column>
@@ -261,9 +264,77 @@
         </createTable>
     </changeSet>
 
+
+<!-- CREA TABELLA GRUPPI -->
+    <changeSet id="001-07" author="vincenzo">
+        <comment>Crea tabella gruppi</comment>
+        
+        <createTable tableName="gruppi">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="nome" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="descrizione" type="VARCHAR(500)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="colore" type="VARCHAR(20)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="attivo" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data_creazione" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data_modifica" type="TIMESTAMP">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+    <!-- CREA TABELLA ASSOCIATIVA UTENTI_GRUPPI -->
+    <changeSet id="001-08" author="vincenzo">
+        <comment>Crea tabella associativa per relazione many-to-many tra utenti e gruppi</comment>
+        
+        <createTable tableName="utenti_gruppi">
+            <column name="utente_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gruppo_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data_assegnazione" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <!-- Primary key composita -->
+        <addPrimaryKey tableName="utenti_gruppi" 
+                       columnNames="utente_id, gruppo_id" 
+                       constraintName="pk_utenti_gruppi"/>
+        
+        <!-- Foreign keys -->
+        <addForeignKeyConstraint baseTableName="utenti_gruppi"
+                                 baseColumnNames="utente_id"
+                                 constraintName="fk_utenti_gruppi_utente"
+                                 referencedTableName="utenti"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
+        
+        <addForeignKeyConstraint baseTableName="utenti_gruppi"
+                                 baseColumnNames="gruppo_id"
+                                 constraintName="fk_utenti_gruppi_gruppo"
+                                 referencedTableName="gruppi"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
+    </changeSet>
+
 <!-- CREA TABELLA PROCESSING_LOG -->
 
-    <changeSet id="001-07" author="vincenzo">
+    <changeSet id="001-09" author="vincenzo">
         <comment>Crea tabella per tracciare lo stato di elaborazione dei file JSON</comment>
 
         <createTable tableName="processing_log">
