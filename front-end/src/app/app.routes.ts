@@ -89,7 +89,7 @@ export const routes: Routes = [
         path: 'account-panel',
         component: AccountPanelComponent,
         canActivate: [AuthGuard],
-        data: { roles: [Ruoli.utente] },
+        data: { roles: [Ruoli.utente, Ruoli.amministratore] },
       },
       {
         path: 'impostazioni',

@@ -64,7 +64,7 @@ export class HomeDashboardComponent implements OnInit {
   apriOverlayModificaLezione(): void {
     // Apro l'overlay per la modifica delle lezioni
     this.modaleService.apri({
-      titolo: 'Modifica Lezione',
+      titolo: 'Modifica Lezioni',
       componente: ModificaLezioneOverlayComponent,
       dimensione: 'lg',
       onConferma: (lezioneModificata: any) => {
