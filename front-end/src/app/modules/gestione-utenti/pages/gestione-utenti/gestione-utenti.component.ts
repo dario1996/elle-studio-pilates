@@ -45,7 +45,7 @@ import { LoggedUserComponent } from '../../../../shared/components/logged-user/l
     FilterPanelComponent,
     PaginationFooterComponent,
     PageTitleComponent,
-    NotificationComponent,
+    // NotificationComponent,
     LoggedUserComponent
   ],
   templateUrl: './gestione-utenti.component.html',

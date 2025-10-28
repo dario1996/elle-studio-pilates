@@ -20,7 +20,7 @@ Chart.register(...registerables);
     FormsModule, 
     PageTitleComponent,
     LoggedUserComponent,
-    NotificationComponent,
+    // NotificationComponent,
     SpinnerComponent
   ],
   templateUrl: './statistiche.component.html',

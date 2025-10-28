@@ -22,7 +22,13 @@ import { LeggendaColoriComponent } from '../../components/leggenda-colori/leggen
 
 @Component({
   selector: 'app-agenda',
-  imports: [CommonModule, FullCalendarModule, PageTitleComponent, LoggedUserComponent, NotificationComponent],
+  imports: [
+    CommonModule, 
+    FullCalendarModule, 
+    PageTitleComponent, 
+    LoggedUserComponent, 
+    // NotificationComponent
+  ],
   standalone: true,
   templateUrl: './agenda.component.html',
   styleUrl: './agenda.component.css'

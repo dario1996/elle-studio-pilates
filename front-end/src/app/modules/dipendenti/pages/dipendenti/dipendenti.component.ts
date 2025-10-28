@@ -46,7 +46,7 @@ import { NotificationComponent } from '../../../../core/notification/notificatio
     LoggedUserComponent,
     TabellaGenericaComponent,
     FilterPanelComponent,
-    NotificationComponent,
+    // NotificationComponent,
     // PaginationFooterComponent,
     PageTitleComponent,
   ],

@@ -26,7 +26,7 @@ import { NotificationComponent } from '../../../../core/notification/notificatio
     TabellaGenericaComponent,
     PageTitleComponent,
     LoggedUserComponent,
-    NotificationComponent,
+    // NotificationComponent,
     PaginationFooterComponent,
   ],
   templateUrl: './pacchetti.component.html',

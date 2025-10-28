@@ -13,7 +13,12 @@ import { inject } from '@angular/core';
   standalone: true,
   templateUrl: './account-panel.component.html',
   styleUrls: ['./account-panel.component.css'],
-  imports: [CommonModule, ReactiveFormsModule, PageTitleComponent, NotificationComponent, LoggedUserComponent],
+  imports: [
+    CommonModule, 
+    ReactiveFormsModule, 
+    PageTitleComponent, 
+    // NotificationComponent, 
+    LoggedUserComponent],
 })
 export class AccountPanelComponent implements OnInit {
   private userService = inject(UserService);

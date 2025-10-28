@@ -12,7 +12,11 @@ import { inject } from '@angular/core';
   standalone: true,
   templateUrl: './gestione-pacchetti.component.html',
   styleUrls: ['./gestione-pacchetti.component.css'],
-  imports: [CommonModule, PageTitleComponent, NotificationComponent, LoggedUserComponent],
+  imports:[
+  CommonModule, 
+  PageTitleComponent, 
+  // NotificationComponent, 
+  LoggedUserComponent],
 })
 export class GestionePacchettiComponent implements OnInit {
   private auth = inject(AuthJwtService);

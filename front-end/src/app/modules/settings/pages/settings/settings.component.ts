@@ -32,7 +32,7 @@ interface TabItem {
     CommonModule, 
     PageTitleComponent, 
     LoggedUserComponent,
-    NotificationComponent
+    // NotificationComponent
     // TabellaGenericaComponent,
     // PaginationFooterComponent
   ],

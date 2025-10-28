@@ -15,7 +15,12 @@ import { AuthJwtService } from '../../../../core/services/authJwt.service';
   standalone: true,
   templateUrl: './dashboard-utente.component.html',
   styleUrls: ['./dashboard-utente.component.css'],
-  imports: [CommonModule, PageTitleComponent, LoggedUserComponent, NotificationComponent],
+  imports: [
+    CommonModule, 
+    PageTitleComponent, 
+    LoggedUserComponent, 
+    // NotificationComponent
+  ],
 })
 export class DashboardUtenteComponent implements OnInit, AfterViewInit {
 
