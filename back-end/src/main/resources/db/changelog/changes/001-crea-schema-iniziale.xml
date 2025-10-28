@@ -137,12 +137,12 @@
         </createTable>
     </changeSet>
 
-<!-- CREA TABELLA LEZIONE_PARTECIPANTI -->
+<!-- CREA TABELLA PRENOTAZIONI_LEZIONI -->
 
     <changeSet id="001-04" author="vincenzo">
-        <comment>Crea tabella per i partecipanti alle lezioni</comment>
+        <comment>Crea tabella per le prenotazioni delle lezioni</comment>
 
-        <createTable tableName="lezione_partecipanti">
+        <createTable tableName="prenotazioni_lezioni">
             <column name="lezione_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>

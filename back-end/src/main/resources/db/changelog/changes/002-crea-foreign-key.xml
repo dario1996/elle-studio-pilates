@@ -24,17 +24,17 @@
             onDelete="CASCADE"/>
 
         <addForeignKeyConstraint 
-            baseTableName="lezione_partecipanti"
+            baseTableName="prenotazioni_lezioni"
             baseColumnNames="lezione_id"
-            constraintName="fk_lezione_partecipanti_lezione"
+            constraintName="fk_prenotazioni_lezioni_lezioni"
             referencedTableName="lezioni"
             referencedColumnNames="id"
             onDelete="CASCADE"/>
         
         <addForeignKeyConstraint 
-            baseTableName="lezione_partecipanti"
+            baseTableName="prenotazioni_lezioni"
             baseColumnNames="partecipanti_username"
-            constraintName="fk_lezione_partecipanti_utenti"
+            constraintName="fk_prenotazioni_lezioni_utenti"
             referencedTableName="utenti"
             referencedColumnNames="username"
             onDelete="CASCADE"/>

@@ -53,14 +53,14 @@
             <column name="data_inizio"/>
             <column name="data_fine"/>
         </createIndex>
-    
-<!-- Indici per la tabella lezione_partecipanti -->
 
-        <createIndex tableName="lezione_partecipanti" indexName="idx_lezione_partecipanti_lezione">
+<!-- Indici per la tabella prenotazioni_lezioni -->
+
+        <createIndex tableName="prenotazioni_lezioni" indexName="idx_prenotazioni_lezioni_lezione">
             <column name="lezione_id"/>
         </createIndex>
         
-        <createIndex tableName="lezione_partecipanti" indexName="idx_lezione_partecipanti_utenti">
+        <createIndex tableName="prenotazioni_lezioni" indexName="idx_prenotazioni_lezioni_utenti">
             <column name="partecipanti_username"/>
         </createIndex>
 

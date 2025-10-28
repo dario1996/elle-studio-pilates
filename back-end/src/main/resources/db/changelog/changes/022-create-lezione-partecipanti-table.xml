@@ -8,9 +8,9 @@
         <comment>Create join table for lesson participants</comment>
         
         <!-- Drop existing table if it exists with wrong structure -->
-        <dropTable tableName="lezione_partecipanti" cascadeConstraints="true"/>
+        <dropTable tableName="prenotazioni_lezioni" cascadeConstraints="true"/>
         
-        <createTable tableName="lezione_partecipanti">
+        <createTable tableName="prenotazioni_lezioni">
             <column name="lezione_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
@@ -20,31 +20,31 @@
         </createTable>
         
         <!-- Add foreign key constraints -->
-        <addForeignKeyConstraint baseTableName="lezione_partecipanti"
+        <addForeignKeyConstraint baseTableName="prenotazioni_lezioni"
                                 baseColumnNames="lezione_id"
-                                constraintName="fk_lezione_partecipanti_lezione"
+                                constraintName="fk_prenotazioni_lezioni_lezione"
                                 referencedTableName="lezioni"
                                 referencedColumnNames="id"
                                 onDelete="CASCADE"/>
         
-        <addForeignKeyConstraint baseTableName="lezione_partecipanti"
+        <addForeignKeyConstraint baseTableName="prenotazioni_lezioni"
                                 baseColumnNames="partecipanti_username"
-                                constraintName="fk_lezione_partecipanti_utenti"
+                                constraintName="fk_prenotazioni_lezioni_utenti"
                                 referencedTableName="utenti"
                                 referencedColumnNames="username"
                                 onDelete="CASCADE"/>
         
         <!-- Add primary key constraint -->
-        <addPrimaryKey tableName="lezione_partecipanti" 
+        <addPrimaryKey tableName="prenotazioni_lezioni" 
                       columnNames="lezione_id,partecipanti_username" 
-                      constraintName="pk_lezione_partecipanti"/>
+                      constraintName="pk_prenotazioni_lezioni"/>
         
         <!-- Add indexes for better performance -->
-        <createIndex tableName="lezione_partecipanti" indexName="idx_lezione_partecipanti_lezione">
+        <createIndex tableName="prenotazioni_lezioni" indexName="idx_prenotazioni_lezioni_lezione">
             <column name="lezione_id"/>
         </createIndex>
         
-        <createIndex tableName="lezione_partecipanti" indexName="idx_lezione_partecipanti_utenti">
+        <createIndex tableName="prenotazioni_lezioni" indexName="idx_prenotazioni_lezioni_utenti">
             <column name="partecipanti_username"/>
         </createIndex>
     </changeSet>

@@ -59,7 +59,7 @@ public class Lezione {
     // Relazione Many-to-Many con Utenti (partecipanti)
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-        name = "lezione_partecipanti",
+        name = "prenotazioni_lezioni",
         joinColumns = @JoinColumn(name = "lezione_id"),
         inverseJoinColumns = @JoinColumn(name = "partecipanti_username")
     )

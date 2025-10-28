@@ -29,9 +29,9 @@
         <dropTable tableName="utenti" cascadeConstraints="true"/>
 
         <preConditions onFail="MARK_RAN">
-            <tableExists tableName="lezione_partecipanti"/>
+            <tableExists tableName="prenotazioni_lezioni"/>
         </preConditions>
-        <dropTable tableName="lezione_partecipanti" cascadeConstraints="true"/>
+        <dropTable tableName="prenotazioni_lezioni" cascadeConstraints="true"/>
     </changeSet>
 
 </databaseChangeLog>
