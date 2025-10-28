@@ -1,0 +1,136 @@
+<div class="page-container">
+  <div class="page-header">
+    <app-page-title [title]="title" [showButton]="false"></app-page-title>
+    <div class="user-bar">
+      <app-notification></app-notification>
+      <app-logged-user></app-logged-user>
+    </div>
+  </div>
+  
+  <div class="page-content">
+    
+    <!-- Sezioni Pacchetti - Layout Orizzontale -->
+    <div class="pacchetti-section">
+      
+      <!-- Pacchetti Acquistati -->
+      <div class="pacchetti-card">
+        <h2><i class="fas fa-shopping-bag"></i> Pacchetti Acquistati</h2>
+        
+        <div class="pacchetti-list" *ngIf="pacchettiAcquistati.length > 0; else nessunPacchettoAcquistato">
+          <div class="pacchetto-item" *ngFor="let pacchetto of pacchettiAcquistati" 
+               [class.pacchetto-scaduto]="pacchetto.stato === 'SCADUTO'"
+               [class.pacchetto-in-scadenza]="isExpiringSoon(pacchetto.dataScadenza)">
+            <div class="pacchetto-header">
+              <div class="pacchetto-title">
+                <h3>{{ pacchetto.pacchettoNome }}</h3>
+                <div class="badges-row">
+                  <span class="pacchetto-badge" [ngClass]="'badge-' + pacchetto.categoria.toLowerCase()">
+                    {{ pacchetto.categoria }}
+                  </span>
+                  <span class="pacchetto-stato" [ngClass]="'stato-' + pacchetto.stato.toLowerCase()">
+                    {{ pacchetto.stato }}
+                  </span>
+                </div>
+              </div>
+              <div class="pacchetto-price">€ {{ pacchetto.prezzo.toFixed(2) }}</div>
+            </div>
+            
+            <div class="pacchetto-body">
+              <div class="pacchetto-progress">
+                <div class="progress-info">
+                  <span>{{ pacchetto.lezioniRimaste }} di {{ pacchetto.lezioniTotali }} lezioni rimaste</span>
+                  <span>{{ getUsagePercentage(pacchetto) }}%</span>
+                </div>
+                <div class="progress-bar-container">
+                  <div class="progress-bar" [style.width.%]="getUsagePercentage(pacchetto)"></div>
+                </div>
+              </div>
+              
+              <div class="pacchetto-dates">
+                <div class="date-item">
+                  <i class="fas fa-calendar-plus"></i>
+                  <span>Acquistato: {{ formatDate(pacchetto.dataAcquisto) }}</span>
+                </div>
+                <div class="date-item" [class.date-expiring]="isExpiringSoon(pacchetto.dataScadenza)">
+                  <i class="fas fa-calendar-times"></i>
+                  <span>Scadenza: {{ formatDate(pacchetto.dataScadenza) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <ng-template #nessunPacchettoAcquistato>
+          <div class="empty-state">
+            <i class="fas fa-shopping-bag"></i>
+            <p>Non hai ancora acquistato nessun pacchetto</p>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Pacchetti Disponibili -->
+      <div class="pacchetti-card">
+        <h2><i class="fas fa-th-large"></i> Pacchetti Disponibili</h2>
+        
+        <div class="loading-state" *ngIf="loadingPacchetti">
+          <i class="fas fa-spinner fa-spin"></i>
+          <p>Caricamento pacchetti...</p>
+        </div>
+        
+        <div class="pacchetti-grid" *ngIf="!loadingPacchetti && pacchettiDisponibili.length > 0">
+          <div class="pacchetto-disponibile" *ngFor="let pacchetto of pacchettiDisponibili">
+            <div class="pacchetto-header">
+              <h3>{{ pacchetto.nome }}</h3>
+              <span class="pacchetto-badge" [ngClass]="'badge-' + pacchetto.categoria.toLowerCase()">
+                {{ pacchetto.categoria }}
+              </span>
+            </div>
+            
+            <p class="pacchetto-descrizione">{{ pacchetto.descrizione || 'Nessuna descrizione disponibile' }}</p>
+            
+            <div class="pacchetto-details">
+              <div class="pacchetto-detail-item">
+                <i class="fas fa-layer-group"></i>
+                <span>{{ pacchetto.livello }}</span>
+              </div>
+              <div class="pacchetto-detail-item">
+                <i class="fas fa-clock"></i>
+                <span>{{ pacchetto.durataMinuti }} min</span>
+              </div>
+              <div class="pacchetto-detail-item">
+                <i class="fas fa-users"></i>
+                <span>Max {{ pacchetto.maxPartecipanti }} persone</span>
+              </div>
+            </div>
+            
+            <div class="pacchetto-footer">
+              <div class="pacchetto-price">€ {{ pacchetto.prezzo.toFixed(2) }}</div>
+              <button class="btn-acquista" (click)="acquistaPacchetto(pacchetto)">
+                <i class="fas fa-cart-plus"></i>
+                Acquista
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="empty-state" *ngIf="!loadingPacchetti && pacchettiDisponibili.length === 0">
+          <i class="fas fa-th-large"></i>
+          <p>Nessun pacchetto disponibile al momento</p>
+        </div>
+      </div>
+      
+    </div>
+    
+  </div>
+</div>
+
+<!-- Toast Badge Notification -->
+<div class="toast-badge" [class.show]="showToast" [ngClass]="toastType">
+  <div class="toast-content">
+    <i class="toast-icon">{{ toastIcon }}</i>
+    <span class="toast-message">{{ toastMessage }}</span>
+    <button type="button" class="toast-close" (click)="hideToast()">
+      close
+    </button>
+  </div>
+</div>

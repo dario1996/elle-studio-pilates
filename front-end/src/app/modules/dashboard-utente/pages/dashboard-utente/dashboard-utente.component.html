@@ -27,7 +27,7 @@
                   <div class="row w-100">
                     <div class="col-12 col-md-12" *ngFor="let lezione of lezioniCorrenti">
                       <div class="suggested-lessons-small mb-3">
-                        <div class="lesson-row"><span class="label">Tipo corso</span><span class="value">{{ getLabelTipoLezione(lezione.tipo) }}</span></div>
+                        <div class="lesson-row"><span class="label">Tipo pacchetto</span><span class="value">{{ getLabelTipoLezione(lezione.tipo) }}</span></div>
                         <div class="lesson-row"><span class="label">Nome lezione</span><span class="value"><strong>{{ lezione.titolo }}</strong></span></div>
                         <div class="lesson-row"><span class="label">Data</span><span class="value">{{ formatDateOnly(lezione.dataInizio) }}</span></div>
                         <div class="lesson-row"><span class="label">Inizio-Fine</span><span class="value">{{ formatTimeRange(lezione.dataInizio, lezione.dataFine) }}</span></div>

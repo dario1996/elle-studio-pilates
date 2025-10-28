@@ -1,15 +1,15 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="row">
         <div class="col-md-6 form-field">
-            <label for="corsoId" class="form-label p-0 m-0">Tipo di Lezione <span class="text-danger">*</span></label>
-            <select id="corsoId" formControlName="corsoId" class="form-select" 
-                [class.is-invalid]="form.get('corsoId')?.invalid && form.get('corsoId')?.touched">
-                <option value="">Seleziona un corso</option>
-                <option *ngFor="let corso of corsiDisponibili" [value]="corso.id">
-                    {{ corso.nome }} ({{ corso.durataMinuti }}min - max {{ corso.maxPartecipanti }} persone - €{{ corso.prezzo }})
+            <label for="pacchettoId" class="form-label p-0 m-0">Tipo di Lezione <span class="text-danger">*</span></label>
+            <select id="pacchettoId" formControlName="pacchettoId" class="form-select" 
+                [class.is-invalid]="form.get('pacchettoId')?.invalid && form.get('pacchettoId')?.touched">
+                <option value="">Seleziona un pacchetto</option>
+                <option *ngFor="let pacchetto of pacchettiDisponibili" [value]="pacchetto.id">
+                    {{ pacchetto.nome }} ({{ pacchetto.durataMinuti }}min - max {{ pacchetto.maxPartecipanti }} persone - €{{ pacchetto.prezzo }})
                 </option>
             </select>
-            <div *ngIf="form.get('corsoId')?.invalid && form.get('corsoId')?.touched" class="invalid-feedback">
+            <div *ngIf="form.get('pacchettoId')?.invalid && form.get('pacchettoId')?.touched" class="invalid-feedback">
                 Il tipo di lezione è obbligatorio
             </div>
         </div>
@@ -52,7 +52,7 @@
             <input type="number" id="durata" formControlName="durata" class="form-control" 
                 min="15" max="180" readonly
                 [class.is-invalid]="form.get('durata')?.invalid && form.get('durata')?.touched">
-            <div class="form-text">Si compila automaticamente in base al corso selezionato</div>
+            <div class="form-text">Si compila automaticamente in base al pacchetto selezionato</div>
             <div *ngIf="form.get('durata')?.invalid && form.get('durata')?.touched" class="invalid-feedback">
                 <span *ngIf="form.get('durata')?.errors?.['required']">La durata è obbligatoria</span>
                 <span *ngIf="form.get('durata')?.errors?.['min']">Durata minima: 15 minuti</span>
@@ -64,7 +64,7 @@
             <input type="number" id="maxPartecipanti" formControlName="maxPartecipanti" class="form-control" 
                 min="1" max="50" readonly
                 [class.is-invalid]="form.get('maxPartecipanti')?.invalid && form.get('maxPartecipanti')?.touched">
-            <div class="form-text">Si compila automaticamente in base al corso selezionato</div>
+            <div class="form-text">Si compila automaticamente in base al pacchetto selezionato</div>
             <div *ngIf="form.get('maxPartecipanti')?.invalid && form.get('maxPartecipanti')?.touched" class="invalid-feedback">
                 <span *ngIf="form.get('maxPartecipanti')?.errors?.['required']">Il numero di partecipanti è obbligatorio</span>
                 <span *ngIf="form.get('maxPartecipanti')?.errors?.['min']">Minimo 1 partecipante</span>
@@ -89,7 +89,7 @@
             <input type="number" id="prezzo" formControlName="prezzo" class="form-control" 
                 min="0" step="0.01" readonly
                 [class.is-invalid]="form.get('prezzo')?.invalid && form.get('prezzo')?.touched">
-            <div class="form-text">Si compila automaticamente in base al corso selezionato</div>
+            <div class="form-text">Si compila automaticamente in base al pacchetto selezionato</div>
             <div *ngIf="form.get('prezzo')?.invalid && form.get('prezzo')?.touched" class="invalid-feedback">
                 <span *ngIf="form.get('prezzo')?.errors?.['required']">Il prezzo è obbligatorio</span>
                 <span *ngIf="form.get('prezzo')?.errors?.['min']">Il prezzo non può essere negativo</span>

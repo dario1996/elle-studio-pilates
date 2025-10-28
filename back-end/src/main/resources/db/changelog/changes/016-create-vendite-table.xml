@@ -5,7 +5,7 @@
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
     <changeSet id="016-create-vendite-table" author="system">
-        <comment>Crea tabella vendite per gestire acquisti corsi</comment>
+        <comment>Crea tabella vendite per gestire acquisti pacchetti</comment>
 
         <createTable tableName="vendite">
             <column name="id" type="BIGINT" autoIncrement="true">
@@ -14,7 +14,7 @@
             <column name="utente_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
-            <column name="corso_id" type="BIGINT">
+            <column name="pacchetto_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
             <column name="importo" type="DECIMAL(10,2)">
@@ -45,9 +45,9 @@
 
         <addForeignKeyConstraint 
             baseTableName="vendite" 
-            baseColumnNames="corso_id"
-            constraintName="fk_vendite_corso"
-            referencedTableName="corsi"
+            baseColumnNames="pacchetto_id"
+            constraintName="fk_vendite_pacchetto"
+            referencedTableName="pacchetti"
             referencedColumnNames="id"
             onDelete="CASCADE"/>
 
@@ -56,8 +56,8 @@
             <column name="utente_id"/>
         </createIndex>
 
-        <createIndex tableName="vendite" indexName="idx_vendite_corso">
-            <column name="corso_id"/>
+        <createIndex tableName="vendite" indexName="idx_vendite_pacchetto">
+            <column name="pacchetto_id"/>
         </createIndex>
 
         <createIndex tableName="vendite" indexName="idx_vendite_stato">

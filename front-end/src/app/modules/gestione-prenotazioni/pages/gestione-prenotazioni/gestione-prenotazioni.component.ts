@@ -21,8 +21,8 @@ export class GestionePrenotazioniComponent implements OnInit {
   title: string = 'Prenotazioni';
   
   prenotazioneForm: FormGroup;
-  corsiFiltrati: any[] = [];
-  selectedCorso: any = null;
+  pacchettiFiltrati: any[] = [];
+  selectedPacchetto: any = null;
   orariDisponibili: string[] = [];
   orariInfo: { [key: string]: { disponibile: boolean; postiRimasti: number; postiTotali: number } } = {};
   selectedDate: string = '';
@@ -41,12 +41,12 @@ export class GestionePrenotazioniComponent implements OnInit {
   showGestioneModal = false;
   prenotazioniUtente: any[] = [];
 
-  // Mock data per i corsi - verrà sostituito con chiamata API
-  corsiDisponibili = [
+  // Mock data per i pacchetti - verrà sostituito con chiamata API
+  pacchettiDisponibili = [
     {
       id: 1,
       nome: 'Pilates Base',
-      descrizione: 'Corso base di pilates per principianti',
+      descrizione: 'Pacchetto base di pilates per principianti',
       categoria: 'PILATES',
       livello: 'PRINCIPIANTE',
       durataMinuti: 60,
@@ -80,7 +80,7 @@ export class GestionePrenotazioniComponent implements OnInit {
 
   constructor() {
     this.prenotazioneForm = this.fb.group({
-      corso: ['', Validators.required],
+      pacchetto: ['', Validators.required],
       data: ['', Validators.required],
       orario: ['', Validators.required],
       note: ['']
@@ -88,7 +88,7 @@ export class GestionePrenotazioniComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.corsiFiltrati = [...this.corsiDisponibili];
+    this.pacchettiFiltrati = [...this.pacchettiDisponibili];
     this.generateOrariDisponibili();
     this.caricaPrenotazioniUtente();
   }
@@ -103,15 +103,23 @@ export class GestionePrenotazioniComponent implements OnInit {
     }
   }
 
-  onCorsoChange(event: any): void {
-    const corsoId = parseInt(event.target.value);
-    this.selectedCorso = this.corsiDisponibili.find(c => c.id === corsoId);
+  onPacchettoChange(event: any): void {
+    const pacchettoId = parseInt(event.target.value);
+    this.selectedPacchetto = this.pacchettiDisponibili.find(p => p.id === pacchettoId);
     this.updateOrariDisponibili();
   }
 
   onDateChange(event: any): void {
     this.selectedDate = event.target.value;
     this.updateOrariDisponibili();
+  }
+
+  onDateClick(event: any): void {
+    if (!this.selectedPacchetto) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.showToastMessage('Seleziona prima un pacchetto', 'info');
+    }
   }
 
   selectOrario(orario: string): void {
@@ -130,13 +138,13 @@ export class GestionePrenotazioniComponent implements OnInit {
   }
 
   private updateOrariDisponibili(): void {
-    if (this.selectedDate && this.selectedCorso) {
+    if (this.selectedDate && this.selectedPacchetto) {
       // Mock: simula controllo disponibilità orari
       this.orariInfo = {};
       this.orariDisponibili.forEach(orario => {
         // Simula alcuni orari non disponibili
         const random = Math.random();
-        const maxPosti = this.selectedCorso.maxPartecipanti;
+        const maxPosti = this.selectedPacchetto.maxPartecipanti;
         const postiOccupati = Math.floor(random * maxPosti);
         const postiRimasti = maxPosti - postiOccupati;
         
@@ -161,14 +169,14 @@ export class GestionePrenotazioniComponent implements OnInit {
       console.log('Dati prenotazione:', {
         ...formData,
         username,
-        corso: this.selectedCorso
+        pacchetto: this.selectedPacchetto
       });
 
       setTimeout(() => {
         this.loading = false;
         this.showToastMessage('Prenotazione effettuata con successo!', 'success');
         this.prenotazioneForm.reset();
-        this.selectedCorso = null;
+        this.selectedPacchetto = null;
         this.orariDisponibili = [];
         this.orariInfo = {};
       }, 1000);
@@ -182,7 +190,7 @@ export class GestionePrenotazioniComponent implements OnInit {
   showToastMessage(message: string, type: 'success' | 'error' | 'info' = 'success') {
     this.toastMessage = message;
     this.toastType = type;
-    this.toastIcon = type === 'success' ? 'check_circle' : type === 'error' ? 'error' : 'info';
+    this.toastIcon = type === 'success' ? 'success' : type === 'error' ? 'error' : 'info';
     this.showToast = true;
     
     // Auto hide after 3 seconds
@@ -213,7 +221,7 @@ export class GestionePrenotazioniComponent implements OnInit {
   }
 
   isFormValid(): boolean {
-    return this.prenotazioneForm.valid && this.selectedCorso !== null;
+    return this.prenotazioneForm.valid && this.selectedPacchetto !== null;
   }
 
   // Metodi per gestione prenotazioni esistenti
@@ -224,8 +232,8 @@ export class GestionePrenotazioniComponent implements OnInit {
     this.prenotazioniUtente = [
       {
         id: 1,
-        corsoId: 1,
-        corsoNome: 'Pilates Base',
+        pacchettoId: 1,
+        pacchettoNome: 'Pilates Base',
         categoria: 'PILATES',
         data: '2025-09-26',
         orario: '09:00',
@@ -234,8 +242,8 @@ export class GestionePrenotazioniComponent implements OnInit {
       },
       {
         id: 2,
-        corsoId: 2,
-        corsoNome: 'Matwork Avanzato', 
+        pacchettoId: 2,
+        pacchettoNome: 'Matwork Avanzato', 
         categoria: 'MATWORK',
         data: '2025-09-28',
         orario: '10:30',
@@ -244,8 +252,8 @@ export class GestionePrenotazioniComponent implements OnInit {
       },
       {
         id: 3,
-        corsoId: 3,
-        corsoNome: 'Yoga Rilassante',
+        pacchettoId: 3,
+        pacchettoNome: 'Yoga Rilassante',
         categoria: 'YOGA', 
         data: '2025-09-30',
         orario: '18:00',
@@ -276,15 +284,15 @@ export class GestionePrenotazioniComponent implements OnInit {
 
   modificaPrenotazione(prenotazione: any, index: number): void {
     // Implementa la logica di modifica
-    this.showToastMessage(`Modifica prenotazione per ${prenotazione.corsoNome}`, 'info');
+    this.showToastMessage(`Modifica prenotazione per ${prenotazione.pacchettoNome}`, 'info');
     
     // Qui potresti aprire un altro modal con form di modifica
     // Per ora mostriamo solo una notifica
   }
 
   cancellaPrenotazione(prenotazione: any, index: number): void {
-    const conferma = confirm(`Sei sicuro di voler cancellare la prenotazione per ${prenotazione.corsoNome} del ${this.formatDate(prenotazione.data)}?`);
-    
+    const conferma = confirm(`Sei sicuro di voler cancellare la prenotazione per ${prenotazione.pacchettoNome} del ${this.formatDate(prenotazione.data)}?`);
+
     if (conferma) {
       // Simula cancellazione
       this.prenotazioniUtente.splice(index, 1);

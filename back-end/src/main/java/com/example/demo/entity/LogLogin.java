@@ -20,11 +20,11 @@ public class LogLogin {
     @JsonIgnoreProperties({ "assegnazioni", "logLogin" })
     private Dipendente dipendente;
 
-    // Relazione molti-a-uno con Corso (opzionale)
+    // Relazione molti-a-uno con Pacchetto (opzionale)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "corso_id")
+    @JoinColumn(name = "pacchetto_id")
     @JsonIgnoreProperties({ "assegnazioni" })
-    private Corso corso;
+    private Pacchetto pacchetto;
 
     @Column(name = "nome_contenuto", length = 300)
     private String nomeContenuto;
@@ -62,11 +62,11 @@ public class LogLogin {
     @Column(name = "competenze", length = 500)
     private String competenze;
 
-    @Column(name = "nome_corso_video", length = 300)
-    private String nomeCorsoVideo; // Per video di LinkedIn
+    @Column(name = "nome_pacchetto_video", length = 300)
+    private String nomePacchettoVideo; // Per video di LinkedIn
 
-    @Column(name = "id_corso_video", length = 100)
-    private String idCorsoVideo; // ID corso per video di LinkedIn
+    @Column(name = "id_pacchetto_video", length = 100)
+    private String idPacchettoVideo; // ID pacchetto per video di LinkedIn
 
     @Column(name = "gruppi_interazione", length = 500)
     private String gruppiInterazione;
@@ -115,12 +115,12 @@ public class LogLogin {
         this.dipendente = dipendente;
     }
 
-    public Corso getCorso() {
-        return corso;
+    public Pacchetto getPacchetto() {
+        return pacchetto;
     }
 
-    public void setCorso(Corso corso) {
-        this.corso = corso;
+    public void setPacchetto(Pacchetto pacchetto) {
+        this.pacchetto = pacchetto;
     }
 
     public String getNomeContenuto() {
@@ -219,20 +219,20 @@ public class LogLogin {
         this.competenze = competenze;
     }
 
-    public String getNomeCorsoVideo() {
-        return nomeCorsoVideo;
+    public String getNomePacchettoVideo() {
+        return nomePacchettoVideo;
     }
 
-    public void setNomeCorsoVideo(String nomeCorsoVideo) {
-        this.nomeCorsoVideo = nomeCorsoVideo;
+    public void setNomePacchettoVideo(String nomePacchettoVideo) {
+        this.nomePacchettoVideo = nomePacchettoVideo;
     }
 
-    public String getIdCorsoVideo() {
-        return idCorsoVideo;
+    public String getIdPacchettoVideo() {
+        return idPacchettoVideo;
     }
 
-    public void setIdCorsoVideo(String idCorsoVideo) {
-        this.idCorsoVideo = idCorsoVideo;
+    public void setIdPacchettoVideo(String idPacchettoVideo) {
+        this.idPacchettoVideo = idPacchettoVideo;
     }
 
     public String getGruppiInterazione() {

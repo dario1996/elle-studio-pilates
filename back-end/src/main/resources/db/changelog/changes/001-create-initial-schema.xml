@@ -179,7 +179,7 @@
             <column name="dipendente_id" type="BIGINT">
                 <constraints nullable="false" />
             </column>
-            <column name="corso_id" type="BIGINT">
+            <column name="pacchetto_id" type="BIGINT">
                 <constraints nullable="false" />
             </column>
             <column name="data_assegnazione" type="DATE">
@@ -249,7 +249,7 @@
             <column name="dipendente_id" type="BIGINT">
                 <constraints nullable="false" />
             </column>
-            <column name="corso_id" type="BIGINT">
+            <column name="pacchetto_id" type="BIGINT">
                 <constraints nullable="true" />
             </column>
             <column name="nome_contenuto" type="VARCHAR(300)">
@@ -338,7 +338,7 @@
         <!-- Assegnazione -> Corso -->
         <addForeignKeyConstraint
             baseTableName="assegnazioni"
-            baseColumnNames="corso_id"
+            baseColumnNames="pacchetto_id"
             constraintName="fk_assegnazione_corso"
             referencedTableName="corsi"
             referencedColumnNames="id"
@@ -358,7 +358,7 @@
         <!-- LogLogin -> Corso (optional) -->
         <addForeignKeyConstraint
             baseTableName="log_login"
-            baseColumnNames="corso_id"
+            baseColumnNames="pacchetto_id"
             constraintName="fk_log_corso"
             referencedTableName="corsi"
             referencedColumnNames="id"

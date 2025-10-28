@@ -21,13 +21,13 @@
             <column name="codice_fiscale" />
         </createIndex>
 
-<!-- Indici per la tabella corsi -->
+<!-- Indici per la tabella pacchetti -->
 
-        <createIndex indexName="idx_corso_stato" tableName="corsi">
+        <createIndex indexName="idx_pacchetto_stato" tableName="pacchetti">
             <column name="stato" />
         </createIndex>
 
-        <createIndex indexName="idx_corso_categoria" tableName="corsi">
+        <createIndex indexName="idx_pacchetto_categoria" tableName="pacchetti">
             <column name="categoria" />
         </createIndex>
 
@@ -70,8 +70,8 @@
             <column name="utente_id"/>
         </createIndex>
 
-        <createIndex tableName="vendite" indexName="idx_vendite_corso">
-            <column name="corso_id"/>
+        <createIndex tableName="vendite" indexName="idx_vendite_pacchetto">
+            <column name="pacchetto_id"/>
         </createIndex>
 
         <createIndex tableName="vendite" indexName="idx_vendite_stato">

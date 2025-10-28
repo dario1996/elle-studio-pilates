@@ -58,12 +58,12 @@
         </createTable>
     </changeSet>
 
-<!-- CREA TABELLA CORSI -->
+<!-- CREA TABELLA PACCHETTI -->
 
     <changeSet id="001-02" author="vincenzo">
-        <comment>Crea tabella corsi</comment>
-
-        <createTable tableName="corsi">
+        <comment>Crea tabella pacchetti</comment>
+    
+        <createTable tableName="pacchetti">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" />
             </column>
@@ -155,7 +155,7 @@
 <!-- CREA TABELLA VENDITE -->
 
     <changeSet id="001-05" author="vincenzo">
-        <comment>Crea tabella vendite per gestire acquisti corsi</comment>
+        <comment>Crea tabella vendite per gestire acquisti pacchetti</comment>
 
         <createTable tableName="vendite">
             <column name="id" type="BIGINT" autoIncrement="true">
@@ -164,7 +164,7 @@
             <column name="utente_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
-            <column name="corso_id" type="BIGINT">
+            <column name="pacchetto_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
             <column name="importo" type="DECIMAL(10,2)">

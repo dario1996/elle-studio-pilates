@@ -9,7 +9,7 @@ import com.example.demo.exceptions.BindingException;
 import com.example.demo.mapper.LezioneMapper;
 import com.example.demo.repository.LezioneRepository;
 import com.example.demo.services.UtentiService;
-import com.example.demo.services.CorsoService;
+import com.example.demo.services.PacchettoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ public class LezioneService {
     private final LezioneRepository lezioneRepository;
     private final LezioneMapper lezioneMapper;
     private final UtentiService utentiService;
-    private final CorsoService corsoService;
+    private final PacchettoService pacchettoService;
 
     @Transactional(readOnly = true)
     public List<LezioneDto> getAllLezioni() {

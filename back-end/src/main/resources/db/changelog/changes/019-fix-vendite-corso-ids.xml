@@ -4,15 +4,15 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
-    <changeSet id="019-fix-vendite-corso-ids" author="system">
-        <comment>Corregge i corso_id delle vendite per usare gli ID reali dei corsi (30-44)</comment>
+    <changeSet id="019-fix-vendite-pacchetto-ids" author="system">
+        <comment>Corregge i pacchetto_id delle vendite per usare gli ID reali dei pacchetti (30-44)</comment>
         
         <!-- Prima pulisco tutti i dati delle vendite -->
         <sql>DELETE FROM vendite;</sql>
         
         <!-- Poi inserisco i dati corretti -->
         <sql>
-            INSERT INTO vendite (utente_id, corso_id, importo, stato, data_acquisto, data_pagamento, note) VALUES
+            INSERT INTO vendite (utente_id, pacchetto_id, importo, stato, data_acquisto, data_pagamento, note) VALUES
             ('d.biffero', 30, 25.00, 'PAID', '2025-01-03 10:30:00', '2025-01-04 14:20:00', 'Prima lezione di prova - Pagamento confermato'),
             ('d.biffero', 32, 160.00, 'PAID', '2025-01-05 16:45:00', '2025-01-06 09:15:00', 'Pacchetto 4 lezioni semi privata'),
             ('d.biffero', 35, 600.00, 'PAID', '2025-01-10 11:20:00', '2025-01-11 08:30:00', 'Pacchetto 10 lezioni private'),

@@ -1,0 +1,69 @@
+<div class="page-container">
+  <div class="page-header">
+    <app-page-title
+      [title]="'Gestione Pacchetti'"
+      [buttons]="buttons"
+      [activeFiltersCount]="getActiveFiltersCount()"
+      (buttonClick)="gestioneAzione({ tipo: 'add', item: null })"
+      (buttonActionClick)="handleButtonClick($event)"
+      [searchFields]="searchFields"
+      (searchChange)="filtraTabella($event)"
+    ></app-page-title>
+    <div class="user-bar">
+      <app-notification></app-notification>
+      <app-logged-user></app-logged-user>
+    </div>
+    <!-- Filters Panel -->
+    <!-- <app-filter-panel
+      [filtri]="filtri"
+      [valori]="valoriFiltri"
+      [isOpen]="isFilterPanelOpen"
+      (close)="closeFilterPanel()"
+      (applyFilters)="applyFilters($event)"
+      (clearFilters)="clearFilters()">
+    </app-filter-panel> -->
+  </div>
+  <div class="page-content" #pageContentInner>
+    <!-- Pulsanti azioni -->
+    <div class="row mb-3 mt-3">
+      <div class="col d-flex justify-content-start">
+        <button class="quick-action-btn" (click)="gestioneAzione({ tipo: 'add', item: null })">
+          <i class="fas fa-plus"></i>
+          <span>Aggiungi pacchetto</span>
+        </button>
+      </div>
+    </div>
+
+    <div #pageContentInner class="page-content-inner">
+        <!-- Tabella Pacchetti -->
+  <div class="card border-0 shadow-sm fade-in-modal">
+          <div class="card-body p-0">
+            <app-tabella-generica
+              [data]="pacchettiFiltrati"
+              [columns]="columns"
+              [azioni]="actions"
+              [entityName]="'pacchetti'"
+              [rowClickable]="true"
+              (action)="gestioneAzione($event)"
+              (rowClick)="gestioneAzione({ tipo: 'view', item: $event })"
+              (paginationInfo)="aggiornaPaginazione($event)">
+            </app-tabella-generica>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div class="page-footer">
+    <!-- Pagination Container -->
+    <app-pagination-footer
+      [currentPage]="paginationInfo.currentPage"
+      [totalPages]="paginationInfo.totalPages"
+      [pages]="paginationInfo.pages"
+      [displayedItems]="paginationInfo.displayedItems"
+      [totalItems]="paginationInfo.totalItems"
+      [pageSize]="paginationInfo.pageSize"
+      [entityName]="paginationInfo.entityName"
+      (pageChange)="cambiaPagina($event)"
+    >
+    </app-pagination-footer>
+  </div>
+</div>

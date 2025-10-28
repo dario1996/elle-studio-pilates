@@ -32,10 +32,10 @@ export const routes: Routes = [
         data: { roles: [Ruoli.utente] },
       },
       {
-        path: 'corsi',
+        path: 'Pacchetti',
         loadComponent: () =>
-          import('./modules/corsi/pages/corsi/corsi.component').then(
-            m => m.CorsiComponent,
+          import('./modules/pacchetti/pages/pacchetti/pacchetti.component').then(
+            m => m.PacchettiComponent,
           ),
         canActivate: [AuthGuard],
         data: { roles: [Ruoli.amministratore] },
@@ -81,6 +81,15 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./modules/gestione-prenotazioni/pages/gestione-prenotazioni/gestione-prenotazioni.component').then(
             m => m.GestionePrenotazioniComponent,
+          ),
+        canActivate: [AuthGuard],
+        data: { roles: [Ruoli.utente] },
+      },
+      {
+        path: 'gestione-pacchetti',
+        loadComponent: () =>
+          import('./modules/gestione-pacchetti/pages/gestione-pacchetti/gestione-pacchetti.component').then(
+            m => m.GestionePacchettiComponent,
           ),
         canActivate: [AuthGuard],
         data: { roles: [Ruoli.utente] },

@@ -99,6 +99,16 @@ export class UserService {
       { responseType: 'blob' }
     );
 
+  // Cambio password
+  changePassword = (username: string, oldPassword: string, newPassword: string) =>
+    this.httpClient.put<ApiMsg>(
+      `http://${this.server}:${this.port}/api/utenti/${username}/change-password`,
+      {
+        oldPassword: oldPassword,
+        newPassword: newPassword
+      }
+    );
+
   /* 
   // IMPORT MASSIVO - COMMENTATO PER ORA
   bulkImport = (utenti: any[], options?: any) =>

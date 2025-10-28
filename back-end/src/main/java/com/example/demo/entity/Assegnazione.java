@@ -21,11 +21,11 @@ public class Assegnazione {
     @JsonIgnoreProperties({ "assegnazioni", "logLogin" })
     private Dipendente dipendente;
 
-    // Relazione molti-a-uno con Corso
+    // Relazione molti-a-uno con Pacchetto
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "corso_id", nullable = false)
+    @JoinColumn(name = "pacchetto_id", nullable = false)
     @JsonIgnoreProperties({ "assegnazioni" })
-    private Corso corso;
+    private Pacchetto pacchetto;
 
     @Column(name = "data_assegnazione", nullable = false)
     private LocalDate dataAssegnazione;
@@ -98,10 +98,10 @@ public class Assegnazione {
         this.dataAssegnazione = LocalDate.now();
     }
 
-    public Assegnazione(Dipendente dipendente, Corso corso) {
+    public Assegnazione(Dipendente dipendente, Pacchetto pacchetto) {
         this();
         this.dipendente = dipendente;
-        this.corso = corso;
+        this.pacchetto = pacchetto;
     }
 
     @PreUpdate
@@ -114,7 +114,7 @@ public class Assegnazione {
     }
 
     public boolean isInRitardo() {
-        // Per i corsi di pilates, consideriamo "in ritardo" se l'assegnazione
+        // Per i pacchetti di pilates, consideriamo "in ritardo" se l'assegnazione
         // è stata creata da più di 30 giorni e non è ancora completata
         return dataAssegnazione != null &&
                 LocalDate.now().isAfter(dataAssegnazione.plusDays(30)) &&
@@ -137,12 +137,12 @@ public class Assegnazione {
         this.dipendente = dipendente;
     }
 
-    public Corso getCorso() {
-        return corso;
+    public Pacchetto getPacchetto() {
+        return pacchetto;
     }
 
-    public void setCorso(Corso corso) {
-        this.corso = corso;
+    public void setPacchetto(Pacchetto pacchetto) {
+        this.pacchetto = pacchetto;
     }
 
     public LocalDate getDataAssegnazione() {

@@ -17,7 +17,7 @@
         </createIndex>
 
         <createIndex indexName="idx_assegnazione_corso" tableName="assegnazioni">
-            <column name="corso_id" />
+            <column name="pacchetto_id" />
         </createIndex>
 
         <createIndex indexName="idx_log_dipendente" tableName="log_login">
@@ -25,7 +25,7 @@
         </createIndex>
 
         <createIndex indexName="idx_log_corso" tableName="log_login">
-            <column name="corso_id" />
+            <column name="pacchetto_id" />
         </createIndex>
 
         <!-- Indexes for search and filtering -->

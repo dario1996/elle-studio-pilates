@@ -17,9 +17,9 @@
 
         <addForeignKeyConstraint 
             baseTableName="vendite" 
-            baseColumnNames="corso_id"
-            constraintName="fk_vendite_corso"
-            referencedTableName="corsi"
+            baseColumnNames="pacchetto_id"
+            constraintName="fk_vendite_pacchetto"
+            referencedTableName="pacchetti"
             referencedColumnNames="id"
             onDelete="CASCADE"/>
 

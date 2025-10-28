@@ -64,7 +64,7 @@
         <!-- Inserisce i nuovi dati con username corretto -->
         <insert tableName="vendite">
             <column name="utente_id" value="d.biffero"/>
-            <column name="corso_id" value="1"/>
+            <column name="pacchetto_id" value="1"/>
             <column name="importo" value="25.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-09-15 10:30:00"/>
@@ -74,7 +74,7 @@
         
         <insert tableName="vendite">
             <column name="utente_id" value="d.biffero"/>
-            <column name="corso_id" value="2"/>
+            <column name="pacchetto_id" value="2"/>
             <column name="importo" value="70.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-09-08 10:00:00"/>
@@ -84,7 +84,7 @@
         
         <insert tableName="vendite">
             <column name="utente_id" value="d.biffero"/>
-            <column name="corso_id" value="3"/>
+            <column name="pacchetto_id" value="3"/>
             <column name="importo" value="160.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-11-03 09:30:00"/>
@@ -94,7 +94,7 @@
         
         <insert tableName="vendite">
             <column name="utente_id" value="d.biffero"/>
-            <column name="corso_id" value="4"/>
+            <column name="pacchetto_id" value="4"/>
             <column name="importo" value="300.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-11-07 11:20:00"/>
@@ -104,7 +104,7 @@
         
         <insert tableName="vendite">
             <column name="utente_id" value="d.biffero"/>
-            <column name="corso_id" value="5"/>
+            <column name="pacchetto_id" value="5"/>
             <column name="importo" value="1100.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-12-12 16:45:00"/>
@@ -114,7 +114,7 @@
         
         <insert tableName="vendite">
             <column name="utente_id" value="d.biffero"/>
-            <column name="corso_id" value="6"/>
+            <column name="pacchetto_id" value="6"/>
             <column name="importo" value="600.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-08-01 09:20:00"/>
@@ -124,7 +124,7 @@
         
         <insert tableName="vendite">
             <column name="utente_id" value="d.biffero"/>
-            <column name="corso_id" value="7"/>
+            <column name="pacchetto_id" value="7"/>
             <column name="importo" value="40.00"/>
             <column name="stato" value="PENDING"/>
             <column name="data_acquisto" value="2024-12-30 15:20:00"/>
@@ -133,7 +133,7 @@
         
         <insert tableName="vendite">
             <column name="utente_id" value="d.biffero"/>
-            <column name="corso_id" value="8"/>
+            <column name="pacchetto_id" value="8"/>
             <column name="importo" value="80.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-10-20 12:45:00"/>
@@ -143,7 +143,7 @@
         
         <insert tableName="vendite">
             <column name="utente_id" value="d.biffero"/>
-            <column name="corso_id" value="9"/>
+            <column name="pacchetto_id" value="9"/>
             <column name="importo" value="150.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-10-17 13:45:00"/>
@@ -153,7 +153,7 @@
         
         <insert tableName="vendite">
             <column name="utente_id" value="d.biffero"/>
-            <column name="corso_id" value="10"/>
+            <column name="pacchetto_id" value="10"/>
             <column name="importo" value="360.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-11-14 15:15:00"/>
@@ -163,7 +163,7 @@
         
         <insert tableName="vendite">
             <column name="utente_id" value="d.biffero"/>
-            <column name="corso_id" value="11"/>
+            <column name="pacchetto_id" value="11"/>
             <column name="importo" value="320.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-09-22 14:15:00"/>
@@ -173,7 +173,7 @@
         
         <insert tableName="vendite">
             <column name="utente_id" value="d.biffero"/>
-            <column name="corso_id" value="12"/>
+            <column name="pacchetto_id" value="12"/>
             <column name="importo" value="220.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-11-21 10:45:00"/>
@@ -183,7 +183,7 @@
         
         <insert tableName="vendite">
             <column name="utente_id" value="d.biffero"/>
-            <column name="corso_id" value="13"/>
+            <column name="pacchetto_id" value="13"/>
             <column name="importo" value="400.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-12-19 11:15:00"/>
@@ -193,7 +193,7 @@
         
         <insert tableName="vendite">
             <column name="utente_id" value="d.biffero"/>
-            <column name="corso_id" value="14"/>
+            <column name="pacchetto_id" value="14"/>
             <column name="importo" value="25.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-10-06 16:30:00"/>
@@ -203,7 +203,7 @@
         
         <insert tableName="vendite">
             <column name="utente_id" value="d.biffero"/>
-            <column name="corso_id" value="15"/>
+            <column name="pacchetto_id" value="15"/>
             <column name="importo" value="70.00"/>
             <column name="stato" value="CANCELLED"/>
             <column name="data_acquisto" value="2024-10-24 14:30:00"/>
@@ -212,7 +212,7 @@
         
         <insert tableName="vendite">
             <column name="utente_id" value="d.biffero"/>
-            <column name="corso_id" value="15"/>
+            <column name="pacchetto_id" value="15"/>
             <column name="importo" value="70.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-11-17 15:20:00"/>
@@ -222,7 +222,7 @@
         
         <insert tableName="vendite">
             <column name="utente_id" value="d.biffero"/>
-            <column name="corso_id" value="16"/>
+            <column name="pacchetto_id" value="16"/>
             <column name="importo" value="150.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-11-28 13:20:00"/>
@@ -232,7 +232,7 @@
         
         <insert tableName="vendite">
             <column name="utente_id" value="d.biffero"/>
-            <column name="corso_id" value="9"/>
+            <column name="pacchetto_id" value="9"/>
             <column name="importo" value="150.00"/>
             <column name="stato" value="CANCELLED"/>
             <column name="data_acquisto" value="2024-12-08 13:30:00"/>
@@ -241,7 +241,7 @@
         
         <insert tableName="vendite">
             <column name="utente_id" value="d.biffero"/>
-            <column name="corso_id" value="16"/>
+            <column name="pacchetto_id" value="16"/>
             <column name="importo" value="150.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-12-22 10:15:00"/>
@@ -251,7 +251,7 @@
         
         <insert tableName="vendite">
             <column name="utente_id" value="d.biffero"/>
-            <column name="corso_id" value="1"/>
+            <column name="pacchetto_id" value="1"/>
             <column name="importo" value="25.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-12-05 14:30:00"/>
@@ -261,7 +261,7 @@
         
         <insert tableName="vendite">
             <column name="utente_id" value="d.biffero"/>
-            <column name="corso_id" value="4"/>
+            <column name="pacchetto_id" value="4"/>
             <column name="importo" value="300.00"/>
             <column name="stato" value="PENDING"/>
             <column name="data_acquisto" value="2025-08-15 14:30:00"/>

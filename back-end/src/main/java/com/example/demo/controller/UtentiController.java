@@ -228,6 +228,80 @@ public class UtentiController {
                         "Si".equals(nuovoStato) ? "Attivo" : "Non attivo")));
     }
 
+    // 🆕 ENDPOINT PUT per cambiare la password
+    @PutMapping(value = "/{username}/change-password", produces = "application/json")
+    public ResponseEntity<InfoMsg> changePassword(@PathVariable String username,
+            @RequestBody java.util.Map<String, String> passwords) {
+        log.info("Richiesta cambio password per utente: " + username);
+        
+        String oldPassword = passwords.get("oldPassword");
+        String newPassword = passwords.get("newPassword");
+        
+        // Validazione parametri
+        if (oldPassword == null || oldPassword.isEmpty() || 
+            newPassword == null || newPassword.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new InfoMsg(LocalDate.now(), "Password corrente e nuova password sono obbligatorie"));
+        }
+        
+        // Verifica esistenza utente
+        Utenti existingUtente = utentiService.SelUser(username);
+        if (existingUtente == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new InfoMsg(LocalDate.now(), "Utente non trovato"));
+        }
+        
+        // Verifica password corrente
+        if (!passwordEncoder.matches(oldPassword, existingUtente.getPassword())) {
+            log.warning("Password corrente non valida per utente: " + username);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new InfoMsg(LocalDate.now(), "Password corrente non valida"));
+        }
+        
+        // Validazione robustezza nuova password
+        if (!isPasswordStrong(newPassword)) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                    .body(new InfoMsg(LocalDate.now(), 
+                            "La nuova password deve contenere almeno 8 caratteri, " +
+                            "una lettera maiuscola, una minuscola, un numero e un carattere speciale"));
+        }
+        
+        // Verifica che la nuova password sia diversa dalla vecchia
+        if (passwordEncoder.matches(newPassword, existingUtente.getPassword())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new InfoMsg(LocalDate.now(), 
+                            "La nuova password deve essere diversa da quella corrente"));
+        }
+        
+        // Aggiorna la password
+        existingUtente.setPassword(passwordEncoder.encode(newPassword));
+        utentiService.Save(existingUtente);
+        
+        log.info("Password cambiata con successo per utente: " + username);
+        return ResponseEntity.ok(new InfoMsg(LocalDate.now(), "Password cambiata con successo"));
+    }
+    
+    /**
+     * Valida la robustezza della password
+     * - Minimo 8 caratteri
+     * - Almeno una lettera maiuscola
+     * - Almeno una lettera minuscola
+     * - Almeno un numero
+     * - Almeno un carattere speciale
+     */
+    private boolean isPasswordStrong(String password) {
+        if (password == null || password.length() < 8) {
+            return false;
+        }
+        
+        boolean hasUpperCase = password.matches(".*[A-Z].*");
+        boolean hasLowerCase = password.matches(".*[a-z].*");
+        boolean hasDigit = password.matches(".*\\d.*");
+        boolean hasSpecialChar = password.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?].*");
+        
+        return hasUpperCase && hasLowerCase && hasDigit && hasSpecialChar;
+    }
+
     @PostMapping(value = "/inserisci", produces = "application/json")
 	@SneakyThrows
 	public ResponseEntity<InfoMsg> addNewUser(@RequestBody Utenti utente, 

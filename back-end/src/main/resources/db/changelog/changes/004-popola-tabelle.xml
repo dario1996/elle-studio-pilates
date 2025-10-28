@@ -88,10 +88,10 @@
     </changeSet>
 
     <changeSet id="004-02" author="vincenzo">
-        <comment>Insert catalogo corsi per Elle Studio Pilates</comment>
+        <comment>Insert catalogo pacchetti per Elle Studio Pilates</comment>
 
         <!-- Prima Lezione - Analisi Posturale -->
-        <insert tableName="corsi">
+        <insert tableName="pacchetti">
             <column name="nome" value="Prima Lezione - Analisi Posturale"/>
             <column name="descrizione" value="Anamnesi e approccio al metodo Pilates. Sessione introduttiva di valutazione posturale e conoscenza del metodo."/>
             <column name="categoria" value="PRIMA_LEZIONE"/>
@@ -104,7 +104,7 @@
         </insert>
 
         <!-- Pilates Privato - 4 lezioni mensili -->
-        <insert tableName="corsi">
+        <insert tableName="pacchetti">
             <column name="nome" value="Pilates Privato - 4 Lezioni"/>
             <column name="descrizione" value="Abbonamento mensile 4 lezioni private (55 minuti). Utilizzo di tutti i macchinari studio (Cadillac, Reformer, Tower, Chair, Barrel) e piccoli attrezzi."/>
             <column name="categoria" value="PRIVATA"/>
@@ -117,7 +117,7 @@
         </insert>
 
         <!-- Pilates Privato - 8 lezioni mensili -->
-        <insert tableName="corsi">
+        <insert tableName="pacchetti">
             <column name="nome" value="Pilates Privato - 8 Lezioni"/>
             <column name="descrizione" value="Abbonamento mensile 8 lezioni private (55 minuti). Utilizzo di tutti i macchinari studio (Cadillac, Reformer, Tower, Chair, Barrel) e piccoli attrezzi."/>
             <column name="categoria" value="PRIVATA"/>
@@ -130,7 +130,7 @@
         </insert>
 
         <!-- Semi Privata Duetto - 4 lezioni -->
-        <insert tableName="corsi">
+        <insert tableName="pacchetti">
             <column name="nome" value="Semi Privata Duetto - 4 Lezioni"/>
             <column name="descrizione" value="Abbonamento mensile 4 lezioni per 2 persone (50 minuti). Utilizzo di Reformer, Tower, Chair e piccoli attrezzi."/>
             <column name="categoria" value="SEMI_PRIVATA"/>
@@ -143,7 +143,7 @@
         </insert>
 
         <!-- Semi Privata Duetto - 8 lezioni -->
-        <insert tableName="corsi">
+        <insert tableName="pacchetti">
             <column name="nome" value="Semi Privata Duetto - 8 Lezioni"/>
             <column name="descrizione" value="Abbonamento mensile 8 lezioni per 2 persone (50 minuti). Utilizzo di Reformer, Tower, Chair e piccoli attrezzi."/>
             <column name="categoria" value="SEMI_PRIVATA"/>
@@ -156,7 +156,7 @@
         </insert>
 
         <!-- Semi Privata 3-4 persone - 4 lezioni -->
-        <insert tableName="corsi">
+        <insert tableName="pacchetti">
             <column name="nome" value="Semi Privata 3-4 Persone - 4 Lezioni"/>
             <column name="descrizione" value="Abbonamento mensile 4 lezioni per 3-4 persone (50 minuti). Utilizzo di Reformer, Tower, Chair e piccoli attrezzi."/>
             <column name="categoria" value="SEMI_PRIVATA"/>
@@ -169,7 +169,7 @@
         </insert>
 
         <!-- Semi Privata 3-4 persone - 8 lezioni -->
-        <insert tableName="corsi">
+        <insert tableName="pacchetti">
             <column name="nome" value="Semi Privata 3-4 Persone - 8 Lezioni"/>
             <column name="descrizione" value="Abbonamento mensile 8 lezioni per 3-4 persone (50 minuti). Utilizzo di Reformer, Tower, Chair e piccoli attrezzi."/>
             <column name="categoria" value="SEMI_PRIVATA"/>
@@ -182,7 +182,7 @@
         </insert>
 
         <!-- Matwork - 4 lezioni -->
-        <insert tableName="corsi">
+        <insert tableName="pacchetti">
             <column name="nome" value="Matwork - 4 Lezioni"/>
             <column name="descrizione" value="Abbonamento mensile 4 lezioni di gruppo Matwork (50 minuti, max 6 partecipanti). Pilates a corpo libero su tappetino con piccoli attrezzi."/>
             <column name="categoria" value="GRUPPO_MAT"/>
@@ -195,7 +195,7 @@
         </insert>
 
         <!-- Matwork - 8 lezioni -->
-        <insert tableName="corsi">
+        <insert tableName="pacchetti">
             <column name="nome" value="Matwork - 8 Lezioni"/>
             <column name="descrizione" value="Abbonamento mensile 8 lezioni di gruppo Matwork (50 minuti, max 6 partecipanti). Pilates a corpo libero su tappetino con piccoli attrezzi."/>
             <column name="categoria" value="GRUPPO_MAT"/>
@@ -208,7 +208,7 @@
         </insert>
 
         <!-- Combo: 8 Reformer + 4 Matwork -->
-        <insert tableName="corsi">
+        <insert tableName="pacchetti">
             <column name="nome" value="Combo 8 Reformer + 4 Matwork"/>
             <column name="descrizione" value="Abbonamento combo: 8 lezioni Reformer semi private (3/4 persone) + 4 lezioni Matwork. Validità 1 mese."/>
             <column name="categoria" value="COMBO"/>
@@ -221,7 +221,7 @@
         </insert>
 
         <!-- Combo: 4 Reformer + 4 Matwork -->
-        <insert tableName="corsi">
+        <insert tableName="pacchetti">
             <column name="nome" value="Combo 4 Reformer + 4 Matwork"/>
             <column name="descrizione" value="Abbonamento combo: 4 lezioni Reformer semi private (3/4 persone) + 4 lezioni Matwork gruppo (max 6 partecipanti). Validità 1 mese."/>
             <column name="categoria" value="COMBO"/>
@@ -234,7 +234,7 @@
         </insert>
 
         <!-- Combo: 4 Reformer + 4 Yoga -->
-        <insert tableName="corsi">
+        <insert tableName="pacchetti">
             <column name="nome" value="Combo 4 Reformer + 4 Yoga"/>
             <column name="descrizione" value="Abbonamento combo: 4 lezioni Reformer semi private (3/4 persone) + 4 lezioni Yoga. Validità 1 mese."/>
             <column name="categoria" value="COMBO"/>
@@ -247,7 +247,7 @@
         </insert>
 
         <!-- Combo: 4 Matwork + 4 Yoga -->
-        <insert tableName="corsi">
+        <insert tableName="pacchetti">
             <column name="nome" value="Combo 4 Matwork + 4 Yoga"/>
             <column name="descrizione" value="Abbonamento combo: 4 lezioni Matwork gruppo (max 6 partecipanti) + 4 lezioni Yoga. Validità 1 mese."/>
             <column name="categoria" value="COMBO"/>
@@ -260,7 +260,7 @@
         </insert>
 
         <!-- Yoga - 4 lezioni -->
-        <insert tableName="corsi">
+        <insert tableName="pacchetti">
             <column name="nome" value="Yoga - 4 Lezioni"/>
             <column name="descrizione" value="Abbonamento mensile 4 lezioni di gruppo Yoga (60 minuti). Tutti i programmi Yoga disponibili."/>
             <column name="categoria" value="YOGA"/>
@@ -273,7 +273,7 @@
         </insert>
 
         <!-- Yoga - 8 lezioni -->
-        <insert tableName="corsi">
+        <insert tableName="pacchetti">
             <column name="nome" value="Yoga - 8 Lezioni"/>
             <column name="descrizione" value="Abbonamento mensile 8 lezioni di gruppo Yoga (60 minuti). Tutti i programmi Yoga disponibili."/>
             <column name="categoria" value="YOGA"/>
@@ -344,13 +344,13 @@
 <!-- Inserimento dati tabella VENDITE -->
 
     <changeSet id="004-04" author="vincenzo" runOnChange="true">
-        <comment>Inserisce dati di test per vendite con distribuzione realistica - AGGIORNATO 2025-08-22 con corso_id corretti (30-44)</comment>
+        <comment>Inserisce dati di test per vendite con distribuzione realistica - AGGIORNATO 2025-08-22 con pacchetto_id corretti (30-44)</comment>
 
 
         <!-- Vendite Gennaio 2025 -->
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="1"/>
+            <column name="pacchetto_id" value="1"/>
             <column name="importo" value="25.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-01-03 10:30:00"/>
@@ -360,7 +360,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="2"/>
+            <column name="pacchetto_id" value="2"/>
             <column name="importo" value="160.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-01-05 16:45:00"/>
@@ -370,7 +370,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="3"/>
+            <column name="pacchetto_id" value="3"/>
             <column name="importo" value="600.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-01-10 11:20:00"/>
@@ -380,7 +380,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="4"/>
+            <column name="pacchetto_id" value="4"/>
             <column name="importo" value="80.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-01-15 14:10:00"/>
@@ -390,7 +390,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="5"/>
+            <column name="pacchetto_id" value="5"/>
             <column name="importo" value="220.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-01-20 09:30:00"/>
@@ -401,7 +401,7 @@
         <!-- Vendite Febbraio 2025 -->
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="6"/>
+            <column name="pacchetto_id" value="6"/>
             <column name="importo" value="70.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-02-02 10:15:00"/>
@@ -411,7 +411,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="7"/>
+            <column name="pacchetto_id" value="7"/>
             <column name="importo" value="300.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-02-07 15:45:00"/>
@@ -421,7 +421,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="8"/>
+            <column name="pacchetto_id" value="8"/>
             <column name="importo" value="150.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-02-12 12:30:00"/>
@@ -431,7 +431,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="9"/>
+            <column name="pacchetto_id" value="9"/>
             <column name="importo" value="25.00"/>
             <column name="stato" value="CANCELLED"/>
             <column name="data_acquisto" value="2025-02-18 16:20:00"/>
@@ -440,7 +440,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="10"/>
+            <column name="pacchetto_id" value="10"/>
             <column name="importo" value="25.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-02-25 11:45:00"/>
@@ -451,7 +451,7 @@
         <!-- Vendite Marzo 2025 -->
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="11"/>
+            <column name="pacchetto_id" value="11"/>
             <column name="importo" value="1100.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-03-03 10:20:00"/>
@@ -461,7 +461,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="12"/>
+            <column name="pacchetto_id" value="12"/>
             <column name="importo" value="360.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-03-08 14:30:00"/>
@@ -471,7 +471,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="13"/>
+            <column name="pacchetto_id" value="13"/>
             <column name="importo" value="400.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-03-15 09:45:00"/>
@@ -481,7 +481,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="14"/>
+            <column name="pacchetto_id" value="14"/>
             <column name="importo" value="150.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-03-22 16:10:00"/>
@@ -491,7 +491,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="15"/>
+            <column name="pacchetto_id" value="15"/>
             <column name="importo" value="40.00"/>
             <column name="stato" value="PENDING"/>
             <column name="data_acquisto" value="2025-03-28 13:20:00"/>
@@ -501,7 +501,7 @@
         <!-- Vendite Aprile 2025 -->
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="1"/>
+            <column name="pacchetto_id" value="1"/>
             <column name="importo" value="70.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-04-02 11:30:00"/>
@@ -511,7 +511,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="2"/>
+            <column name="pacchetto_id" value="2"/>
             <column name="importo" value="320.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-04-07 15:20:00"/>
@@ -521,7 +521,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="3"/>
+            <column name="pacchetto_id" value="3"/>
             <column name="importo" value="160.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-04-12 12:45:00"/>
@@ -531,7 +531,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="4"/>
+            <column name="pacchetto_id" value="4"/>
             <column name="importo" value="70.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-04-18 10:15:00"/>
@@ -541,7 +541,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="5"/>
+            <column name="pacchetto_id" value="5"/>
             <column name="importo" value="80.00"/>
             <column name="stato" value="PENDING"/>
             <column name="data_acquisto" value="2025-04-25 16:30:00"/>
@@ -551,7 +551,7 @@
         <!-- Vendite Maggio 2025 -->
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="6"/>
+            <column name="pacchetto_id" value="6"/>
             <column name="importo" value="300.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-05-03 09:20:00"/>
@@ -561,7 +561,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="7"/>
+            <column name="pacchetto_id" value="7"/>
             <column name="importo" value="600.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-05-08 14:45:00"/>
@@ -571,7 +571,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="8"/>
+            <column name="pacchetto_id" value="8"/>
             <column name="importo" value="150.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-05-15 11:20:00"/>
@@ -581,7 +581,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="9"/>
+            <column name="pacchetto_id" value="9"/>
             <column name="importo" value="220.00"/>
             <column name="stato" value="CANCELLED"/>
             <column name="data_acquisto" value="2025-05-22 15:30:00"/>
@@ -590,7 +590,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="10"/>
+            <column name="pacchetto_id" value="10"/>
             <column name="importo" value="150.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-05-28 13:15:00"/>
@@ -601,7 +601,7 @@
         <!-- Vendite Giugno 2025 -->
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="5"/>
+            <column name="pacchetto_id" value="5"/>
             <column name="importo" value="25.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-06-02 10:45:00"/>
@@ -611,7 +611,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="7"/>
+            <column name="pacchetto_id" value="7"/>
             <column name="importo" value="1100.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-06-07 16:20:00"/>
@@ -621,7 +621,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="3"/>
+            <column name="pacchetto_id" value="3"/>
             <column name="importo" value="360.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-06-14 12:30:00"/>
@@ -631,7 +631,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="4"/>
+            <column name="pacchetto_id" value="4"/>
             <column name="importo" value="400.00"/>
             <column name="stato" value="PENDING"/>
             <column name="data_acquisto" value="2025-06-20 14:15:00"/>
@@ -640,7 +640,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="1"/>
+            <column name="pacchetto_id" value="1"/>
             <column name="importo" value="70.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-06-26 09:50:00"/>
@@ -651,7 +651,7 @@
         <!-- Vendite Luglio 2025 -->
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="1"/>
+            <column name="pacchetto_id" value="1"/>
             <column name="importo" value="40.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-07-03 11:25:00"/>
@@ -661,7 +661,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="2"/>
+            <column name="pacchetto_id" value="2"/>
             <column name="importo" value="160.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-07-09 15:40:00"/>
@@ -671,7 +671,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="9"/>
+            <column name="pacchetto_id" value="9"/>
             <column name="importo" value="25.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-07-16 13:20:00"/>
@@ -681,7 +681,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="9"/>
+            <column name="pacchetto_id" value="9"/>
             <column name="importo" value="320.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-07-22 10:30:00"/>
@@ -691,7 +691,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="8"/>
+            <column name="pacchetto_id" value="8"/>
             <column name="importo" value="70.00"/>
             <column name="stato" value="PENDING"/>
             <column name="data_acquisto" value="2025-07-29 16:45:00"/>
@@ -701,7 +701,7 @@
         <!-- Vendite Agosto 2025 -->
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="3"/>
+            <column name="pacchetto_id" value="3"/>
             <column name="importo" value="80.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-08-05 09:15:00"/>
@@ -711,7 +711,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="3"/>
+            <column name="pacchetto_id" value="3"/>
             <column name="importo" value="300.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-08-12 14:20:00"/>
@@ -721,7 +721,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="3"/>
+            <column name="pacchetto_id" value="3"/>
             <column name="importo" value="600.00"/>
             <column name="stato" value="PENDING"/>
             <column name="data_acquisto" value="2025-08-19 11:30:00"/>
@@ -734,7 +734,7 @@
         <!-- Gennaio aggiuntive -->
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="12"/>
+            <column name="pacchetto_id" value="12"/>
             <column name="importo" value="25.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-01-25 10:30:00"/>
@@ -743,7 +743,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="12"/>
+            <column name="pacchetto_id" value="12"/>
             <column name="importo" value="70.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-01-28 15:20:00"/>
@@ -753,7 +753,7 @@
         <!-- Febbraio aggiuntive -->
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="13"/>
+            <column name="pacchetto_id" value="13"/>
             <column name="importo" value="40.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-02-14 12:45:00"/>
@@ -762,7 +762,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="14"/>
+            <column name="pacchetto_id" value="14"/>
             <column name="importo" value="150.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-02-20 14:30:00"/>
@@ -772,7 +772,7 @@
         <!-- Marzo aggiuntive -->
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="15"/>
+            <column name="pacchetto_id" value="15"/>
             <column name="importo" value="25.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-03-05 11:15:00"/>
@@ -781,7 +781,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="15"/>
+            <column name="pacchetto_id" value="15"/>
             <column name="importo" value="70.00"/>
             <column name="stato" value="CANCELLED"/>
             <column name="data_acquisto" value="2025-03-12 16:20:00"/>
@@ -791,7 +791,7 @@
         <!-- Aprile aggiuntive -->
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="15"/>
+            <column name="pacchetto_id" value="15"/>
             <column name="importo" value="150.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-04-05 09:30:00"/>
@@ -800,7 +800,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="12"/>
+            <column name="pacchetto_id" value="12"/>
             <column name="importo" value="360.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-04-14 13:40:00"/>
@@ -810,7 +810,7 @@
         <!-- Maggio aggiuntive -->
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="10"/>
+            <column name="pacchetto_id" value="10"/>
             <column name="importo" value="25.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-05-07 10:20:00"/>
@@ -819,7 +819,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="9"/>
+            <column name="pacchetto_id" value="9"/>
             <column name="importo" value="25.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-05-18 14:15:00"/>
@@ -829,7 +829,7 @@
         <!-- Giugno aggiuntive -->
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="9"/>
+            <column name="pacchetto_id" value="9"/>
             <column name="importo" value="80.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-06-04 15:30:00"/>
@@ -838,7 +838,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="9"/>
+            <column name="pacchetto_id" value="9"/>
             <column name="importo" value="70.00"/>
             <column name="stato" value="PENDING"/>
             <column name="data_acquisto" value="2025-06-22 12:20:00"/>
@@ -848,7 +848,7 @@
         <!-- Luglio aggiuntive -->
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="9"/>
+            <column name="pacchetto_id" value="9"/>
             <column name="importo" value="220.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-07-08 11:45:00"/>
@@ -857,7 +857,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="7"/>
+            <column name="pacchetto_id" value="7"/>
             <column name="importo" value="150.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-07-25 16:10:00"/>
@@ -870,7 +870,7 @@
         <!-- Settembre 2024 -->
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="8"/>
+            <column name="pacchetto_id" value="8"/>
             <column name="importo" value="25.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-09-05 10:30:00"/>
@@ -880,7 +880,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="8"/>
+            <column name="pacchetto_id" value="8"/>
             <column name="importo" value="160.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-09-12 14:20:00"/>
@@ -889,7 +889,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="8"/>
+            <column name="pacchetto_id" value="8"/>
             <column name="importo" value="80.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-09-18 11:15:00"/>
@@ -898,7 +898,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="2"/>
+            <column name="pacchetto_id" value="2"/>
             <column name="importo" value="25.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-09-25 15:40:00"/>
@@ -908,7 +908,7 @@
         <!-- Ottobre 2024 -->
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="1"/>
+            <column name="pacchetto_id" value="1"/>
             <column name="importo" value="70.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-10-03 12:30:00"/>
@@ -917,7 +917,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="1"/>
+            <column name="pacchetto_id" value="1"/>
             <column name="importo" value="600.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-10-10 16:20:00"/>
@@ -926,7 +926,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="1"/>
+            <column name="pacchetto_id" value="1"/>
             <column name="importo" value="150.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-10-17 13:45:00"/>
@@ -935,7 +935,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="1"/>
+            <column name="pacchetto_id" value="1"/>
             <column name="importo" value="70.00"/>
             <column name="stato" value="CANCELLED"/>
             <column name="data_acquisto" value="2024-10-24 14:30:00"/>
@@ -945,7 +945,7 @@
         <!-- Novembre 2024 -->
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="4"/>
+            <column name="pacchetto_id" value="4"/>
             <column name="importo" value="300.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-11-07 11:20:00"/>
@@ -954,7 +954,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="4"/>
+            <column name="pacchetto_id" value="4"/>
             <column name="importo" value="360.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-11-14 15:15:00"/>
@@ -963,7 +963,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="4"/>
+            <column name="pacchetto_id" value="4"/>
             <column name="importo" value="220.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-11-21 10:45:00"/>
@@ -972,7 +972,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="4"/>
+            <column name="pacchetto_id" value="4"/>
             <column name="importo" value="150.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-11-28 13:20:00"/>
@@ -982,7 +982,7 @@
         <!-- Dicembre 2024 -->
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="4"/>
+            <column name="pacchetto_id" value="4"/>
             <column name="importo" value="25.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-12-05 14:30:00"/>
@@ -991,7 +991,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="5"/>
+            <column name="pacchetto_id" value="5"/>
             <column name="importo" value="1100.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-12-12 16:45:00"/>
@@ -1001,7 +1001,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="5"/>
+            <column name="pacchetto_id" value="5"/>
             <column name="importo" value="400.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-12-19 11:15:00"/>
@@ -1011,7 +1011,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="6"/>
+            <column name="pacchetto_id" value="6"/>
             <column name="importo" value="40.00"/>
             <column name="stato" value="PENDING"/>
             <column name="data_acquisto" value="2024-12-30 15:20:00"/>
@@ -1023,7 +1023,7 @@
         
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="7"/>
+            <column name="pacchetto_id" value="7"/>
             <column name="importo" value="70.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-09-08 10:00:00"/>
@@ -1032,7 +1032,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="7"/>
+            <column name="pacchetto_id" value="7"/>
             <column name="importo" value="320.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-09-22 14:15:00"/>
@@ -1041,7 +1041,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="11"/>
+            <column name="pacchetto_id" value="11"/>
             <column name="importo" value="25.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-10-06 16:30:00"/>
@@ -1050,7 +1050,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="1"/>
+            <column name="pacchetto_id" value="1"/>
             <column name="importo" value="80.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-10-20 12:45:00"/>
@@ -1059,7 +1059,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="11"/>
+            <column name="pacchetto_id" value="11"/>
             <column name="importo" value="160.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-11-03 09:30:00"/>
@@ -1068,7 +1068,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="11"/>
+            <column name="pacchetto_id" value="11"/>
             <column name="importo" value="70.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-11-17 15:20:00"/>
@@ -1077,7 +1077,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="2"/>
+            <column name="pacchetto_id" value="2"/>
             <column name="importo" value="150.00"/>
             <column name="stato" value="CANCELLED"/>
             <column name="data_acquisto" value="2024-12-08 13:30:00"/>
@@ -1086,7 +1086,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="2"/>
+            <column name="pacchetto_id" value="2"/>
             <column name="importo" value="150.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2024-12-22 10:15:00"/>
@@ -1096,7 +1096,7 @@
         <!-- Ultime vendite per completare -->
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="10"/>
+            <column name="pacchetto_id" value="10"/>
             <column name="importo" value="600.00"/>
             <column name="stato" value="PAID"/>
             <column name="data_acquisto" value="2025-08-01 09:20:00"/>
@@ -1106,7 +1106,7 @@
 
         <insert tableName="vendite">
             <column name="utente_id" value="2"/>
-            <column name="corso_id" value="10"/>
+            <column name="pacchetto_id" value="10"/>
             <column name="importo" value="300.00"/>
             <column name="stato" value="PENDING"/>
             <column name="data_acquisto" value="2025-08-15 14:30:00"/>

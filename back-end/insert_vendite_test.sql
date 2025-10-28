@@ -2,10 +2,10 @@
 -- 150 vendite per il 2025 (anno corrente)
 -- 150 vendite per il 2024 (anno precedente)
 -- Utente: d.biffero
--- Corsi ID: da 30 a 44 compresi
+-- Pacchetti ID: da 30 a 44 compresi
 
 -- Vendite 2025 (gennaio - agosto)
-INSERT INTO vendite (utente_id, corso_id, data_acquisto, importo, stato, data_pagamento, note) VALUES
+INSERT INTO vendite (utente_id, pacchetto_id, data_acquisto, importo, stato, data_pagamento, note) VALUES
 -- Gennaio 2025 (20 vendite)
 ('d.biffero', 30, '2025-01-05 10:30:00', 45.00, 'PAID', '2025-01-05 11:30:00', 'Vendita test gennaio'),
 ('d.biffero', 31, '2025-01-08 14:20:00', 55.00, 'PAID', '2025-01-08 15:20:00', 'Vendita test gennaio'),
@@ -370,7 +370,7 @@ SELECT
     SUM(importo) as fatturato_totale
 FROM vendite 
 WHERE utente_id = 'd.biffero' 
-    AND corso_id BETWEEN 30 AND 44
+    AND pacchetto_id BETWEEN 30 AND 44
     AND data_vendita >= '2024-01-01'
 GROUP BY YEAR(data_vendita), MONTH(data_vendita)
 ORDER BY anno DESC, mese DESC;

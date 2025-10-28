@@ -14,7 +14,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 4rem;
-  justify-content: stretch;
+  justify-content: center;
   align-items: stretch; /* align cards to top so taller cards don't overflow visually */
   width: 100%;
   margin: 0 auto;

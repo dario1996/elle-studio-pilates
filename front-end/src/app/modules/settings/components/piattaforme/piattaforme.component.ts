@@ -42,7 +42,7 @@ export class PiattaformeComponent implements OnInit, OnChanges {
 
   @ViewChild(TabellaGenericaComponent) tabellaComponent!: TabellaGenericaComponent;
 
-  // Pagination info following the working pattern from dipendenti/corsi
+  // Pagination info following the working pattern from dipendenti/pacchetti
   paginationInfo = {
     currentPage: 1,
     totalPages: 1,

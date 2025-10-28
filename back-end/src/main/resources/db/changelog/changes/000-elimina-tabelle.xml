@@ -19,9 +19,9 @@
         <dropTable tableName="lezioni" cascadeConstraints="true"/>
 
         <preConditions onFail="MARK_RAN">
-            <tableExists tableName="corsi"/>
+            <tableExists tableName="pacchetti"/>
         </preConditions>
-        <dropTable tableName="corsi" cascadeConstraints="true"/>
+        <dropTable tableName="pacchetti" cascadeConstraints="true"/>
 
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="utenti"/>

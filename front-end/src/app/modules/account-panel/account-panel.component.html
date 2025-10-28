@@ -39,8 +39,125 @@
       </div>
     </div>
   </div>
+
 </div>
     
+  </div>
+</div>
+
+<!-- Toast Badge Notification -->
+<div class="toast-badge" [class.show]="showToast" [ngClass]="toastType">
+  <div class="toast-content">
+    <i class="toast-icon">{{ toastIcon }}</i>
+    <span class="toast-message">{{ toastMessage }}</span>
+    <button type="button" class="toast-close" (click)="hideToast()">
+      close
+    </button>
+  </div>
+</div>
+
+<!-- Modal Cambio Password -->
+<div class="modal-overlay" [class.show]="showPasswordModal" (click)="closePasswordModal()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Cambia Password</h3>
+      <button type="button" class="modal-close" (click)="closePasswordModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="modal-body">
+      <form [formGroup]="passwordForm" (ngSubmit)="onSubmitPasswordChange()">
+        
+        <!-- Password corrente -->
+        <div class="form-group">
+          <label for="currentPassword">Password Corrente *</label>
+          <input 
+            type="password" 
+            id="currentPassword" 
+            formControlName="currentPassword"
+            class="form-control"
+            [class.invalid]="passwordForm.get('currentPassword')?.invalid && passwordForm.get('currentPassword')?.touched"
+            placeholder="Inserisci la password corrente">
+          <span class="error-message" *ngIf="passwordForm.get('currentPassword')?.hasError('required') && passwordForm.get('currentPassword')?.touched">
+            La password corrente è obbligatoria
+          </span>
+        </div>
+
+        <!-- Nuova password -->
+        <div class="form-group">
+          <label for="newPassword">Nuova Password *</label>
+          <input 
+            type="password" 
+            id="newPassword" 
+            formControlName="newPassword"
+            class="form-control"
+            [class.invalid]="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched"
+            placeholder="Inserisci la nuova password">
+          
+          <!-- Requisiti password - sempre visibili -->
+          <div class="password-requirements">
+            <p class="requirements-title">La password deve contenere:</p>
+            <ul>
+              <li *ngFor="let requirement of getPasswordRequirements()" 
+                  [class.requirement-valid]="requirement.valid"
+                  [class.requirement-invalid]="!requirement.valid">
+                <i class="fas" [ngClass]="requirement.valid ? 'fa-check-circle' : 'fa-times-circle'"></i>
+                {{ requirement.text }}
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Conferma password -->
+        <div class="form-group">
+          <label for="confirmPassword">Conferma Nuova Password *</label>
+          <input 
+            type="password" 
+            id="confirmPassword" 
+            formControlName="confirmPassword"
+            class="form-control"
+            [class.invalid]="(passwordForm.get('confirmPassword')?.invalid || hasPasswordMismatch()) && passwordForm.get('confirmPassword')?.touched"
+            placeholder="Conferma la nuova password">
+          <span class="error-message" *ngIf="passwordForm.get('confirmPassword')?.hasError('required') && passwordForm.get('confirmPassword')?.touched">
+            La conferma password è obbligatoria
+          </span>
+          <span class="error-message" *ngIf="hasPasswordMismatch()">
+            Le password non coincidono
+          </span>
+        </div>
+
+        <!-- Messaggi di errore/successo -->
+        <div class="alert alert-error" *ngIf="passwordError">
+          <i class="fas fa-exclamation-circle"></i>
+          {{ passwordError }}
+        </div>
+        
+        <div class="alert alert-success" *ngIf="passwordSuccess">
+          <i class="fas fa-check-circle"></i>
+          {{ passwordSuccess }}
+        </div>
+
+      </form>
+    </div>
+    
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="closePasswordModal()" [disabled]="passwordLoading">
+        Annulla
+      </button>
+      <button 
+        type="button" 
+        class="btn btn-primary" 
+        (click)="onSubmitPasswordChange()"
+        [disabled]="passwordForm.invalid || passwordLoading">
+        <span *ngIf="passwordLoading">
+          <i class="fas fa-spinner fa-spin"></i> Cambiando...
+        </span>
+        <span *ngIf="!passwordLoading">
+          <i class="fas fa-key"></i> Cambia Password
+        </span>
+      </button>
+    </div>
   </div>
 </div>
 

@@ -29,7 +29,7 @@ export class StatusBadgeService {
       { value: 'SI', displayText: 'SI', colorClass: 'status-badge-success' },
       { value: 'NO', displayText: 'NO', colorClass: 'status-badge-secondary' }
     ],
-    corso: [
+    pacchetto: [
       { value: 'Attivo', displayText: 'Attivo', colorClass: 'status-badge-success' },
       { value: 'Non attivo', displayText: 'Non attivo', colorClass: 'status-badge-secondary' },
       { value: 'Scaduto', displayText: 'Scaduto', colorClass: 'status-badge-danger' }

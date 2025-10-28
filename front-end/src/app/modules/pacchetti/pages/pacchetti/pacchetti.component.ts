@@ -1,0 +1,285 @@
+import { Component, OnInit, ChangeDetectorRef, OnChanges } from '@angular/core';
+import { IPacchetti } from '../../../../shared/models/Pacchetti';
+import { PacchettiService } from '../../../../core/services/data/pacchetti.service';
+import { ToastrService } from 'ngx-toastr';
+import { ToastrModule } from 'ngx-toastr';
+import { TabellaGenericaComponent } from '../../../../shared/components/tabella-generica/tabella-generica.component';
+import { ModaleService } from '../../../../core/services/modal.service';
+import { FormPacchettiComponent } from '../../components/form-pacchetti/form-pacchetti.component';
+import { DeleteConfirmComponent } from '../../../../core/delete-confirm/delete-confirm.component';
+import { PageTitleComponent } from '../../../../core/page-title/page-title.component';
+import { ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { PaginationFooterComponent } from '../../../../shared/components/pagination-footer/pagination-footer.component';
+import {
+  PACCHETTI_COLUMNS,
+  PACCHETTI_FILTRI,
+  PACCHETTI_AZIONI,
+  PACCHETTI_AZIONI_PAGINA,
+} from '../../../../shared/config/pacchetti.config';
+import { LoggedUserComponent } from '../../../../shared/components/logged-user/logged-user.component';
+import { NotificationComponent } from '../../../../core/notification/notification.component';
+
+@Component({
+  selector: 'app-pacchetti',
+  imports: [
+    ToastrModule,
+    TabellaGenericaComponent,
+    PageTitleComponent,
+    LoggedUserComponent,
+    NotificationComponent,
+    PaginationFooterComponent,
+  ],
+  templateUrl: './pacchetti.component.html',
+  styleUrls: ['./pacchetti.component.css'],
+  standalone: true,
+})
+export class PacchettiComponent implements AfterViewInit, OnInit, OnChanges {
+  @ViewChild('pageContentInner') pageContentInner!: ElementRef<HTMLDivElement>;
+  
+  @ViewChild(TabellaGenericaComponent) 
+  set tabella(component: TabellaGenericaComponent) {
+    this.tabellaComponent = component;
+  }
+  
+  private tabellaComponent!: TabellaGenericaComponent;
+
+  isFilterPanelOpen = false;
+
+  pacchetti: IPacchetti[] = [];
+  pacchettiFiltrati: IPacchetti[] = [];
+
+  columns = PACCHETTI_COLUMNS;
+  filtri = PACCHETTI_FILTRI;
+  actions = PACCHETTI_AZIONI;
+  buttons = PACCHETTI_AZIONI_PAGINA;
+
+  valoriFiltri: { [key: string]: any } = {};
+
+  searchFields = [
+    { key: 'nome', placeholder: 'Cerca Nome Pacchetto' },
+    { key: 'categoria', placeholder: 'Cerca Categoria' }
+  ];
+
+  paginationInfo = {
+    currentPage: 1,
+    totalPages: 1,
+    pages: [] as number[],
+    displayedItems: 0,
+    totalItems: 0,
+    pageSize: 20,
+    entityName: 'pacchetti'
+  };
+
+  constructor(
+    private pacchettiService: PacchettiService,
+    private modaleService: ModaleService,
+    private toastr: ToastrService,
+    private cd: ChangeDetectorRef,
+  ) {}
+
+  ngAfterViewInit() {
+    this.cd.detectChanges();
+  }
+
+  ngOnChanges() {
+    this.cd.detectChanges();
+  }
+
+  ngOnInit(): void {
+    this.loadPacchetti();
+  }
+
+  private loadPacchetti() {
+    this.pacchettiService.getListaPacchetti().subscribe({
+      next: data => {
+        this.pacchetti = data;
+        this.applicaFiltri();
+        this.cd.detectChanges();
+        this.paginationInfo.totalItems = this.pacchetti.length;
+      },
+      error: error => {
+        console.log(error);
+        if (error && error.includes && error.includes('Nessun pacchetto disponibile a sistema')) {
+          this.pacchetti = [];
+          this.applicaFiltri();
+          this.cd.detectChanges();
+          this.paginationInfo.totalItems = 0;
+          return;
+        }
+        
+        if (error) {
+          this.toastr.warning(error);
+          return;
+        } else {
+          this.toastr.error('Errore nel caricamento dei pacchetti');
+        }
+      },
+    });
+  }
+
+  addPacchetto(pacchettoData: any) {
+    this.pacchettiService.createPacchetto(pacchettoData).subscribe({
+      next: () => {
+        this.loadPacchetti();
+        this.toastr.success('Pacchetto aggiunto con successo');
+        this.modaleService.chiudi();
+      },
+      error: () => {
+        this.toastr.error("Errore durante l'aggiunta del pacchetto");
+      },
+    });
+  }
+
+  deletePacchetto(id: number) {
+    this.pacchettiService.deletePacchetto(id).subscribe({
+      next: () => {
+        this.loadPacchetti();
+        this.toastr.success('Pacchetto eliminato con successo');
+      },
+      error: error => {
+        this.toastr.error("Errore durante l'eliminazione del pacchetto");
+      },
+    });
+  }
+
+  updatePacchetto(id: number, pacchettoData: any) {
+    this.pacchettiService.updatePacchetto(id, pacchettoData).subscribe({
+      next: () => {
+        this.loadPacchetti();
+        this.toastr.success('Pacchetto modificato con successo');
+        this.modaleService.chiudi();
+      },
+      error: () => {
+        this.toastr.error('Errore durante la modifica del pacchetto');
+      },
+    });
+  }
+
+  gestioneAzione(e: { tipo: string; item: any }) {
+    switch (e.tipo) {
+      case 'add':
+        this.modaleService.apri({
+          titolo: 'Aggiungi pacchetto',
+          componente: FormPacchettiComponent,
+          dati: {},
+          onConferma: (formValue: any) => this.addPacchetto(formValue),
+        });
+        break;
+      case 'edit':
+        this.modaleService.apri({
+          titolo: 'Modifica pacchetto',
+          componente: FormPacchettiComponent,
+          dati: e.item,
+          onConferma: (formValue: any) => this.updatePacchetto(e.item.id, formValue),
+        });
+        break;
+      case 'delete':
+        this.modaleService.apri({
+          titolo: 'Conferma eliminazione',
+          componente: DeleteConfirmComponent,
+          dati: {
+            messaggio: 'Vuoi davvero eliminare il pacchetto "' + e.item.nome + '"?',
+          },
+          onConferma: () => this.deletePacchetto(e.item.id),
+        });
+        break;
+      default:
+        console.error('Azione non supportata:', e.tipo);
+    }
+  }
+
+  onFiltriChange(valori: { [key: string]: any }) {
+    this.valoriFiltri = valori;
+  }
+
+  onFiltersApplied(valori: { [key: string]: any }) {
+    this.valoriFiltri = valori;
+    this.applicaFiltri();
+  }
+
+  applicaFiltri() {
+    this.pacchettiFiltrati = this.pacchetti.filter(c => {
+      if (
+        this.valoriFiltri['nome'] &&
+        !c.nome.toLowerCase().includes(this.valoriFiltri['nome'].toLowerCase())
+      ) {
+        return false;
+      }
+      if (
+        this.valoriFiltri['categoria'] &&
+        c.categoria !== this.valoriFiltri['categoria']
+      ) {
+        return false;
+      }
+      if (
+        this.valoriFiltri['livello'] &&
+        c.livello !== this.valoriFiltri['livello']
+      ) {
+        return false;
+      }
+      if (this.valoriFiltri['attivo']) {
+        const attivoValue = this.valoriFiltri['attivo'] === 'true';
+        if (c.attivo !== attivoValue) {
+          return false;
+        }
+      }
+      return true;
+    });
+  }
+
+  aggiornaPaginazione(paginationData: any) {
+    this.paginationInfo = { ...paginationData };
+  }
+
+  cambiaPagina(page: number) {
+    if (this.tabellaComponent) {
+      this.tabellaComponent.goToPage(page);
+    }
+  }
+
+  
+  handleButtonClick(action: string) {
+    switch (action) {
+      case 'filter':
+        this.openFilterPanel();
+        break;
+      case 'add':
+        this.gestioneAzione({ tipo: 'add', item: null });
+        break;
+      default:
+        console.warn('Azione non riconosciuta:', action);
+    }
+  }
+
+  openFilterPanel() {
+    this.isFilterPanelOpen = true;
+  }
+
+  closeFilterPanel() {
+    this.isFilterPanelOpen = false;
+  }
+
+  applyFilters(filtri: { [key: string]: any }) {
+    this.valoriFiltri = filtri;
+    this.applicaFiltri();
+  }
+
+  clearFilters() {
+    this.valoriFiltri = {};
+    this.applicaFiltri();
+  }
+
+  getActiveFiltersCount(): number {
+    return Object.values(this.valoriFiltri).filter(
+      value => value !== null && value !== undefined && value !== '',
+    ).length;
+  }
+
+  filtraTabella(event: { [key: string]: string }) {
+    this.pacchettiFiltrati = this.pacchetti.filter(row =>
+      (row.nome?.toLowerCase() || '').includes((event['nome'] || '').toLowerCase()) &&
+      (row.categoria?.toLowerCase() || '').includes((event['categoria'] || '').toLowerCase())
+    );
+  }
+
+}

@@ -29,7 +29,7 @@ Chart.register(...registerables);
 export class StatisticheComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('pageContentInner') pageContentInner!: ElementRef<HTMLDivElement>;
   @ViewChild('andamentoGuadagniChart', { static: false }) andamentoGuadagniChartRef!: ElementRef<HTMLCanvasElement>;
-  @ViewChild('andamentoCorsiChart', { static: false }) andamentoCorsiChartRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('andamentoPacchettiChart', { static: false }) andamentoPacchettiChartRef!: ElementRef<HTMLCanvasElement>;
 
   private destroy$ = new Subject<void>();
   
@@ -40,7 +40,7 @@ export class StatisticheComponent implements OnInit, OnDestroy, AfterViewInit {
   
   // Grafici
   private andamentoGuadagniChart?: Chart;
-  private andamentoCorsiChart?: Chart;
+  private andamentoPacchettiChart?: Chart;
   
   // Configurazione buttons per PageTitle
   buttons = [
@@ -161,10 +161,14 @@ export class StatisticheComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private creaGrafici(): void {
+    console.log('Inizio creazione grafici, statistiche:', this.statistiche);
     if (!this.statistiche) return;
     
-    this.creaGraficoAndamentoGuadagni();
-    this.creaGraficoAndamentoCorsi();
+    // Usa un piccolo delay per assicurarsi che entrambi i canvas siano renderizzati
+    setTimeout(() => {
+      this.creaGraficoAndamentoGuadagni();
+      this.creaGraficoAndamentoPacchetti();
+    }, 0);
   }
 
   private creaGraficoAndamentoGuadagni(): void {
@@ -249,18 +253,26 @@ export class StatisticheComponent implements OnInit, OnDestroy, AfterViewInit {
     this.andamentoGuadagniChart = new Chart(ctx, config);
   }
 
-  private creaGraficoAndamentoCorsi(): void {
-    const canvas = this.andamentoCorsiChartRef?.nativeElement;
-    if (!canvas || !this.statistiche) return;
+  private creaGraficoAndamentoPacchetti(): void {
+    console.log('Creazione grafico pacchetti - andamentoPacchettiChartRef:', this.andamentoPacchettiChartRef);
+    const canvas = this.andamentoPacchettiChartRef?.nativeElement;
+    console.log('Canvas pacchetti trovato:', canvas);
+    if (!canvas || !this.statistiche) {
+      console.log('Canvas o statistiche non disponibili', { canvas, statistiche: this.statistiche });
+      return;
+    }
 
     const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    if (!ctx) {
+      console.log('Contesto canvas non disponibile');
+      return;
+    }
 
-    this.distruggiGrafico(this.andamentoCorsiChart);
+    this.distruggiGrafico(this.andamentoPacchettiChart);
 
     const labels = this.statistiche.andamentoMensile.map(item => this.formattaLabelGrafico(item.mese));
     const venditeData = this.statistiche.andamentoMensile.map(item => item.vendite);
-
+    
     const config: ChartConfiguration = {
       type: 'line',
       data: {
@@ -294,7 +306,7 @@ export class StatisticheComponent implements OnInit, OnDestroy, AfterViewInit {
             intersect: false,
             callbacks: {
               label: (context) => {
-                return `Corsi venduti: ${context.parsed.y}`;
+                return `Pacchetti venduti: ${context.parsed.y}`;
               }
             }
           }
@@ -311,7 +323,7 @@ export class StatisticheComponent implements OnInit, OnDestroy, AfterViewInit {
             display: true,
             title: {
               display: true,
-              text: 'Numero Corsi'
+              text: 'Numero Pacchetti'
             },
             ticks: {
               stepSize: 1
@@ -326,7 +338,7 @@ export class StatisticheComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     };
 
-    this.andamentoCorsiChart = new Chart(ctx, config);
+    this.andamentoPacchettiChart = new Chart(ctx, config);
   }
 
   private distruggiGrafico(chart?: Chart): void {
@@ -337,7 +349,7 @@ export class StatisticheComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private distruggiGrafici(): void {
     this.distruggiGrafico(this.andamentoGuadagniChart);
-    this.distruggiGrafico(this.andamentoCorsiChart);
+    this.distruggiGrafico(this.andamentoPacchettiChart);
   }
 
   formattaImporto(importo: number): string {
@@ -507,12 +519,12 @@ export class StatisticheComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   getLabelDataset(tipo: 'fatturato' | 'vendite'): string {
     const isGiornaliero = this.isPerGraficoGiornaliero();
-    const basePeriodo = isGiornaliero ? 'giornaliero' : 'mensile';
+    const basePeriodo = isGiornaliero ? 'giornalieri' : 'mensili';
     
     if (tipo === 'fatturato') {
       return `Fatturato ${basePeriodo} (€)`;
     } else {
-      return `Corsi venduti ${basePeriodo}`;
+      return `Pacchetti ${basePeriodo} venduti`;
     }
   }
 
@@ -533,7 +545,7 @@ export class StatisticheComponent implements OnInit, OnDestroy, AfterViewInit {
    * Ottiene il titolo dinamico per i grafici in base al periodo
    */
   getTitoloGrafico(tipo: 'fatturato' | 'vendite'): string {
-    const baseTipo = tipo === 'fatturato' ? 'Andamento Guadagni' : 'Andamento Corsi Venduti';
+    const baseTipo = tipo === 'fatturato' ? 'Andamento Guadagni' : 'Andamento Pacchetti Venduti';
     
     if (this.filtri.periodo === 'personalizzato') {
       if (this.filtri.dataInizio && this.filtri.dataFine) {
