@@ -134,4 +134,14 @@ public interface VenditaRepository extends JpaRepository<Vendita, Long> {
 
     // Query per verificare se un utente ha già acquistato un pacchetto
     boolean existsByUtenteUsernameAndPacchettoIdAndStato(String username, Long pacchettoId, StatoVendita stato);
+
+    // Query per trovare vendite per utente e stato
+    List<Vendita> findByUtenteUsernameAndStato(String username, StatoVendita stato);
+
+    // Query per trovare vendite per utente ID e stato (usando query nativa per compatibilità)
+    @Query("SELECT v FROM Vendita v WHERE v.utente.username = :username AND v.stato = :stato")
+    List<Vendita> findVenditeByUsernameAndStato(@Param("username") String username, @Param("stato") StatoVendita stato);
+
+    // Query per trovare vendite per pacchetto e stato
+    List<Vendita> findByPacchettoIdAndStato(Long pacchettoId, StatoVendita stato);
 }

@@ -1,4 +1,4 @@
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, LOCALE_ID } from '@angular/core';
 import { provideHttpClient, withInterceptorsFromDi, HttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
@@ -7,6 +7,11 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { GestErrorInterceptor } from './interceptors/gest-error.interceptor';
 import { NetworkInterceptor } from './interceptors/network.interceptor';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { registerLocaleData } from '@angular/common';
+import localeIt from '@angular/common/locales/it';
+
+// Register Italian locale
+registerLocaleData(localeIt);
 
 // ✅ Funzione per creare il loader delle traduzioni
 export function HttpLoaderFactory(http: HttpClient) {
@@ -17,6 +22,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideHttpClient(withInterceptorsFromDi()),
+    { provide: LOCALE_ID, useValue: 'it-IT' },
 
     // ✅ Intercettori HTTP
     {

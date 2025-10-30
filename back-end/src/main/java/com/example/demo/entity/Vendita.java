@@ -16,7 +16,7 @@ public class Vendita {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "utente_id", nullable = false)
+    @JoinColumn(name = "utente_id", referencedColumnName = "id", nullable = false)
     private Utenti utente;
 
     @ManyToOne(fetch = FetchType.LAZY)

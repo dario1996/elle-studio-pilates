@@ -129,9 +129,9 @@
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
 
-        <!-- Semi Privata Duetto - 4 lezioni -->
+        <!-- Semi Privata - 4 lezioni -->
         <insert tableName="pacchetti">
-            <column name="nome" value="Semi Privata Duetto - 4 Lezioni"/>
+            <column name="nome" value="Semi Privata - 4 Lezioni"/>
             <column name="descrizione" value="Abbonamento mensile 4 lezioni per 2 persone (50 minuti). Utilizzo di Reformer, Tower, Chair e piccoli attrezzi."/>
             <column name="categoria" value="SEMI_PRIVATA"/>
             <column name="livello" value="TUTTI"/>
@@ -142,9 +142,9 @@
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
 
-        <!-- Semi Privata Duetto - 8 lezioni -->
+        <!-- Semi Privata - 8 lezioni -->
         <insert tableName="pacchetti">
-            <column name="nome" value="Semi Privata Duetto - 8 Lezioni"/>
+            <column name="nome" value="Semi Privata - 8 Lezioni"/>
             <column name="descrizione" value="Abbonamento mensile 8 lezioni per 2 persone (50 minuti). Utilizzo di Reformer, Tower, Chair e piccoli attrezzi."/>
             <column name="categoria" value="SEMI_PRIVATA"/>
             <column name="livello" value="TUTTI"/>
@@ -185,7 +185,7 @@
         <insert tableName="pacchetti">
             <column name="nome" value="Matwork - 4 Lezioni"/>
             <column name="descrizione" value="Abbonamento mensile 4 lezioni di gruppo Matwork (50 minuti, max 6 partecipanti). Pilates a corpo libero su tappetino con piccoli attrezzi."/>
-            <column name="categoria" value="GRUPPO_MAT"/>
+            <column name="categoria" value="MATWORK_PILATES"/>
             <column name="livello" value="TUTTI"/>
             <column name="durata_minuti" value="50"/>
             <column name="max_partecipanti" value="6"/>
@@ -198,7 +198,7 @@
         <insert tableName="pacchetti">
             <column name="nome" value="Matwork - 8 Lezioni"/>
             <column name="descrizione" value="Abbonamento mensile 8 lezioni di gruppo Matwork (50 minuti, max 6 partecipanti). Pilates a corpo libero su tappetino con piccoli attrezzi."/>
-            <column name="categoria" value="GRUPPO_MAT"/>
+            <column name="categoria" value="MATWORK_PILATES"/>
             <column name="livello" value="TUTTI"/>
             <column name="durata_minuti" value="50"/>
             <column name="max_partecipanti" value="6"/>
@@ -290,53 +290,59 @@
 
     <changeSet id="004-03" author="vincenzo">
         <comment>Inserimento dati di esempio per la tabella lezioni</comment>
+
+        <!-- Analisi posturale con prima lezione di pilates -->
         <insert tableName="lezioni">
-            <column name="titolo" value="Pilates Privato con Eleonora"/>
+            <column name="titolo" value="Analisi posturale e prima lezione privata"/>
             <column name="data_inizio" value="2025-08-20 09:00:00"/>
             <column name="data_fine" value="2025-08-20 09:50:00"/>
-            <column name="istruttore" value="Eleonora Bianchi"/>
-            <column name="tipo_lezione" value="PRIVATA"/>
-            <column name="note" value="Prima lezione del cliente"/>
+            <column name="istruttore" value="Laura Caratti"/>
+            <column name="tipo_lezione" value="PRIMA_LEZIONE"/>
+            <column name="note" value="Analisi posturale anamnesi e approccio al metodo Pilates"/>
             <column name="attiva" valueBoolean="true"/>
         </insert>
-        
+
+        <!-- Lezione di pilates PRIVATA-->
         <insert tableName="lezioni">
-            <column name="titolo" value="Matwork Gruppo"/>
-            <column name="data_inizio" value="2025-08-20 18:00:00"/>
-            <column name="data_fine" value="2025-08-20 18:50:00"/>
-            <column name="istruttore" value="Marco Rossi"/>
-            <column name="tipo_lezione" value="MATWORK"/>
-            <column name="note" value="Gruppo avanzato"/>
-            <column name="attiva" valueBoolean="true"/>
-        </insert>
-        
-        <insert tableName="lezioni">
-            <column name="titolo" value="Yoga Serale"/>
-            <column name="data_inizio" value="2025-08-21 19:30:00"/>
-            <column name="data_fine" value="2025-08-21 20:30:00"/>
-            <column name="istruttore" value="Sofia Verdi"/>
-            <column name="tipo_lezione" value="YOGA"/>
-            <column name="note" value="Portare tappetino personale"/>
-            <column name="attiva" valueBoolean="true"/>
-        </insert>
-        
-        <insert tableName="lezioni">
-            <column name="titolo" value="Semi-Privata Duetto"/>
-            <column name="data_inizio" value="2025-08-22 10:00:00"/>
-            <column name="data_fine" value="2025-08-22 10:50:00"/>
-            <column name="istruttore" value="Eleonora Bianchi"/>
-            <column name="tipo_lezione" value="SEMI_PRIVATA_DUETTO"/>
-            <column name="note" value="Due amiche principianti"/>
-            <column name="attiva" valueBoolean="true"/>
-        </insert>
-        
-        <insert tableName="lezioni">
-            <column name="titolo" value="Prima Lezione"/>
+            <column name="titolo" value="Lezione privata"/>
             <column name="data_inizio" value="2025-08-22 15:00:00"/>
             <column name="data_fine" value="2025-08-22 16:00:00"/>
-            <column name="istruttore" value="Marco Rossi"/>
-            <column name="tipo_lezione" value="PRIMA_LEZIONE"/>
-            <column name="note" value="Valutazione posturale completa"/>
+            <column name="istruttore" value="Laura Caratti"/>
+            <column name="tipo_lezione" value="PRIVATA"/>
+            <column name="note" value="Lezione privata di pilates"/>
+            <column name="attiva" valueBoolean="true"/>
+        </insert>
+
+        <!-- Lezione di pilates SEMI-PRIVATA -->
+        <insert tableName="lezioni">
+            <column name="titolo" value="Lezione semi-privata"/>
+            <column name="data_inizio" value="2025-08-22 15:00:00"/>
+            <column name="data_fine" value="2025-08-22 16:00:00"/>
+            <column name="istruttore" value="Laura Caratti"/>
+            <column name="tipo_lezione" value="SEMI_PRIVATA"/>
+            <column name="note" value="Lezione semi-privata di pilates"/>
+            <column name="attiva" valueBoolean="true"/>
+        </insert>
+        
+        <!-- Lezione di Matwork Pilates di gruppo -->
+        <insert tableName="lezioni">
+            <column name="titolo" value="Matwork in gruppo"/>
+            <column name="data_inizio" value="2025-08-20 18:00:00"/>
+            <column name="data_fine" value="2025-08-20 18:50:00"/>
+            <column name="istruttore" value="Laura Caratti"/>
+            <column name="tipo_lezione" value="MATWORK_PILATES"/>
+            <column name="note" value="Gruppo di pilates matwork"/>
+            <column name="attiva" valueBoolean="true"/>
+        </insert>
+        
+        <!-- Lezione di Yoga in gruppo -->
+        <insert tableName="lezioni">
+            <column name="titolo" value="Yoga in gruppo"/>
+            <column name="data_inizio" value="2025-08-21 19:30:00"/>
+            <column name="data_fine" value="2025-08-21 20:30:00"/>
+            <column name="istruttore" value="Laura Caratti"/>
+            <column name="tipo_lezione" value="YOGA"/>
+            <column name="note" value="Portare tappetino personale"/>
             <column name="attiva" valueBoolean="true"/>
         </insert>
     </changeSet>
@@ -1164,7 +1170,7 @@
             <column name="ora_inizio" value="18:00:00"/>
             <column name="ora_fine" value="18:50:00"/>
             <column name="titolo" value="Pilates Matwork"/>
-            <column name="tipo_lezione" value="MATWORK"/>
+            <column name="tipo_lezione" value="MATWORK_PILATES"/>
             <column name="max_partecipanti" value="8"/>
             <column name="colore" value="#27AE60"/>
         </insert>
@@ -1195,7 +1201,7 @@
             <column name="ora_inizio" value="13:00:00"/>
             <column name="ora_fine" value="13:50:00"/>
             <column name="titolo" value="Pilates Matwork"/>
-            <column name="tipo_lezione" value="MATWORK"/>
+            <column name="tipo_lezione" value="MATWORK_PILATES"/>
             <column name="max_partecipanti" value="8"/>
             <column name="colore" value="#27AE60"/>
         </insert>
@@ -1266,7 +1272,7 @@
             <column name="ora_inizio" value="17:30:00"/>
             <column name="ora_fine" value="18:20:00"/>
             <column name="titolo" value="Pilates Matwork"/>
-            <column name="tipo_lezione" value="MATWORK"/>
+            <column name="tipo_lezione" value="MATWORK_PILATES"/>
             <column name="max_partecipanti" value="8"/>
             <column name="colore" value="#27AE60"/>
         </insert>
@@ -1317,7 +1323,7 @@
             <column name="ora_inizio" value="13:00:00"/>
             <column name="ora_fine" value="13:50:00"/>
             <column name="titolo" value="Pilates Matwork"/>
-            <column name="tipo_lezione" value="MATWORK"/>
+            <column name="tipo_lezione" value="MATWORK_PILATES"/>
             <column name="max_partecipanti" value="8"/>
             <column name="colore" value="#27AE60"/>
         </insert>
@@ -1388,7 +1394,7 @@
             <column name="ora_inizio" value="16:30:00"/>
             <column name="ora_fine" value="17:20:00"/>
             <column name="titolo" value="Pilates Matwork"/>
-            <column name="tipo_lezione" value="MATWORK"/>
+            <column name="tipo_lezione" value="MATWORK_PILATES"/>
             <column name="max_partecipanti" value="8"/>
             <column name="colore" value="#27AE60"/>
         </insert>
