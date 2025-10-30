@@ -30,22 +30,28 @@ public class LezioneMapper {
         dto.setDataInizio(lezione.getDataInizio());
         dto.setDataFine(lezione.getDataFine());
         dto.setIstruttore(lezione.getIstruttore());
-    dto.setTipoLezione(lezione.getTipoLezione());
-    dto.setNote(lezione.getNote());
+        dto.setTipoLezione(lezione.getTipoLezione());
+        dto.setNote(lezione.getNote());
         dto.setAttiva(lezione.getAttiva());
+        dto.setTemplateId(lezione.getTemplateId());
+        dto.setMaxPartecipanti(lezione.getMaxPartecipanti());
         dto.setCreatedAt(lezione.getCreatedAt());
         dto.setUpdatedAt(lezione.getUpdatedAt());
-        
-    // Rimosse chiamate a setPrezzo, setDurata e setMaxPartecipanti (non più presenti su LezioneDto)
         
         // Mappa i partecipanti (solo username)
         if (lezione.getPartecipanti() != null) {
             dto.setPartecipanti(lezione.getPartecipanti().stream()
                     .map(Utenti::getUsername)
                     .collect(Collectors.toList()));
+            
+            // Calcola posti disponibili
+            int prenotati = lezione.getPartecipanti().size();
+            dto.setPostiDisponibili(lezione.getMaxPartecipanti() - prenotati);
+        } else {
+            dto.setPostiDisponibili(lezione.getMaxPartecipanti());
         }
 
-    return dto;
+        return dto;
     }
 
     public Lezione toEntity(LezioneDto dto) {

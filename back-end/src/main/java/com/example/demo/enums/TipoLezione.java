@@ -6,7 +6,9 @@ public enum TipoLezione {
     SEMI_PRIVATA_DUETTO("Semi-Privata Duetto"),
     SEMI_PRIVATA_GRUPPO("Semi-Privata Gruppo"),
     MATWORK("Matwork"),
-    YOGA("Yoga");
+    YOGA("Yoga"),
+    REFORMER_INTERMEDIO("Reformer Intermedio"),
+    STUDIO_POSTURALE("Studio Posturale");
 
     private final String label;
 

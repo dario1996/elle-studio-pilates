@@ -51,4 +51,11 @@ public interface LezioneRepository extends JpaRepository<Lezione, Long> {
     // Trova tutte le lezioni prenotate da uno username (usando la join table prenotazioni_lezioni)
     @Query("SELECT l FROM Lezione l JOIN l.partecipanti p WHERE p.username = :username")
     List<Lezione> findLezioniPrenotateByUsername(@Param("username") String username);
+
+    // Metodi per il generatore di lezioni
+    boolean existsByTemplateIdAndDataInizio(Long templateId, LocalDateTime dataInizio);
+
+    List<Lezione> findByDataInizioAfterAndAttivaTrue(LocalDateTime dataInizio);
+
+    List<Lezione> findByDataInizioBetween(LocalDateTime dataInizio, LocalDateTime dataFine);
 }

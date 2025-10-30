@@ -36,10 +36,17 @@ public class LezioneDto {
 
     private Boolean attiva;
 
+    private Long templateId;
+
+    private Integer maxPartecipanti;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 
     // Lista di username dei partecipanti
     private List<String> partecipanti;
+
+    // Numero di posti disponibili (calcolato)
+    private Integer postiDisponibili;
 }

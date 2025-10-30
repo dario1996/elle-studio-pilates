@@ -50,6 +50,12 @@ public class Lezione {
     @Column(name = "attiva", nullable = false)
     private Boolean attiva = true;
 
+    @Column(name = "template_id")
+    private Long templateId;
+
+    @Column(name = "max_partecipanti", nullable = false)
+    private Integer maxPartecipanti = 1;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 

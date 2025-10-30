@@ -39,6 +39,14 @@
             referencedColumnNames="username"
             onDelete="CASCADE"/>
 
+        <addForeignKeyConstraint 
+            baseTableName="lezioni"
+            baseColumnNames="template_id"
+            constraintName="fk_lezioni_calendario_template"
+            referencedTableName="calendario_settimanale"
+            referencedColumnNames="id"
+            onDelete="SET NULL"/>
+
     </changeSet>
 
 </databaseChangeLog> 

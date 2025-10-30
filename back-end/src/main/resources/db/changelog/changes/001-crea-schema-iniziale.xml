@@ -130,6 +130,58 @@
             <column name="attiva" type="BOOLEAN" defaultValueBoolean="true">
                 <constraints nullable="false"/>
             </column>
+            <column name="template_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+            <column name="max_partecipanti" type="INTEGER" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="DATETIME" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="DATETIME" defaultValueComputed="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+<!-- CREA TABELLA CALENDARIO_SETTIMANALE -->
+
+    <changeSet id="001-04" author="vincenzo">
+        <comment>Crea tabella calendario_settimanale per definire il template ricorrente delle lezioni</comment>
+        
+        <createTable tableName="calendario_settimanale">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="giorno_settimana" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ora_inizio" type="TIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ora_fine" type="TIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="titolo" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tipo_lezione" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="istruttore" type="VARCHAR(100)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="max_partecipanti" type="INTEGER" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="colore" type="VARCHAR(20)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="note" type="TEXT">
+                <constraints nullable="true"/>
+            </column>
+            <column name="attivo" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
             <column name="created_at" type="DATETIME" defaultValueComputed="CURRENT_TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
@@ -139,7 +191,7 @@
 
 <!-- CREA TABELLA PRENOTAZIONI_LEZIONI -->
 
-    <changeSet id="001-04" author="vincenzo">
+    <changeSet id="001-05" author="vincenzo">
         <comment>Crea tabella per le prenotazioni delle lezioni</comment>
 
         <createTable tableName="prenotazioni_lezioni">
@@ -154,7 +206,7 @@
 
 <!-- CREA TABELLA VENDITE -->
 
-    <changeSet id="001-05" author="vincenzo">
+    <changeSet id="001-06" author="vincenzo">
         <comment>Crea tabella vendite per gestire acquisti pacchetti</comment>
 
         <createTable tableName="vendite">
@@ -181,82 +233,6 @@
             </column>
             <column name="note" type="TEXT">
                 <constraints nullable="true"/>
-            </column>
-        </createTable>
-    </changeSet>
-
-<!-- CREA TABELLA LEARNING_DATA -->
-
-    <changeSet id="001-06" author="vincenzo">
-        <comment>Crea tabella per memorizzare i dati di apprendimento importati da file JSON</comment>
-
-        <createTable tableName="learning_data">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false" />
-            </column>
-            <column name="first_name" type="VARCHAR(100)">
-                <constraints nullable="true" />
-            </column>
-            <column name="last_name" type="VARCHAR(100)">
-                <constraints nullable="true" />
-            </column>
-            <column name="email" type="VARCHAR(255)">
-                <constraints nullable="false" />
-            </column>
-            <column name="content_name" type="VARCHAR(500)">
-                <constraints nullable="false" />
-            </column>
-            <column name="content_type" type="VARCHAR(100)">
-                <constraints nullable="true" />
-            </column>
-            <column name="time_viewed_seconds" type="BIGINT">
-                <constraints nullable="true" />
-            </column>
-            <column name="percentage_complete" type="DECIMAL(5,2)">
-                <constraints nullable="true" />
-            </column>
-            <column name="completion_date" type="DATE">
-                <constraints nullable="true" />
-            </column>
-            <column name="skills" type="TEXT">
-                <constraints nullable="true" />
-            </column>
-            <column name="rating" type="DECIMAL(3,2)">
-                <constraints nullable="true" />
-            </column>
-            <column name="total_ratings" type="INT">
-                <constraints nullable="true" />
-            </column>
-            <column name="difficulty" type="VARCHAR(50)">
-                <constraints nullable="true" />
-            </column>
-            <column name="course_url" type="TEXT">
-                <constraints nullable="true" />
-            </column>
-            <column name="employee_id" type="VARCHAR(50)">
-                <constraints nullable="true" />
-            </column>
-            <column name="content_id" type="VARCHAR(50)">
-                <constraints nullable="true" />
-            </column>
-            <column name="provider" type="VARCHAR(100)">
-                <constraints nullable="true" />
-            </column>
-            <column name="processed" type="BOOLEAN" defaultValue="false">
-                <constraints nullable="false" />
-            </column>
-            <column name="processed_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false" />
-            </column>
-            <column name="source_file" type="VARCHAR(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false" />
-            </column>
-            <column name="updated_at" type="TIMESTAMP"
-                defaultValueComputed="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP">
-                <constraints nullable="false" />
             </column>
         </createTable>
     </changeSet>
