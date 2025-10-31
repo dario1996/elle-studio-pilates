@@ -5,8 +5,8 @@ import com.example.demo.entity.Lezione;
 import com.example.demo.enums.GiornoSettimana;
 import com.example.demo.repository.CalendarioSettimanaleRepository;
 import com.example.demo.repository.LezioneRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,16 +14,21 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
-@Slf4j
 public class LezioneGeneratorService {
+
+    private static final Logger log = LoggerFactory.getLogger(LezioneGeneratorService.class);
 
     private final CalendarioSettimanaleRepository calendarioRepository;
     private final LezioneRepository lezioneRepository;
+
+    public LezioneGeneratorService(final CalendarioSettimanaleRepository calendarioRepository,
+                                   final LezioneRepository lezioneRepository) {
+        this.calendarioRepository = calendarioRepository;
+        this.lezioneRepository = lezioneRepository;
+    }
 
     /**
      * Genera le lezioni concrete per un determinato periodo basandosi sul calendario settimanale

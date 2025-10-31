@@ -9,7 +9,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,23 +18,25 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import lombok.SneakyThrows;
-import lombok.extern.java.Log;
 import com.example.demo.services.PacchettoService;
 import com.example.demo.exceptions.NotFoundException;
 
 @RestController
 @RequestMapping("/api/pacchetti")
 @CrossOrigin(origins = "*")
-@Log
 @Tag(name = "Pacchetti", description = "Gestione dei pacchetti di formazione")
 public class PacchettoController {
 
-    @Autowired
-    private PacchettoService pacchettoService;
+    private static final Logger log = LoggerFactory.getLogger(PacchettoController.class);
 
-    @Autowired
-    private PacchettoRepository pacchettoRepository;
+    private final PacchettoService pacchettoService;
+    private final PacchettoRepository pacchettoRepository;
+
+    public PacchettoController(final PacchettoService pacchettoService,
+                               final PacchettoRepository pacchettoRepository) {
+        this.pacchettoService = pacchettoService;
+        this.pacchettoRepository = pacchettoRepository;
+    }
 
     @Operation(summary = "Crea un nuovo pacchetto", description = "Inserisce un nuovo pacchetto associato a una piattaforma di formazione esistente")
     @ApiResponses(value = {
@@ -69,9 +72,8 @@ public class PacchettoController {
         return ResponseEntity.noContent().build();
     }
 
-    @SneakyThrows
     @GetMapping(value = "/lista", produces = "application/json")
-    public ResponseEntity<List<Pacchetto>> getAllPacchetti() {
+    public ResponseEntity<List<Pacchetto>> getAllPacchetti() throws NotFoundException {
         log.info("****** Otteniamo i Pacchetti *******");
 
         List<Pacchetto> pacchetti = pacchettoService.SelAllPacchetti();
@@ -79,7 +81,7 @@ public class PacchettoController {
         if(pacchetti.isEmpty()) {
             String ErrMsg = String.format("Nessun pacchetto disponibile a sistema.");
 
-            log.warning(ErrMsg);
+            log.warn(ErrMsg);
             
             throw new NotFoundException(ErrMsg);
         }

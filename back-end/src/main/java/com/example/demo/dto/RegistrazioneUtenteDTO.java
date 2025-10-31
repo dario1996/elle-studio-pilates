@@ -6,15 +6,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class RegistrazioneUtenteDTO {
     
     // Step 1: Dettagli Profilo
@@ -61,6 +53,132 @@ public class RegistrazioneUtenteDTO {
     private String attivo = "Si";
     private List<String> ruoli;
     
+    public RegistrazioneUtenteDTO() {
+    }
+
+    public RegistrazioneUtenteDTO(String nome, String cognome, String codiceFiscale, String certificatoMedico,
+                                  Boolean patologie, String descrizionePatologie, String obiettivi,
+                                  String username, String email, String password, String confirmPassword,
+                                  String attivo, List<String> ruoli) {
+        this.nome = nome;
+        this.cognome = cognome;
+        this.codiceFiscale = codiceFiscale;
+        this.certificatoMedico = certificatoMedico;
+        this.patologie = patologie;
+        this.descrizionePatologie = descrizionePatologie;
+        this.obiettivi = obiettivi;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.confirmPassword = confirmPassword;
+        this.attivo = attivo;
+        this.ruoli = ruoli;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getCognome() {
+        return cognome;
+    }
+
+    public void setCognome(String cognome) {
+        this.cognome = cognome;
+    }
+
+    public String getCodiceFiscale() {
+        return codiceFiscale;
+    }
+
+    public void setCodiceFiscale(String codiceFiscale) {
+        this.codiceFiscale = codiceFiscale;
+    }
+
+    public String getCertificatoMedico() {
+        return certificatoMedico;
+    }
+
+    public void setCertificatoMedico(String certificatoMedico) {
+        this.certificatoMedico = certificatoMedico;
+    }
+
+    public Boolean getPatologie() {
+        return patologie;
+    }
+
+    public void setPatologie(Boolean patologie) {
+        this.patologie = patologie;
+    }
+
+    public String getDescrizionePatologie() {
+        return descrizionePatologie;
+    }
+
+    public void setDescrizionePatologie(String descrizionePatologie) {
+        this.descrizionePatologie = descrizionePatologie;
+    }
+
+    public String getObiettivi() {
+        return obiettivi;
+    }
+
+    public void setObiettivi(String obiettivi) {
+        this.obiettivi = obiettivi;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
+
+    public String getAttivo() {
+        return attivo;
+    }
+
+    public void setAttivo(String attivo) {
+        this.attivo = attivo;
+    }
+
+    public List<String> getRuoli() {
+        return ruoli;
+    }
+
+    public void setRuoli(List<String> ruoli) {
+        this.ruoli = ruoli;
+    }
+
     // Metodo per validare che le password coincidano
     public boolean isPasswordMatching() {
         return password != null && password.equals(confirmPassword);

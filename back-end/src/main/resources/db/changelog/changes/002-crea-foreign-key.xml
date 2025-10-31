@@ -24,28 +24,27 @@
             onDelete="CASCADE"/>
 
         <addForeignKeyConstraint 
-            baseTableName="prenotazioni_lezioni"
-            baseColumnNames="lezione_id"
-            constraintName="fk_prenotazioni_lezioni_lezioni"
-            referencedTableName="lezioni"
-            referencedColumnNames="id"
-            onDelete="CASCADE"/>
-        
-        <addForeignKeyConstraint 
-            baseTableName="prenotazioni_lezioni"
-            baseColumnNames="partecipanti_username"
-            constraintName="fk_prenotazioni_lezioni_utenti"
-            referencedTableName="utenti"
-            referencedColumnNames="username"
-            onDelete="CASCADE"/>
-
-        <addForeignKeyConstraint 
             baseTableName="lezioni"
             baseColumnNames="template_id"
             constraintName="fk_lezioni_calendario_template"
             referencedTableName="calendario_settimanale"
             referencedColumnNames="id"
             onDelete="SET NULL"/>
+
+        <addForeignKeyConstraint
+            baseTableName="lezione_partecipanti"
+            baseColumnNames="lezione_id"
+            constraintName="fk_lezione_partecipanti_lezione"
+            referencedTableName="lezioni"
+            referencedColumnNames="id"
+            onDelete="CASCADE"/>
+        <addForeignKeyConstraint
+            baseTableName="lezione_partecipanti"
+            baseColumnNames="utente_id"
+            constraintName="fk_lezione_partecipanti_utente"
+            referencedTableName="utenti"
+            referencedColumnNames="id"
+            onDelete="CASCADE"/>
 
     </changeSet>
 

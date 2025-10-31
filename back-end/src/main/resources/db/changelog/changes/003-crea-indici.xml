@@ -58,16 +58,6 @@
             <column name="template_id"/>
         </createIndex>
 
-<!-- Indici per la tabella prenotazioni_lezioni -->
-
-        <createIndex tableName="prenotazioni_lezioni" indexName="idx_prenotazioni_lezioni_lezione">
-            <column name="lezione_id"/>
-        </createIndex>
-        
-        <createIndex tableName="prenotazioni_lezioni" indexName="idx_prenotazioni_lezioni_utenti">
-            <column name="partecipanti_username"/>
-        </createIndex>
-
 <!-- Indici per la tabella vendite -->
 
         <createIndex tableName="vendite" indexName="idx_vendite_utente">
@@ -90,7 +80,7 @@
             <column name="data_pagamento"/>
         </createIndex>
     
-<!-- Indici per la tabella PROCESSING_LOG -->
+<!-- Indici per la tabella processing_log -->
 
         <createIndex tableName="processing_log" indexName="idx_processing_log_file_name">
             <column name="file_name" />
@@ -120,6 +110,14 @@
         
         <createIndex tableName="calendario_settimanale" indexName="idx_calendario_attivo">
             <column name="attivo"/>
+        </createIndex>
+
+    <!-- Indici per la tabella lezione_partecipanti (partecipanti lezioni) -->
+        <createIndex tableName="lezione_partecipanti" indexName="idx_lp_lezione">
+            <column name="lezione_id"/>
+        </createIndex>
+        <createIndex tableName="lezione_partecipanti" indexName="idx_lp_utente">
+            <column name="utente_id"/>
         </createIndex>
 
     </changeSet>

@@ -6,8 +6,8 @@ import com.example.demo.enums.GiornoSettimana;
 import com.example.demo.exceptions.NotFoundException;
 import com.example.demo.mapper.CalendarioSettimanaleMapper;
 import com.example.demo.repository.CalendarioSettimanaleRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,12 +15,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
-@Slf4j
 public class CalendarioSettimanaleService {
+
+    private static final Logger log = LoggerFactory.getLogger(CalendarioSettimanaleService.class);
 
     private final CalendarioSettimanaleRepository calendarioRepository;
     private final CalendarioSettimanaleMapper calendarioMapper;
+
+    public CalendarioSettimanaleService(final CalendarioSettimanaleRepository calendarioRepository,
+                                        final CalendarioSettimanaleMapper calendarioMapper) {
+        this.calendarioRepository = calendarioRepository;
+        this.calendarioMapper = calendarioMapper;
+    }
 
     /**
      * Recupera tutte le voci del calendario settimanale attive

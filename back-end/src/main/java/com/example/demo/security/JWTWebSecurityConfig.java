@@ -1,7 +1,5 @@
 package com.example.demo.security;
 
-import lombok.RequiredArgsConstructor;
-
 import org.springframework.security.config.Customizer;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +20,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableMethodSecurity
-@RequiredArgsConstructor
 public class JWTWebSecurityConfig {
 
     private final UserDetailsService userDetailsService;
@@ -32,6 +29,10 @@ public class JWTWebSecurityConfig {
 
     @Value("${sicurezza.refresh}")
     private String refreshPath;
+
+    public JWTWebSecurityConfig(final UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter) throws Exception {

@@ -2,7 +2,8 @@ package com.example.demo.controller;
 
 import java.time.LocalDate;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,22 +14,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.RegistrazioneUtenteDTO;
-import com.example.demo.controller.InfoMsg;
 import com.example.demo.services.RegistrazioneService;
 
 import jakarta.validation.Valid;
-import lombok.extern.java.Log;
 
-@Log
 @RestController
 @RequestMapping(value = "/api/registrazione")
 public class RegistrazioneController {
 
-    @Autowired
-    private RegistrazioneService registrazioneService;
+    private static final Logger log = LoggerFactory.getLogger(RegistrazioneController.class);
 
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private final RegistrazioneService registrazioneService;
+    private final BCryptPasswordEncoder passwordEncoder;
+
+    public RegistrazioneController(final RegistrazioneService registrazioneService,
+                                   final BCryptPasswordEncoder passwordEncoder) {
+        this.registrazioneService = registrazioneService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @PostMapping(value = "/utente", produces = "application/json")
     public ResponseEntity<InfoMsg> registraUtente(
@@ -45,7 +48,7 @@ public class RegistrazioneController {
                         .reduce((msg1, msg2) -> msg1 + "; " + msg2)
                         .orElse("Errore di validazione");
                 
-                log.warning("Errori di validazione: " + errorMsg);
+                log.warn("Errori di validazione: {}", errorMsg);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new InfoMsg(LocalDate.now(), errorMsg));
             }
@@ -83,7 +86,7 @@ public class RegistrazioneController {
                     .body(new InfoMsg(LocalDate.now(), result));
 
         } catch (Exception e) {
-            log.severe("Errore durante la registrazione: " + e.getMessage());
+            log.error("Errore durante la registrazione: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new InfoMsg(LocalDate.now(), "Errore interno durante la registrazione"));
         }

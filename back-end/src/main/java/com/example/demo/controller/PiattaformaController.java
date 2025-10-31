@@ -9,9 +9,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.SneakyThrows;
-import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,18 +18,23 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-@Log
 @RestController
 @RequestMapping("/api/piattaforme")
 @CrossOrigin(origins = "*")
 @Tag(name = "Piattaforme", description = "Gestione delle piattaforme di formazione")
 public class PiattaformaController {
 
-    @Autowired
-    private PiattaformaRepository piattaformaRepository;
+    private static final Logger log = LoggerFactory.getLogger(PiattaformaController.class);
 
-    @Autowired
-    private PiattaformeService piattaformeService;
+    private final PiattaformaRepository piattaformaRepository;
+
+    private final PiattaformeService piattaformeService;
+
+    public PiattaformaController(final PiattaformaRepository piattaformaRepository,
+                                 final PiattaformeService piattaformeService) {
+        this.piattaformaRepository = piattaformaRepository;
+        this.piattaformeService = piattaformeService;
+    }
 
     @Operation(summary = "Recupera tutte le piattaforme", description = "Restituisce l'elenco completo delle piattaforme di formazione registrate")
     @ApiResponses(value = {
@@ -41,9 +45,8 @@ public class PiattaformaController {
     // return piattaformaRepository.findAll();
     // }
 
-    @SneakyThrows
     @GetMapping(value = "/lista", produces = "application/json")
-    public ResponseEntity<List<Piattaforma>> getAllPiattaforme() {
+    public ResponseEntity<List<Piattaforma>> getAllPiattaforme() throws NotFoundException {
         log.info("****** Otteniamo le Piattaforme *******");
 
         List<Piattaforma> piattaforme = piattaformeService.SelAllPiattaforme();
@@ -51,7 +54,7 @@ public class PiattaformaController {
         if (piattaforme.isEmpty()) {
             String ErrMsg = String.format("Nessuna piattaforma disponibile a sistema.");
 
-            log.warning(ErrMsg);
+            log.warn(ErrMsg);
 
             throw new NotFoundException(ErrMsg);
         }
@@ -60,7 +63,6 @@ public class PiattaformaController {
     }
 
     @PostMapping(value = "/inserisci", produces = "application/json")
-    @SneakyThrows
     public ResponseEntity<InfoMsg> createPiattaforma(@RequestBody Piattaforma piattaforma) {
         log.info("Salviamo la piattaforma con codice " + piattaforma.getId());
 

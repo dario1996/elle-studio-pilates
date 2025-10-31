@@ -3,11 +3,6 @@ package com.example.demo.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class NotFoundException  extends Exception
 {
@@ -23,6 +18,14 @@ public class NotFoundException  extends Exception
 	public NotFoundException(String messaggio)
 	{
 		super(messaggio);
+		this.messaggio = messaggio;
+	}
+
+	public String getMessaggio() {
+		return messaggio;
+	}
+
+	public void setMessaggio(String messaggio) {
 		this.messaggio = messaggio;
 	}
 }

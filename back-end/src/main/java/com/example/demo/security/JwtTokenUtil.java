@@ -1,27 +1,35 @@
 package com.example.demo.security;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import javax.crypto.SecretKey;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
+
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
-
-import javax.crypto.SecretKey;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Component
-@RequiredArgsConstructor
-@Log
 public class JwtTokenUtil {
 
+    private static final Logger log = LoggerFactory.getLogger(JwtTokenUtil.class);
+
     private final JwtConfig jwtConfig;
+
+    public JwtTokenUtil(final JwtConfig jwtConfig) {
+        this.jwtConfig = jwtConfig;
+    }
 
     private SecretKey getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(jwtConfig.getSecret());
@@ -49,7 +57,7 @@ public class JwtTokenUtil {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (JwtException e) {
-            log.warning("JWT parsing failed: " + e.getMessage());
+            log.warn("JWT parsing failed: {}", e.getMessage());
             throw e;
         }
     }
@@ -116,7 +124,7 @@ public class JwtTokenUtil {
             
             return doGenerateToken(newClaims, username, jwtConfig.getExpiration());
         } catch (Exception e) {
-            log.warning("Token refresh failed: " + e.getMessage());
+            log.warn("Token refresh failed: {}", e.getMessage());
             throw new RuntimeException("Token refresh failed", e);
         }
     }
@@ -137,7 +145,7 @@ public class JwtTokenUtil {
                 return generateToken(userDetails);
             }
         } catch (Exception e) {
-            log.warning("Token extension check failed: " + e.getMessage());
+            log.warn("Token extension check failed: {}", e.getMessage());
         }
         
         return token;

@@ -4,7 +4,8 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.HttpStatus;
@@ -26,21 +27,22 @@ import com.example.demo.entity.Utenti;
 import com.example.demo.exceptions.BindingException;
 import com.example.demo.services.UtentiService;
 
-import lombok.SneakyThrows;
-import lombok.extern.java.Log;
-
-@Log
 @RestController
 @RequestMapping(value = "/api/utenti")
 public class UtentiController {
-    @Autowired
-	UtentiService utentiService;
-	
-	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
-	
-	@Autowired
-	private ResourceBundleMessageSource errMessage;
+    private static final Logger log = LoggerFactory.getLogger(UtentiController.class);
+
+    private final UtentiService utentiService;
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final ResourceBundleMessageSource errMessage;
+
+    public UtentiController(final UtentiService utentiService,
+                            final BCryptPasswordEncoder passwordEncoder,
+                            final ResourceBundleMessageSource errMessage) {
+        this.utentiService = utentiService;
+        this.passwordEncoder = passwordEncoder;
+        this.errMessage = errMessage;
+    }
 
     // 🆕 ENDPOINT GET per ottenere la lista degli utenti
     @GetMapping(produces = "application/json")
@@ -50,7 +52,7 @@ public class UtentiController {
             List<Utenti> utenti = utentiService.SelPreloadUsers();
             return ResponseEntity.ok(utenti);
         } catch (Exception e) {
-            log.severe("Errore nel recupero degli utenti: " + e.getMessage());
+            log.error("Errore nel recupero degli utenti: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -66,22 +68,21 @@ public class UtentiController {
             }
             return ResponseEntity.ok(utente);
         } catch (Exception e) {
-            log.severe("Errore nel recupero utente: " + e.getMessage());
+            log.error("Errore nel recupero utente: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
     // 🆕 ENDPOINT PUT per modificare un utente
     @PutMapping(value = "/{username}", produces = "application/json")
-    @SneakyThrows
     public ResponseEntity<InfoMsg> updateUtente(@PathVariable String username, 
-            @RequestBody Utenti utente, BindingResult bindingResult) {
+            @RequestBody Utenti utente, BindingResult bindingResult) throws BindingException {
         
         log.info("Richiesta modifica utente: " + username);
         
         if (bindingResult.hasErrors()) {
             String MsgErr = errMessage.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale());
-            log.warning(MsgErr);
+            log.warn(MsgErr);
             throw new BindingException(MsgErr);
         }
         
@@ -133,7 +134,7 @@ public class UtentiController {
             return ResponseEntity.ok(new InfoMsg(LocalDate.now(), 
                     String.format("Utente %s eliminato con successo", username)));
         } catch (Exception e) {
-            log.severe("Errore nell'eliminazione dell'utente: " + e.getMessage());
+            log.error("Errore nell'eliminazione dell'utente: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new InfoMsg(LocalDate.now(), "Errore nell'eliminazione dell'utente"));
         }
@@ -163,7 +164,7 @@ public class UtentiController {
             
             return ResponseEntity.ok(risultati);
         } catch (Exception e) {
-            log.severe("Errore nell'autocomplete utenti: " + e.getMessage());
+            log.error("Errore nell'autocomplete utenti: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -185,7 +186,7 @@ public class UtentiController {
             
             return ResponseEntity.ok(utentiFiltrati);
         } catch (Exception e) {
-            log.severe("Errore nel recupero utenti per usernames: " + e.getMessage());
+            log.error("Errore nel recupero utenti per usernames: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -253,7 +254,7 @@ public class UtentiController {
         
         // Verifica password corrente
         if (!passwordEncoder.matches(oldPassword, existingUtente.getPassword())) {
-            log.warning("Password corrente non valida per utente: " + username);
+            log.warn("Password corrente non valida per utente: {}", username);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new InfoMsg(LocalDate.now(), "Password corrente non valida"));
         }
@@ -303,15 +304,14 @@ public class UtentiController {
     }
 
     @PostMapping(value = "/inserisci", produces = "application/json")
-	@SneakyThrows
 	public ResponseEntity<InfoMsg> addNewUser(@RequestBody Utenti utente, 
-	    BindingResult bindingResult) {
+        BindingResult bindingResult) throws BindingException {
 
 	    Utenti checkUtente = utentiService.SelUser(utente.getUsername());
 
-	    if (bindingResult.hasErrors()) {
-	        String MsgErr = errMessage.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale());
-	        log.warning(MsgErr);
+        if (bindingResult.hasErrors()) {
+            String MsgErr = errMessage.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale());
+            log.warn(MsgErr);
 	        throw new BindingException(MsgErr);
 	    }
 	    

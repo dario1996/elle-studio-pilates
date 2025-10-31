@@ -1,23 +1,26 @@
 package com.example.demo.mapper;
 
-import com.example.demo.dto.LezioneDto;
-import com.example.demo.entity.Lezione;
-import com.example.demo.entity.Utenti;
-import com.example.demo.entity.Pacchetto;
-import com.example.demo.services.PacchettoService;
-import com.example.demo.enums.TipoLezione;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Component;
+
+import com.example.demo.dto.LezioneDto;
+import com.example.demo.entity.Lezione;
+import com.example.demo.entity.Pacchetto;
+import com.example.demo.entity.Utenti;
+import com.example.demo.enums.TipoLezione;
+import com.example.demo.services.PacchettoService;
+
 @Component
-@RequiredArgsConstructor
 public class LezioneMapper {
 
     private final PacchettoService pacchettoService;
+
+    public LezioneMapper(PacchettoService pacchettoService) {
+        this.pacchettoService = pacchettoService;
+    }
 
     public LezioneDto toDto(Lezione lezione) {
         if (lezione == null) {
@@ -39,7 +42,7 @@ public class LezioneMapper {
         dto.setUpdatedAt(lezione.getUpdatedAt());
         
         // Mappa i partecipanti (solo username)
-        if (lezione.getPartecipanti() != null) {
+        if (lezione.getPartecipanti() != null && !lezione.getPartecipanti().isEmpty()) {
             dto.setPartecipanti(lezione.getPartecipanti().stream()
                     .map(Utenti::getUsername)
                     .collect(Collectors.toList()));

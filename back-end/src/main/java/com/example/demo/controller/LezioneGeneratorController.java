@@ -1,8 +1,8 @@
 package com.example.demo.controller;
 
 import com.example.demo.service.LezioneGeneratorService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,12 +12,16 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/lezioni/genera")
-@RequiredArgsConstructor
-@Slf4j
 @CrossOrigin(origins = "http://localhost:4200")
 public class LezioneGeneratorController {
 
+    private static final Logger log = LoggerFactory.getLogger(LezioneGeneratorController.class);
+
     private final LezioneGeneratorService generatorService;
+
+    public LezioneGeneratorController(final LezioneGeneratorService generatorService) {
+        this.generatorService = generatorService;
+    }
 
     @PostMapping("/periodo")
     public ResponseEntity<Map<String, Object>> generaLezioniPeriodo(

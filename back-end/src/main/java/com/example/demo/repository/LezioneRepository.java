@@ -1,15 +1,16 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.Lezione;
-import com.example.demo.enums.TipoLezione;
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import com.example.demo.entity.Lezione;
+import com.example.demo.enums.TipoLezione;
 
 @Repository
 public interface LezioneRepository extends JpaRepository<Lezione, Long> {
@@ -48,14 +49,13 @@ public interface LezioneRepository extends JpaRepository<Lezione, Long> {
                             @Param("dataFine") LocalDateTime dataFine,
                             @Param("lezioneId") Long lezioneId);
 
-    // Trova tutte le lezioni prenotate da uno username (usando la join table prenotazioni_lezioni)
-    @Query("SELECT l FROM Lezione l JOIN l.partecipanti p WHERE p.username = :username")
-    List<Lezione> findLezioniPrenotateByUsername(@Param("username") String username);
-
     // Metodi per il generatore di lezioni
     boolean existsByTemplateIdAndDataInizio(Long templateId, LocalDateTime dataInizio);
 
     List<Lezione> findByDataInizioAfterAndAttivaTrue(LocalDateTime dataInizio);
 
     List<Lezione> findByDataInizioBetween(LocalDateTime dataInizio, LocalDateTime dataFine);
+
+    @Query("SELECT l FROM Lezione l JOIN l.partecipanti p WHERE p.username = :username")
+    List<Lezione> findLezioniPrenotateByUsername(@Param("username") String username);
 }
