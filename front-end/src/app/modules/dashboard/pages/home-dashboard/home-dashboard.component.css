@@ -1,70 +1,40 @@
-
-.fade-in-modal {
-  opacity: 0;
-  transform: translateY(40px);
-  animation: fadeInModal 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
-}
-
-@keyframes fadeInModal {
-  0% {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.page-content {
+/* Contenuto scrollabile per dashboard-contents */
+.dashboard-contents {
   flex: 1 1 auto;
   min-height: 0;
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto; /* Cambiato da hidden ad auto per consentire lo scroll */
-  overflow-x: hidden; /* Evita lo scroll orizzontale indesiderato */
-  position: relative;
-  z-index: 1;
-  padding-bottom: 2rem; /* Aggiunto padding in fondo per distanziare il contenuto dal bordo */
-  -webkit-overflow-scrolling: touch; /* Scroll fluido su iOS */
-  scroll-behavior: smooth; /* Scroll animato */
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* Nessun padding/margine aggiuntivo, le spaziature restano gestite dai figli */
+}
+/* Dashboard Stats */
+.dashboard-stats {
+  padding: 6px 0px 6px 0px;
+  /* margin-left: 20px;
+  margin-right: 20px; */
 }
 
-.dashboard-contents {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
+/* Spazio tra le prime 4 card: aggiunge margin-right alle prime 3 per creare gap tra 1-2-3-4 */
+.dashboard-stats .col-md-3:nth-child(-n+3) {
+  margin-right: 20px;
 }
 
-.dashboard-stats .row {
-  justify-content: center;
-  align-items: stretch;
-  display: flex;
-  align-items: stretch;
-  max-width: 1300px;
-  width: 100%;
-}
-
-.dashboard-stats .col-md-3 {
-  flex: 1;
-  max-width: 350px;
-  min-width: 260px;
-}
-
-.dashboard-stats .col-md-3:not(:last-child) {
-  margin-right: 20px; /* Gap solo tra le card, non sui bordi esterni */
+/* Rimuovi il margin-right quando il layout si riduce e le card vanno in colonna */
+@media (max-width: 992px) {
+  .dashboard-stats .col-md-3:nth-child(-n+3) {
+    margin-right: 0;
+  }
 }
 
 .stats-card {
   background: white;
-  border-radius: 16px;
-  padding: 32px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   border: 1px solid #c99e67; /* Colore bordo sidebar */
   border-top: 4px solid #c99e67; /* Bordo superiore più spesso */
+  /* height: 100%;  RIMOSSO per evitare taglio contenuto scrollabile */
   transition: all 0.3s ease;
   position: relative;
-  height: 180px;
 }
 
 .stats-card:hover {
@@ -80,7 +50,7 @@
 }
 
 .card-header h3 {
-  font-size: 13px; /* Ridotto da 16px a 13px per coerenza */
+  font-size: 16px;
   font-weight: 600;
   color: #374151;
   margin: 0;
@@ -107,7 +77,7 @@
 }
 
 .main-number {
-  font-size: 24px; /* Ridotto da 56px a 24px per coerenza */
+  font-size: 48px;
   font-weight: 700;
   color: #111827;
   line-height: 1;
@@ -148,70 +118,47 @@
 }
 
 /* Responsive design */
-@media (max-width: 1400px) {
-  .dashboard-stats .col-md-3:not(:last-child) {
-    margin-right: 18px;
-  }
-  
-  .dashboard-stats .col-md-3 {
-    max-width: 280px;
-  }
-  
+@media (max-width: 1200px) {
   .main-number {
-    font-size: 22px; /* Ridotto da 50px per coerenza */
+    font-size: 42px;
   }
   
   .card-header h3 {
-    font-size: 12px; /* Ridotto da 15px */
+    font-size: 15px;
   }
   
   .stats-card {
-    padding: 26px;
+    padding: 20px;
   }
 }
 
-@media (max-width: 1200px) {
-  .dashboard-stats .col-md-3:not(:last-child) {
-    margin-right: 16px;
+/* Mantieni le prime 4 card su una singola riga sui dispositivi desktop */
+@media (min-width: 992px) {
+  .dashboard-stats .row {
+    display: flex;
+    flex-wrap: nowrap; /* evita il wrapping */
+    gap: 20px; /* fallback se supported */
   }
-  
-  .dashboard-stats .col-md-3 {
-    max-width: 260px;
+
+  .dashboard-stats .row .col-md-3 {
+    flex: 0 0 calc((100% - 60px) / 4); /* quattro card con gap totali considerati */
+    max-width: calc((100% - 60px) / 4);
   }
-  
-  .main-number {
-    font-size: 20px; /* Ridotto da 46px per coerenza */
-  }
-  
-  .card-header h3 {
-    font-size: 12px; /* Ridotto da 14px */
-  }
-  
-  .stats-card {
-    padding: 24px;
+
+  /* Assicura che il margin-right aggiuntivo non sommi troppo al gap già impostato */
+  .dashboard-stats .col-md-3:nth-child(-n+3) {
+    margin-right: 0;
   }
 }
 
 @media (max-width: 992px) {
-  .dashboard-stats .row {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 16px;
-  }
-  
-  .dashboard-stats .col-md-3 {
-    flex: 1 1 calc(50% - 8px); /* 2 card per riga su tablet */
-    max-width: 300px;
-    min-width: 250px;
-  }
-  
   .main-number {
-    font-size: 18px; /* Ridotto da 44px per coerenza */
+    font-size: 36px;
   }
   
   .stats-card {
-    padding: 24px;
-    height: auto;
+    padding: 18px;
+    margin-bottom: 16px;
   }
 
   .appointments-section {
@@ -221,20 +168,20 @@
 }
 
 @media (max-width: 768px) {
-  .dashboard-stats {
-    padding: 16px;
-  }
-  
   .main-number {
-    font-size: 16px; /* Ridotto da 38px per coerenza */
+    font-size: 32px;
   }
   
   .card-header h3 {
-    font-size: 12px; /* Mantenuto 12px */
+    font-size: 14px;
   }
   
   .stats-card {
-    padding: 20px;
+    padding: 16px;
+  }
+  
+  .dashboard-stats {
+    padding: 16px 0;
   }
 
   .appointments-section {
@@ -243,10 +190,9 @@
   }
 }
 
-/* Sezione Prossimi Appuntamenti - Full Width */
+/* Sezione Prossimi Appuntamenti */
 .appointments-section {
   margin-top: 32px;
-  width: 100%;
 }
 
 .appointments-card {
@@ -257,9 +203,6 @@
   border: 1px solid #c99e67;
   border-top: 4px solid #c99e67;
   transition: all 0.3s ease;
-  width: 100%;
-  max-width: 1300px; /* Allineato con le card superiori */
-  margin: 0 auto;
 }
 
 .appointments-header {
@@ -267,7 +210,7 @@
 }
 
 .appointments-header h3 {
-  font-size: 14px; /* Ridotto da 18px a 14px per coerenza */
+  font-size: 18px;
   font-weight: 600;
   color: #374151;
   margin: 0;
@@ -367,13 +310,6 @@
 
 /* Responsive per appuntamenti */
 @media (max-width: 768px) {
-  .page-content {
-    /* Assicura che il contenuto sia sempre scrollabile su mobile */
-    overflow-y: auto !important;
-    height: 100%;
-    max-height: calc(100vh - 120px); /* Lascia spazio per header e footer */
-  }
-
   .quick-actions {
     margin-left: 0;
     margin-right: 0;
@@ -418,12 +354,6 @@
 }
 
 @media (max-width: 576px) {
-  .page-content {
-    /* Assicura che il contenuto sia sempre scrollabile anche su schermi piccoli */
-    overflow-y: auto !important;
-    max-height: calc(100vh - 100px); /* Meno spazio per header su schermi piccoli */
-  }
-
   .main-number {
     font-size: 28px;
   }
@@ -442,41 +372,4 @@
     /* margin-left: 20px;
     margin-right: 20px; */
   }
-}
-
-/* Stati di caricamento ed errore */
-.text-center {
-  text-align: center;
-}
-
-.text-muted {
-  color: #6b7280;
-}
-
-.p-3 {
-  padding: 24px;
-}
-
-.alert {
-  padding: 16px;
-  border-radius: 8px;
-  margin: 16px 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.alert-danger {
-  background-color: #fef2f2;
-  border: 1px solid #fecaca;
-  color: #dc2626;
-}
-
-.fa-spinner.fa-spin {
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
 }

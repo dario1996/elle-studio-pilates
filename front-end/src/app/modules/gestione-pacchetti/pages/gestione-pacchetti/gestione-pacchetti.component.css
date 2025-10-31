@@ -1,12 +1,22 @@
 /* Pacchetti Section */
 .pacchetti-section {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-wrap: wrap;
   gap: 1.5rem;
-  max-width: 100%;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
   margin: 0 auto;
-  height: 100%;
+  padding: 0;
+  box-sizing: border-box;
   min-height: 0;
+  margin-top: 18px; /* slight vertical offset to align with headings */
+}
+
+/* page-content padding for consistent left/right margins */
+.page-content {
+  padding: 0 12px;
+  box-sizing: border-box;
 }
 
 /* Pacchetti Card */
@@ -15,12 +25,13 @@
   border-radius: 12px;
   border: 1px solid #c99e67;
   border-top: 4px solid #c99e67;
-  padding: 1.25rem;
+  padding: 24px; /* increase to match prenotazioni-card */
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
+  flex: 1 1 340px; /* make behavior identical to dashboard user-cards */
 }
 
 .pacchetti-card h2 {
@@ -552,11 +563,13 @@
   }
   
   .pacchetti-section {
-    gap: 1rem;
+  gap: 1rem;
+  padding: 0 12px; /* ensure consistent horizontal padding on mobile */
+  margin-top: 12px; /* smaller offset on mobile */
   }
   
   .pacchetti-card {
-    padding: 1rem;
+  padding: 1rem;
   }
   
   .pacchetti-grid {

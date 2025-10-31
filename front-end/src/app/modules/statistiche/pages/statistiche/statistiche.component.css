@@ -26,8 +26,10 @@
   align-items: stretch;
   display: flex;
   align-items: stretch;
-  max-width: 1300px;
+  max-width: 1300px; /* container centrato come in home-dashboard */
   width: 100%;
+  margin: 0 auto;
+  padding: 0; /* rimuove padding laterale extra */
 }
 
 .dashboard-stats .col-md-3 {
@@ -38,6 +40,27 @@
 
 .dashboard-stats .col-md-3:not(:last-child) {
   margin-right: 20px; /* Gap tra le card come nella dashboard */
+}
+
+/* Mantieni le prime 4 statistic cards su una sola riga sui dispositivi desktop */
+@media (min-width: 992px) {
+  .dashboard-stats .row {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 20px;
+  }
+
+  .dashboard-stats .row .col-md-3 {
+    box-sizing: border-box;
+    flex: 1 1 25%;
+    min-width: 0;
+    max-width: none;
+  }
+
+  /* Evita doppio spazio: annulla il margin-right predefinito sulle prime tre */
+  .dashboard-stats .col-md-3:not(:last-child) {
+    margin-right: 0;
+  }
 }
 
 .stats-card {

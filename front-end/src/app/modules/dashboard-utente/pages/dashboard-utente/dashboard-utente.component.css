@@ -1,11 +1,10 @@
-
 /* Layout orizzontale delle cards su desktop, colonna su mobile */
 .page-content {
   min-height: 0;
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 0;
+  padding: 0 12px; /* adjust horizontal padding to match gestione-prenotazioni */
   box-sizing: border-box;
   overflow-y: auto;
   max-height: 100vh;
@@ -13,42 +12,50 @@
 .dashboard-utente-cards {
   display: flex;
   flex-wrap: wrap;
-  gap: 4rem;
+  gap: 1.5rem;                /* match gestione-prenotazioni spacing */
   justify-content: center;
-  align-items: stretch; /* align cards to top so taller cards don't overflow visually */
+  align-items: flex-start;    /* align cards to top */
   width: 100%;
   margin: 0 auto;
-  padding: 20px 12px 48px 12px; /* more top padding to push cards lower */
+  padding: 0;                 /* no extra padding so cards align with page edges */
   box-sizing: border-box;
-  min-height: calc(100vh - 260px); /* ensure cards sit roughly mid-page */
-  max-width: 1400px;
-  overflow-x: auto;
+  min-height: unset;          /* remove large vertical offset so cards sit like prenotazioni */
+  max-width: none;            /* allow cards to use full container width like prenotazioni */
+  overflow-x: hidden;         /* avoid horizontal scroll */
+  margin-top: 18px;          /* sposta le card leggermente verso il basso */
 }
 
 .user-cards {
   background: white;
-  border-radius: 16px;
-  padding: 24px 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   border: 1px solid #c99e67;
   border-top: 4px solid #c99e67;
-  transition: all 0.3s ease;
-  position: relative;
-  /* margin-bottom: 16px; */
-  display: flex;
-  flex-direction: column;
-  min-width: 260px;
-  max-width: 380px;
-  flex: 0 1 340px;
-  height: auto; /* allow card to grow with content */
-  box-sizing: border-box;
+  padding: 24px;              /* same as .prenotazioni-card */
+  min-width: 0;
+  width: 100%;
+  flex: 1 1 340px;           /* same base as prenotazioni card */
+  margin-bottom: 16px;
 }
 
-.card-content {
-  flex: 1 1 auto;
+.user-cards .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.user-cards .card-header h3 {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+
+.user-cards .card-content {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  gap: 12px;
 }
 
 .btn-link:not([disabled]) .fa-chevron-left,
@@ -98,11 +105,12 @@
   .dashboard-utente-cards {
     flex-direction: column;
     align-items: center;
-    padding: 24px 12px 24px 12px;
+  padding: 24px 12px 24px 12px;
     gap: 1.2rem;
     min-height: unset;
     width: 100%;
     overflow-x: unset;
+  margin-top: 12px; /* meno offset su mobile */
   }
 
   .user-cards {
