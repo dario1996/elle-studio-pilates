@@ -1,14 +1,14 @@
 package com.example.demo.dto;
 
+import java.math.BigDecimal;
+
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Max;
-
-import java.math.BigDecimal;
 
 @Schema(description = "Dati richiesti per creare un nuovo pacchetto di pilates")
 public class PacchettoCreateRequest {
@@ -23,7 +23,7 @@ public class PacchettoCreateRequest {
     private String descrizione;
 
     @NotBlank(message = "La categoria è obbligatoria")
-    @Schema(description = "Categoria del pacchetto", example = "PILATES", allowableValues = { "PILATES", "YOGA", "MATWORK", "REFORMER", "CARDIOLATES" }, required = true)
+    @Schema(description = "Categoria del pacchetto", example = "PILATES", allowableValues = { "PILATES", "YOGA", "PILATES_MATWORK", "REFORMER", "CARDIOLATES" }, required = true)
     private String categoria;
 
     @NotBlank(message = "Il livello è obbligatorio")

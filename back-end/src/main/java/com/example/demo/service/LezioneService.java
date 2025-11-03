@@ -1,24 +1,25 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.LezioneDto;
-import com.example.demo.entity.Lezione;
-import com.example.demo.entity.Utenti;
-import com.example.demo.enums.TipoLezione;
-import com.example.demo.exceptions.NotFoundException;
-import com.example.demo.exceptions.BindingException;
-import com.example.demo.mapper.LezioneMapper;
-import com.example.demo.repository.LezioneRepository;
-import com.example.demo.services.PacchettoService;
-import com.example.demo.services.UtentiService;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.stream.Collectors;
+import com.example.demo.dto.LezioneDto;
+import com.example.demo.entity.Lezione;
+import com.example.demo.entity.Utenti;
+import com.example.demo.enums.TipoLezione;
+import com.example.demo.exceptions.BindingException;
+import com.example.demo.exceptions.NotFoundException;
+import com.example.demo.mapper.LezioneMapper;
+import com.example.demo.repository.LezioneRepository;
+import com.example.demo.services.PacchettoService;
+import com.example.demo.services.UtentiService;
 
 @Service
 @Transactional
@@ -116,7 +117,7 @@ public class LezioneService {
         if (lezioneDto.getPartecipanti() != null && !lezioneDto.getPartecipanti().isEmpty()) {
             List<Utenti> partecipanti = new ArrayList<>();
             for (String username : lezioneDto.getPartecipanti()) {
-                Utenti utente = utentiService.SelUser(username);
+                Utenti utente = utentiService.SelUserByUsername(username);
                 if (utente != null) {
                     partecipanti.add(utente);
                 } else {
@@ -165,7 +166,7 @@ public class LezioneService {
         if (lezioneDto.getPartecipanti() != null) {
             List<Utenti> partecipanti = new ArrayList<>();
             for (String username : lezioneDto.getPartecipanti()) {
-                Utenti utente = utentiService.SelUser(username);
+                Utenti utente = utentiService.SelUserByUsername(username);
                 if (utente != null) {
                     partecipanti.add(utente);
                 } else {
@@ -240,14 +241,12 @@ public class LezioneService {
             case PRIVATA:
             case PRIMA_LEZIONE:
                 return 1;
-            case SEMI_PRIVATA_DUETTO:
+            case SEMI_PRIVATA:
                 return 2;
-            case SEMI_PRIVATA_GRUPPO:
-                return 4;
-            case MATWORK:
-                return 6;
+            case PILATES_MATWORK:
+                return 3;
             case YOGA:
-                return 8;
+                return 4;
             default:
                 return 1;
         }

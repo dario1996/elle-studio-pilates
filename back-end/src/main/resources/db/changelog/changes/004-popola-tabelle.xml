@@ -9,23 +9,27 @@
     <changeSet id="004-01" author="vincenzo">
         <comment>Inserimento dati utenti iniziali con password crittografata</comment>
 
+        <!-- Amministratore 1 -->
         <insert tableName="utenti">
             <column name="username" value="l.caratti" />
             <column name="nome" value="Laura" />
             <column name="cognome" value="Caratti" />
+            <column name="codice_fiscale" value="CRTLRA85M41H501Z" />
             <column name="email" value="laura.caratti@mail.com" />
             <!-- BCrypt hash of "vinc123" with salt rounds 10 -->
             <column name="password" value="$2a$10$SAFTjDJLm1kN6KaDpBjc.eZWGKdRcFW/eBt5WR.ciDDWkYZj2.69." />
             <column name="attivo" value="Si" />
-            <column name="ruoli" value="ADMIN,SUPER_USER" />
+            <column name="ruoli" value="ADMIN" />
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
         </insert>
 
+        <!-- Utente 1 -->
         <insert tableName="utenti">
-            <column name="username" value="d.biffero" />
-            <column name="nome" value="Dario" />
-            <column name="cognome" value="Biffero" />
-            <column name="email" value="dario.biffero@mail.com" />
+            <column name="username" value="m.rossi" />
+            <column name="nome" value="Mario" />
+            <column name="cognome" value="Rossi" />
+            <column name="codice_fiscale" value="RSSMRA88H15F205X" />
+            <column name="email" value="mario.rossi@mail.com" />
             <!-- BCrypt hash of "dario1234" with salt rounds 10 -->
             <column name="password" value="$2a$10$PvPcRCwDmkcS7hvJ88ZW.OWVSUWjGbZ392kVLodXvKa1VQ9tkpa5q" />
             <column name="attivo" value="Si" />
@@ -33,38 +37,26 @@
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
         </insert>
 
-
+        <!-- Utente 2 -->
         <insert tableName="utenti">
-            <column name="username" value="v.cusaniello" />
-            <column name="nome" value="Vincenzo" />
-            <column name="cognome" value="Cusaniello" />
-            <column name="email" value="vincenzo.cusaniello@mail.com" />
+            <column name="username" value="g.castello" />
+            <column name="nome" value="Giorgio" />
+            <column name="cognome" value="Castello" />
+            <column name="codice_fiscale" value="CSTGRG92C20L219Y" />
+            <column name="email" value="giorgio.castello@mail.com" />
             <!-- BCrypt hash of "vinc1234" with salt rounds 10 -->
             <column name="password" value="$2a$10$s.WiawnI82GBVDIhpcpgJObJN1W8vk6b68BtenhTn2FwDsJo8/Aqa" />
             <column name="attivo" value="Si" />
             <column name="ruoli" value="USER" />
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
         </insert>
-        
 
-        <!-- Utente 1 -->
-        <insert tableName="utenti">
-            <column name="username" value="m.rossi" />
-            <column name="nome" value="Marco" />
-            <column name="cognome" value="Rossi" />
-            <column name="email" value="marco.rossi@mail.com" />
-            <!-- BCrypt hash of "Pilates2025!" salt rounds 10 -->
-            <column name="password" value="$2a$10$.Nx7AuyLC0iDwmXudIeE4.DI/io9wbMQ843UsFg1WuTGZhHJt5rPO" />
-            <column name="attivo" value="Si" />
-            <column name="ruoli" value="USER" />
-            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
-        </insert>
-
-        <!-- Utente 2 -->
+        <!-- Utente 3 -->
         <insert tableName="utenti">
             <column name="username" value="e.bianchi" />
             <column name="nome" value="Eleonora" />
             <column name="cognome" value="Bianchi" />
+            <column name="codice_fiscale" value="BNCNLR87D45F205V" />
             <column name="email" value="eleonora.bianchi@mail.com" />
             <!-- BCrypt hash of "Yoga2025!" salt rounds 10 -->
             <column name="password" value="$2a$10$mB576Og6h2nRZnN8YEhuQeYJgBPWa5JktpU94/U9VDxZHnqBGrZLu" />
@@ -73,11 +65,12 @@
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
         </insert>
 
-        <!-- Utente 3 -->
+        <!-- Utente 4 -->
         <insert tableName="utenti">
             <column name="username" value="s.verdi" />
             <column name="nome" value="Sofia" />
             <column name="cognome" value="Verdi" />
+            <column name="codice_fiscale" value="VRDSFO95E42H501T" />
             <column name="email" value="sofia.verdi@mail.com" />
             <!-- BCrypt hash of "Studio2025!" salt rounds 10 -->
             <column name="password" value="$2a$10$mr0KceDH2tFL7iBBtWWFt.cO90StEzDUEMi5D5BSD0kSmFnr0fnFC" />
@@ -395,7 +388,7 @@
         </insert>
 
         <insert tableName="vendite">
-            <column name="utente_id" value="6"/>
+            <column name="utente_id" value="4"/>
             <column name="pacchetto_id" value="5"/>
             <column name="importo" value="220.00"/>
             <column name="stato" value="PAID"/>
@@ -406,7 +399,7 @@
 
         <!-- Vendite Febbraio 2025 -->
         <insert tableName="vendite">
-            <column name="utente_id" value="6"/>
+            <column name="utente_id" value="5"/>
             <column name="pacchetto_id" value="6"/>
             <column name="importo" value="70.00"/>
             <column name="stato" value="PAID"/>

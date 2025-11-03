@@ -62,7 +62,7 @@ public class UtentiController {
     public ResponseEntity<Utenti> getUtenteByUsername(@PathVariable String username) {
         log.info("Richiesta utente by username: " + username);
         try {
-            Utenti utente = utentiService.SelUser(username);
+            Utenti utente = utentiService.SelUserByUsername(username);
             if (utente == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
@@ -74,11 +74,11 @@ public class UtentiController {
     }
 
     // 🆕 ENDPOINT PUT per modificare un utente
-    @PutMapping(value = "/{username}", produces = "application/json")
-    public ResponseEntity<InfoMsg> updateUtente(@PathVariable String username, 
+    @PutMapping(value = "/{id}", produces = "application/json")
+    public ResponseEntity<InfoMsg> updateUtente(@PathVariable Long id, 
             @RequestBody Utenti utente, BindingResult bindingResult) throws BindingException {
         
-        log.info("Richiesta modifica utente: " + username);
+        log.info("Richiesta modifica utente: " + id);
         
         if (bindingResult.hasErrors()) {
             String MsgErr = errMessage.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale());
@@ -86,7 +86,7 @@ public class UtentiController {
             throw new BindingException(MsgErr);
         }
         
-        Utenti existingUtente = utentiService.SelUser(username);
+        Utenti existingUtente = utentiService.SelUserById(id);
         if (existingUtente == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new InfoMsg(LocalDate.now(), "Utente non trovato"));
@@ -96,7 +96,14 @@ public class UtentiController {
         existingUtente.setNome(utente.getNome());
         existingUtente.setCognome(utente.getCognome());
         existingUtente.setEmail(utente.getEmail());
-        existingUtente.setCodiceFiscale(utente.getCodiceFiscale());
+        
+        // Aggiorna codice fiscale solo se non è null e non è vuoto
+        if (utente.getCodiceFiscale() != null && !utente.getCodiceFiscale().trim().isEmpty()) {
+            existingUtente.setCodiceFiscale(utente.getCodiceFiscale());
+        } else {
+            existingUtente.setCodiceFiscale(null);
+        }
+        
         existingUtente.setAttivo(utente.getAttivo());
         existingUtente.setPatologie(utente.getPatologie());
         existingUtente.setDescrizionePatologie(utente.getDescrizionePatologie());
@@ -115,24 +122,24 @@ public class UtentiController {
         utentiService.Save(existingUtente);
         
         return ResponseEntity.ok(new InfoMsg(LocalDate.now(), 
-                String.format("Utente %s modificato con successo", username)));
+                String.format("Utente %s modificato con successo", existingUtente.getUsername())));
     }
 
     // 🆕 ENDPOINT DELETE per eliminare un utente
-    @DeleteMapping(value = "/{username}", produces = "application/json")
-    public ResponseEntity<InfoMsg> deleteUtente(@PathVariable String username) {
-        log.info("Richiesta eliminazione utente: " + username);
-        
-        Utenti existingUtente = utentiService.SelUser(username);
+    @DeleteMapping(value = "/{id}", produces = "application/json")
+    public ResponseEntity<InfoMsg> deleteUtente(@PathVariable Long id) {
+        log.info("Richiesta eliminazione utente: " + id);
+
+        Utenti existingUtente = utentiService.SelUserById(id);
         if (existingUtente == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new InfoMsg(LocalDate.now(), "Utente non trovato"));
         }
         
         try {
-            utentiService.deleteUtente(username);
-            return ResponseEntity.ok(new InfoMsg(LocalDate.now(), 
-                    String.format("Utente %s eliminato con successo", username)));
+            utentiService.deleteUtente(id);
+            return ResponseEntity.ok(new InfoMsg(LocalDate.now(),
+                    String.format("Utente %s eliminato con successo", id)));
         } catch (Exception e) {
             log.error("Errore nell'eliminazione dell'utente: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -208,11 +215,11 @@ public class UtentiController {
     }
 
     // 🆕 ENDPOINT PUT per cambiare stato utente (attivo/non attivo)
-    @PutMapping(value = "/{username}/toggle-status", produces = "application/json")
-    public ResponseEntity<InfoMsg> toggleUtenteStatus(@PathVariable String username) {
-        log.info("Richiesta cambio stato utente: " + username);
-        
-        Utenti existingUtente = utentiService.SelUser(username);
+    @PutMapping(value = "/{id}/toggle-status", produces = "application/json")
+    public ResponseEntity<InfoMsg> toggleUtenteStatus(@PathVariable Long id) {
+        log.info("Richiesta cambio stato utente: " + id);
+
+        Utenti existingUtente = utentiService.SelUserById(id);
         if (existingUtente == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new InfoMsg(LocalDate.now(), "Utente non trovato"));
@@ -225,15 +232,15 @@ public class UtentiController {
         utentiService.Save(existingUtente);
         
         return ResponseEntity.ok(new InfoMsg(LocalDate.now(), 
-                String.format("Stato utente %s cambiato in: %s", username, 
+                String.format("Stato utente %s cambiato in: %s", existingUtente.getUsername(), 
                         "Si".equals(nuovoStato) ? "Attivo" : "Non attivo")));
     }
 
     // 🆕 ENDPOINT PUT per cambiare la password
-    @PutMapping(value = "/{username}/change-password", produces = "application/json")
-    public ResponseEntity<InfoMsg> changePassword(@PathVariable String username,
+    @PutMapping(value = "/{id}/change-password", produces = "application/json")
+    public ResponseEntity<InfoMsg> changePassword(@PathVariable Long id,
             @RequestBody java.util.Map<String, String> passwords) {
-        log.info("Richiesta cambio password per utente: " + username);
+        log.info("Richiesta cambio password per utente: " + id);
         
         String oldPassword = passwords.get("oldPassword");
         String newPassword = passwords.get("newPassword");
@@ -246,7 +253,7 @@ public class UtentiController {
         }
         
         // Verifica esistenza utente
-        Utenti existingUtente = utentiService.SelUser(username);
+        Utenti existingUtente = utentiService.SelUserById(id);
         if (existingUtente == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new InfoMsg(LocalDate.now(), "Utente non trovato"));
@@ -254,7 +261,7 @@ public class UtentiController {
         
         // Verifica password corrente
         if (!passwordEncoder.matches(oldPassword, existingUtente.getPassword())) {
-            log.warn("Password corrente non valida per utente: {}", username);
+            log.warn("Password corrente non valida per utente: {}", existingUtente.getUsername());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new InfoMsg(LocalDate.now(), "Password corrente non valida"));
         }
@@ -278,7 +285,7 @@ public class UtentiController {
         existingUtente.setPassword(passwordEncoder.encode(newPassword));
         utentiService.Save(existingUtente);
         
-        log.info("Password cambiata con successo per utente: " + username);
+        log.info("Password cambiata con successo per utente: " + existingUtente.getUsername());
         return ResponseEntity.ok(new InfoMsg(LocalDate.now(), "Password cambiata con successo"));
     }
     
@@ -307,7 +314,7 @@ public class UtentiController {
 	public ResponseEntity<InfoMsg> addNewUser(@RequestBody Utenti utente, 
         BindingResult bindingResult) throws BindingException {
 
-	    Utenti checkUtente = utentiService.SelUser(utente.getUsername());
+	    Utenti checkUtente = utentiService.SelUserByUsername(utente.getUsername());
 
         if (bindingResult.hasErrors()) {
             String MsgErr = errMessage.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale());

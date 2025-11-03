@@ -20,9 +20,8 @@ export interface ILezione {
 
 export enum TipoLezione {
   PRIVATA = 'PRIVATA',
-  SEMI_PRIVATA_DUETTO = 'SEMI_PRIVATA_DUETTO', // 2 persone
-  SEMI_PRIVATA_GRUPPO = 'SEMI_PRIVATA_GRUPPO', // 3-4 persone
-  MATWORK = 'MATWORK', // max 6 persone
+  SEMI_PRIVATA = 'SEMI_PRIVATA', // 3-4 persone
+  PILATES_MATWORK = 'PILATES_MATWORK', // max 6 persone
   YOGA = 'YOGA', // gruppo
   PRIMA_LEZIONE = 'PRIMA_LEZIONE' // 55 minuti analisi posturale
 }
@@ -58,22 +57,15 @@ export const TIPI_LEZIONE_CONFIG: Record<TipoLezione, TipoLezioneConfig> = {
     colore: '#8b5cf6',
     descrizione: '55 minuti - analisi posturale e anamnesi'
   },
-  [TipoLezione.SEMI_PRIVATA_DUETTO]: {
-    label: 'Semi Privata Duetto',
-    durata: 50,
-    maxPartecipanti: 2,
-    colore: '#10b981',
-    descrizione: '50 minuti - 2 persone'
-  },
-  [TipoLezione.SEMI_PRIVATA_GRUPPO]: {
-    label: 'Semi Privata Gruppo',
+  [TipoLezione.SEMI_PRIVATA]: {
+    label: 'Semi Privata',
     durata: 50,
     maxPartecipanti: 4,
     colore: '#f59e0b',
     descrizione: '50 minuti - 3-4 persone'
   },
-  [TipoLezione.MATWORK]: {
-    label: 'Matwork',
+  [TipoLezione.PILATES_MATWORK]: {
+    label: 'Pilates Matwork',
     durata: 50,
     maxPartecipanti: 6,
     colore: '#ef4444',

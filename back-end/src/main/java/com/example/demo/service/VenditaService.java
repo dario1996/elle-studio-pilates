@@ -1,5 +1,22 @@
 package com.example.demo.service;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.demo.entity.Pacchetto;
 import com.example.demo.entity.Utenti;
 import com.example.demo.entity.Vendita;
@@ -7,18 +24,6 @@ import com.example.demo.entity.Vendita.StatoVendita;
 import com.example.demo.repository.PacchettoRepository;
 import com.example.demo.repository.UtenteRepository;
 import com.example.demo.repository.VenditaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.YearMonth;
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Service per gestire le operazioni di business relative alle vendite
@@ -41,9 +46,9 @@ public class VenditaService {
     /**
      * Crea una nuova vendita
      */
-    public Vendita creaVendita(String username, Long pacchettoId, BigDecimal importo, String note) {
-        Utenti utente = utenteRepository.findById(username)
-                .orElseThrow(() -> new RuntimeException("Utente non trovato con username: " + username));
+    public Vendita creaVendita(Long id, Long pacchettoId, BigDecimal importo, String note) {
+        Utenti utente = utenteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Utente non trovato con ID: " + id));
 
         Pacchetto pacchetto = pacchettoRepository.findById(pacchettoId)
                 .orElseThrow(() -> new RuntimeException("Pacchetto non trovato con ID: " + pacchettoId));

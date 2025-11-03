@@ -15,9 +15,14 @@ public class UtentiServiceImpl implements UtentiService {
 	UtenteRepository utentiRepository;
 
     @Override
-	public Utenti SelUser(String username)
+	public Utenti SelUserByUsername(String username)
 	{
 		return utentiRepository.findByUsername(username);
+	}
+
+	@Override
+	public Utenti SelUserById(Long id) {
+		return utentiRepository.findById(id).orElse(null);
 	}
 
     @Override
@@ -47,15 +52,15 @@ public class UtentiServiceImpl implements UtentiService {
 		return utentiRepository.findByEmail(email);
 	}
 	
-	// 🆕 Implementazione per ottenere tutti gli utenti
+	// Implementazione per ottenere tutti gli utenti
 	@Override
 	public List<Utenti> SelPreloadUsers() {
 		return utentiRepository.findAll();
 	}
 	
-	// 🆕 Implementazione per eliminare un utente
+	// Implementazione per eliminare un utente
 	@Override
-	public void deleteUtente(String username) {
-		utentiRepository.deleteById(username);
+	public void deleteUtente(Long id) {
+		utentiRepository.deleteById(id);
 	}
 }

@@ -1,9 +1,19 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "log_login")
@@ -13,12 +23,6 @@ public class LogLogin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    // Relazione molti-a-uno con Dipendente
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "dipendente_id", nullable = false)
-    @JsonIgnoreProperties({ "assegnazioni", "logLogin" })
-    private Dipendente dipendente;
 
     // Relazione molti-a-uno con Pacchetto (opzionale)
     @ManyToOne(fetch = FetchType.LAZY)
@@ -87,9 +91,8 @@ public class LogLogin {
         this.dataImport = LocalDateTime.now();
     }
 
-    public LogLogin(Dipendente dipendente, String nomeContenuto, String fornitoreContenuto) {
+    public LogLogin(String nomeContenuto, String fornitoreContenuto) {
         this();
-        this.dipendente = dipendente;
         this.nomeContenuto = nomeContenuto;
         this.fornitoreContenuto = fornitoreContenuto;
     }
@@ -105,14 +108,6 @@ public class LogLogin {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Dipendente getDipendente() {
-        return dipendente;
-    }
-
-    public void setDipendente(Dipendente dipendente) {
-        this.dipendente = dipendente;
     }
 
     public Pacchetto getPacchetto() {

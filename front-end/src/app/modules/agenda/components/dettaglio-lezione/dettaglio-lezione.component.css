@@ -106,15 +106,11 @@
   background-color: #8b5cf6;
 }
 
-.type-badge[data-tipo="SEMI_PRIVATA_DUETTO"] {
-  background-color: #10b981;
-}
-
-.type-badge[data-tipo="SEMI_PRIVATA_GRUPPO"] {
+.type-badge[data-tipo="SEMI_PRIVATA"] {
   background-color: #f59e0b;
 }
 
-.type-badge[data-tipo="MATWORK"] {
+.type-badge[data-tipo="PILATES_MATWORK"] {
   background-color: #ef4444;
 }
 

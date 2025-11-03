@@ -53,12 +53,9 @@ export class FormLezioneComponent implements OnInit {
       case 'PRIVATA':
         return TipoLezione.PRIVATA;
       case 'SEMI_PRIVATA':
-        return TipoLezione.SEMI_PRIVATA_DUETTO; // Default per semi-privata
-      case 'GRUPPO_MAT':
-      case 'MATWORK':
-        return TipoLezione.MATWORK;
-      case 'COMBO':
-        return TipoLezione.SEMI_PRIVATA_GRUPPO; // Mappiamo COMBO a gruppo
+        return TipoLezione.SEMI_PRIVATA;
+      case 'PILATES_MATWORK':
+        return TipoLezione.PILATES_MATWORK;
       case 'YOGA':
         return TipoLezione.YOGA;
       default:

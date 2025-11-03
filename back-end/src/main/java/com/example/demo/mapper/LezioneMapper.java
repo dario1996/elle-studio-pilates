@@ -139,12 +139,10 @@ public class LezioneMapper {
                 return "PRIVATA";
             case PRIMA_LEZIONE:
                 return "PRIMA_LEZIONE";
-            case SEMI_PRIVATA_DUETTO:
-                return "SEMI_PRIVATA_DUETTO";
-            case SEMI_PRIVATA_GRUPPO:
-                return "SEMI_PRIVATA_GRUPPO";
-            case MATWORK:
-                return "MATWORK";
+            case SEMI_PRIVATA:
+                return "SEMI_PRIVATA";
+            case PILATES_MATWORK:
+                return "PILATES_MATWORK";
             case YOGA:
                 return "YOGA";
             default:

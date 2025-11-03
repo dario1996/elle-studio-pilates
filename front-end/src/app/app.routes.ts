@@ -41,15 +41,6 @@ export const routes: Routes = [
         data: { roles: [Ruoli.amministratore] },
       },
       {
-        path: 'dipendenti',
-        loadComponent: () =>
-          import(
-            './modules/dipendenti/pages/dipendenti/dipendenti.component'
-          ).then(m => m.DipendentiComponent),
-        canActivate: [AuthGuard],
-        data: { roles: [Ruoli.amministratore] },
-      },
-      {
         path: 'gestione-utenti',
         loadComponent: () =>
           import(
@@ -99,13 +90,6 @@ export const routes: Routes = [
         component: AccountPanelComponent,
         canActivate: [AuthGuard],
         data: { roles: [Ruoli.utente, Ruoli.amministratore] },
-      },
-      {
-        path: 'impostazioni',
-        loadComponent: () =>
-          import('./modules/settings/pages/settings/settings.component').then(
-            m => m.SettingsComponent,
-          ),
       },
     ],
     canActivate: [AuthGuard],

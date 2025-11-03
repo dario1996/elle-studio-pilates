@@ -26,7 +26,7 @@ export class FormPacchettiComponent implements OnInit {
     { value: 'PRIMA_LEZIONE', label: 'Prima Lezione' },
     { value: 'PRIVATA', label: 'Privata' },
     { value: 'SEMI_PRIVATA', label: 'Semi Privata' },
-    { value: 'GRUPPO_MAT', label: 'Matwork' },
+    { value: 'PILATES_MATWORK', label: 'Pilates Matwork' },
     { value: 'COMBO', label: 'Combo' },
     { value: 'YOGA', label: 'Yoga' },
   ];

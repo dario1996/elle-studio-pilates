@@ -274,7 +274,7 @@
   background-color: #f59e0b;
 }
 
-::ng-deep .fc-event[data-tipo="MATWORK"] {
+::ng-deep .fc-event[data-tipo="PILATES_MATWORK"] {
   background-color: #ef4444;
 }
 

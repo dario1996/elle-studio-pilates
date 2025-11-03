@@ -42,7 +42,7 @@ public class PacchettoController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Pacchetto creato con successo", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Pacchetto.class))),
             @ApiResponse(responseCode = "400", description = "Dati richiesta non validi"),
-            @ApiResponse(responseCode = "404", description = "Piattaforma non trovata"),
+            @ApiResponse(responseCode = "404", description = "Pacchetto non trovato"),
             @ApiResponse(responseCode = "409", description = "Pacchetto già esistente (codice pacchetto duplicato)")
     })
 
