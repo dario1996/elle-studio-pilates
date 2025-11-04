@@ -36,14 +36,29 @@
   align-items: stretch;
 }
 
+.dashboard-stats {
+  padding: 6px 0px 0px 0px;
+  margin-bottom: 24px;
+}
+
 .dashboard-stats .row {
+  justify-content: center;
+  align-items: stretch;
+  display: flex;
+  align-items: stretch;
+  max-width: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+/* .dashboard-stats .row {
   justify-content: center;
   align-items: stretch;
   display: flex;
   align-items: stretch;
   max-width: 1300px;
   width: 100%;
-}
+} */
 
 .dashboard-stats .col-md-3 {
   flex: 1;
@@ -258,7 +273,7 @@
   border-top: 4px solid #c99e67;
   transition: all 0.3s ease;
   width: 100%;
-  max-width: 1300px; /* Allineato con le card superiori */
+  max-width: auto;
   margin: 0 auto;
 }
 

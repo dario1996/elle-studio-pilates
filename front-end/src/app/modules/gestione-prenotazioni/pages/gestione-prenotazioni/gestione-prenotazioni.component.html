@@ -41,7 +41,7 @@
                     (change)="onPacchettoChange($event)">
                     <option value="">-- Seleziona un pacchetto --</option>
                     <option *ngFor="let pacchetto of pacchetti" [value]="pacchetto.id">
-                      {{ pacchetto.nome }} - {{ pacchetto.categoria }}
+                      {{ pacchetto.nome }}
                     </option>
                   </select>
                 </div>
@@ -49,8 +49,8 @@
                 <!-- Dettagli pacchetto selezionato -->
                 <div class="pacchetto-details" *ngIf="selectedPacchetto">
                   <div class="detail-row">
-                    <span class="label"><i class="fas fa-tag"></i> Categoria:</span>
-                    <span class="value">{{ selectedPacchetto.categoria }}</span>
+                    <span class="label"><i class="fas fa-tag"></i> Nome:</span>
+                    <span class="value">{{ selectedPacchetto.nome }}</span>
                   </div>
                   <div class="detail-row" *ngIf="selectedPacchetto.livello">
                     <span class="label"><i class="fas fa-chart-line"></i> Livello:</span>
