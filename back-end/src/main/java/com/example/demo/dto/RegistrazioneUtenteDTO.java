@@ -60,7 +60,7 @@ public class RegistrazioneUtenteDTO {
     private String confirmPassword;
     
     // Campi di sistema
-    private String attivo = "Si";
+    private String attivo = "No";
     private List<String> ruoli;
     
     public RegistrazioneUtenteDTO() {

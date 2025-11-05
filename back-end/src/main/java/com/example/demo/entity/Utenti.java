@@ -34,7 +34,7 @@ public class Utenti
 	private String password;
 	
 	@Column(name = "attivo")
-	private String attivo = "Si";
+	private String attivo = "No";
 	
 	@Column(name = "ruoli")
     @Convert(converter = StringListConverter.class)
