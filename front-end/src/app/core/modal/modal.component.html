@@ -38,7 +38,7 @@
 
         <!-- Default buttons if no custom buttons or showDefaultButtons is true -->
         <ng-container *ngIf="(!config.customButtons || config.customButtons.length === 0 || config.showDefaultButtons !== false)">
-          <button class="btn btn-cancel btn-sm" (click)="chiudi()">Chiudi</button>
+          <button class="btn btn-cancel btn-sm ms-2" (click)="chiudi()">Chiudi</button>
           <button
             *ngIf="config.onConferma"
             class="btn btn-confirm btn-sm ms-2"

@@ -35,7 +35,7 @@
         <div class="info-row"><span>Stato</span><span [ngClass]="{'status-disabled': user.attivo !== 'Si'}">{{ displayStatus(user.attivo) }}</span></div>
         <div class="info-row"><span>Membro dal</span><span>{{ display(user.data_creazione) }}</span></div>
         <div class="info-row"><span>Password</span><span>********</span></div>
-        <div class="info-row btn-row"><span></span><span><button class="btn-change" (click)="changePassword()">Cambia password</button></span></div>
+        <div class="info-row btn-row"><span></span><span><button class="btn btn-change btn-sm" (click)="changePassword()">Cambia password</button></span></div>
       </div>
     </div>
   </div>
@@ -61,7 +61,7 @@
   <div class="modal-container" (click)="$event.stopPropagation()">
     <div class="modal-header">
       <h3>Cambia Password</h3>
-      <button type="button" class="modal-close" (click)="closePasswordModal()">
+      <button type="button" class="button-close" (click)="closePasswordModal()">
         <i class="fas fa-times"></i>
       </button>
     </div>
@@ -142,12 +142,12 @@
     </div>
     
     <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" (click)="closePasswordModal()" [disabled]="passwordLoading">
+      <button type="button" class="btn btn-cancel btn-sm" (click)="closePasswordModal()" [disabled]="passwordLoading">
         Annulla
       </button>
       <button 
         type="button" 
-        class="btn btn-primary" 
+        class="btn btn-change btn-sm" 
         (click)="onSubmitPasswordChange()"
         [disabled]="passwordForm.invalid || passwordLoading">
         <span *ngIf="passwordLoading">

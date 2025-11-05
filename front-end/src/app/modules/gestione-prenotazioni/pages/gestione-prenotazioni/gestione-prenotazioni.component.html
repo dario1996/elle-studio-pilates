@@ -185,13 +185,13 @@
           <div class="form-actions">
             <button 
               type="button" 
-              class="btn btn-secondary"
+              class="btn btn-cancel btn-sm"
               (click)="prenotazioneForm.reset(); selectedLezione = null; selectedTipoLezione = null; selectedPacchetto = null; tipiLezione = []; lezioniDisponibili = []; clearMessages()">
               Annulla
             </button>
             <button 
               type="submit" 
-              class="btn btn-primary"
+              class="btn quick-action-btn"
               [disabled]="!isFormValid() || loading">
               <span *ngIf="loading">
                 <i class="fas fa-spinner fa-spin"></i> Prenotando...
@@ -225,7 +225,7 @@
   <div class="modal-container" (click)="$event.stopPropagation()">
     <div class="modal-header">
       <h3>Le tue Prenotazioni</h3>
-      <button type="button" class="modal-close" (click)="chiudiGestionePrenotazioni()">
+      <button type="button" class="button-close" (click)="chiudiGestionePrenotazioni()">
         <i class="fas fa-times"></i>
       </button>
     </div>
@@ -280,7 +280,7 @@
     </div>
     
     <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" (click)="chiudiGestionePrenotazioni()">
+      <button type="button" class="btn btn-cancel btn-sm ms-2" (click)="chiudiGestionePrenotazioni()">
         Chiudi
       </button>
     </div>
