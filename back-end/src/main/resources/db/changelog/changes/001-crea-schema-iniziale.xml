@@ -28,6 +28,15 @@
             <column name="codice_fiscale" type="VARCHAR(16)">
                 <constraints nullable="true" unique="true" />
             </column>
+            <column name="indirizzo" type="VARCHAR(200)">
+                <constraints nullable="false" />
+            </column>
+            <column name="città" type="VARCHAR(100)">
+                <constraints nullable="false" />
+            </column>
+            <column name="telefono" type="VARCHAR(20)">
+                <constraints nullable="true" />
+            </column>
             <column name="certificato_medico" type="VARCHAR(500)">
                 <constraints nullable="true" />
             </column>

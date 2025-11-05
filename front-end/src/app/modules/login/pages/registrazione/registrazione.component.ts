@@ -31,6 +31,9 @@ export class RegistrazioneComponent implements OnInit {
     nome: '',
     cognome: '',
     codiceFiscale: '',
+    indirizzo: '',
+    città: '',
+    telefono: '',
     // Step 2
     certificatoMedico: '',
     patologie: false,
@@ -161,7 +164,10 @@ export class RegistrazioneComponent implements OnInit {
         return {
           nome: this.registrationData.nome,
           cognome: this.registrationData.cognome,
-          codiceFiscale: this.registrationData.codiceFiscale
+          codiceFiscale: this.registrationData.codiceFiscale,
+          indirizzo: this.registrationData.indirizzo,
+          città: this.registrationData.città,
+          telefono: this.registrationData.telefono
         };
       case 2:
         return {

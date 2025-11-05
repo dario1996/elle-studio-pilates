@@ -81,6 +81,9 @@ public class RegistrazioneService {
         utente.setNome(dto.getNome());
         utente.setCognome(dto.getCognome());
         utente.setCodiceFiscale(dto.getCodiceFiscale());
+        utente.setIndirizzo(dto.getIndirizzo());
+        utente.setCittà(dto.getCittà());
+        utente.setTelefono(dto.getTelefono());
         utente.setCertificatoMedico(dto.getCertificatoMedico());
         utente.setPatologie(dto.getPatologie());
         utente.setDescrizionePatologie(dto.getDescrizionePatologie());

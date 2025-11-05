@@ -95,6 +95,68 @@
         </div>
       </div>
       <div class="mb-4">
+        <label for="indirizzo" class="form-label"
+          >Indirizzo<span class="text-danger">*</span></label
+        >
+        <input
+          type="text"
+          id="indirizzo"
+          class="form-control"
+          formControlName="indirizzo"
+          [ngClass]="{
+            'is-invalid':
+              profiloForm.get('indirizzo')?.invalid &&
+              profiloForm.get('indirizzo')?.touched,
+          }"
+          placeholder="Via Roma 123"
+        />
+        <div
+          class="invalid-feedback"
+          *ngIf="
+            profiloForm.get('indirizzo')?.invalid &&
+            profiloForm.get('indirizzo')?.touched
+          "
+        >
+          L'indirizzo è obbligatorio.
+        </div>
+      </div>
+      <div class="mb-4">
+        <label for="città" class="form-label"
+          >Città<span class="text-danger">*</span></label
+        >
+        <input
+          type="text"
+          id="città"
+          class="form-control"
+          formControlName="città"
+          [ngClass]="{
+            'is-invalid':
+              profiloForm.get('città')?.invalid &&
+              profiloForm.get('città')?.touched,
+          }"
+          placeholder="Milano"
+        />
+        <div
+          class="invalid-feedback"
+          *ngIf="
+            profiloForm.get('città')?.invalid &&
+            profiloForm.get('città')?.touched
+          "
+        >
+          La città è obbligatoria.
+        </div>
+      </div>
+      <div class="mb-4">
+        <label for="telefono" class="form-label">Numero di Telefono</label>
+        <input
+          type="tel"
+          id="telefono"
+          class="form-control"
+          formControlName="telefono"
+          placeholder="+39 123 456 7890"
+        />
+      </div>
+      <div class="mb-4">
         <button
           type="submit"
           class="btn btn-dark w-100"

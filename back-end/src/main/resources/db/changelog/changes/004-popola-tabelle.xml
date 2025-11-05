@@ -16,6 +16,8 @@
             <column name="cognome" value="Caratti" />
             <column name="codice_fiscale" value="CRTLRA85M41H501Z" />
             <column name="email" value="laura.caratti@mail.com" />
+            <column name="indirizzo" value="Corso Umberto 45" />
+            <column name="città" value="Torino" />
             <!-- BCrypt hash of "vinc123" with salt rounds 10 -->
             <column name="password" value="$2a$10$SAFTjDJLm1kN6KaDpBjc.eZWGKdRcFW/eBt5WR.ciDDWkYZj2.69." />
             <column name="attivo" value="Si" />
@@ -30,6 +32,8 @@
             <column name="cognome" value="Rossi" />
             <column name="codice_fiscale" value="RSSMRA88H15F205X" />
             <column name="email" value="mario.rossi@mail.com" />
+            <column name="indirizzo" value="Via Roma 45" />
+            <column name="città" value="Milano" />
             <!-- BCrypt hash of "dario1234" with salt rounds 10 -->
             <column name="password" value="$2a$10$PvPcRCwDmkcS7hvJ88ZW.OWVSUWjGbZ392kVLodXvKa1VQ9tkpa5q" />
             <column name="attivo" value="Si" />
@@ -44,6 +48,8 @@
             <column name="cognome" value="Castello" />
             <column name="codice_fiscale" value="CSTGRG92C20L219Y" />
             <column name="email" value="giorgio.castello@mail.com" />
+            <column name="indirizzo" value="Corso Italia 128" />
+            <column name="città" value="Torino" />
             <!-- BCrypt hash of "vinc1234" with salt rounds 10 -->
             <column name="password" value="$2a$10$s.WiawnI82GBVDIhpcpgJObJN1W8vk6b68BtenhTn2FwDsJo8/Aqa" />
             <column name="attivo" value="Si" />
@@ -58,6 +64,8 @@
             <column name="cognome" value="Bianchi" />
             <column name="codice_fiscale" value="BNCNLR87D45F205V" />
             <column name="email" value="eleonora.bianchi@mail.com" />
+            <column name="indirizzo" value="Piazza Garibaldi 7" />
+            <column name="città" value="Bologna" />
             <!-- BCrypt hash of "Yoga2025!" salt rounds 10 -->
             <column name="password" value="$2a$10$mB576Og6h2nRZnN8YEhuQeYJgBPWa5JktpU94/U9VDxZHnqBGrZLu" />
             <column name="attivo" value="Si" />
@@ -72,8 +80,250 @@
             <column name="cognome" value="Verdi" />
             <column name="codice_fiscale" value="VRDSFO95E42H501T" />
             <column name="email" value="sofia.verdi@mail.com" />
+            <column name="indirizzo" value="Viale dei Giardini 22" />
+            <column name="città" value="Firenze" />
             <!-- BCrypt hash of "Studio2025!" salt rounds 10 -->
             <column name="password" value="$2a$10$mr0KceDH2tFL7iBBtWWFt.cO90StEzDUEMi5D5BSD0kSmFnr0fnFC" />
+            <column name="attivo" value="Si" />
+            <column name="ruoli" value="USER" />
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
+        </insert>
+
+        <!-- Utente 5 -->
+        <insert tableName="utenti">
+            <column name="username" value="a.ferrari" />
+            <column name="nome" value="Andrea" />
+            <column name="cognome" value="Ferrari" />
+            <column name="codice_fiscale" value="FRRNDR90L12F205W" />
+            <column name="email" value="andrea.ferrari@mail.com" />
+            <column name="indirizzo" value="Via Garibaldi 33" />
+            <column name="città" value="Roma" />
+            <!-- BCrypt hash of "Pilates123" salt rounds 10 -->
+            <column name="password" value="$2a$10$ZXm5QvP8k9L.YxJ7fN2HVeqKp5JW8mN.9RtQ3vL4kX2pY6nM8jH9O" />
+            <column name="attivo" value="Si" />
+            <column name="ruoli" value="USER" />
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
+        </insert>
+
+        <!-- Utente 6 -->
+        <insert tableName="utenti">
+            <column name="username" value="c.romano" />
+            <column name="nome" value="Chiara" />
+            <column name="cognome" value="Romano" />
+            <column name="codice_fiscale" value="RMNCRH89S52F839K" />
+            <column name="email" value="chiara.romano@mail.com" />
+            <column name="indirizzo" value="Corso Venezia 88" />
+            <column name="città" value="Venezia" />
+            <!-- BCrypt hash of "Benessere2025" salt rounds 10 -->
+            <column name="password" value="$2a$10$Km9Y5tR2nP4qX8wL6vN3Ue5Jh7Fg9Ss2Mz1Oo3Qq6Rr8Tt5Vv2Xx" />
+            <column name="attivo" value="Si" />
+            <column name="ruoli" value="USER" />
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
+        </insert>
+
+        <!-- Utente 7 -->
+        <insert tableName="utenti">
+            <column name="username" value="l.fontana" />
+            <column name="nome" value="Luca" />
+            <column name="cognome" value="Fontana" />
+            <column name="codice_fiscale" value="FNTLCU86T10H501M" />
+            <column name="email" value="luca.fontana@mail.com" />
+            <column name="indirizzo" value="Via Mazzini 17" />
+            <column name="città" value="Napoli" />
+            <!-- BCrypt hash of "Wellness99" salt rounds 10 -->
+            <column name="password" value="$2a$10$Aa1Bb2Cc3Dd4Ee5Ff6Gg7Hh8Ii9Jj0Kk1Ll2Mm3Nn4Oo5Pp6Qq7Rr" />
+            <column name="attivo" value="Si" />
+            <column name="ruoli" value="USER" />
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
+        </insert>
+
+        <!-- Utente 8 -->
+        <insert tableName="utenti">
+            <column name="username" value="f.colombo" />
+            <column name="nome" value="Francesca" />
+            <column name="cognome" value="Colombo" />
+            <column name="codice_fiscale" value="CLMFNC93A48F205N" />
+            <column name="email" value="francesca.colombo@mail.com" />
+            <column name="indirizzo" value="Piazza Dante 12" />
+            <column name="città" value="Milano" />
+            <!-- BCrypt hash of "Fitness2024" salt rounds 10 -->
+            <column name="password" value="$2a$10$Ss1Tt2Uu3Vv4Ww5Xx6Yy7Zz8Aa9Bb0Cc1Dd2Ee3Ff4Gg5Hh6Ii7Jj" />
+            <column name="attivo" value="Si" />
+            <column name="ruoli" value="USER" />
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
+        </insert>
+
+        <!-- Utente 9 -->
+        <insert tableName="utenti">
+            <column name="username" value="m.ricci" />
+            <column name="nome" value="Marco" />
+            <column name="cognome" value="Ricci" />
+            <column name="codice_fiscale" value="RCCMRC91D15L219P" />
+            <column name="email" value="marco.ricci@mail.com" />
+            <column name="indirizzo" value="Via Torino 55" />
+            <column name="città" value="Torino" />
+            <!-- BCrypt hash of "Salute123" salt rounds 10 -->
+            <column name="password" value="$2a$10$Kk1Ll2Mm3Nn4Oo5Pp6Qq7Rr8Ss9Tt0Uu1Vv2Ww3Xx4Yy5Zz6Aa7Bb" />
+            <column name="attivo" value="Si" />
+            <column name="ruoli" value="USER" />
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
+        </insert>
+
+        <!-- Utente 10 -->
+        <insert tableName="utenti">
+            <column name="username" value="g.marino" />
+            <column name="nome" value="Giulia" />
+            <column name="cognome" value="Marino" />
+            <column name="codice_fiscale" value="MRNGLL94M52F839Q" />
+            <column name="email" value="giulia.marino@mail.com" />
+            <column name="indirizzo" value="Corso Buenos Aires 77" />
+            <column name="città" value="Milano" />
+            <!-- BCrypt hash of "Sport2025!" salt rounds 10 -->
+            <column name="password" value="$2a$10$Cc1Dd2Ee3Ff4Gg5Hh6Ii7Jj8Kk9Ll0Mm1Nn2Oo3Pp4Qq5Rr6Ss7Tt" />
+            <column name="attivo" value="Si" />
+            <column name="ruoli" value="USER" />
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
+        </insert>
+
+        <!-- Utente 11 -->
+        <insert tableName="utenti">
+            <column name="username" value="d.conti" />
+            <column name="nome" value="Davide" />
+            <column name="cognome" value="Conti" />
+            <column name="codice_fiscale" value="CNTDVD87H20F205R" />
+            <column name="email" value="davide.conti@mail.com" />
+            <column name="indirizzo" value="Via San Marco 9" />
+            <column name="città" value="Bologna" />
+            <!-- BCrypt hash of "Corpo2025" salt rounds 10 -->
+            <column name="password" value="$2a$10$Uu1Vv2Ww3Xx4Yy5Zz6Aa7Bb8Cc9Dd0Ee1Ff2Gg3Hh4Ii5Jj6Kk7Ll" />
+            <column name="attivo" value="Si" />
+            <column name="ruoli" value="USER" />
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
+        </insert>
+
+        <!-- Utente 12 -->
+        <insert tableName="utenti">
+            <column name="username" value="s.galli" />
+            <column name="nome" value="Silvia" />
+            <column name="cognome" value="Galli" />
+            <column name="codice_fiscale" value="GLLSLV92E48H501S" />
+            <column name="email" value="silvia.galli@mail.com" />
+            <column name="indirizzo" value="Viale Europa 44" />
+            <column name="città" value="Roma" />
+            <!-- BCrypt hash of "Energia99!" salt rounds 10 -->
+            <column name="password" value="$2a$10$Mm1Nn2Oo3Pp4Qq5Rr6Ss7Tt8Uu9Vv0Ww1Xx2Yy3Zz4Aa5Bb6Cc7Dd" />
+            <column name="attivo" value="Si" />
+            <column name="ruoli" value="USER" />
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
+        </insert>
+
+        <!-- Utente 13 -->
+        <insert tableName="utenti">
+            <column name="username" value="p.bruno" />
+            <column name="nome" value="Paolo" />
+            <column name="cognome" value="Bruno" />
+            <column name="codice_fiscale" value="BRNPLA89M10L219T" />
+            <column name="email" value="paolo.bruno@mail.com" />
+            <column name="indirizzo" value="Via Dante 25" />
+            <column name="città" value="Firenze" />
+            <!-- BCrypt hash of "Movimento123" salt rounds 10 -->
+            <column name="password" value="$2a$10$Ee1Ff2Gg3Hh4Ii5Jj6Kk7Ll8Mm9Nn0Oo1Pp2Qq3Rr4Ss5Tt6Uu7Vv" />
+            <column name="attivo" value="Si" />
+            <column name="ruoli" value="USER" />
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
+        </insert>
+
+        <!-- Utente 14 -->
+        <insert tableName="utenti">
+            <column name="username" value="v.de_luca" />
+            <column name="nome" value="Valentina" />
+            <column name="cognome" value="De Luca" />
+            <column name="codice_fiscale" value="DLCVNT90D52F839U" />
+            <column name="email" value="valentina.deluca@mail.com" />
+            <column name="indirizzo" value="Corso Umberto 66" />
+            <column name="città" value="Napoli" />
+            <!-- BCrypt hash of "Equilibrio2025" salt rounds 10 -->
+            <column name="password" value="$2a$10$Ww1Xx2Yy3Zz4Aa5Bb6Cc7Dd8Ee9Ff0Gg1Hh2Ii3Jj4Kk5Ll6Mm7Nn" />
+            <column name="attivo" value="Si" />
+            <column name="ruoli" value="USER" />
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
+        </insert>
+
+        <!-- Utente 15 -->
+        <insert tableName="utenti">
+            <column name="username" value="a.mancini" />
+            <column name="nome" value="Alessandro" />
+            <column name="cognome" value="Mancini" />
+            <column name="codice_fiscale" value="MNCLSN88L15F205V" />
+            <column name="email" value="alessandro.mancini@mail.com" />
+            <column name="indirizzo" value="Via Nazionale 101" />
+            <column name="città" value="Roma" />
+            <!-- BCrypt hash of "Forza2025!" salt rounds 10 -->
+            <column name="password" value="$2a$10$Oo1Pp2Qq3Rr4Ss5Tt6Uu7Vv8Ww9Xx0Yy1Zz2Aa3Bb4Cc5Dd6Ee7Ff" />
+            <column name="attivo" value="Si" />
+            <column name="ruoli" value="USER" />
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
+        </insert>
+
+        <!-- Utente 16 -->
+        <insert tableName="utenti">
+            <column name="username" value="l.grassi" />
+            <column name="nome" value="Laura" />
+            <column name="cognome" value="Grassi" />
+            <column name="codice_fiscale" value="GRSLRA93S48L219W" />
+            <column name="email" value="laura.grassi@mail.com" />
+            <column name="indirizzo" value="Piazza Cavour 8" />
+            <column name="città" value="Torino" />
+            <!-- BCrypt hash of "Armonia99" salt rounds 10 -->
+            <column name="password" value="$2a$10$Gg1Hh2Ii3Jj4Kk5Ll6Mm7Nn8Oo9Pp0Qq1Rr2Ss3Tt4Uu5Vv6Ww7Xx" />
+            <column name="attivo" value="Si" />
+            <column name="ruoli" value="USER" />
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
+        </insert>
+
+        <!-- Utente 17 -->
+        <insert tableName="utenti">
+            <column name="username" value="r.santoro" />
+            <column name="nome" value="Roberto" />
+            <column name="cognome" value="Santoro" />
+            <column name="codice_fiscale" value="SNTRRT86A10H501X" />
+            <column name="email" value="roberto.santoro@mail.com" />
+            <column name="indirizzo" value="Via Marconi 39" />
+            <column name="città" value="Bologna" />
+            <!-- BCrypt hash of "Postura123!" salt rounds 10 -->
+            <column name="password" value="$2a$10$Yy1Zz2Aa3Bb4Cc5Dd6Ee7Ff8Gg9Hh0Ii1Jj2Kk3Ll4Mm5Nn6Oo7Pp" />
+            <column name="attivo" value="Si" />
+            <column name="ruoli" value="USER" />
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
+        </insert>
+
+        <!-- Utente 18 -->
+        <insert tableName="utenti">
+            <column name="username" value="b.moretti" />
+            <column name="nome" value="Barbara" />
+            <column name="cognome" value="Moretti" />
+            <column name="codice_fiscale" value="MRTBBR91M52F205Y" />
+            <column name="email" value="barbara.moretti@mail.com" />
+            <column name="indirizzo" value="Viale Libertà 29" />
+            <column name="città" value="Milano" />
+            <!-- BCrypt hash of "Flex2025" salt rounds 10 -->
+            <column name="password" value="$2a$10$Qq1Rr2Ss3Tt4Uu5Vv6Ww7Xx8Yy9Zz0Aa1Bb2Cc3Dd4Ee5Ff6Gg7Hh" />
+            <column name="attivo" value="Si" />
+            <column name="ruoli" value="USER" />
+            <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />
+        </insert>
+
+        <!-- Utente 19 -->
+        <insert tableName="utenti">
+            <column name="username" value="t.villa" />
+            <column name="nome" value="Tommaso" />
+            <column name="cognome" value="Villa" />
+            <column name="codice_fiscale" value="VLLTMS94D15F839Z" />
+            <column name="email" value="tommaso.villa@mail.com" />
+            <column name="indirizzo" value="Corso Francia 88" />
+            <column name="città" value="Torino" />
+            <!-- BCrypt hash of "Respiro2025!" salt rounds 10 -->
+            <column name="password" value="$2a$10$Ii1Jj2Kk3Ll4Mm5Nn6Oo7Pp8Qq9Rr0Ss1Tt2Uu3Vv4Ww5Xx6Yy7Zz" />
             <column name="attivo" value="Si" />
             <column name="ruoli" value="USER" />
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP" />

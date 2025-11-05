@@ -21,6 +21,16 @@ public class RegistrazioneUtenteDTO {
     @NotBlank(message = "Il codice fiscale è obbligatorio")
     @Size(min = 16, max = 16, message = "Il codice fiscale deve essere di 16 caratteri")
     private String codiceFiscale;
+
+    @NotBlank(message = "L'indirizzo è obbligatorio")
+    @Size(min = 10, max = 100, message = "L'indirizzo deve essere tra 10 e 100 caratteri")
+    private String indirizzo;
+
+    @NotBlank(message = "La città è obbligatoria")
+    @Size(max = 100, message = "La città non può superare i 100 caratteri")
+    private String città;
+
+    private String telefono;
     
     // Step 2: Certificato Medico
     private String certificatoMedico; // Path del file uploadato
@@ -56,13 +66,16 @@ public class RegistrazioneUtenteDTO {
     public RegistrazioneUtenteDTO() {
     }
 
-    public RegistrazioneUtenteDTO(String nome, String cognome, String codiceFiscale, String certificatoMedico,
-                                  Boolean patologie, String descrizionePatologie, String obiettivi,
+    public RegistrazioneUtenteDTO(String nome, String cognome, String codiceFiscale, String indirizzo, String città, String telefono,
+                                  String certificatoMedico, Boolean patologie, String descrizionePatologie, String obiettivi,
                                   String username, String email, String password, String confirmPassword,
                                   String attivo, List<String> ruoli) {
         this.nome = nome;
         this.cognome = cognome;
         this.codiceFiscale = codiceFiscale;
+        this.indirizzo = indirizzo;
+        this.città = città;
+        this.telefono = telefono;
         this.certificatoMedico = certificatoMedico;
         this.patologie = patologie;
         this.descrizionePatologie = descrizionePatologie;
@@ -97,6 +110,30 @@ public class RegistrazioneUtenteDTO {
 
     public void setCodiceFiscale(String codiceFiscale) {
         this.codiceFiscale = codiceFiscale;
+    }
+
+    public String getIndirizzo() {
+        return indirizzo;
+    }
+
+    public void setIndirizzo(String indirizzo) {
+        this.indirizzo = indirizzo;
+    }
+
+    public String getCittà() {
+        return città;
+    }
+
+    public void setCittà(String città) {
+        this.città = città;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
 
     public String getCertificatoMedico() {

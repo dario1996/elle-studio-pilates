@@ -46,8 +46,8 @@ public class JWTWebSecurityConfig {
                         .requestMatchers(HttpMethod.POST, authenticationPath).permitAll()
                         .requestMatchers(HttpMethod.GET, refreshPath).permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/utenti/inserisci").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/registrazione/utente").permitAll() // 👈 Endpoint registrazione pubblico
-                        .requestMatchers("/h2-console/**").permitAll() // 👈 H2 Console access
+                        .requestMatchers(HttpMethod.POST, "/api/registrazione/utente").permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
                         // .requestMatchers(
                         // "/swagger-ui/**",
                         // "/v3/api-docs/**",
@@ -55,11 +55,11 @@ public class JWTWebSecurityConfig {
                         // "/swagger-ui.html",
                         // "/login"
                         // ).permitAll()
-                        .requestMatchers("/api/**").authenticated() // 👈 Protegge SOLO le API
+                        .requestMatchers("/api/**").authenticated()
                         .requestMatchers("/**").permitAll()
                 // .anyRequest().authenticated()
                 )
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class); // 👈 aggiunta qui
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

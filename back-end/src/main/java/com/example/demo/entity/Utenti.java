@@ -51,7 +51,16 @@ public class Utenti
 	private String codiceFiscale;
 	
 	@Column(name = "certificato_medico")
-	private String certificatoMedico; // Path del file uploadato
+	private String certificatoMedico;
+
+	@Column(name = "indirizzo")
+	private String indirizzo;
+
+	@Column(name = "città")
+	private String città;	
+
+	@Column(name = "telefono")
+	private String telefono;
 	
 	@Column(name = "patologie")
 	private Boolean patologie;
@@ -91,6 +100,9 @@ public class Utenti
 				String nome,
 				String cognome,
 				String codiceFiscale,
+				String indirizzo,
+				String città,
+				String telefono,
 				String certificatoMedico,
 				Boolean patologie,
 				String descrizionePatologie,
@@ -106,6 +118,9 @@ public class Utenti
 		this.nome = nome;
 		this.cognome = cognome;
 		this.codiceFiscale = codiceFiscale;
+		this.indirizzo = indirizzo;
+		this.città = città;
+		this.telefono = telefono;
 		this.certificatoMedico = certificatoMedico;
 		this.patologie = patologie;
 		this.descrizionePatologie = descrizionePatologie;
@@ -184,6 +199,30 @@ public class Utenti
 
 	public void setCodiceFiscale(String codiceFiscale) {
 		this.codiceFiscale = codiceFiscale;
+	}
+
+	public String getIndirizzo() {
+		return indirizzo;
+	}
+	
+	public void setIndirizzo(String indirizzo) {
+		this.indirizzo = indirizzo;
+	}
+
+	public String getCittà() {
+		return città;
+	}
+
+	public void setCittà(String città) {
+		this.città = città;
+	}
+
+	public String getTelefono() {
+		return telefono;
+	}
+
+	public void setTelefono(String telefono) {
+		this.telefono = telefono;
 	}
 
 	public String getCertificatoMedico() {
