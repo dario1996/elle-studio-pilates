@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import java.util.List;
+
 import com.example.demo.entity.Utenti;
 
 public interface UtentiService
@@ -23,5 +24,7 @@ public interface UtentiService
 	public List<Utenti> SelPreloadUsers();
 
 	public void deleteUtente(Long id);
+
+	public void aggiornaPacchettiDisponibili(Long utenteId, List<Long> pacchettiIds);
 
 }

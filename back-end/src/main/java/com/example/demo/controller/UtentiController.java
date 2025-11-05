@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.ModificaUtenteDTO;
 import com.example.demo.dto.UtenteAutocompleteDto;
 import com.example.demo.entity.Utenti;
 import com.example.demo.exceptions.BindingException;
@@ -76,7 +77,7 @@ public class UtentiController {
     // 🆕 ENDPOINT PUT per modificare un utente
     @PutMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<InfoMsg> updateUtente(@PathVariable Long id, 
-            @RequestBody Utenti utente, BindingResult bindingResult) throws BindingException {
+            @RequestBody ModificaUtenteDTO dto, BindingResult bindingResult) throws BindingException {
         
         log.info("Richiesta modifica utente: " + id);
         
@@ -92,34 +93,37 @@ public class UtentiController {
                     .body(new InfoMsg(LocalDate.now(), "Utente non trovato"));
         }
         
-        // Aggiorna i campi
-        existingUtente.setNome(utente.getNome());
-        existingUtente.setCognome(utente.getCognome());
-        existingUtente.setEmail(utente.getEmail());
+        // Aggiorna i campi base
+        existingUtente.setNome(dto.getNome());
+        existingUtente.setCognome(dto.getCognome());
+        existingUtente.setEmail(dto.getEmail());
         
         // Aggiorna codice fiscale solo se non è null e non è vuoto
-        if (utente.getCodiceFiscale() != null && !utente.getCodiceFiscale().trim().isEmpty()) {
-            existingUtente.setCodiceFiscale(utente.getCodiceFiscale());
+        if (dto.getCodiceFiscale() != null && !dto.getCodiceFiscale().trim().isEmpty()) {
+            existingUtente.setCodiceFiscale(dto.getCodiceFiscale());
         } else {
             existingUtente.setCodiceFiscale(null);
         }
         
-        existingUtente.setAttivo(utente.getAttivo());
-        existingUtente.setPatologie(utente.getPatologie());
-        existingUtente.setDescrizionePatologie(utente.getDescrizionePatologie());
-        existingUtente.setObiettivi(utente.getObiettivi());
+        // Aggiorna indirizzo, città, telefono
+        existingUtente.setIndirizzo(dto.getIndirizzo());
+        existingUtente.setCittà(dto.getCittà());
+        existingUtente.setTelefono(dto.getTelefono());
         
-        // Aggiorna password solo se fornita
-        if (utente.getPassword() != null && !utente.getPassword().isBlank()) {
-            existingUtente.setPassword(passwordEncoder.encode(utente.getPassword()));
-        }
+        existingUtente.setAttivo(dto.getAttivo());
         
         // Aggiorna ruoli
-        if (utente.getRuoli() != null) {
-            existingUtente.setRuoli(Arrays.asList(utente.getRuoli().toArray(new String[0])));
+        if (dto.getRuoli() != null) {
+            existingUtente.setRuoli(dto.getRuoli());
         }
         
+        // Salva l'utente con i campi base aggiornati
         utentiService.Save(existingUtente);
+        
+        // Aggiorna i pacchetti disponibili per l'utente
+        if (dto.getPacchettiDisponibiliIds() != null) {
+            utentiService.aggiornaPacchettiDisponibili(id, dto.getPacchettiDisponibiliIds());
+        }
         
         return ResponseEntity.ok(new InfoMsg(LocalDate.now(), 
                 String.format("Utente %s modificato con successo", existingUtente.getUsername())));

@@ -297,4 +297,19 @@
         <addPrimaryKey tableName="lezione_partecipanti" columnNames="lezione_id,utente_id" constraintName="PK_lezione_partecipanti"/>
     </changeSet>
 
+    <changeSet id="001-09" author="vincenzo">
+        <comment>Crea tabella di join per pacchetti disponibili per utente</comment>
+        <createTable tableName="utente_pacchetti_disponibili">
+            <column name="utente_id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="pacchetto_id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="data_assegnazione" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>

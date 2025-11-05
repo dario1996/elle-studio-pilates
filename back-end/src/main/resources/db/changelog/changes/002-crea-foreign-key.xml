@@ -46,6 +46,22 @@
             referencedColumnNames="id"
             onDelete="CASCADE"/>
 
+        <addForeignKeyConstraint 
+            baseTableName="utente_pacchetti_disponibili"
+            baseColumnNames="utente_id"
+            constraintName="FK_utente_pacchetti_utente"
+            referencedTableName="utenti"
+            referencedColumnNames="id"
+            onDelete="CASCADE"/>
+        
+        <addForeignKeyConstraint 
+            baseTableName="utente_pacchetti_disponibili"
+            baseColumnNames="pacchetto_id"
+            constraintName="FK_utente_pacchetti_pacchetto"
+            referencedTableName="pacchetti"
+            referencedColumnNames="id"
+            onDelete="CASCADE"/>
+
     </changeSet>
 
 </databaseChangeLog> 

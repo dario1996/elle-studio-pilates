@@ -1,135 +1,267 @@
 <form [formGroup]="utenteForm" (ngSubmit)="onSubmit()">
     
-    <!-- Informazioni Base -->
-    <div class="row">
-      <div class="col-md-6 form-field">
-        <label for="username" class="form-label p-0 m-0">Username <span class="text-danger">*</span></label>
-        <input
-          type="text"
-          id="username"
-          class="form-control"
-          formControlName="username"
-          [class.is-invalid]="isFieldInvalid('username')"
-          [readonly]="isEditMode"
-          placeholder="Inserisci username">
-        <div class="invalid-feedback" *ngIf="isFieldInvalid('username')">
-          {{ getFieldErrorMessage('username') }}
-        </div>
-      </div>
+  <!-- Navigation Tabs -->
+  <ul class="nav nav-tabs mb-3" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button 
+        class="nav-link" 
+        [class.active]="activeTab === 'dati'"
+        type="button" 
+        (click)="activeTab = 'dati'"
+        role="tab">
+        <i class="fas fa-user me-1"></i>Dati Utente
+      </button>
+    </li>
+    <li class="nav-item" role="presentation" *ngIf="isEditMode">
+      <button 
+        class="nav-link" 
+        [class.active]="activeTab === 'pacchetti'"
+        type="button" 
+        (click)="activeTab = 'pacchetti'"
+        role="tab">
+        <i class="fas fa-box me-1"></i>Pacchetti Acquistabili
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button 
+        class="nav-link" 
+        [class.active]="activeTab === 'ruolo'"
+        type="button" 
+        (click)="activeTab = 'ruolo'"
+        role="tab">
+        <i class="fas fa-shield-alt me-1"></i>Ruolo
+      </button>
+    </li>
+  </ul>
 
-      <div class="col-md-6 form-field">
-        <label for="email" class="form-label p-0 m-0">Email <span class="text-danger">*</span></label>
-        <input
-          type="email"
-          id="email"
-          class="form-control"
-          formControlName="email"
-          [class.is-invalid]="isFieldInvalid('email')"
-          placeholder="Inserisci email">
-        <div class="invalid-feedback" *ngIf="isFieldInvalid('email')">
-          {{ getFieldErrorMessage('email') }}
-        </div>
-      </div>
-    </div>
-
-    <div class="row mt-3">
-      <div class="col-md-6 form-field">
-        <label for="nome" class="form-label p-0 m-0">Nome <span class="text-danger">*</span></label>
-        <input
-          type="text"
-          id="nome"
-          class="form-control"
-          formControlName="nome"
-          [class.is-invalid]="isFieldInvalid('nome')"
-          placeholder="Inserisci nome">
-        <div class="invalid-feedback" *ngIf="isFieldInvalid('nome')">
-          {{ getFieldErrorMessage('nome') }}
-        </div>
-      </div>
-
-      <div class="col-md-6 form-field">
-        <label for="cognome" class="form-label p-0 m-0">Cognome <span class="text-danger">*</span></label>
-        <input
-          type="text"
-          id="cognome"
-          class="form-control"
-          formControlName="cognome"
-          [class.is-invalid]="isFieldInvalid('cognome')"
-          placeholder="Inserisci cognome">
-        <div class="invalid-feedback" *ngIf="isFieldInvalid('cognome')">
-          {{ getFieldErrorMessage('cognome') }}
-        </div>
-      </div>
-    </div>
-
-    <div class="row mt-3">
-      <div class="col-md-6 form-field">
-        <label for="codiceFiscale" class="form-label p-0 m-0">Codice Fiscale</label>
-        <input
-          type="text"
-          id="codiceFiscale"
-          class="form-control"
-          formControlName="codiceFiscale"
-          placeholder="Inserisci codice fiscale"
-          style="text-transform: uppercase;">
-      </div>
-
-      <div class="col-md-6 form-field">
-        <label for="ruoli" class="form-label p-0 m-0">Ruoli <span class="text-danger">*</span></label>
-        <select
-          id="ruoli"
-          class="form-select"
-          formControlName="ruoli"
-          [class.is-invalid]="isFieldInvalid('ruoli')"
-          multiple>
-          <option *ngFor="let ruolo of ruoliDisponibili" [value]="ruolo.value">
-            {{ ruolo.label }}
-          </option>
-        </select>
-        <div class="form-text">Tieni premuto Ctrl per selezionare più ruoli</div>
-        <div class="invalid-feedback" *ngIf="isFieldInvalid('ruoli')">
-          {{ getFieldErrorMessage('ruoli') }}
-        </div>
-      </div>
-    </div>
-
-    <div class="row mt-3">
-      <div class="col-md-6 form-field">
-        <div class="form-check mt-4">
+  <!-- Tab Content -->
+  <div class="tab-content">
+    
+    <!-- TAB 1: Dati Utente -->
+    <div class="tab-pane fade" [class.show]="activeTab === 'dati'" [class.active]="activeTab === 'dati'">
+      <div class="row">
+        <div class="col-md-6 form-field">
+          <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
           <input
-            type="checkbox"
-            id="patologie"
-            class="form-check-input"
-            formControlName="patologie">
-          <label for="patologie" class="form-check-label">
-            Ha patologie da segnalare
-          </label>
+            type="text"
+            id="username"
+            class="form-control"
+            formControlName="username"
+            [class.is-invalid]="isFieldInvalid('username')"
+            [readonly]="isEditMode"
+            placeholder="Inserisci username">
+          <div class="invalid-feedback" *ngIf="isFieldInvalid('username')">
+            {{ getFieldErrorMessage('username') }}
+          </div>
+        </div>
+
+        <div class="col-md-6 form-field">
+          <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+          <input
+            type="email"
+            id="email"
+            class="form-control"
+            formControlName="email"
+            [class.is-invalid]="isFieldInvalid('email')"
+            placeholder="Inserisci email">
+          <div class="invalid-feedback" *ngIf="isFieldInvalid('email')">
+            {{ getFieldErrorMessage('email') }}
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-md-6 form-field">
+          <label for="nome" class="form-label">Nome <span class="text-danger">*</span></label>
+          <input
+            type="text"
+            id="nome"
+            class="form-control"
+            formControlName="nome"
+            [class.is-invalid]="isFieldInvalid('nome')"
+            placeholder="Inserisci nome">
+          <div class="invalid-feedback" *ngIf="isFieldInvalid('nome')">
+            {{ getFieldErrorMessage('nome') }}
+          </div>
+        </div>
+
+        <div class="col-md-6 form-field">
+          <label for="cognome" class="form-label">Cognome <span class="text-danger">*</span></label>
+          <input
+            type="text"
+            id="cognome"
+            class="form-control"
+            formControlName="cognome"
+            [class.is-invalid]="isFieldInvalid('cognome')"
+            placeholder="Inserisci cognome">
+          <div class="invalid-feedback" *ngIf="isFieldInvalid('cognome')">
+            {{ getFieldErrorMessage('cognome') }}
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-md-6 form-field">
+          <label for="codiceFiscale" class="form-label">Codice Fiscale</label>
+          <input
+            type="text"
+            id="codiceFiscale"
+            class="form-control"
+            formControlName="codiceFiscale"
+            placeholder="Inserisci codice fiscale"
+            style="text-transform: uppercase;">
+        </div>
+
+        <div class="col-md-6 form-field">
+          <label for="indirizzo" class="form-label">Indirizzo</label>
+          <input
+            type="text"
+            id="indirizzo"
+            class="form-control"
+            formControlName="indirizzo"
+            placeholder="Inserisci indirizzo">
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-md-6 form-field">
+          <label for="città" class="form-label">Città</label>
+          <input
+            type="text"
+            id="città"
+            class="form-control"
+            formControlName="città"
+            placeholder="Inserisci città">
+        </div>
+
+        <div class="col-md-6 form-field">
+          <label for="telefono" class="form-label">Telefono</label>
+          <input
+            type="tel"
+            id="telefono"
+            class="form-control"
+            formControlName="telefono"
+            placeholder="Inserisci telefono">
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-md-6 form-field">
+          <div class="form-check">
+            <input
+              type="checkbox"
+              id="patologie"
+              class="form-check-input"
+              formControlName="patologie">
+            <label for="patologie" class="form-check-label">
+              Ha patologie da segnalare
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-3" *ngIf="utenteForm.get('patologie')?.value">
+        <div class="col-12 form-field">
+          <label for="descrizionePatologie" class="form-label">Descrizione Patologie</label>
+          <textarea
+            id="descrizionePatologie"
+            class="form-control"
+            formControlName="descrizionePatologie"
+            rows="3"
+            placeholder="Descrivi le patologie..."></textarea>
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-12 form-field">
+          <label for="obiettivi" class="form-label">Obiettivi</label>
+          <textarea
+            id="obiettivi"
+            class="form-control"
+            formControlName="obiettivi"
+            rows="3"
+            placeholder="Descrivi gli obiettivi..."></textarea>
         </div>
       </div>
     </div>
 
-    <div class="row mt-3" *ngIf="utenteForm.get('patologie')?.value">
-      <div class="col-12 form-field">
-        <label for="descrizionePatologie" class="form-label p-0 m-0">Descrizione Patologie</label>
-        <textarea
-          id="descrizionePatologie"
-          class="form-control"
-          formControlName="descrizionePatologie"
-          rows="3"
-          placeholder="Descrivi le patologie..."></textarea>
+    <!-- TAB 2: Pacchetti Acquistabili -->
+    <div class="tab-pane fade" [class.show]="activeTab === 'pacchetti'" [class.active]="activeTab === 'pacchetti'" *ngIf="isEditMode">
+      <div class="alert alert-info mb-3">
+        <i class="fas fa-info-circle me-2"></i>
+        Seleziona i pacchetti che questo utente potrà visualizzare e acquistare.
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <div class="list-group" *ngIf="pacchettiDisponibili.length > 0; else noPacchetti">
+            <label class="list-group-item" *ngFor="let pacchetto of pacchettiDisponibili">
+              <div class="d-flex align-items-start">
+                <input 
+                  class="form-check-input me-3 mt-1" 
+                  type="checkbox" 
+                  [value]="pacchetto.id"
+                  [checked]="isPacchettoSelected(pacchetto.id)"
+                  (change)="togglePacchetto(pacchetto.id)">
+                <div class="flex-grow-1">
+                  <div class="fw-bold">{{ pacchetto.nome }}</div>
+                  <small class="text-muted d-block" *ngIf="pacchetto.descrizione">
+                    {{ pacchetto.descrizione }}
+                  </small>
+                  <div class="mt-1">
+                    <span class="badge bg-secondary me-2">{{ pacchetto.categoria }}</span>
+                    <span class="badge bg-info me-2">{{ pacchetto.livello }}</span>
+                    <span class="badge bg-success">€{{ pacchetto.prezzo }}</span>
+                  </div>
+                </div>
+              </div>
+            </label>
+          </div>
+          <ng-template #noPacchetti>
+            <div class="alert alert-warning">
+              <i class="fas fa-exclamation-triangle me-2"></i>
+              Nessun pacchetto disponibile nel sistema.
+            </div>
+          </ng-template>
+        </div>
+      </div>
+
+      <div class="alert alert-secondary mt-3" *ngIf="getSelectedPacchettiCount() > 0">
+        <i class="fas fa-check-circle me-2"></i>
+        <strong>{{ getSelectedPacchettiCount() }}</strong> pacchetto/i selezionato/i
       </div>
     </div>
 
-    <div class="row mt-3">
-      <div class="col-12 form-field">
-        <label for="obiettivi" class="form-label p-0 m-0">Obiettivi</label>
-        <textarea
-          id="obiettivi"
-          class="form-control"
-          formControlName="obiettivi"
-          rows="3"
-          placeholder="Descrivi gli obiettivi..."></textarea>
+    <!-- TAB 3: Ruolo -->
+    <div class="tab-pane fade" [class.show]="activeTab === 'ruolo'" [class.active]="activeTab === 'ruolo'">
+      <div class="alert alert-info mb-3">
+        <i class="fas fa-info-circle me-2"></i>
+        Assegna il ruolo appropriato all'utente nel sistema.
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <div class="list-group">
+            <label class="list-group-item" *ngFor="let ruolo of ruoliDisponibili">
+              <div class="d-flex align-items-center">
+                <input 
+                  class="form-check-input me-3" 
+                  type="radio" 
+                  name="ruoloRadio"
+                  [value]="ruolo.value"
+                  [checked]="isRuoloSelected(ruolo.value)"
+                  (change)="selectRuolo(ruolo.value)">
+                <div>
+                  <div class="fw-bold">{{ ruolo.label }}</div>
+                  <small class="text-muted">{{ getRuoloDescription(ruolo.value) }}</small>
+                </div>
+              </div>
+            </label>
+          </div>
+        </div>
       </div>
     </div>
 
-  </form>
+  </div>
+
+</form>

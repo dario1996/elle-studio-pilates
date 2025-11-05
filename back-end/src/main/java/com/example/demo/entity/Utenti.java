@@ -1,9 +1,14 @@
 package com.example.demo.entity;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.example.demo.converter.StringListConverter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -11,6 +16,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -78,6 +86,15 @@ public class Utenti
 	@Column(name = "data_modifica")
 	private LocalDateTime dataModifica;
 	
+	@ManyToMany
+	@JoinTable(
+	    name = "utente_pacchetti_disponibili",
+	    joinColumns = @JoinColumn(name = "utente_id"),
+	    inverseJoinColumns = @JoinColumn(name = "pacchetto_id")
+	)
+	@JsonIgnore
+	private Set<Pacchetto> pacchettiDisponibili = new HashSet<>();
+
 	@PrePersist
 	protected void onCreate() {
 		this.dataCreazione = LocalDateTime.now();
@@ -86,6 +103,17 @@ public class Utenti
 	@PreUpdate
 	protected void onUpdate() {
 		this.dataModifica = LocalDateTime.now();
+	}
+	
+	// Metodo per esporre solo gli ID dei pacchetti al frontend
+	@JsonProperty("pacchettiDisponibiliIds")
+	public List<Long> getPacchettiDisponibiliIds() {
+		if (pacchettiDisponibili == null) {
+			return List.of();
+		}
+		return pacchettiDisponibili.stream()
+				.map(Pacchetto::getId)
+				.collect(Collectors.toList());
 	}
 
 	public Utenti() {
@@ -271,6 +299,14 @@ public class Utenti
 
 	public void setDataModifica(LocalDateTime dataModifica) {
 		this.dataModifica = dataModifica;
+	}
+
+	public Set<Pacchetto> getPacchettiDisponibili() {
+		return pacchettiDisponibili;
+	}
+
+	public void setPacchettiDisponibili(Set<Pacchetto> pacchettiDisponibili) {
+		this.pacchettiDisponibili = pacchettiDisponibili;
 	}
 	
 }
