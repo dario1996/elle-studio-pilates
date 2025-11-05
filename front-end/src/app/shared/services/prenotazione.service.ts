@@ -35,8 +35,11 @@ export class PrenotazioneService {
   /**
    * Recupera i tipi di lezione filtrati per categoria del pacchetto
    */
-  getTipiLezionePerPacchetto(pacchettoId: number): Observable<TipoLezione[]> {
-    return this.http.get<TipoLezione[]>(`${this.baseUrl}/tipi-lezione/pacchetto/${pacchettoId}`);
+  // ora accetta la categoria (string) per filtrare i template disponibili
+  getTipiLezionePerPacchetto(categoria: string): Observable<TipoLezione[]> {
+    // use query param to avoid path encoding issues
+    const url = `${this.baseUrl}/tipi-lezione?categoria=${encodeURIComponent(categoria)}`;
+    return this.http.get<TipoLezione[]>(url);
   }
 
   /**

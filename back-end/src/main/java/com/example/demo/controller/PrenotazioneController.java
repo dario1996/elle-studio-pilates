@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -263,9 +264,44 @@ public class PrenotazioneController {
             if (pacchettoOpt.isEmpty()) return ResponseEntity.ok(java.util.Collections.emptyList());
             String categoria = pacchettoOpt.get().getCategoria();
 
-            // Recupera tutti i template attivi tramite JDBC per evitare errori di parsing enum presenti in DB
-            String sql = "select id, giorno_settimana, ora_inizio, ora_fine, tipo_lezione, titolo, istruttore, max_partecipanti, colore, note, attivo from calendario_settimanale where attivo = 1 order by giorno_settimana, ora_inizio";
-            java.util.List<TipoLezioneDTO> all = jdbcTemplate.query(sql, (rs, rowNum) -> {
+            // Recupera i template attivi per la categoria del pacchetto usando tipo_lezione = categoria
+            String sql = "select id, giorno_settimana, ora_inizio, ora_fine, tipo_lezione, titolo, istruttore, max_partecipanti, colore, note, attivo from calendario_settimanale where attivo = 1 and lower(tipo_lezione) = lower(?) order by giorno_settimana, ora_inizio";
+            java.util.List<TipoLezioneDTO> all = jdbcTemplate.query(sql, new Object[]{categoria}, (rs, rowNum) -> {
+                TipoLezioneDTO dto = new TipoLezioneDTO();
+                dto.setId(rs.getLong("id"));
+                dto.setGiornoSettimana(rs.getString("giorno_settimana"));
+                dto.setOraInizio(rs.getString("ora_inizio"));
+                dto.setOraFine(rs.getString("ora_fine"));
+                dto.setTitolo(rs.getString("titolo"));
+                dto.setTipoLezione(rs.getString("tipo_lezione"));
+                dto.setIstruttore(rs.getString("istruttore"));
+                Object mp = rs.getObject("max_partecipanti");
+                dto.setMaxPartecipanti(mp != null ? rs.getInt("max_partecipanti") : null);
+                dto.setColore(rs.getString("colore"));
+                dto.setNote(rs.getString("note"));
+                Object at = rs.getObject("attivo");
+                dto.setAttivo(at != null ? rs.getBoolean("attivo") : null);
+                return dto;
+            });
+            java.util.List<TipoLezioneDTO> list = all;
+
+            return ResponseEntity.ok(list);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    /**
+     * Variante che accetta direttamente la categoria (utile se il client già la possiede).
+     */
+    @GetMapping("/tipi-lezione/categoria/{categoria}")
+    public ResponseEntity<?> getTipiLezionePerCategoria(@PathVariable String categoria) {
+        try {
+            if (categoria == null || categoria.isBlank()) return ResponseEntity.ok(java.util.Collections.emptyList());
+
+            String sql = "select id, giorno_settimana, ora_inizio, ora_fine, tipo_lezione, titolo, istruttore, max_partecipanti, colore, note, attivo from calendario_settimanale where attivo = 1 and lower(tipo_lezione) = lower(?) order by giorno_settimana, ora_inizio";
+            java.util.List<TipoLezioneDTO> all = jdbcTemplate.query(sql, new Object[]{categoria}, (rs, rowNum) -> {
                 TipoLezioneDTO dto = new TipoLezioneDTO();
                 dto.setId(rs.getLong("id"));
                 dto.setGiornoSettimana(rs.getString("giorno_settimana"));
@@ -283,15 +319,53 @@ public class PrenotazioneController {
                 return dto;
             });
 
-            java.util.List<TipoLezioneDTO> list = all.stream()
-                    .filter(t -> matchesCategoria(t.getTipoLezione(), categoria))
-                    .collect(Collectors.toList());
-
-            return ResponseEntity.ok(list);
+            return ResponseEntity.ok(all);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }
+    }
+
+    /**
+     * Fallback: recupera i tipi di lezione. Se viene passata la query param `categoria` filtra per quella categoria.
+     * Utile per chiamate dal client dove la categoria può contenere caratteri speciali (evita problemi di path encoding).
+     */
+    @GetMapping("/tipi-lezione")
+    public ResponseEntity<?> getTipiLezione(@RequestParam(required = false) String categoria) {
+        try {
+            final String baseSql = "select id, giorno_settimana, ora_inizio, ora_fine, tipo_lezione, titolo, istruttore, max_partecipanti, colore, note, attivo from calendario_settimanale where attivo = 1";
+
+            if (categoria == null || categoria.isBlank()) {
+                String sql = baseSql + " order by giorno_settimana, ora_inizio";
+                java.util.List<TipoLezioneDTO> all = jdbcTemplate.query(sql, (rs, rowNum) -> mapRowToTipoLezioneDTO(rs));
+                return ResponseEntity.ok(all);
+            }
+
+            String sqlByCat = baseSql + " and lower(tipo_lezione) = lower(?) order by giorno_settimana, ora_inizio";
+            java.util.List<TipoLezioneDTO> all = jdbcTemplate.query(sqlByCat, new Object[]{categoria}, (rs, rowNum) -> mapRowToTipoLezioneDTO(rs));
+            return ResponseEntity.ok(all);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    private TipoLezioneDTO mapRowToTipoLezioneDTO(java.sql.ResultSet rs) throws java.sql.SQLException {
+        TipoLezioneDTO dto = new TipoLezioneDTO();
+        dto.setId(rs.getLong("id"));
+        dto.setGiornoSettimana(rs.getString("giorno_settimana"));
+        dto.setOraInizio(rs.getString("ora_inizio"));
+        dto.setOraFine(rs.getString("ora_fine"));
+        dto.setTitolo(rs.getString("titolo"));
+        dto.setTipoLezione(rs.getString("tipo_lezione"));
+        dto.setIstruttore(rs.getString("istruttore"));
+        Object mp = rs.getObject("max_partecipanti");
+        dto.setMaxPartecipanti(mp != null ? rs.getInt("max_partecipanti") : null);
+        dto.setColore(rs.getString("colore"));
+        dto.setNote(rs.getString("note"));
+        Object at = rs.getObject("attivo");
+        dto.setAttivo(at != null ? rs.getBoolean("attivo") : null);
+        return dto;
     }
 
     private String mapTipoLezioneToCategoria(com.example.demo.enums.TipoLezione tipoLezione) {

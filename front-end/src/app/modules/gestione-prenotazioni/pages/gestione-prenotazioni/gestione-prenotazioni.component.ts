@@ -105,7 +105,8 @@ export class GestionePrenotazioniComponent implements OnInit {
     if (!this.selectedPacchetto) return;
     
     this.loading = true;
-    this.prenotazioneService.getTipiLezionePerPacchetto(this.selectedPacchetto.id).subscribe({
+    // passiamo la categoria del pacchetto al backend
+    this.prenotazioneService.getTipiLezionePerPacchetto(this.selectedPacchetto.categoria).subscribe({
       next: (tipi) => {
         this.tipiLezione = tipi;
         this.loading = false;
