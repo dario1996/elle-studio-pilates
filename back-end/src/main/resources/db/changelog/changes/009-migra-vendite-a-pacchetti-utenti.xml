@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="009-migra-vendite-a-pacchetti-utenti" author="auto-generated">
+        <comment>Migra vendite PAID creando record pacchetti_utenti collegati a vendite esistenti. lezioni_residue lasciato NULL per inizializzazione manuale o logica applicativa.</comment>
+
+        <sql>
+            INSERT INTO pacchetti_utenti (vendita_id, utente_id, pacchetto_id, lezioni_residue, attivo, data_acquisto, data_pagamento, created_at)
+            SELECT v.id AS vendita_id, v.utente_id, v.pacchetto_id, NULL AS lezioni_residue, 1 AS attivo, v.data_acquisto, v.data_pagamento, CURRENT_TIMESTAMP
+            FROM vendite v
+            WHERE v.stato = 'PAID';
+        </sql>
+
+        <rollback>
+            <sql>DELETE pu FROM pacchetti_utenti pu WHERE pu.vendita_id IN (SELECT id FROM vendite WHERE stato = 'PAID');</sql>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

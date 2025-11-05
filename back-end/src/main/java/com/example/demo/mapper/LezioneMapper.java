@@ -12,11 +12,16 @@ import com.example.demo.entity.Pacchetto;
 import com.example.demo.entity.Utenti;
 import com.example.demo.enums.TipoLezione;
 import com.example.demo.services.PacchettoService;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.repository.PrenotazioneRepository;
 
 @Component
 public class LezioneMapper {
 
     private final PacchettoService pacchettoService;
+
+    @Autowired
+    private PrenotazioneRepository prenotazioneRepository;
 
     public LezioneMapper(PacchettoService pacchettoService) {
         this.pacchettoService = pacchettoService;
@@ -41,18 +46,26 @@ public class LezioneMapper {
         dto.setCreatedAt(lezione.getCreatedAt());
         dto.setUpdatedAt(lezione.getUpdatedAt());
         
-        // Mappa i partecipanti (solo username)
+        // Mappa i partecipanti (solo username) e calcola posti disponibili
+        int prenotati = 0;
+        try {
+            if (prenotazioneRepository != null) {
+                prenotati = (int) prenotazioneRepository.countByLezioneAndAttivaTrue(lezione);
+            } else if (lezione.getPartecipanti() != null) {
+                prenotati = lezione.getPartecipanti().size();
+            }
+        } catch (Exception e) {
+            // fallback
+            if (lezione.getPartecipanti() != null) prenotati = lezione.getPartecipanti().size();
+        }
+
         if (lezione.getPartecipanti() != null && !lezione.getPartecipanti().isEmpty()) {
             dto.setPartecipanti(lezione.getPartecipanti().stream()
                     .map(Utenti::getUsername)
                     .collect(Collectors.toList()));
-            
-            // Calcola posti disponibili
-            int prenotati = lezione.getPartecipanti().size();
-            dto.setPostiDisponibili(lezione.getMaxPartecipanti() - prenotati);
-        } else {
-            dto.setPostiDisponibili(lezione.getMaxPartecipanti());
         }
+
+        dto.setPostiDisponibili(lezione.getMaxPartecipanti() - prenotati);
 
         return dto;
     }

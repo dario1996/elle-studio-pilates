@@ -78,28 +78,28 @@ export class PrenotazioneService {
   /**
    * Crea una nuova prenotazione
    */
-  creaPrenotazione(request: PrenotazioneLezioneRequest): Observable<PrenotazioneLezioneResponse> {
-    return this.http.post<PrenotazioneLezioneResponse>(this.baseUrl, request);
+  creaPrenotazione(request: PrenotazioneLezioneRequest): Observable<void> {
+    return this.http.post<void>(this.baseUrl, request);
   }
 
   /**
    * Recupera tutte le prenotazioni dell'utente corrente
    */
   getMiePrenotazioni(): Observable<PrenotazioneLezioneResponse[]> {
-    return this.http.get<PrenotazioneLezioneResponse[]>(`${this.baseUrl}/mie-prenotazioni`);
+    return this.http.get<PrenotazioneLezioneResponse[]>(`${this.baseUrl}/mie`);
   }
 
   /**
    * Recupera le prenotazioni future dell'utente corrente
    */
   getMiePrenotazioniFuture(): Observable<PrenotazioneLezioneResponse[]> {
-    return this.http.get<PrenotazioneLezioneResponse[]>(`${this.baseUrl}/mie-prenotazioni/future`);
+    return this.http.get<PrenotazioneLezioneResponse[]>(`${this.baseUrl}/mie?future=true`);
   }
 
   /**
    * Cancella una prenotazione
    */
-  cancellaPrenotazione(prenotazioneId: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${prenotazioneId}`);
+  cancellaPrenotazione(lezioneId: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${lezioneId}`);
   }
 }

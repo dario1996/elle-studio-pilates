@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="006-migra-prenotazioni-lezioni" author="auto-generated">
+        <comment>Migra dati da lezione_partecipanti nella nuova tabella prenotazioni_lezioni</comment>
+
+        <!-- Inserisce le righe nella nuova tabella prendendo le informazioni dalla tabella di join esistente -->
+        <sql>
+            INSERT INTO prenotazioni_lezioni (lezione_id, vendita_id, utente_id, note, consumata, attiva, data_prenotazione, created_at)
+            SELECT lp.lezione_id, NULL AS vendita_id, lp.utente_id, NULL AS note, 0 AS consumata, 1 AS attiva, CURRENT_TIMESTAMP AS data_prenotazione, CURRENT_TIMESTAMP AS created_at
+            FROM lezione_partecipanti lp
+            LEFT JOIN lezioni l ON l.id = lp.lezione_id
+            WHERE 1=1;
+        </sql>
+
+        <rollback>
+            <!-- Rimuove le righe inserite (match su lezione_id e utente_id) -->
+            <sql>DELETE p FROM prenotazioni_lezioni p JOIN lezione_partecipanti lp ON p.lezione_id = lp.lezione_id AND p.utente_id = lp.utente_id;</sql>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

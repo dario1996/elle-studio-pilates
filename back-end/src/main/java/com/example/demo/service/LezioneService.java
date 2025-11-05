@@ -184,6 +184,73 @@ public class LezioneService {
         return lezioneMapper.toDto(updatedLezione);
     }
 
+    /**
+     * Metodo temporaneo per creare una prenotazione sfruttando la relazione many-to-many
+     * esistente (lezione.partecipanti). Questa implementazione è non invasiva e serve
+     * solo per la fase di test/validazione prima della migrazione verso una tabella
+     * dedicata `prenotazioni_lezioni`.
+     */
+    public void creaPrenotazioneTemporanea(Long lezioneId, String username, String note, Long venditaId) throws NotFoundException, BindingException {
+        log.info("Creazione prenotazione temporanea per lezione {} utente {}", lezioneId, username);
+
+        Lezione lezione = lezioneRepository.findById(lezioneId)
+                .orElseThrow(() -> new NotFoundException("Lezione non trovata con ID: " + lezioneId));
+
+        if (lezione.getAttiva() == null || !lezione.getAttiva()) {
+            throw new BindingException("Impossibile prenotare: lezione non attiva");
+        }
+
+        // Inizializza lista partecipanti se null
+        if (lezione.getPartecipanti() == null) {
+            lezione.setPartecipanti(new java.util.ArrayList<>());
+        }
+
+        // Controllo duplicato
+        boolean giaPrenotato = lezione.getPartecipanti().stream()
+                .anyMatch(u -> u.getUsername().equals(username));
+        if (giaPrenotato) {
+            throw new BindingException("Hai già una prenotazione per questa lezione");
+        }
+
+        // Controllo posti
+        int prenotati = lezione.getPartecipanti().size();
+        Integer max = lezione.getMaxPartecipanti() != null ? lezione.getMaxPartecipanti() : 0;
+        if (prenotati >= max) {
+            throw new BindingException("Posti esauriti per questa lezione");
+        }
+
+        // Recupera l'utente
+        com.example.demo.entity.Utenti utente = utentiService.SelUserByUsername(username);
+        if (utente == null) {
+            throw new NotFoundException("Utente non trovato: " + username);
+        }
+
+        // Aggiunge l'utente alla lista dei partecipanti e salva
+        lezione.getPartecipanti().add(utente);
+        lezioneRepository.save(lezione);
+
+        log.info("Prenotazione temporanea creata per lezione {} utente {}", lezioneId, username);
+    }
+
+    public void cancellaPrenotazioneTemporanea(Long lezioneId, String username) throws NotFoundException {
+        log.info("Cancellazione prenotazione temporanea per lezione {} utente {}", lezioneId, username);
+
+        Lezione lezione = lezioneRepository.findById(lezioneId)
+                .orElseThrow(() -> new NotFoundException("Lezione non trovata con ID: " + lezioneId));
+
+        if (lezione.getPartecipanti() == null || lezione.getPartecipanti().isEmpty()) {
+            throw new NotFoundException("Nessuna prenotazione trovata per questa lezione e utente");
+        }
+
+        boolean removed = lezione.getPartecipanti().removeIf(u -> u.getUsername().equals(username));
+        if (!removed) {
+            throw new NotFoundException("Prenotazione non trovata per utente: " + username);
+        }
+
+        lezioneRepository.save(lezione);
+        log.info("Prenotazione temporanea rimossa per lezione {} utente {}", lezioneId, username);
+    }
+
     public void toggleStatusLezione(Long id) throws NotFoundException, BindingException {
         log.info("Toggle status lezione con ID: {}", id);
         

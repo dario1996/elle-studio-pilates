@@ -39,6 +39,9 @@ public class Vendita {
     @Column(name = "note", columnDefinition = "TEXT")
     private String note;
 
+    @Column(name = "lezioni_residue")
+    private Integer lezioniResidue;
+
     // Enum per lo stato della vendita
     public enum StatoVendita {
         PENDING,
@@ -121,6 +124,14 @@ public class Vendita {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public Integer getLezioniResidue() {
+        return lezioniResidue;
+    }
+
+    public void setLezioniResidue(Integer lezioniResidue) {
+        this.lezioniResidue = lezioniResidue;
     }
 
     // Metodi di utilità

@@ -178,7 +178,8 @@ export class GestionePrenotazioniComponent implements OnInit {
       const formData = this.prenotazioneForm.value;
       const request = {
         lezioneId: this.selectedLezione.lezioneId,
-        note: formData.note
+        note: formData.note,
+        venditaId: this.selectedPacchetto ? this.selectedPacchetto.venditaId : undefined
       };
 
       this.prenotazioneService.creaPrenotazione(request).subscribe({
@@ -286,7 +287,7 @@ export class GestionePrenotazioniComponent implements OnInit {
     const conferma = confirm(`Sei sicuro di voler cancellare la prenotazione per ${prenotazione.titolo} del ${this.formatDate(prenotazione.dataInizio)}?`);
 
     if (conferma) {
-      this.prenotazioneService.cancellaPrenotazione(prenotazione.id).subscribe({
+    this.prenotazioneService.cancellaPrenotazione(prenotazione.lezioneId).subscribe({
         next: () => {
           this.prenotazioniUtente.splice(index, 1);
           this.showToastMessage('Prenotazione cancellata con successo', 'success');

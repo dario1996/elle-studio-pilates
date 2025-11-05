@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="008-create-pacchetti-utenti" author="auto-generated">
+        <comment>Crea tabella pacchetti_utenti per tracciare lezioni residue per ogni vendita/pacchetto utente</comment>
+
+        <createTable tableName="pacchetti_utenti">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="vendita_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+            <column name="utente_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pacchetto_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lezioni_residue" type="INTEGER">
+                <constraints nullable="true"/>
+            </column>
+            <column name="attivo" type="BOOLEAN" defaultValueBoolean="true"/>
+            <column name="data_acquisto" type="DATETIME"/>
+            <column name="data_pagamento" type="DATETIME"/>
+            <column name="created_at" type="DATETIME" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" type="DATETIME"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="pacchetti_utenti"
+                                 baseColumnNames="vendita_id"
+                                 constraintName="fk_pacut_vendita"
+                                 referencedTableName="vendite"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="pacchetti_utenti"
+                                 baseColumnNames="utente_id"
+                                 constraintName="fk_pacut_utente"
+                                 referencedTableName="utenti"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="pacchetti_utenti"
+                                 baseColumnNames="pacchetto_id"
+                                 constraintName="fk_pacut_pacchetto"
+                                 referencedTableName="pacchetti"
+                                 referencedColumnNames="id"/>
+
+        <createIndex tableName="pacchetti_utenti" indexName="idx_pacut_vendita">
+            <column name="vendita_id"/>
+        </createIndex>
+
+        <rollback>
+            <dropTable tableName="pacchetti_utenti"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

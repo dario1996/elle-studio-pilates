@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="012-popola-lezioni-residue-pacchetti-utenti" author="assistant">
+        <comment>Popola il campo lezioni_residue in pacchetti_utenti usando pacchetti.numero_lezioni quando disponibile, altrimenti usa vendite.lezioni_residue</comment>
+
+        <sql>
+            UPDATE pacchetti_utenti pu
+            JOIN pacchetti p ON pu.pacchetto_id = p.id
+            LEFT JOIN vendite v ON pu.vendita_id = v.id
+            SET pu.lezioni_residue = COALESCE(p.numero_lezioni, v.lezioni_residue);
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

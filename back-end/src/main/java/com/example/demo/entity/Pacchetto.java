@@ -32,6 +32,9 @@ public class Pacchetto {
     @Column(name = "max_partecipanti")
     private Integer maxPartecipanti;
 
+    @Column(name = "numero_lezioni")
+    private Integer numeroLezioni;
+
     @Column(precision = 8, scale = 2)
     private BigDecimal prezzo;
 
@@ -108,6 +111,14 @@ public class Pacchetto {
 
     public void setMaxPartecipanti(Integer maxPartecipanti) {
         this.maxPartecipanti = maxPartecipanti;
+    }
+
+    public Integer getNumeroLezioni() {
+        return numeroLezioni;
+    }
+
+    public void setNumeroLezioni(Integer numeroLezioni) {
+        this.numeroLezioni = numeroLezioni;
     }
 
     public BigDecimal getPrezzo() {

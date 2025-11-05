@@ -1,6 +1,7 @@
 export interface PrenotazioneLezioneRequest {
   lezioneId: number;
   note?: string;
+  venditaId?: number;
 }
 
 export interface PrenotazioneLezioneResponse {
@@ -58,4 +59,6 @@ export interface Pacchetto {
   maxPartecipanti?: number;
   prezzo: number;
   attivo: boolean;
+  venditaId?: number;
+  lezioniResidue?: number;
 }

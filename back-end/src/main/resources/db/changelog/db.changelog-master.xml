@@ -8,4 +8,12 @@
     <include file="db/changelog/changes/002-crea-foreign-key.xml" />
     <include file="db/changelog/changes/003-crea-indici.xml" />
     <include file="db/changelog/changes/004-popola-tabelle.xml" />
+    <include file="db/changelog/changes/005-create-prenotazioni-lezioni.xml" />
+    <include file="db/changelog/changes/006-migra-prenotazioni-lezioni.xml" />
+    <include file="db/changelog/changes/007-add-lezioni-residue-to-vendite.xml" />
+    <include file="db/changelog/changes/008-create-pacchetti-utenti.xml" />
+    <include file="db/changelog/changes/009-migra-vendite-a-pacchetti-utenti.xml" />
+    <include file="db/changelog/changes/010-add-pacchetto-utente-fk-to-prenotazioni.xml" />
+    <include file="db/changelog/changes/011-add-numero-lezioni-to-pacchetti.xml" />
+    <include file="db/changelog/changes/012-popola-lezioni-residue-pacchetti-utenti.xml" />
 </databaseChangeLog>

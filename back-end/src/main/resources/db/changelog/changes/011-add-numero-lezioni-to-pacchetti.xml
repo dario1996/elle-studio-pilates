@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="011-add-numero-lezioni-to-pacchetti" author="assistant">
+        <comment>Aggiunge la colonna numero_lezioni alla tabella pacchetti e prova a popolarla dalle descrizioni/nome</comment>
+        <addColumn tableName="pacchetti">
+            <column name="numero_lezioni" type="INT"/>
+        </addColumn>
+
+        <!-- Imposta valore esplicito per alcune tipologie comuni -->
+        <sql>
+            UPDATE pacchetti SET numero_lezioni = 1 WHERE nome LIKE '%Prima Lezione%';
+            UPDATE pacchetti SET numero_lezioni = 4 WHERE nome LIKE '%4 Lezioni%';
+            UPDATE pacchetti SET numero_lezioni = 8 WHERE nome LIKE '%8 Lezioni%';
+            UPDATE pacchetti SET numero_lezioni = 10 WHERE nome LIKE '%10 Lezioni%';
+        </sql>
+    </changeSet>
+
+    <!-- Operazione MySQL-specifica: usa REGEXP_SUBSTR disponibile in MySQL 8+ per estrarre numeri dal nome -->
+    <changeSet id="011b-popola-numero-lezioni-mysql-regexp" author="assistant" dbms="mysql">
+        <comment>Popola numero_lezioni usando REGEXP_SUBSTR su MySQL 8+</comment>
+        <sql>
+            UPDATE pacchetti
+            SET numero_lezioni = CAST(REGEXP_SUBSTR(nome, '[0-9]+') AS UNSIGNED)
+            WHERE numero_lezioni IS NULL AND nome REGEXP '[0-9]+';
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

@@ -41,6 +41,9 @@ public class VenditaService {
     @Autowired
     private PacchettoRepository pacchettoRepository;
 
+    @Autowired
+    private com.example.demo.repository.PacchettoUtenteRepository pacchettoUtenteRepository;
+
     // ===== OPERAZIONI CRUD =====
 
     /**
@@ -82,6 +85,13 @@ public class VenditaService {
             vendita.setStato(stato);
             if (stato == StatoVendita.PAID && vendita.getDataPagamento() == null) {
                 vendita.setDataPagamento(LocalDateTime.now());
+                // crea l'eventuale record pacchetto_utente che terrà traccia delle lezioni residue
+                try {
+                    createPacchettoUtenteIfNeeded(vendita);
+                } catch (Exception e) {
+                    // non bloccare l'aggiornamento se la creazione del pacchetto-utente fallisce; loggare
+                    System.err.println("Errore durante creazione PacchettoUtente: " + e.getMessage());
+                }
             }
         }
         
@@ -100,7 +110,45 @@ public class VenditaService {
                 .orElseThrow(() -> new RuntimeException("Vendita non trovata con ID: " + venditaId));
 
         vendita.marcaComePagata();
-        return venditaRepository.save(vendita);
+        Vendita saved = venditaRepository.save(vendita);
+        try {
+            createPacchettoUtenteIfNeeded(saved);
+        } catch (Exception e) {
+            System.err.println("Errore durante creazione PacchettoUtente: " + e.getMessage());
+        }
+        return saved;
+    }
+
+    /**
+     * Crea un record PacchettoUtente associato alla vendita se non esiste ancora.
+     * Usa pacchetto.numeroLezioni se presente, altrimenti usa vendita.lezioniResidue.
+     */
+    private void createPacchettoUtenteIfNeeded(Vendita vendita) {
+        if (vendita == null) return;
+        if (vendita.getPacchetto() == null) return;
+
+        // se già esiste un pacchetto_utente per questa vendita non fare nulla
+        var existing = pacchettoUtenteRepository.findByVendita(vendita);
+        if (existing.isPresent()) return;
+
+        com.example.demo.entity.PacchettoUtente pu = new com.example.demo.entity.PacchettoUtente();
+        pu.setVendita(vendita);
+        pu.setUtente(vendita.getUtente());
+        pu.setPacchetto(vendita.getPacchetto());
+
+        Integer lez = null;
+        if (vendita.getPacchetto().getNumeroLezioni() != null) {
+            lez = vendita.getPacchetto().getNumeroLezioni();
+        } else if (vendita.getLezioniResidue() != null) {
+            lez = vendita.getLezioniResidue();
+        }
+
+        pu.setLezioniResidue(lez);
+        pu.setAttivo(true);
+        pu.setDataAcquisto(vendita.getDataAcquisto());
+        pu.setDataPagamento(vendita.getDataPagamento());
+
+        pacchettoUtenteRepository.save(pu);
     }
 
     /**
