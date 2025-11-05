@@ -22,8 +22,8 @@ export class FormUtentiComponent implements OnInit {
   private modaleService = inject(ModaleService);
 
   ruoliDisponibili = [
-    { value: 'utente', label: 'Utente' },
-    { value: 'amministratore', label: 'Amministratore' }
+    { value: 'USER', label: 'Cliente' },
+    { value: 'ADMIN', label: 'Amministratore' }
   ];
 
   constructor(private fb: FormBuilder) {}

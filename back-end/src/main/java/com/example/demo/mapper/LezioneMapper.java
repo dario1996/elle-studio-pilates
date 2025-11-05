@@ -1,23 +1,26 @@
 package com.example.demo.mapper;
 
-import com.example.demo.dto.LezioneDto;
-import com.example.demo.entity.Lezione;
-import com.example.demo.entity.Utenti;
-import com.example.demo.entity.Corso;
-import com.example.demo.services.CorsoService;
-import com.example.demo.enums.TipoLezione;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Component;
+
+import com.example.demo.dto.LezioneDto;
+import com.example.demo.entity.Lezione;
+import com.example.demo.entity.Pacchetto;
+import com.example.demo.entity.Utenti;
+import com.example.demo.enums.TipoLezione;
+import com.example.demo.services.PacchettoService;
+
 @Component
-@RequiredArgsConstructor
 public class LezioneMapper {
 
-    private final CorsoService corsoService;
+    private final PacchettoService pacchettoService;
+
+    public LezioneMapper(PacchettoService pacchettoService) {
+        this.pacchettoService = pacchettoService;
+    }
 
     public LezioneDto toDto(Lezione lezione) {
         if (lezione == null) {
@@ -30,22 +33,28 @@ public class LezioneMapper {
         dto.setDataInizio(lezione.getDataInizio());
         dto.setDataFine(lezione.getDataFine());
         dto.setIstruttore(lezione.getIstruttore());
-    dto.setTipoLezione(lezione.getTipoLezione());
-    dto.setNote(lezione.getNote());
+        dto.setTipoLezione(lezione.getTipoLezione());
+        dto.setNote(lezione.getNote());
         dto.setAttiva(lezione.getAttiva());
+        dto.setTemplateId(lezione.getTemplateId());
+        dto.setMaxPartecipanti(lezione.getMaxPartecipanti());
         dto.setCreatedAt(lezione.getCreatedAt());
         dto.setUpdatedAt(lezione.getUpdatedAt());
         
-    // Rimosse chiamate a setPrezzo, setDurata e setMaxPartecipanti (non più presenti su LezioneDto)
-        
         // Mappa i partecipanti (solo username)
-        if (lezione.getPartecipanti() != null) {
+        if (lezione.getPartecipanti() != null && !lezione.getPartecipanti().isEmpty()) {
             dto.setPartecipanti(lezione.getPartecipanti().stream()
                     .map(Utenti::getUsername)
                     .collect(Collectors.toList()));
+            
+            // Calcola posti disponibili
+            int prenotati = lezione.getPartecipanti().size();
+            dto.setPostiDisponibili(lezione.getMaxPartecipanti() - prenotati);
+        } else {
+            dto.setPostiDisponibili(lezione.getMaxPartecipanti());
         }
 
-    return dto;
+        return dto;
     }
 
     public Lezione toEntity(LezioneDto dto) {
@@ -79,45 +88,45 @@ public class LezioneMapper {
                 .collect(Collectors.toList());
     }
 
-    private BigDecimal getPrezzoFromCorso(TipoLezione tipoLezione) {
+    private BigDecimal getPrezzoFromPacchetto(TipoLezione tipoLezione) {
         try {
             String categoria = mapTipoLezioneToCategoria(tipoLezione);
-            List<Corso> corsi = corsoService.SelAllCorsi();
-            
-            return corsi.stream()
-                    .filter(corso -> corso.getAttivo() && categoria.equals(corso.getCategoria()))
+            List<Pacchetto> pacchetti = pacchettoService.SelAllPacchetti();
+
+            return pacchetti.stream()
+                    .filter(pacchetto -> pacchetto.getAttivo() && categoria.equals(pacchetto.getCategoria()))
                     .findFirst()
-                    .map(Corso::getPrezzo)
+                    .map(Pacchetto::getPrezzo)
                     .orElse(BigDecimal.ZERO);
         } catch (Exception e) {
             return BigDecimal.ZERO;
         }
     }
 
-    private Integer getDurataFromCorso(TipoLezione tipoLezione) {
+    private Integer getDurataFromPacchetto(TipoLezione tipoLezione) {
         try {
             String categoria = mapTipoLezioneToCategoria(tipoLezione);
-            List<Corso> corsi = corsoService.SelAllCorsi();
-            
-            return corsi.stream()
-                    .filter(corso -> corso.getAttivo() && categoria.equals(corso.getCategoria()))
+            List<Pacchetto> pacchetti = pacchettoService.SelAllPacchetti();
+
+            return pacchetti.stream()
+                    .filter(pacchetto -> pacchetto.getAttivo() && categoria.equals(pacchetto.getCategoria()))
                     .findFirst()
-                    .map(Corso::getDurataMinuti)
+                    .map(Pacchetto::getDurataMinuti)
                     .orElse(60); // Default 60 minuti
         } catch (Exception e) {
             return 60;
         }
     }
 
-    private Integer getMaxPartecipantiFromCorso(TipoLezione tipoLezione) {
+    private Integer getMaxPartecipantiFromPacchetto(TipoLezione tipoLezione) {
         try {
             String categoria = mapTipoLezioneToCategoria(tipoLezione);
-            List<Corso> corsi = corsoService.SelAllCorsi();
-            
-            return corsi.stream()
-                    .filter(corso -> corso.getAttivo() && categoria.equals(corso.getCategoria()))
+            List<Pacchetto> pacchetti = pacchettoService.SelAllPacchetti();
+
+            return pacchetti.stream()
+                    .filter(pacchetto -> pacchetto.getAttivo() && categoria.equals(pacchetto.getCategoria()))
                     .findFirst()
-                    .map(Corso::getMaxPartecipanti)
+                    .map(Pacchetto::getMaxPartecipanti)
                     .orElse(1); // Default 1 partecipante
         } catch (Exception e) {
             return 1;
@@ -130,12 +139,10 @@ public class LezioneMapper {
                 return "PRIVATA";
             case PRIMA_LEZIONE:
                 return "PRIMA_LEZIONE";
-            case SEMI_PRIVATA_DUETTO:
-                return "SEMI_PRIVATA_DUETTO";
-            case SEMI_PRIVATA_GRUPPO:
-                return "SEMI_PRIVATA_GRUPPO";
-            case MATWORK:
-                return "MATWORK";
+            case SEMI_PRIVATA:
+                return "SEMI_PRIVATA";
+            case PILATES_MATWORK:
+                return "PILATES_MATWORK";
             case YOGA:
                 return "YOGA";
             default:

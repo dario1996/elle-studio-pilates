@@ -1,10 +1,5 @@
 package com.example.demo.exceptions;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
 public class BindingException  extends Exception
 {
  	private static final long serialVersionUID = -5198072630604345819L;
@@ -19,6 +14,14 @@ public class BindingException  extends Exception
 	public BindingException(String messaggio)
 	{
 		super(messaggio);
+		this.messaggio = messaggio;
+	}
+
+	public String getMessaggio() {
+		return messaggio;
+	}
+
+	public void setMessaggio(String messaggio) {
 		this.messaggio = messaggio;
 	}
 

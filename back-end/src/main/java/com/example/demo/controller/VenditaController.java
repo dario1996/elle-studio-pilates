@@ -1,8 +1,11 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.Vendita;
-import com.example.demo.entity.Vendita.StatoVendita;
-import com.example.demo.service.VenditaService;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,13 +13,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import com.example.demo.entity.Vendita;
+import com.example.demo.entity.Vendita.StatoVendita;
+import com.example.demo.service.VenditaService;
 
 /**
  * Controller REST per gestire le vendite e le statistiche
@@ -38,8 +47,8 @@ public class VenditaController {
     public ResponseEntity<Vendita> creaVendita(@RequestBody VenditaRequest request) {
         try {
             Vendita vendita = venditaService.creaVendita(
-                    request.getUsername(),
-                    request.getCorsoId(),
+                    request.getId(),
+                    request.getPacchettoId(),
                     request.getImporto(),
                     request.getNote()
             );
@@ -152,11 +161,11 @@ public class VenditaController {
     }
 
     /**
-     * Ottiene vendite per corso
+     * Ottiene vendite per pacchetto
      */
-    @GetMapping("/corso/{corsoId}")
-    public ResponseEntity<List<Vendita>> getVenditePerCorso(@PathVariable Long corsoId) {
-        List<Vendita> vendite = venditaService.trovaVenditePerCorso(corsoId);
+    @GetMapping("/pacchetto/{pacchettoId}")
+    public ResponseEntity<List<Vendita>> getVenditePerPacchetto(@PathVariable Long pacchettoId) {
+        List<Vendita> vendite = venditaService.trovaVenditePerPacchetto(pacchettoId);
         return ResponseEntity.ok(vendite);
     }
 
@@ -275,17 +284,17 @@ public class VenditaController {
     }
 
     /**
-     * Ottiene statistiche per corso in un range
+     * Ottiene statistiche per pacchetto in un range
      */
-    @GetMapping("/statistiche/per-corso")
-    public ResponseEntity<List<Map<String, Object>>> getStatistichePerCorso(
+    @GetMapping("/statistiche/per-pacchetto")
+    public ResponseEntity<List<Map<String, Object>>> getStatistichePerPacchetto(
             @RequestParam String dataInizio,
             @RequestParam String dataFine) {
         try {
             LocalDateTime dataInizioConverted = LocalDateTime.parse(dataInizio + "T00:00:00");
             LocalDateTime dataFineConverted = LocalDateTime.parse(dataFine + "T23:59:59");
-            
-            List<Map<String, Object>> stats = venditaService.getStatistichePerCorso(dataInizioConverted, dataFineConverted);
+
+            List<Map<String, Object>> stats = venditaService.getStatistichePerPacchetto(dataInizioConverted, dataFineConverted);
             return ResponseEntity.ok(stats);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
@@ -311,14 +320,14 @@ public class VenditaController {
     }
 
     /**
-     * Verifica se un utente ha acquistato un corso
+     * Verifica se un utente ha acquistato un pacchetto
      */
-    @GetMapping("/verifica/{username}/{corsoId}")
+    @GetMapping("/verifica/{username}/{pacchettoId}")
     public ResponseEntity<Map<String, Boolean>> verificaAcquisto(
-            @PathVariable String username, 
-            @PathVariable Long corsoId) {
-        
-        boolean haAcquistato = venditaService.utenteHaAcquistatoCorso(username, corsoId);
+            @PathVariable String username,
+            @PathVariable Long pacchettoId) {
+
+        boolean haAcquistato = venditaService.utenteHaAcquistatoPacchetto(username, pacchettoId);
         return ResponseEntity.ok(Map.of("haAcquistato", haAcquistato));
     }
 
@@ -328,18 +337,18 @@ public class VenditaController {
      * DTO per creare una nuova vendita
      */
     public static class VenditaRequest {
-        private String username;
-        private Long corsoId;
+        private Long id;
+        private Long pacchettoId;
         private BigDecimal importo;
         private String note;
 
         // Getters e Setters
-        public String getUsername() { return username; }
-        public void setUsername(String username) { this.username = username; }
-        
-        public Long getCorsoId() { return corsoId; }
-        public void setCorsoId(Long corsoId) { this.corsoId = corsoId; }
-        
+        public Long getId() { return id; }
+        public void setId(Long id) { this.id = id; }
+
+        public Long getPacchettoId() { return pacchettoId; }
+        public void setPacchettoId(Long pacchettoId) { this.pacchettoId = pacchettoId; }
+
         public BigDecimal getImporto() { return importo; }
         public void setImporto(BigDecimal importo) { this.importo = importo; }
         

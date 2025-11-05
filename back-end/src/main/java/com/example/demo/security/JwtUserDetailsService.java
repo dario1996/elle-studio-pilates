@@ -1,7 +1,10 @@
 package com.example.demo.security;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -13,21 +16,23 @@ import org.springframework.stereotype.Service;
 import com.example.demo.entity.Utenti;
 import com.example.demo.repository.UtenteRepository;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service("CustomUserDetailsService")
-@RequiredArgsConstructor
-@Log
 public class JwtUserDetailsService implements UserDetailsService {
 
+    private static final Logger log = LoggerFactory.getLogger(JwtUserDetailsService.class);
+
     private final UtenteRepository utenteRepository;
+
+    public JwtUserDetailsService(final UtenteRepository utenteRepository) {
+        this.utenteRepository = utenteRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     	Utenti utente = utenteRepository.findByUsername(username);
     	if (utente == null) {
-    	    throw new UsernameNotFoundException("Utente non trovato: " + username);
+	    	log.warn("Utente non trovato: {}", username);
+	    	throw new UsernameNotFoundException("Utente non trovato: " + username);
     	}
 
 

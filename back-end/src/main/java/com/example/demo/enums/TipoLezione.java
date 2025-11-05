@@ -3,10 +3,11 @@ package com.example.demo.enums;
 public enum TipoLezione {
     PRIVATA("Lezione Privata"),
     PRIMA_LEZIONE("Prima Lezione"),
-    SEMI_PRIVATA_DUETTO("Semi-Privata Duetto"),
-    SEMI_PRIVATA_GRUPPO("Semi-Privata Gruppo"),
-    MATWORK("Matwork"),
-    YOGA("Yoga");
+    SEMI_PRIVATA("Semi-Privata"),
+    PILATES_MATWORK("Matwork"),
+    YOGA("Yoga"),
+    REFORMER_INTERMEDIO("Reformer Intermedio"),
+    STUDIO_POSTURALE("Studio Posturale");
 
     private final String label;
 

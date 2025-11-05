@@ -6,6 +6,8 @@ import { PageTitleComponent } from '../../../../core/page-title/page-title.compo
 import { NotificationComponent } from '../../../../core/notification/notification.component';
 import { AuthJwtService } from '../../../../core/services/authJwt.service';
 import { inject } from '@angular/core';
+import { PrenotazioneService } from '../../../../shared/services/prenotazione.service';
+import { LezioneDisponibile, PrenotazioneLezioneResponse, TipoLezione, Pacchetto } from '../../../../shared/models/prenotazione.model';
 
 @Component({
   selector: 'app-gestione-prenotazioni',
@@ -17,15 +19,17 @@ import { inject } from '@angular/core';
 export class GestionePrenotazioniComponent implements OnInit {
   private fb = inject(FormBuilder);
   private auth = inject(AuthJwtService);
+  private prenotazioneService = inject(PrenotazioneService);
 
   title: string = 'Prenotazioni';
   
   prenotazioneForm: FormGroup;
-  corsiFiltrati: any[] = [];
-  selectedCorso: any = null;
-  orariDisponibili: string[] = [];
-  orariInfo: { [key: string]: { disponibile: boolean; postiRimasti: number; postiTotali: number } } = {};
-  selectedDate: string = '';
+  pacchetti: Pacchetto[] = [];
+  selectedPacchetto: Pacchetto | null = null;
+  tipiLezione: TipoLezione[] = [];
+  selectedTipoLezione: TipoLezione | null = null;
+  lezioniDisponibili: LezioneDisponibile[] = [];
+  selectedLezione: LezioneDisponibile | null = null;
   loading = false;
   error: string | null = null;
   successMessage: string | null = null;
@@ -39,141 +43,164 @@ export class GestionePrenotazioniComponent implements OnInit {
 
   // Modal gestione prenotazioni
   showGestioneModal = false;
-  prenotazioniUtente: any[] = [];
-
-  // Mock data per i corsi - verrà sostituito con chiamata API
-  corsiDisponibili = [
-    {
-      id: 1,
-      nome: 'Pilates Base',
-      descrizione: 'Corso base di pilates per principianti',
-      categoria: 'PILATES',
-      livello: 'PRINCIPIANTE',
-      durataMinuti: 60,
-      maxPartecipanti: 8,
-      prezzo: 25.00,
-      attivo: true
-    },
-    {
-      id: 2,
-      nome: 'Matwork Avanzato',
-      descrizione: 'Lezioni di matwork per livello avanzato',
-      categoria: 'MATWORK',
-      livello: 'AVANZATO',
-      durataMinuti: 75,
-      maxPartecipanti: 10,
-      prezzo: 35.00,
-      attivo: true
-    },
-    {
-      id: 3,
-      nome: 'Yoga Rilassante',
-      descrizione: 'Sessioni di yoga per rilassamento e stretching',
-      categoria: 'YOGA',
-      livello: 'INTERMEDIO',
-      durataMinuti: 90,
-      maxPartecipanti: 12,
-      prezzo: 30.00,
-      attivo: true
-    }
-  ];
+  prenotazioniUtente: PrenotazioneLezioneResponse[] = [];
 
   constructor() {
     this.prenotazioneForm = this.fb.group({
-      corso: ['', Validators.required],
-      data: ['', Validators.required],
-      orario: ['', Validators.required],
+      pacchetto: ['', Validators.required],
+      tipoLezione: ['', Validators.required],
+      lezione: ['', Validators.required],
       note: ['']
     });
   }
 
   ngOnInit(): void {
-    this.corsiFiltrati = [...this.corsiDisponibili];
-    this.generateOrariDisponibili();
+    this.caricaPacchetti();
     this.caricaPrenotazioniUtente();
   }
 
-  private generateOrariDisponibili(): void {
-    // Genera orari disponibili dalle 8:00 alle 20:00 con intervalli di 30 minuti
-    for (let i = 8; i <= 20; i++) {
-      this.orariDisponibili.push(`${i.toString().padStart(2, '0')}:00`);
-      if (i < 20) {
-        this.orariDisponibili.push(`${i.toString().padStart(2, '0')}:30`);
+  caricaPacchetti(): void {
+    this.loading = true;
+    console.log('Caricamento pacchetti utente...');
+    this.prenotazioneService.getPacchettiUtente().subscribe({
+      next: (pacchetti) => {
+        console.log('Pacchetti ricevuti:', pacchetti);
+        this.pacchetti = pacchetti;
+        this.loading = false;
+        if (pacchetti.length === 0) {
+          console.warn('Nessun pacchetto trovato per questo utente');
+          this.showToastMessage('Non hai ancora acquistato nessun pacchetto', 'info');
+        }
+      },
+      error: (error) => {
+        console.error('Errore durante il caricamento dei pacchetti', error);
+        console.error('Dettaglio errore:', error.error);
+        console.error('Status:', error.status);
+        this.showToastMessage('Errore durante il caricamento dei pacchetti acquistati', 'error');
+        this.loading = false;
       }
+    });
+  }
+
+  onPacchettoChange(event: any): void {
+    const pacchettoId = parseInt(event.target.value);
+    this.selectedPacchetto = this.pacchetti.find(p => p.id === pacchettoId) || null;
+    
+    // Reset selezioni successive
+    this.selectedTipoLezione = null;
+    this.selectedLezione = null;
+    this.lezioniDisponibili = [];
+    this.tipiLezione = [];
+    this.prenotazioneForm.patchValue({
+      tipoLezione: '',
+      lezione: ''
+    });
+    
+    if (this.selectedPacchetto) {
+      this.caricaTipiLezionePerPacchetto();
     }
   }
 
-  onCorsoChange(event: any): void {
-    const corsoId = parseInt(event.target.value);
-    this.selectedCorso = this.corsiDisponibili.find(c => c.id === corsoId);
-    this.updateOrariDisponibili();
+  caricaTipiLezionePerPacchetto(): void {
+    if (!this.selectedPacchetto) return;
+    
+    this.loading = true;
+    this.prenotazioneService.getTipiLezionePerPacchetto(this.selectedPacchetto.id).subscribe({
+      next: (tipi) => {
+        this.tipiLezione = tipi;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Errore durante il caricamento dei tipi lezione', error);
+        this.showToastMessage('Errore durante il caricamento dei tipi lezione per questo pacchetto', 'error');
+        this.loading = false;
+      }
+    });
   }
 
-  onDateChange(event: any): void {
-    this.selectedDate = event.target.value;
-    this.updateOrariDisponibili();
+  onTipoLezioneChange(event: any): void {
+    const tipoLezioneId = parseInt(event.target.value);
+    this.selectedTipoLezione = this.tipiLezione.find(t => t.id === tipoLezioneId) || null;
+    
+    if (this.selectedTipoLezione) {
+      this.caricaLezioniPerTipo();
+    }
+  }
+
+  caricaLezioniPerTipo(): void {
+    if (!this.selectedTipoLezione) return;
+    
+    this.loading = true;
+    this.lezioniDisponibili = [];
+    
+    // Carica lezioni per le prossime 4 settimane
+    const oggi = new Date();
+    const dataInizio = oggi.toISOString().split('T')[0];
+    const dataFine = new Date(oggi.getTime() + (28 * 24 * 60 * 60 * 1000)).toISOString().split('T')[0];
+    
+    this.prenotazioneService.getLezioniPerTemplate(this.selectedTipoLezione.id, dataInizio, dataFine).subscribe({
+      next: (lezioni) => {
+        this.lezioniDisponibili = lezioni;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Errore durante il caricamento delle lezioni', error);
+        this.showToastMessage('Errore durante il caricamento delle lezioni', 'error');
+        this.loading = false;
+      }
+    });
+  }
+
+  onLezioneChange(event: any): void {
+    const lezioneId = parseInt(event.target.value);
+    this.selectedLezione = this.lezioniDisponibili.find(l => l.lezioneId === lezioneId) || null;
   }
 
   selectOrario(orario: string): void {
-    if (this.isOrarioDisponibile(orario)) {
-      this.prenotazioneForm.patchValue({ orario });
-    }
+    // Metodo deprecato - ora le lezioni hanno già l'orario dalla tabella
   }
 
   isOrarioDisponibile(orario: string): boolean {
-    const info = this.orariInfo[orario];
-    return info ? info.disponibile : true; // Default disponibile se non ci sono info
+    // Metodo deprecato
+    return true;
   }
 
   getOrarioInfo(orario: string): { disponibile: boolean; postiRimasti: number; postiTotali: number } | null {
-    return this.orariInfo[orario] || null;
-  }
-
-  private updateOrariDisponibili(): void {
-    if (this.selectedDate && this.selectedCorso) {
-      // Mock: simula controllo disponibilità orari
-      this.orariInfo = {};
-      this.orariDisponibili.forEach(orario => {
-        // Simula alcuni orari non disponibili
-        const random = Math.random();
-        const maxPosti = this.selectedCorso.maxPartecipanti;
-        const postiOccupati = Math.floor(random * maxPosti);
-        const postiRimasti = maxPosti - postiOccupati;
-        
-        this.orariInfo[orario] = {
-          disponibile: postiRimasti > 0,
-          postiRimasti,
-          postiTotali: maxPosti
-        };
-      });
-    }
+    // Metodo deprecato
+    return null;
   }
 
   onSubmit(): void {
-    if (this.prenotazioneForm.valid) {
+    if (this.prenotazioneForm.valid && this.selectedLezione) {
       this.loading = true;
       this.clearMessages();
 
       const formData = this.prenotazioneForm.value;
-      const username = this.auth.loggedUser();
+      const request = {
+        lezioneId: this.selectedLezione.lezioneId,
+        note: formData.note
+      };
 
-      // Mock submission - verrà sostituito con chiamata API reale
-      console.log('Dati prenotazione:', {
-        ...formData,
-        username,
-        corso: this.selectedCorso
+      this.prenotazioneService.creaPrenotazione(request).subscribe({
+        next: (response) => {
+          this.loading = false;
+          this.showToastMessage('Prenotazione effettuata con successo!', 'success');
+          this.prenotazioneForm.reset();
+          this.selectedLezione = null;
+          this.selectedTipoLezione = null;
+          this.selectedPacchetto = null;
+          this.lezioniDisponibili = [];
+          this.tipiLezione = [];
+          this.caricaPrenotazioniUtente();
+        },
+        error: (error) => {
+          this.loading = false;
+          const errorMsg = error.error?.message || 'Errore durante la prenotazione';
+          this.showToastMessage(errorMsg, 'error');
+        }
       });
-
-      setTimeout(() => {
-        this.loading = false;
-        this.showToastMessage('Prenotazione effettuata con successo!', 'success');
-        this.prenotazioneForm.reset();
-        this.selectedCorso = null;
-        this.orariDisponibili = [];
-        this.orariInfo = {};
-      }, 1000);
     } else {
-      this.showToastMessage('Completa tutti i campi obbligatori', 'error');
+      this.showToastMessage('Completa tutti i campi obbligatori e seleziona una lezione', 'error');
       this.prenotazioneForm.markAllAsTouched();
     }
   }
@@ -182,7 +209,7 @@ export class GestionePrenotazioniComponent implements OnInit {
   showToastMessage(message: string, type: 'success' | 'error' | 'info' = 'success') {
     this.toastMessage = message;
     this.toastType = type;
-    this.toastIcon = type === 'success' ? 'check_circle' : type === 'error' ? 'error' : 'info';
+    this.toastIcon = type === 'success' ? 'success' : type === 'error' ? 'error' : 'info';
     this.showToast = true;
     
     // Auto hide after 3 seconds
@@ -213,46 +240,19 @@ export class GestionePrenotazioniComponent implements OnInit {
   }
 
   isFormValid(): boolean {
-    return this.prenotazioneForm.valid && this.selectedCorso !== null;
+    return this.prenotazioneForm.valid && this.selectedLezione !== null;
   }
 
   // Metodi per gestione prenotazioni esistenti
   caricaPrenotazioniUtente(): void {
-    const username = this.auth.loggedUser();
-    
-    // Mock data - sarà sostituito con chiamata API reale
-    this.prenotazioniUtente = [
-      {
-        id: 1,
-        corsoId: 1,
-        corsoNome: 'Pilates Base',
-        categoria: 'PILATES',
-        data: '2025-09-26',
-        orario: '09:00',
-        note: 'Prima lezione',
-        stato: 'CONFERMATA'
+    this.prenotazioneService.getMiePrenotazioniFuture().subscribe({
+      next: (prenotazioni) => {
+        this.prenotazioniUtente = prenotazioni;
       },
-      {
-        id: 2,
-        corsoId: 2,
-        corsoNome: 'Matwork Avanzato', 
-        categoria: 'MATWORK',
-        data: '2025-09-28',
-        orario: '10:30',
-        note: '',
-        stato: 'CONFERMATA'
-      },
-      {
-        id: 3,
-        corsoId: 3,
-        corsoNome: 'Yoga Rilassante',
-        categoria: 'YOGA', 
-        data: '2025-09-30',
-        orario: '18:00',
-        note: 'Lezione serale',
-        stato: 'CONFERMATA'
+      error: (error) => {
+        console.error('Errore durante il caricamento delle prenotazioni', error);
       }
-    ];
+    });
   }
 
   apriGestionePrenotazioni(): void {
@@ -274,21 +274,31 @@ export class GestionePrenotazioniComponent implements OnInit {
     });
   }
 
-  modificaPrenotazione(prenotazione: any, index: number): void {
+  modificaPrenotazione(prenotazione: PrenotazioneLezioneResponse, index: number): void {
     // Implementa la logica di modifica
-    this.showToastMessage(`Modifica prenotazione per ${prenotazione.corsoNome}`, 'info');
+    this.showToastMessage(`Modifica prenotazione per ${prenotazione.titolo}`, 'info');
     
     // Qui potresti aprire un altro modal con form di modifica
     // Per ora mostriamo solo una notifica
   }
 
-  cancellaPrenotazione(prenotazione: any, index: number): void {
-    const conferma = confirm(`Sei sicuro di voler cancellare la prenotazione per ${prenotazione.corsoNome} del ${this.formatDate(prenotazione.data)}?`);
-    
+  cancellaPrenotazione(prenotazione: PrenotazioneLezioneResponse, index: number): void {
+    const conferma = confirm(`Sei sicuro di voler cancellare la prenotazione per ${prenotazione.titolo} del ${this.formatDate(prenotazione.dataInizio)}?`);
+
     if (conferma) {
-      // Simula cancellazione
-      this.prenotazioniUtente.splice(index, 1);
-      this.showToastMessage('Prenotazione cancellata con successo', 'success');
+      this.prenotazioneService.cancellaPrenotazione(prenotazione.id).subscribe({
+        next: () => {
+          this.prenotazioniUtente.splice(index, 1);
+          this.showToastMessage('Prenotazione cancellata con successo', 'success');
+          if (this.selectedTipoLezione) {
+            this.caricaLezioniPerTipo(); // Ricarica le lezioni disponibili
+          }
+        },
+        error: (error) => {
+          const errorMsg = error.error?.message || 'Errore durante la cancellazione';
+          this.showToastMessage(errorMsg, 'error');
+        }
+      });
     }
   }
 }

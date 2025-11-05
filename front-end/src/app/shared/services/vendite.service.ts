@@ -6,7 +6,7 @@ import { environment } from '../../../environments/environment';
 export interface Vendita {
   id?: number;
   utenteId: string;
-  corsoId: number;
+  pacchettoId: number;
   importo: number;
   stato: 'PENDING' | 'PAID' | 'CANCELLED';
   dataAcquisto: string;

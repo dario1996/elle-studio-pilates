@@ -2,7 +2,7 @@
   <div class="page-header">
     <app-page-title [title]="title" [showButton]="false"></app-page-title>
     <div class="user-bar">
-      <app-notification></app-notification>
+      <!-- <app-notification></app-notification> -->
       <app-logged-user></app-logged-user>
     </div>
 
@@ -11,39 +11,64 @@
   <div class="page-content">
     <div class="dashboard-utente-cards">
       <!-- Card 1: Lezioni prenotate -->
-  <div class="user-cards" #userCard>
+      <div class="user-cards" #userCard>
           <div class="card-header">
             <h3>Lezioni prenotate</h3>
             <i class="fas fa-calendar-check card-icon"></i>
           </div>
           <div class="card-content mt-3">
-            <div *ngIf="lezioniPrenotate.length === 0" class="text-muted">Nessuna lezione prenotata</div>
+            <div *ngIf="lezioniPrenotate.length === 0" class="empty-state">
+              <i class="fas fa-calendar-times fa-3x mb-3"></i>
+              <p>Nessuna lezione prenotata</p>
+            </div>
             <ng-container *ngIf="lezioniCorrenti.length > 0">
-              <div class="d-flex align-items-center justify-content-between">
-                <button class="btn btn-link p-0" (click)="prevLezione()" [disabled]="lezioneIndex === 0">
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <button class="btn btn-link p-0 nav-arrow" (click)="prevLezione()" [disabled]="lezioneIndex === 0">
                   <i class="fas fa-chevron-left"></i>
                 </button>
-                <div class="d-flex flex-column flex-grow-1 align-items-center">
-                  <div class="row w-100">
-                    <div class="col-12 col-md-12" *ngFor="let lezione of lezioniCorrenti">
-                      <div class="suggested-lessons-small mb-3">
-                        <div class="lesson-row"><span class="label">Tipo corso</span><span class="value">{{ getLabelTipoLezione(lezione.tipo) }}</span></div>
-                        <div class="lesson-row"><span class="label">Nome lezione</span><span class="value"><strong>{{ lezione.titolo }}</strong></span></div>
-                        <div class="lesson-row"><span class="label">Data</span><span class="value">{{ formatDateOnly(lezione.dataInizio) }}</span></div>
-                        <div class="lesson-row"><span class="label">Inizio-Fine</span><span class="value">{{ formatTimeRange(lezione.dataInizio, lezione.dataFine) }}</span></div>
-                        <div class="lesson-row"><span class="label">Istruttore</span><span class="value">{{ lezione.istruttore }}</span></div>
+                <div class="lessons-container flex-grow-1">
+                  <div class="lesson-card" *ngFor="let lezione of lezioniCorrenti; let i = index" [class.lesson-card-primary]="i === 0" [class.lesson-card-secondary]="i === 1" [class.lesson-card-tertiary]="i === 2">
+                    <!-- Badge giorni mancanti -->
+                    <div class="lesson-badge" [ngClass]="getGiorniBadgeClass(lezione.dataInizio)">
+                      <i class="fas fa-calendar-day me-1"></i>
+                      {{ getGiorniMancantiText(lezione.dataInizio) }}
+                    </div>
+                    
+                    <!-- Titolo lezione -->
+                    <h4 class="lesson-title">{{ lezione.titolo }}</h4>
+                    
+                    <!-- Tipo lezione -->
+                    <div class="lesson-type">
+                      <i class="fas fa-tag me-2"></i>
+                      {{ getLabelTipoLezione(lezione.tipo) }}
+                    </div>
+                    
+                    <!-- Data e ora -->
+                    <div class="lesson-datetime">
+                      <div class="datetime-item">
+                        <i class="fas fa-calendar me-2"></i>
+                        <span>{{ formatDateOnly(lezione.dataInizio) }}</span>
                       </div>
+                      <div class="datetime-item">
+                        <i class="fas fa-clock me-2"></i>
+                        <span>{{ formatTimeRange(lezione.dataInizio, lezione.dataFine) }}</span>
+                      </div>
+                    </div>
+                    
+                    <!-- Istruttore -->
+                    <div class="lesson-instructor">
+                      <i class="fas fa-user-circle me-2"></i>
+                      {{ lezione.istruttore }}
                     </div>
                   </div>
                 </div>
-                <button class="btn btn-link p-0" (click)="nextLezione()" [disabled]="lezioneIndex >= lezioniPrenotate.length - 2">
+                <button class="btn btn-link p-0 nav-arrow" (click)="nextLezione()" [disabled]="lezioneIndex >= lezioniPrenotate.length - 2">
                   <i class="fas fa-chevron-right"></i>
                 </button>
               </div>
-              <div class="text-center mt-2 text-muted" *ngIf="lezioniPrenotate.length > 2">
-                {{ lezioneIndex + 1 }} - {{ getLezioneIndexEnd() }} / {{ lezioniPrenotate.length }}
+              <div class="pagination-info" *ngIf="lezioniPrenotate.length > 2">
+                <span class="pagination-text">{{ lezioneIndex + 1 }} - {{ getLezioneIndexEnd() }} di {{ lezioniPrenotate.length }}</span>
               </div>
-              <hr>
             </ng-container>
           </div>
       </div>

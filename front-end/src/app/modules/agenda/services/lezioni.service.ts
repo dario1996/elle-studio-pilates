@@ -19,9 +19,8 @@ export interface LezioneDto {
 export enum TipoLezione {
   PRIVATA = 'PRIVATA',
   PRIMA_LEZIONE = 'PRIMA_LEZIONE',
-  SEMI_PRIVATA_DUETTO = 'SEMI_PRIVATA_DUETTO',
-  SEMI_PRIVATA_GRUPPO = 'SEMI_PRIVATA_GRUPPO',
-  MATWORK = 'MATWORK',
+  SEMI_PRIVATA = 'SEMI_PRIVATA',
+  PILATES_MATWORK = 'PILATES_MATWORK',
   YOGA = 'YOGA'
 }
 
@@ -90,13 +89,12 @@ export class LezioniService {
       case TipoLezione.PRIVATA:
       case TipoLezione.PRIMA_LEZIONE:
         return 1;
-      case TipoLezione.SEMI_PRIVATA_DUETTO:
+      case TipoLezione.SEMI_PRIVATA:
         return 2;
-      case TipoLezione.SEMI_PRIVATA_GRUPPO:
-        return 4;
-      case TipoLezione.MATWORK:
+      case TipoLezione.PILATES_MATWORK:
+        return 3;
       case TipoLezione.YOGA:
-        return 8;
+        return 4;
       default:
         return 1;
     }

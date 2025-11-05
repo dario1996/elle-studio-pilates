@@ -16,7 +16,12 @@ import { ToastrService } from 'ngx-toastr';
   standalone: true,
   templateUrl: './home-dashboard.component.html',
   styleUrls: ['./home-dashboard.component.css'],
-  imports: [CommonModule, PageTitleComponent, LoggedUserComponent, NotificationComponent],
+  imports: [
+    CommonModule, 
+    PageTitleComponent, 
+    LoggedUserComponent, 
+    // NotificationComponent
+  ]
 })
 export class HomeDashboardComponent implements OnInit {
 

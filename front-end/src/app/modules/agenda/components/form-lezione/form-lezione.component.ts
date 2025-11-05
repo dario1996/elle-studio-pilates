@@ -4,10 +4,10 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray, For
 import { ModaleService } from '../../../../core/services/modal.service';
 import { ToastrService } from 'ngx-toastr';
 import { LezioniService } from '../../../../core/services/lezioni.service';
-import { CorsiService } from '../../../../core/services/data/corsi.service';
+import { PacchettiService } from '../../../../core/services/data/pacchetti.service';
 import { UserService } from '../../../../core/services/data/user.service';
 import { ILezione, TipoLezione, StatoLezione } from '../../../../shared/models/Lezione';
-import { ICorsi } from '../../../../shared/models/Corsi';
+import { IPacchetti } from '../../../../shared/models/Pacchetti';
 import { IUtenteAutocomplete } from '../../../../shared/models/utente-autocomplete.model';
 import { debounceTime, distinctUntilChanged, switchMap, of } from 'rxjs';
 
@@ -23,7 +23,7 @@ export class FormLezioneComponent implements OnInit {
   private modaleService = inject(ModaleService);
   private toastr = inject(ToastrService);
   private lezioniService = inject(LezioniService);
-  private corsiService = inject(CorsiService);
+  private pacchettiService = inject(PacchettiService);
   private userService = inject(UserService);
   private cdr = inject(ChangeDetectorRef);
 
@@ -32,8 +32,8 @@ export class FormLezioneComponent implements OnInit {
   isEditMode = false;
   isLoading = false;
 
-  // Sostituiamo i mock con i corsi reali
-  corsiDisponibili: ICorsi[] = [];
+  // Sostituiamo i mock con i pacchetti reali
+  pacchettiDisponibili: IPacchetti[] = [];
   
   // Istruttore fisso: Laura Caratti
   readonly ISTRUTTORE_FISSO = 'Laura Caratti';
@@ -45,7 +45,7 @@ export class FormLezioneComponent implements OnInit {
   showAutocomplete = false;
   maxPartecipantiCorrente = 0;
 
-  // Mapping categoria corso -> tipo lezione
+  // Mapping categoria pacchetto -> tipo lezione
   private mapCategoriaToTipoLezione(categoria: string): TipoLezione {
     switch (categoria.toUpperCase()) {
       case 'PRIMA_LEZIONE':
@@ -53,26 +53,23 @@ export class FormLezioneComponent implements OnInit {
       case 'PRIVATA':
         return TipoLezione.PRIVATA;
       case 'SEMI_PRIVATA':
-        return TipoLezione.SEMI_PRIVATA_DUETTO; // Default per semi-privata
-      case 'GRUPPO_MAT':
-      case 'MATWORK':
-        return TipoLezione.MATWORK;
-      case 'COMBO':
-        return TipoLezione.SEMI_PRIVATA_GRUPPO; // Mappiamo COMBO a gruppo
+        return TipoLezione.SEMI_PRIVATA;
+      case 'PILATES_MATWORK':
+        return TipoLezione.PILATES_MATWORK;
       case 'YOGA':
         return TipoLezione.YOGA;
       default:
-        console.warn('Categoria corso non riconosciuta:', categoria, '- usando PRIVATA come default');
+        console.warn('Categoria pacchetto non riconosciuta:', categoria, '- usando PRIVATA come default');
         return TipoLezione.PRIVATA;
     }
   }
 
   ngOnInit() {
     console.log('FormLezioneComponent ngOnInit, dati:', this.lezioneToEdit);
-    
-    // Carica i corsi e solo dopo gestisci la precompilazione
-    this.loadCorsi = this.loadCorsi.bind(this);
-    this.loadCorsi(() => {
+
+    // Carica i pacchetti e solo dopo gestisci la precompilazione
+    this.loadPacchetti = this.loadPacchetti.bind(this);
+    this.loadPacchetti(() => {
       this.modaleService.config$.subscribe(config => {
         console.log('📦 Config ricevuto nel form:', config);
         if (config?.dati && Object.keys(config.dati).length > 0) {
@@ -132,16 +129,16 @@ export class FormLezioneComponent implements OnInit {
     });
   }
 
-  private loadCorsi(callback?: () => void) {
-    this.corsiService.getListaCorsi().subscribe({
-      next: (corsi) => {
-        this.corsiDisponibili = corsi.filter(c => c.attivo); // Solo corsi attivi
-        console.log('📚 Corsi caricati:', this.corsiDisponibili);
+  private loadPacchetti(callback?: () => void) {
+    this.pacchettiService.getListaPacchetti().subscribe({
+      next: (pacchetti) => {
+        this.pacchettiDisponibili = pacchetti.filter(p => p.attivo); // Solo pacchetti attivi
+        console.log('📚 Pacchetti caricati:', this.pacchettiDisponibili);
         if (callback) callback();
       },
       error: (error) => {
-        console.error('Errore nel caricamento corsi:', error);
-        this.toastr.error('Errore nel caricamento dei corsi');
+        console.error('Errore nel caricamento pacchetti:', error);
+        this.toastr.error('Errore nel caricamento dei pacchetti');
         if (callback) callback();
       }
     });
@@ -163,32 +160,32 @@ export class FormLezioneComponent implements OnInit {
     const dataFormatted = dataInizio.toISOString().split('T')[0];
     const oraFormatted = dataInizio.toTimeString().slice(0, 5);
 
-    // Trova il corso corrispondente al tipo della lezione (se possibile)
-    let corsoSelezionato = null;
-    if (this.lezioneToEdit.tipo && this.corsiDisponibili.length > 0) {
-      // Prova a trovare il corso che mappa il tipo/categoria
-      corsoSelezionato = this.corsiDisponibili.find(corso => {
-        // Mappiamo la categoria del corso con il tipo della lezione
-        return this.mapCategoriaToTipoLezione(corso.categoria) === this.lezioneToEdit!.tipo;
+    // Trova il pacchetto corrispondente al tipo della lezione (se possibile)
+    let pacchettoSelezionato = null;
+    if (this.lezioneToEdit.tipo && this.pacchettiDisponibili.length > 0) {
+      // Prova a trovare il pacchetto che mappa il tipo/categoria
+      pacchettoSelezionato = this.pacchettiDisponibili.find(pacchetto => {
+        // Mappiamo la categoria del pacchetto con il tipo della lezione
+        return this.mapCategoriaToTipoLezione(pacchetto.categoria) === this.lezioneToEdit!.tipo;
       });
     }
-    // Fallback: primo corso disponibile
-    if (!corsoSelezionato && this.corsiDisponibili.length > 0) {
-      corsoSelezionato = this.corsiDisponibili[0];
+    // Fallback: primo pacchetto disponibile
+    if (!pacchettoSelezionato && this.pacchettiDisponibili.length > 0) {
+      pacchettoSelezionato = this.pacchettiDisponibili[0];
     }
 
     this.form.patchValue({
-  corsoId: corsoSelezionato ? corsoSelezionato.id : '',
+  pacchettoId: pacchettoSelezionato ? pacchettoSelezionato.id : '',
   titolo: this.lezioneToEdit.titolo || '',
   dataInizio: dataFormatted,
   oraInizio: oraFormatted,
-  durata: corsoSelezionato ? corsoSelezionato.durataMinuti : '',
-  maxPartecipanti: corsoSelezionato ? corsoSelezionato.maxPartecipanti : '',
-  prezzo: corsoSelezionato ? corsoSelezionato.prezzo : '',
+  durata: pacchettoSelezionato ? pacchettoSelezionato.durataMinuti : '',
+  maxPartecipanti: pacchettoSelezionato ? pacchettoSelezionato.maxPartecipanti : '',
+  prezzo: pacchettoSelezionato ? pacchettoSelezionato.prezzo : '',
   note: this.lezioneToEdit.note || ''
     });
 
-    this.maxPartecipantiCorrente = corsoSelezionato ? corsoSelezionato.maxPartecipanti : 0;
+    this.maxPartecipantiCorrente = pacchettoSelezionato ? pacchettoSelezionato.maxPartecipanti : 0;
 
     // Carica i dati completi dei partecipanti (se presenti)
     if (this.lezioneToEdit.partecipanti && this.lezioneToEdit.partecipanti.length > 0) {
@@ -221,7 +218,7 @@ export class FormLezioneComponent implements OnInit {
       this.cdr.detectChanges();
     }
 
-    // I campi disabilitati si popolano automaticamente quando cambia corsoId
+    // I campi disabilitati si popolano automaticamente quando cambia pacchettoId
     console.log('Form popolato per edit con patchValue:', this.form.value);
   }
 
@@ -260,7 +257,7 @@ export class FormLezioneComponent implements OnInit {
 
   private initForm() {
     this.form = this.fb.group({
-      corsoId: [this.lezioneToEdit?.tipo || '', Validators.required],
+      pacchettoId: [this.lezioneToEdit?.tipo || '', Validators.required],
       titolo: [this.lezioneToEdit?.titolo || '', [Validators.required, Validators.minLength(3)]],
       dataInizio: [this.getFormattedDate(), Validators.required],
       oraInizio: [this.getFormattedTime(), Validators.required],
@@ -271,29 +268,29 @@ export class FormLezioneComponent implements OnInit {
       note: [this.lezioneToEdit?.note || '']
     });
 
-    // Auto-compilazione quando cambia il corso selezionato
-    this.form.get('corsoId')?.valueChanges.subscribe(corsoId => {
-      const corsoSelezionato = this.corsiDisponibili.find(c => c.id === parseInt(corsoId));
-      if (corsoSelezionato) {
+    // Auto-compilazione quando cambia il pacchetto selezionato
+    this.form.get('pacchettoId')?.valueChanges.subscribe(pacchettoId => {
+      const pacchettoSelezionato = this.pacchettiDisponibili.find(p => p.id === parseInt(pacchettoId));
+      if (pacchettoSelezionato) {
         // Auto-compila i campi disabilitati
-        this.form.get('durata')?.setValue(corsoSelezionato.durataMinuti);
-        this.form.get('maxPartecipanti')?.setValue(corsoSelezionato.maxPartecipanti);
-        this.form.get('prezzo')?.setValue(corsoSelezionato.prezzo);
-        
+        this.form.get('durata')?.setValue(pacchettoSelezionato.durataMinuti);
+        this.form.get('maxPartecipanti')?.setValue(pacchettoSelezionato.maxPartecipanti);
+        this.form.get('prezzo')?.setValue(pacchettoSelezionato.prezzo);
+
         // Aggiorna il limite partecipanti corrente
-        this.maxPartecipantiCorrente = corsoSelezionato.maxPartecipanti || 1;
-        
+        this.maxPartecipantiCorrente = pacchettoSelezionato.maxPartecipanti || 1;
+
         // Verifica se i partecipanti selezionati superano il nuovo limite
         if (this.partecipantiSelezionati.length > this.maxPartecipantiCorrente) {
-          this.toastr.warning(`Il corso selezionato permette massimo ${this.maxPartecipantiCorrente} partecipanti. Alcuni partecipanti sono stati rimossi.`);
+          this.toastr.warning(`Il pacchetto selezionato permette massimo ${this.maxPartecipantiCorrente} partecipanti. Alcuni partecipanti sono stati rimossi.`);
           this.partecipantiSelezionati = this.partecipantiSelezionati.slice(0, this.maxPartecipantiCorrente);
           this.updatePartecipantiFormValue();
         }
-        
-        console.log('🎯 Auto-compilato da corso:', {
-          durata: corsoSelezionato.durataMinuti,
-          maxPartecipanti: corsoSelezionato.maxPartecipanti,
-          prezzo: corsoSelezionato.prezzo
+
+        console.log('🎯 Auto-compilato da pacchetto:', {
+          durata: pacchettoSelezionato.durataMinuti,
+          maxPartecipanti: pacchettoSelezionato.maxPartecipanti,
+          prezzo: pacchettoSelezionato.prezzo
         });
       }
     });
@@ -304,11 +301,11 @@ export class FormLezioneComponent implements OnInit {
     if (this.form.valid) {
       this.isLoading = true;
       const formData = this.form.value;
-      
-      // Trova il corso selezionato per ottenere il nome/tipo
-      const corsoSelezionato = this.corsiDisponibili.find(c => c.id === parseInt(formData.corsoId));
-      if (!corsoSelezionato) {
-        this.toastr.error('Corso selezionato non valido');
+
+      // Trova il pacchetto selezionato per ottenere il nome/tipo
+      const pacchettoSelezionato = this.pacchettiDisponibili.find(p => p.id === parseInt(formData.pacchettoId));
+      if (!pacchettoSelezionato) {
+        this.toastr.error('Pacchetto selezionato non valido');
         this.isLoading = false;
         return;
       }
@@ -323,13 +320,13 @@ export class FormLezioneComponent implements OnInit {
       console.log('Dati form originali:', formData.dataInizio, formData.oraInizio);
       
       // Ottieni i valori dai campi disabilitati
-      const durata = this.form.get('durata')?.value || corsoSelezionato.durataMinuti;
-      const maxPartecipanti = this.form.get('maxPartecipanti')?.value || corsoSelezionato.maxPartecipanti;
-      const prezzo = this.form.get('prezzo')?.value || corsoSelezionato.prezzo;
-      
+      const durata = this.form.get('durata')?.value || pacchettoSelezionato.durataMinuti;
+      const maxPartecipanti = this.form.get('maxPartecipanti')?.value || pacchettoSelezionato.maxPartecipanti;
+      const prezzo = this.form.get('prezzo')?.value || pacchettoSelezionato.prezzo;
+
       const lezione: ILezione = {
         id: this.isEditMode ? this.lezioneToEdit?.id : undefined,
-        tipo: this.mapCategoriaToTipoLezione(corsoSelezionato.categoria), // Uso la funzione di mapping
+        tipo: this.mapCategoriaToTipoLezione(pacchettoSelezionato.categoria), // Uso la funzione di mapping
         titolo: formData.titolo,
         dataInizio: dataOra,
         dataFine: new Date(dataOra.getTime() + durata * 60000),

@@ -1,24 +1,29 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.Corso;
-import com.example.demo.entity.Utenti;
-import com.example.demo.entity.Vendita;
-import com.example.demo.entity.Vendita.StatoVendita;
-import com.example.demo.repository.CorsoRepository;
-import com.example.demo.repository.UtenteRepository;
-import com.example.demo.repository.VenditaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.demo.entity.Pacchetto;
+import com.example.demo.entity.Utenti;
+import com.example.demo.entity.Vendita;
+import com.example.demo.entity.Vendita.StatoVendita;
+import com.example.demo.repository.PacchettoRepository;
+import com.example.demo.repository.UtenteRepository;
+import com.example.demo.repository.VenditaRepository;
 
 /**
  * Service per gestire le operazioni di business relative alle vendite
@@ -34,21 +39,21 @@ public class VenditaService {
     private UtenteRepository utenteRepository;
 
     @Autowired
-    private CorsoRepository corsoRepository;
+    private PacchettoRepository pacchettoRepository;
 
     // ===== OPERAZIONI CRUD =====
 
     /**
      * Crea una nuova vendita
      */
-    public Vendita creaVendita(String username, Long corsoId, BigDecimal importo, String note) {
-        Utenti utente = utenteRepository.findById(username)
-                .orElseThrow(() -> new RuntimeException("Utente non trovato con username: " + username));
-        
-        Corso corso = corsoRepository.findById(corsoId)
-                .orElseThrow(() -> new RuntimeException("Corso non trovato con ID: " + corsoId));
+    public Vendita creaVendita(Long id, Long pacchettoId, BigDecimal importo, String note) {
+        Utenti utente = utenteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Utente non trovato con ID: " + id));
 
-        Vendita vendita = new Vendita(utente, corso, importo);
+        Pacchetto pacchetto = pacchettoRepository.findById(pacchettoId)
+                .orElseThrow(() -> new RuntimeException("Pacchetto non trovato con ID: " + pacchettoId));
+
+        Vendita vendita = new Vendita(utente, pacchetto, importo);
         vendita.setNote(note);
         
         return venditaRepository.save(vendita);
@@ -138,11 +143,11 @@ public class VenditaService {
     }
 
     /**
-     * Trova vendite per corso
+     * Trova vendite per pacchetto
      */
     @Transactional(readOnly = true)
-    public List<Vendita> trovaVenditePerCorso(Long corsoId) {
-        return venditaRepository.findByCorsoIdOrderByDataAcquistoDesc(corsoId);
+    public List<Vendita> trovaVenditePerPacchetto(Long pacchettoId) {
+        return venditaRepository.findByPacchettoIdOrderByDataAcquistoDesc(pacchettoId);
     }
 
     /**
@@ -243,9 +248,9 @@ public class VenditaService {
             List<Map<String, Object>> andamentoMensile = calcolaAndamentoPeriodo(periodo, inizioPeriodo, finePeriodo);
             stats.put("andamentoMensile", andamentoMensile);
             
-            // Distribuzione prodotti (top corsi venduti)
+            // Distribuzione prodotti (top pacchetti venduti)
             List<Map<String, Object>> distribuzioneProdotti = new ArrayList<>();
-            // TODO: implementare query per top corsi venduti
+            // TODO: implementare query per top pacchetti venduti
             stats.put("distribuzioneProdotti", distribuzioneProdotti);
             
             // Vendite per stato
@@ -290,8 +295,8 @@ public class VenditaService {
                     dto.put("dataAcquisto", v.getDataAcquisto());
                     dto.put("dataPagamento", v.getDataPagamento());
                     dto.put("utenteId", v.getUtente() != null ? v.getUtente().getUsername() : null);
-                    dto.put("corsoId", v.getCorso() != null ? v.getCorso().getId() : null);
-                    dto.put("corsoNome", v.getCorso() != null ? v.getCorso().getNome() : null);
+                    dto.put("pacchettoId", v.getPacchetto() != null ? v.getPacchetto().getId() : null);
+                    dto.put("pacchettoNome", v.getPacchetto() != null ? v.getPacchetto().getNome() : null);
                     dto.put("note", v.getNote());
                     return dto;
                 })
@@ -515,9 +520,9 @@ public class VenditaService {
             datiMese.put("fatturato", fatturato);
             andamentoMensile.add(datiMese);
         }
-        stats.put("andamentoMensile", andamentoMensile);            // Distribuzione prodotti (top corsi venduti)
+        stats.put("andamentoMensile", andamentoMensile);            // Distribuzione prodotti (top pacchetti venduti)
             List<Map<String, Object>> distribuzioneProdotti = new ArrayList<>();
-            // TODO: implementare query per top corsi venduti
+            // TODO: implementare query per top pacchetti venduti
             stats.put("distribuzioneProdotti", distribuzioneProdotti);
             
             // Vendite per stato
@@ -562,8 +567,8 @@ public class VenditaService {
                     dto.put("dataAcquisto", v.getDataAcquisto());
                     dto.put("dataPagamento", v.getDataPagamento());
                     dto.put("utenteId", v.getUtente() != null ? v.getUtente().getUsername() : null);
-                    dto.put("corsoId", v.getCorso() != null ? v.getCorso().getId() : null);
-                    dto.put("corsoNome", v.getCorso() != null ? v.getCorso().getNome() : null);
+                    dto.put("pacchettoId", v.getPacchetto() != null ? v.getPacchetto().getId() : null);
+                    dto.put("pacchettoNome", v.getPacchetto() != null ? v.getPacchetto().getNome() : null);
                     dto.put("note", v.getNote());
                     return dto;
                 })
@@ -614,11 +619,11 @@ public class VenditaService {
     }
 
     /**
-     * Ottiene le statistiche vendite per corso in un range
+     * Ottiene le statistiche vendite per pacchetto in un range
      */
     @Transactional(readOnly = true)
-    public List<Map<String, Object>> getStatistichePerCorso(LocalDateTime dataInizio, LocalDateTime dataFine) {
-        return venditaRepository.getStatisticheVenditePerCorso(dataInizio, dataFine);
+    public List<Map<String, Object>> getStatistichePerPacchetto(LocalDateTime dataInizio, LocalDateTime dataFine) {
+        return venditaRepository.getStatisticheVenditePerPacchetto(dataInizio, dataFine);
     }
 
     /**
@@ -694,11 +699,11 @@ public class VenditaService {
     // ===== METODI DI UTILITÀ =====
 
     /**
-     * Verifica se un utente ha già acquistato un corso
+     * Verifica se un utente ha già acquistato un pacchetto
      */
     @Transactional(readOnly = true)
-    public boolean utenteHaAcquistatoCorso(String username, Long corsoId) {
-        return venditaRepository.existsByUtenteUsernameAndCorsoIdAndStato(username, corsoId, StatoVendita.PAID);
+    public boolean utenteHaAcquistatoPacchetto(String username, Long pacchettoId) {
+        return venditaRepository.existsByUtenteUsernameAndPacchettoIdAndStato(username, pacchettoId, StatoVendita.PAID);
     }
 
     /**

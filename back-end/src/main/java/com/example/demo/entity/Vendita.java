@@ -16,12 +16,12 @@ public class Vendita {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "utente_id", nullable = false)
+    @JoinColumn(name = "utente_id", referencedColumnName = "id", nullable = false)
     private Utenti utente;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "corso_id", nullable = false)
-    private Corso corso;
+    @JoinColumn(name = "pacchetto_id", nullable = false)
+    private Pacchetto pacchetto;
 
     @Column(name = "importo", precision = 10, scale = 2, nullable = false)
     private BigDecimal importo;
@@ -51,10 +51,10 @@ public class Vendita {
         this.dataAcquisto = LocalDateTime.now();
     }
 
-    public Vendita(Utenti utente, Corso corso, BigDecimal importo) {
+    public Vendita(Utenti utente, Pacchetto pacchetto, BigDecimal importo) {
         this();
         this.utente = utente;
-        this.corso = corso;
+        this.pacchetto = pacchetto;
         this.importo = importo;
     }
 
@@ -75,12 +75,12 @@ public class Vendita {
         this.utente = utente;
     }
 
-    public Corso getCorso() {
-        return corso;
+    public Pacchetto getPacchetto() {
+        return pacchetto;
     }
 
-    public void setCorso(Corso corso) {
-        this.corso = corso;
+    public void setPacchetto(Pacchetto pacchetto) {
+        this.pacchetto = pacchetto;
     }
 
     public BigDecimal getImporto() {

@@ -22,8 +22,8 @@ public interface VenditaRepository extends JpaRepository<Vendita, Long> {
     // Query per trovare vendite per utente
     List<Vendita> findByUtenteUsernameOrderByDataAcquistoDesc(String username);
 
-    // Query per trovare vendite per corso
-    List<Vendita> findByCorsoIdOrderByDataAcquistoDesc(Long corsoId);
+    // Query per trovare vendite per pacchetto
+    List<Vendita> findByPacchettoIdOrderByDataAcquistoDesc(Long pacchettoId);
 
     // Query per trovare vendite per stato
     List<Vendita> findByStatoOrderByDataAcquistoDesc(StatoVendita stato);
@@ -52,21 +52,21 @@ public interface VenditaRepository extends JpaRepository<Vendita, Long> {
             @Param("dataFine") LocalDateTime dataFine
     );
 
-    // Query per statistiche: vendite per corso
+    // Query per statistiche: vendite per pacchetto
     @Query(value = """
         SELECT 
-            c.nome as nome_corso,
+            p.nome as nome_pacchetto,
             COUNT(*) as numero_vendite,
             SUM(CASE WHEN v.stato = 'PAID' THEN v.importo ELSE 0 END) as ricavi_totali,
             AVG(CASE WHEN v.stato = 'PAID' THEN v.importo ELSE NULL END) as ricavo_medio
         FROM vendite v
-        JOIN corsi c ON v.corso_id = c.id
+        JOIN pacchetti p ON v.pacchetto_id = p.id
         WHERE v.data_acquisto >= :dataInizio 
         AND v.data_acquisto <= :dataFine
-        GROUP BY c.id, c.nome
+        GROUP BY p.id, p.nome
         ORDER BY ricavi_totali DESC
         """, nativeQuery = true)
-    List<Map<String, Object>> getStatisticheVenditePerCorso(
+    List<Map<String, Object>> getStatisticheVenditePerPacchetto(
             @Param("dataInizio") LocalDateTime dataInizio,
             @Param("dataFine") LocalDateTime dataFine
     );
@@ -122,7 +122,7 @@ public interface VenditaRepository extends JpaRepository<Vendita, Long> {
     List<Map<String, Object>> getTrendVenditeUltimi12Mesi();
 
     // Query per trovare le vendite più recenti con fetch delle relazioni
-    @Query("SELECT v FROM Vendita v LEFT JOIN FETCH v.utente LEFT JOIN FETCH v.corso ORDER BY v.dataAcquisto DESC")
+    @Query("SELECT v FROM Vendita v LEFT JOIN FETCH v.utente LEFT JOIN FETCH v.pacchetto ORDER BY v.dataAcquisto DESC")
     List<Vendita> findTop10WithRelations(Pageable pageable);
 
     // Query per vendite di un utente in un range di date
@@ -132,6 +132,16 @@ public interface VenditaRepository extends JpaRepository<Vendita, Long> {
             LocalDateTime dataFine
     );
 
-    // Query per verificare se un utente ha già acquistato un corso
-    boolean existsByUtenteUsernameAndCorsoIdAndStato(String username, Long corsoId, StatoVendita stato);
+    // Query per verificare se un utente ha già acquistato un pacchetto
+    boolean existsByUtenteUsernameAndPacchettoIdAndStato(String username, Long pacchettoId, StatoVendita stato);
+
+    // Query per trovare vendite per utente e stato
+    List<Vendita> findByUtenteUsernameAndStato(String username, StatoVendita stato);
+
+    // Query per trovare vendite per utente ID e stato (usando query nativa per compatibilità)
+    @Query("SELECT v FROM Vendita v WHERE v.utente.username = :username AND v.stato = :stato")
+    List<Vendita> findVenditeByUsernameAndStato(@Param("username") String username, @Param("stato") StatoVendita stato);
+
+    // Query per trovare vendite per pacchetto e stato
+    List<Vendita> findByPacchettoIdAndStato(Long pacchettoId, StatoVendita stato);
 }

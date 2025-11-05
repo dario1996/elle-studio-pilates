@@ -2,7 +2,8 @@ package com.example.demo.services;
 
 import java.util.Arrays;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,18 +12,21 @@ import com.example.demo.dto.RegistrazioneUtenteDTO;
 import com.example.demo.entity.Utenti;
 import com.example.demo.repository.UtenteRepository;
 
-import lombok.extern.java.Log;
-
-@Log
 @Service
 @Transactional
 public class RegistrazioneService {
 
-    @Autowired
-    private UtenteRepository utenteRepository;
+    private static final Logger log = LoggerFactory.getLogger(RegistrazioneService.class);
 
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private final UtenteRepository utenteRepository;
+
+    private final BCryptPasswordEncoder passwordEncoder;
+
+    public RegistrazioneService(final UtenteRepository utenteRepository,
+                                final BCryptPasswordEncoder passwordEncoder) {
+        this.utenteRepository = utenteRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     /**
      * Registra un nuovo utente nel sistema
@@ -77,6 +81,9 @@ public class RegistrazioneService {
         utente.setNome(dto.getNome());
         utente.setCognome(dto.getCognome());
         utente.setCodiceFiscale(dto.getCodiceFiscale());
+        utente.setIndirizzo(dto.getIndirizzo());
+        utente.setCittà(dto.getCittà());
+        utente.setTelefono(dto.getTelefono());
         utente.setCertificatoMedico(dto.getCertificatoMedico());
         utente.setPatologie(dto.getPatologie());
         utente.setDescrizionePatologie(dto.getDescrizionePatologie());

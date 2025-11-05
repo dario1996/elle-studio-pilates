@@ -15,7 +15,12 @@ import { AuthJwtService } from '../../../../core/services/authJwt.service';
   standalone: true,
   templateUrl: './dashboard-utente.component.html',
   styleUrls: ['./dashboard-utente.component.css'],
-  imports: [CommonModule, PageTitleComponent, LoggedUserComponent, NotificationComponent],
+  imports: [
+    CommonModule, 
+    PageTitleComponent, 
+    LoggedUserComponent, 
+    // NotificationComponent
+  ],
 })
 export class DashboardUtenteComponent implements OnInit, AfterViewInit {
 
@@ -44,12 +49,21 @@ export class DashboardUtenteComponent implements OnInit, AfterViewInit {
     if (username) {
       this.lezioniService.getLezioniPrenotate(username).subscribe({
         next: (lezioni) => {
-          // Ordina per dataInizio crescente
-          this.lezioniPrenotate = lezioni.sort((a, b) => {
-            const dateA = new Date(a.dataInizio).getTime();
-            const dateB = new Date(b.dataInizio).getTime();
-            return dateA - dateB;
-          });
+          // Ordina per dataInizio crescente e filtra solo le lezioni future o di oggi
+          const oggi = new Date();
+          oggi.setHours(0, 0, 0, 0);
+          
+          this.lezioniPrenotate = lezioni
+            .filter(lezione => {
+              const dataLezione = new Date(lezione.dataInizio);
+              dataLezione.setHours(0, 0, 0, 0);
+              return dataLezione >= oggi; // Mostra solo lezioni di oggi o future
+            })
+            .sort((a, b) => {
+              const dateA = new Date(a.dataInizio).getTime();
+              const dateB = new Date(b.dataInizio).getTime();
+              return dateA - dateB;
+            });
           this.lezioneIndex = 0;
 
           // SUGGERIMENTI: prendi lezioni già frequentate, scegli 3 random (se disponibili)
@@ -157,6 +171,37 @@ export class DashboardUtenteComponent implements OnInit, AfterViewInit {
 
   getLabelTipoLezione(tipo: string): string {
     return TIPI_LEZIONE_CONFIG[tipo as keyof typeof TIPI_LEZIONE_CONFIG]?.label || tipo;
+  }
+
+  // Calcola i giorni mancanti da oggi alla data della lezione
+  getGiorniMancanti(dataLezione: string | Date): number {
+    const oggi = new Date();
+    oggi.setHours(0, 0, 0, 0);
+    const lezione = new Date(dataLezione);
+    lezione.setHours(0, 0, 0, 0);
+    const diffTime = lezione.getTime() - oggi.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  }
+
+  // Restituisce un messaggio testuale sui giorni mancanti
+  getGiorniMancantiText(dataLezione: string | Date): string {
+    const giorni = this.getGiorniMancanti(dataLezione);
+    if (giorni === 0) return 'Oggi';
+    if (giorni === 1) return 'Domani';
+    if (giorni === -1) return 'Ieri';
+    if (giorni < 0) return `${Math.abs(giorni)} giorni fa`;
+    return `Tra ${giorni} giorni`;
+  }
+
+  // Restituisce la classe CSS per il badge dei giorni in base alla vicinanza
+  getGiorniBadgeClass(dataLezione: string | Date): string {
+    const giorni = this.getGiorniMancanti(dataLezione);
+    if (giorni === 0) return 'badge-oggi';
+    if (giorni === 1) return 'badge-domani';
+    if (giorni >= 2 && giorni <= 7) return 'badge-settimana';
+    if (giorni < 0) return 'badge-passato';
+    return 'badge-futuro';
   }
 
   // Popup suggerimento

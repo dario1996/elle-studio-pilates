@@ -65,16 +65,16 @@ export class WelcomeComponent implements OnInit {
       roles: [Ruoli.amministratore], // Solo amministratori
     },
     {
-      title: 'Gestione corsi',
+      title: 'Gestione Pacchetti',
       icon: 'fa-solid fa-book fa-xl',
       links: [
         {
-          label: 'Gestione corsi',
-          url: 'corsi',
+          label: 'Gestione pacchetti',
+          url: 'pacchetti',
           icon: 'fa-solid fa-book fa-lg',
         },
       ],
-      roles: [Ruoli.amministratore], // Solo amministratori
+      roles: [Ruoli.utente], // Solo utenti
     },
     {
       title: 'Il mio profilo',
@@ -87,6 +87,18 @@ export class WelcomeComponent implements OnInit {
         },
       ],
       roles: [Ruoli.amministratore], // Accessibile solo agli amministratori
+    },
+    {
+      title: 'Il mio account',
+      icon: 'fa-solid fa-user fa-xl',
+      links: [
+        {
+          label: 'Il mio account',
+          url: 'account-panel',
+          icon: 'fa-solid fa-user fa-lg',
+        },
+      ],
+      roles: [Ruoli.utente], // Accessibile solo agli utenti
     },
   ];
 
@@ -173,7 +185,7 @@ export class WelcomeComponent implements OnInit {
         roles: [Ruoli.amministratore],
       });
     } else if (userRoles.includes(Ruoli.utente)) {
-      // Utente normale: dashboard utente + prenotazioni
+      // Utente normale: dashboard utente + prenotazioni + gestione pacchetti + il mio account
       this.menuItems = [
         {
           title: 'Dashboard',
@@ -195,6 +207,30 @@ export class WelcomeComponent implements OnInit {
               label: 'Prenotazioni',
               url: 'gestione-prenotazioni',
               icon: 'fa-regular fa-calendar-days fa-lg',
+            },
+          ],
+          roles: [Ruoli.utente],
+        },
+        {
+          title: 'Gestione Pacchetti',
+          icon: 'fa-solid fa-box-open fa-xl',
+          links: [
+            {
+              label: 'Gestione Pacchetti',
+              url: 'gestione-pacchetti',
+              icon: 'fa-solid fa-box-open fa-lg',
+            },
+          ],
+          roles: [Ruoli.utente],
+        },
+        {
+          title: 'Il mio account',
+          icon: 'fa-solid fa-user fa-xl',
+          links: [
+            {
+              label: 'Il mio account',
+              url: 'account-panel',
+              icon: 'fa-solid fa-user fa-lg',
             },
           ],
           roles: [Ruoli.utente],

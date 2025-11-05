@@ -2,9 +2,10 @@ package com.example.demo.controller;
 
 import java.util.Objects;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,36 +30,38 @@ import com.example.demo.security.JwtConfig;
 import com.example.demo.security.JwtTokenUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.SneakyThrows;
-import lombok.extern.java.Log;
- 
 @RestController
-@Log
 public class JwtAuthenticationRestController 
 {
+
+    private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationRestController.class);
 
 	@Value("${sicurezza.header}")
 	private String tokenHeader;
 
-	@Autowired
-	private AuthenticationManager authenticationManager;
+	private final AuthenticationManager authenticationManager;
 
-	@Autowired
-	private JwtTokenUtil jwtTokenUtil;
-	
-	@Autowired
-	private JwtConfig jwtConfig;
+	private final JwtTokenUtil jwtTokenUtil;
 
+	private final JwtConfig jwtConfig;
 
-	@Autowired
-	@Qualifier("CustomUserDetailsService")
-	private UserDetailsService userDetailsService;
-	
-	@Autowired
-	private UtenteRepository utentiRepository;
+	private final UserDetailsService userDetailsService;
+
+	private final UtenteRepository utentiRepository;
+
+	public JwtAuthenticationRestController(final AuthenticationManager authenticationManager,
+	                                      final JwtTokenUtil jwtTokenUtil,
+	                                      final JwtConfig jwtConfig,
+	                                      @Qualifier("CustomUserDetailsService") final UserDetailsService userDetailsService,
+	                                      final UtenteRepository utentiRepository) {
+		this.authenticationManager = authenticationManager;
+		this.jwtTokenUtil = jwtTokenUtil;
+		this.jwtConfig = jwtConfig;
+		this.userDetailsService = userDetailsService;
+		this.utentiRepository = utentiRepository;
+	}
 	
 	@PostMapping(value = "${sicurezza.uri}")
-	@SneakyThrows
 	public ResponseEntity<JwtTokensResponse> createAuthenticationToken(@RequestBody JwtTokenRequest authenticationRequest) 
 	{
 		log.info("Autenticazione e Generazione Token");
@@ -78,8 +81,8 @@ public class JwtAuthenticationRestController
 		String displayName = (nome + " " + cognome).trim();
 		String email = utente != null ? utente.getEmail() : "";
 		
-		log.warning(String.format("Access Token %s", accessToken));
-		log.warning(String.format("Refresh Token %s", refreshToken));
+		log.warn("Access Token {}", accessToken);
+		log.warn("Refresh Token {}", refreshToken);
 
 		JwtTokensResponse response = new JwtTokensResponse(
 			accessToken, 
@@ -106,7 +109,7 @@ public class JwtAuthenticationRestController
 	            String newAccessToken = jwtTokenUtil.refreshToken(refreshToken);
 	            return ResponseEntity.ok(new JwtTokenResponse(newAccessToken));
 	        } catch (Exception e) {
-	            log.warning("Refresh token failed: " + e.getMessage());
+	            log.warn("Refresh token failed: {}", e.getMessage());
 	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 	        }
 	    }
@@ -132,12 +135,12 @@ public class JwtAuthenticationRestController
 		} 
 		catch (DisabledException e) 
 		{
-			log.warning("UTENTE DISABILITATO");
+			log.warn("UTENTE DISABILITATO");
 			throw new AuthenticationException("UTENTE DISABILITATO", e);
 		} 
 		catch (BadCredentialsException e) 
 		{
-			log.warning("CREDENZIALI NON VALIDE");
+			log.warn("CREDENZIALI NON VALIDE");
 			throw new AuthenticationException("CREDENZIALI NON VALIDE", e);
 		}
 	}

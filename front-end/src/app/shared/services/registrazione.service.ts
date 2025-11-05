@@ -7,6 +7,9 @@ export interface RegistrazioneRequest {
   nome: string;
   cognome: string;
   codiceFiscale: string;
+  indirizzo: string;
+  città: string;
+  telefono?: string;
   
   // Step 2: Certificato Medico
   certificato?: File;  // File object per l'upload

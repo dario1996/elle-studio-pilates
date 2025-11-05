@@ -62,7 +62,7 @@
 }
 
 .fc-view-harness {
-    background: white;
+  background: white;
   border-radius: 6px;
   padding: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -274,7 +274,7 @@
   background-color: #f59e0b;
 }
 
-::ng-deep .fc-event[data-tipo="MATWORK"] {
+::ng-deep .fc-event[data-tipo="PILATES_MATWORK"] {
   background-color: #ef4444;
 }
 

@@ -41,20 +41,20 @@ export class UserService {
       utente,
     );
 
-  updUtente = (username: string, utente: IUsers) =>
+  updUtente = (id: number, utente: IUsers) =>
     this.httpClient.put<IUsers>(
-      `http://${this.server}:${this.port}/api/utenti/${username}`,
+      `http://${this.server}:${this.port}/api/utenti/${id}`,
       utente,
     );
 
-  delUtente = (username: string) =>
+  delUtente = (id: number) =>
     this.httpClient.delete<void>(
-      `http://${this.server}:${this.port}/api/utenti/${username}`,
+      `http://${this.server}:${this.port}/api/utenti/${id}`,
     );
 
-  toggleUtenteStatus = (username: string) =>
+  toggleUtenteStatus = (id: number) =>
     this.httpClient.put<IUsers>(
-      `http://${this.server}:${this.port}/api/utenti/${username}/toggle-status`,
+      `http://${this.server}:${this.port}/api/utenti/${id}/toggle-status`,
       {},
     );
 
@@ -97,6 +97,16 @@ export class UserService {
     this.httpClient.get(
       `http://${this.server}:${this.port}/api/upload/certificato-medico/${username}`,
       { responseType: 'blob' }
+    );
+
+  // Cambio password
+  changePassword = (username: string, oldPassword: string, newPassword: string) =>
+    this.httpClient.put<ApiMsg>(
+      `http://${this.server}:${this.port}/api/utenti/${username}/change-password`,
+      {
+        oldPassword: oldPassword,
+        newPassword: newPassword
+      }
     );
 
   /* 

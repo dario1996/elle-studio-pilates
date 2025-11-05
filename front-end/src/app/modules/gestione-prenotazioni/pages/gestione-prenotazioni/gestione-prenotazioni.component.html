@@ -12,7 +12,7 @@
       <div class="col d-flex justify-content-start">
         <button class="quick-action-btn" (click)="apriGestionePrenotazioni()">
           <i class="fas fa-edit"></i>
-          <span>Modifica prenotazioni</span>
+          <span>Le mie prenotazioni</span>
         </button>
       </div>
     </div>
@@ -25,84 +25,90 @@
           <!-- Layout a due colonne -->
           <div class="form-layout">
             
-            <!-- Colonna sinistra: Data e Orario -->
+            <!-- Colonna sinistra: Pacchetto e Tipo Lezione -->
             <div class="left-column">
+
+              <!-- Sezione selezione pacchetto -->
               <div class="form-section">
-                <h3><i class="fas fa-calendar-alt"></i> Data e Orario</h3>
-                
-                <!-- Calendario -->
+                <h3><i class="fas fa-box"></i> Seleziona Pacchetto</h3>
+
                 <div class="form-group">
-                  <label for="data">Seleziona Data *</label>
-                  <input 
-                    type="date" 
-                    id="data" 
-                    formControlName="data" 
-                    class="form-control calendar-input"
-                    [min]="getMinDate()"
-                    (change)="onDateChange($event)">
-                </div>
-                
-                <!-- Orari disponibili scrollabili -->
-                <div class="form-group" *ngIf="prenotazioneForm.get('data')?.value">
-                  <label>Orari Disponibili *</label>
-                  <div class="orari-container compact">
-                    <div class="orari-scroll">
-                      <div class="orario-slot" 
-                           *ngFor="let orario of orariDisponibili" 
-                           [class.selected]="prenotazioneForm.get('orario')?.value === orario"
-                           [class.unavailable]="!isOrarioDisponibile(orario)"
-                           (click)="selectOrario(orario)">
-                        <div class="orario-time">{{ orario }}</div>
-                        <div class="orario-info" *ngIf="getOrarioInfo(orario) as info">
-                          <span class="posti-info" [class.esaurito]="!info.disponibile">
-                            {{ info.disponibile ? info.postiRimasti + ' posti' : 'Esaurito' }}
-                          </span>
-                        </div>
-                      </div>
-                      
-                      <!-- Messaggio se nessun orario disponibile -->
-                      <div class="no-slots" *ngIf="orariDisponibili.length === 0">
-                        <i class="fas fa-info-circle"></i>
-                        Seleziona prima un corso
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Colonna destra: Corso e Note -->
-            <div class="right-column">
-              
-              <!-- Sezione selezione corso -->
-              <div class="form-section">
-                <h3><i class="fas fa-dumbbell"></i> Seleziona Corso</h3>
-                
-                <div class="form-group">
-                  <label for="corso">Corso *</label>
-                  <select id="corso" formControlName="corso" class="form-control" (change)="onCorsoChange($event)">
-                    <option value="">Seleziona un corso...</option>
-                    <option *ngFor="let corso of corsiFiltrati" [value]="corso.id">
-                      {{ corso.nome }} - €{{ corso.prezzo }}
+                  <label for="pacchetto">Pacchetto Acquistato *</label>
+                  <select 
+                    id="pacchetto" 
+                    formControlName="pacchetto" 
+                    class="form-control"
+                    (change)="onPacchettoChange($event)">
+                    <option value="">-- Seleziona un pacchetto --</option>
+                    <option *ngFor="let pacchetto of pacchetti" [value]="pacchetto.id">
+                      {{ pacchetto.nome }}
                     </option>
                   </select>
                 </div>
                 
-                <!-- Dettagli corso compatti -->
-                <div *ngIf="selectedCorso" class="corso-details-compact">
-                  <div class="corso-quick-info">
-                    <span class="corso-categoria">{{ selectedCorso.categoria }}</span>
-                    <span class="corso-livello">{{ selectedCorso.livello }}</span>
-                    <span class="corso-durata">
-                      <i class="fas fa-clock"></i> {{ selectedCorso.durataMinuti }}min
-                    </span>
+                <!-- Dettagli pacchetto selezionato -->
+                <div class="pacchetto-details" *ngIf="selectedPacchetto">
+                  <div class="detail-row">
+                    <span class="label"><i class="fas fa-tag"></i> Nome:</span>
+                    <span class="value">{{ selectedPacchetto.nome }}</span>
                   </div>
-                  <p class="corso-descrizione-short">{{ selectedCorso.descrizione }}</p>
+                  <div class="detail-row" *ngIf="selectedPacchetto.livello">
+                    <span class="label"><i class="fas fa-chart-line"></i> Livello:</span>
+                    <span class="value">{{ selectedPacchetto.livello }}</span>
+                  </div>
+                  <div class="detail-row" *ngIf="selectedPacchetto.descrizione">
+                    <span class="label"><i class="fas fa-info-circle"></i> Descrizione:</span>
+                    <span class="value">{{ selectedPacchetto.descrizione }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sezione selezione tipo lezione -->
+              <div class="form-section" *ngIf="selectedPacchetto">
+                <h3><i class="fas fa-dumbbell"></i> Seleziona Tipo Lezione</h3>
+
+                <div class="form-group">
+                  <label for="tipoLezione">Tipo Lezione *</label>
+                  <select 
+                    id="tipoLezione" 
+                    formControlName="tipoLezione" 
+                    class="form-control"
+                    [disabled]="!selectedPacchetto"
+                    (change)="onTipoLezioneChange($event)">
+                    <option value="">-- Seleziona un tipo di lezione --</option>
+                    <option *ngFor="let tipo of tipiLezione" [value]="tipo.id">
+                      {{ tipo.titolo }} - {{ tipo.tipoLezione }} ({{ tipo.giornoSettimana }})
+                    </option>
+                  </select>
+                </div>
+                
+                <!-- Dettagli tipo lezione selezionato -->
+                <div class="tipo-lezione-details" *ngIf="selectedTipoLezione">
+                  <div class="detail-row">
+                    <span class="label"><i class="fas fa-calendar-day"></i> Giorno:</span>
+                    <span class="value">{{ selectedTipoLezione.giornoSettimana }}</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="label"><i class="fas fa-clock"></i> Orario:</span>
+                    <span class="value">{{ selectedTipoLezione.oraInizio }} - {{ selectedTipoLezione.oraFine }}</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="label"><i class="fas fa-user"></i> Istruttore:</span>
+                    <span class="value">{{ selectedTipoLezione.istruttore }}</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="label"><i class="fas fa-users"></i> Max partecipanti:</span>
+                    <span class="value">{{ selectedTipoLezione.maxPartecipanti }}</span>
+                  </div>
+                  <div class="detail-row" *ngIf="selectedTipoLezione.note">
+                    <span class="label"><i class="fas fa-info-circle"></i> Note:</span>
+                    <span class="value">{{ selectedTipoLezione.note }}</span>
+                  </div>
                 </div>
               </div>
               
-              <!-- Sezione note compatte -->
-              <div class="form-section">
+              <!-- Sezione note -->
+              <div class="form-section" *ngIf="selectedLezione">
                 <h3><i class="fas fa-sticky-note"></i> Note</h3>
                 
                 <div class="form-group">
@@ -110,12 +116,67 @@
                     id="note" 
                     formControlName="note" 
                     class="form-control compact-textarea" 
-                    rows="2"
+                    rows="3"
                     placeholder="Note particolari...">
                   </textarea>
                 </div>
+              </div>             
+            </div>
+            
+            <!-- Colonna destra: Date e Orari disponibili -->
+            <div class="right-column">
+              <div class="form-section">
+                <h3><i class="fas fa-calendar-alt"></i> Date e Orari Disponibili</h3>
+                
+                <!-- Lezioni disponibili raggruppate per data -->
+                <div class="form-group" *ngIf="selectedTipoLezione && !loading">
+                  <div class="lezioni-list" *ngIf="lezioniDisponibili.length > 0; else nessunalezione">
+                    <div class="lezione-card" 
+                         *ngFor="let lezione of lezioniDisponibili"
+                         [class.selected]="selectedLezione?.lezioneId === lezione.lezioneId"
+                         [class.unavailable]="!lezione.disponibile"
+                         (click)="lezione.disponibile && onLezioneChange({target: {value: lezione.lezioneId}})">
+                      <div class="lezione-header">
+                        <h4>{{ lezione.dataInizio | date:'EEEE, d MMMM yyyy':'':'it' }}</h4>
+                        <span class="lezione-orario">{{ lezione.dataInizio | date:'HH:mm' }} - {{ lezione.dataFine | date:'HH:mm' }}</span>
+                      </div>
+                      <div class="lezione-details">
+                        <span class="posti-info" [class.esaurito]="!lezione.disponibile">
+                          <i class="fas fa-users"></i> {{ lezione.postiDisponibili }} / {{ lezione.maxPartecipanti }} posti
+                        </span>
+                        <span class="disponibilita-badge" [class.non-disponibile]="!lezione.disponibile">
+                          <i class="fas" [ngClass]="lezione.disponibile ? 'fa-check-circle' : 'fa-times-circle'"></i>
+                          {{ lezione.disponibile ? 'Disponibile' : 'Completo' }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <ng-template #nessunalezione>
+                    <div class="no-slots">
+                      <i class="fas fa-info-circle"></i>
+                      Nessuna lezione disponibile per questo tipo nei prossimi giorni
+                    </div>
+                  </ng-template>
+                </div>
+                
+                <!-- Spinner caricamento -->
+                <div class="loading-spinner" *ngIf="loading">
+                  <i class="fas fa-spinner fa-spin"></i> Caricamento lezioni...
+                </div>
+                
+                <!-- Messaggio seleziona tipo -->
+                <div class="no-slots" *ngIf="!selectedTipoLezione && !loading && selectedPacchetto">
+                  <i class="fas fa-info-circle"></i>
+                  Seleziona un tipo di lezione per vedere le date e gli orari disponibili
+                </div>
+                
+                <!-- Messaggio seleziona pacchetto -->
+                <div class="no-slots" *ngIf="!selectedPacchetto && !loading">
+                  <i class="fas fa-info-circle"></i>
+                  Seleziona prima un pacchetto acquistato
+                </div>
               </div>
-              
             </div>
             
           </div>
@@ -124,13 +185,13 @@
           <div class="form-actions">
             <button 
               type="button" 
-              class="btn btn-secondary"
-              (click)="prenotazioneForm.reset(); selectedCorso = null; clearMessages()">
+              class="btn btn-cancel btn-sm"
+              (click)="prenotazioneForm.reset(); selectedLezione = null; selectedTipoLezione = null; selectedPacchetto = null; tipiLezione = []; lezioniDisponibili = []; clearMessages()">
               Annulla
             </button>
             <button 
               type="submit" 
-              class="btn btn-primary"
+              class="btn quick-action-btn"
               [disabled]="!isFormValid() || loading">
               <span *ngIf="loading">
                 <i class="fas fa-spinner fa-spin"></i> Prenotando...
@@ -151,10 +212,10 @@
 <!-- Toast Badge Notification -->
 <div class="toast-badge" [class.show]="showToast" [ngClass]="toastType">
   <div class="toast-content">
-    <i class="material-icons-round toast-icon">{{ toastIcon }}</i>
+    <i class="toast-icon">{{ toastIcon }}</i>
     <span class="toast-message">{{ toastMessage }}</span>
     <button type="button" class="toast-close" (click)="hideToast()">
-      <i class="material-icons-round">close</i>
+      close
     </button>
   </div>
 </div>
@@ -164,7 +225,7 @@
   <div class="modal-container" (click)="$event.stopPropagation()">
     <div class="modal-header">
       <h3>Le tue Prenotazioni</h3>
-      <button type="button" class="modal-close" (click)="chiudiGestionePrenotazioni()">
+      <button type="button" class="button-close" (click)="chiudiGestionePrenotazioni()">
         <i class="fas fa-times"></i>
       </button>
     </div>
@@ -174,18 +235,22 @@
       <div class="prenotazioni-list" *ngIf="prenotazioniUtente.length > 0; else nessunaPrenotazione">
         <div class="prenotazione-item" *ngFor="let prenotazione of prenotazioniUtente; let i = index">
           <div class="prenotazione-info">
-            <div class="prenotazione-corso">
-              <span class="corso-nome">{{ prenotazione.corsoNome }}</span>
-              <span class="corso-categoria">{{ prenotazione.categoria }}</span>
+            <div class="prenotazione-pacchetto">
+              <span class="pacchetto-nome">{{ prenotazione.titolo }}</span>
+              <span class="pacchetto-categoria">{{ prenotazione.tipoLezione }}</span>
             </div>
             <div class="prenotazione-dettagli">
               <span class="prenotazione-data">
                 <i class="fas fa-calendar"></i>
-                {{ formatDate(prenotazione.data) }}
+                {{ formatDate(prenotazione.dataInizio) }}
               </span>
               <span class="prenotazione-orario">
                 <i class="fas fa-clock"></i>
-                {{ prenotazione.orario }}
+                {{ prenotazione.dataInizio | date:'HH:mm' }} - {{ prenotazione.dataFine | date:'HH:mm' }}
+              </span>
+              <span class="prenotazione-istruttore">
+                <i class="fas fa-user"></i>
+                {{ prenotazione.istruttore }}
               </span>
             </div>
             <div class="prenotazione-note" *ngIf="prenotazione.note">
@@ -215,7 +280,7 @@
     </div>
     
     <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" (click)="chiudiGestionePrenotazioni()">
+      <button type="button" class="btn btn-cancel btn-sm ms-2" (click)="chiudiGestionePrenotazioni()">
         Chiudi
       </button>
     </div>

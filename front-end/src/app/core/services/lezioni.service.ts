@@ -91,14 +91,12 @@ export class LezioniService {
       case TipoLezione.PRIVATA:
       case TipoLezione.PRIMA_LEZIONE:
         return 1;
-      case TipoLezione.SEMI_PRIVATA_DUETTO:
+      case TipoLezione.SEMI_PRIVATA:
         return 2;
-      case TipoLezione.SEMI_PRIVATA_GRUPPO:
-        return 4;
-      case TipoLezione.MATWORK:
-        return 6;
+      case TipoLezione.PILATES_MATWORK:
+        return 3;
       case TipoLezione.YOGA:
-        return 8;
+        return 4;
       default:
         return 1;
     }
@@ -110,11 +108,9 @@ export class LezioniService {
         return '#3b82f6';
       case TipoLezione.PRIMA_LEZIONE:
         return '#8b5cf6';
-      case TipoLezione.SEMI_PRIVATA_DUETTO:
+      case TipoLezione.SEMI_PRIVATA:
         return '#10b981';
-      case TipoLezione.SEMI_PRIVATA_GRUPPO:
-        return '#f59e0b';
-      case TipoLezione.MATWORK:
+      case TipoLezione.PILATES_MATWORK:
         return '#ef4444';
       case TipoLezione.YOGA:
         return '#84cc16';

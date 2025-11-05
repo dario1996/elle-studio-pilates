@@ -32,20 +32,11 @@ export const routes: Routes = [
         data: { roles: [Ruoli.utente] },
       },
       {
-        path: 'corsi',
+        path: 'Pacchetti',
         loadComponent: () =>
-          import('./modules/corsi/pages/corsi/corsi.component').then(
-            m => m.CorsiComponent,
+          import('./modules/pacchetti/pages/pacchetti/pacchetti.component').then(
+            m => m.PacchettiComponent,
           ),
-        canActivate: [AuthGuard],
-        data: { roles: [Ruoli.amministratore] },
-      },
-      {
-        path: 'dipendenti',
-        loadComponent: () =>
-          import(
-            './modules/dipendenti/pages/dipendenti/dipendenti.component'
-          ).then(m => m.DipendentiComponent),
         canActivate: [AuthGuard],
         data: { roles: [Ruoli.amministratore] },
       },
@@ -86,17 +77,19 @@ export const routes: Routes = [
         data: { roles: [Ruoli.utente] },
       },
       {
+        path: 'gestione-pacchetti',
+        loadComponent: () =>
+          import('./modules/gestione-pacchetti/pages/gestione-pacchetti/gestione-pacchetti.component').then(
+            m => m.GestionePacchettiComponent,
+          ),
+        canActivate: [AuthGuard],
+        data: { roles: [Ruoli.utente] },
+      },
+      {
         path: 'account-panel',
         component: AccountPanelComponent,
         canActivate: [AuthGuard],
         data: { roles: [Ruoli.utente, Ruoli.amministratore] },
-      },
-      {
-        path: 'impostazioni',
-        loadComponent: () =>
-          import('./modules/settings/pages/settings/settings.component').then(
-            m => m.SettingsComponent,
-          ),
       },
     ],
     canActivate: [AuthGuard],

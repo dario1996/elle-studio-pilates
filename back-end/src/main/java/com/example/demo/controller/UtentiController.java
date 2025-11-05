@@ -4,7 +4,8 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.HttpStatus;
@@ -26,21 +27,22 @@ import com.example.demo.entity.Utenti;
 import com.example.demo.exceptions.BindingException;
 import com.example.demo.services.UtentiService;
 
-import lombok.SneakyThrows;
-import lombok.extern.java.Log;
-
-@Log
 @RestController
 @RequestMapping(value = "/api/utenti")
 public class UtentiController {
-    @Autowired
-	UtentiService utentiService;
-	
-	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
-	
-	@Autowired
-	private ResourceBundleMessageSource errMessage;
+    private static final Logger log = LoggerFactory.getLogger(UtentiController.class);
+
+    private final UtentiService utentiService;
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final ResourceBundleMessageSource errMessage;
+
+    public UtentiController(final UtentiService utentiService,
+                            final BCryptPasswordEncoder passwordEncoder,
+                            final ResourceBundleMessageSource errMessage) {
+        this.utentiService = utentiService;
+        this.passwordEncoder = passwordEncoder;
+        this.errMessage = errMessage;
+    }
 
     // 🆕 ENDPOINT GET per ottenere la lista degli utenti
     @GetMapping(produces = "application/json")
@@ -50,7 +52,7 @@ public class UtentiController {
             List<Utenti> utenti = utentiService.SelPreloadUsers();
             return ResponseEntity.ok(utenti);
         } catch (Exception e) {
-            log.severe("Errore nel recupero degli utenti: " + e.getMessage());
+            log.error("Errore nel recupero degli utenti: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -60,32 +62,31 @@ public class UtentiController {
     public ResponseEntity<Utenti> getUtenteByUsername(@PathVariable String username) {
         log.info("Richiesta utente by username: " + username);
         try {
-            Utenti utente = utentiService.SelUser(username);
+            Utenti utente = utentiService.SelUserByUsername(username);
             if (utente == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
             return ResponseEntity.ok(utente);
         } catch (Exception e) {
-            log.severe("Errore nel recupero utente: " + e.getMessage());
+            log.error("Errore nel recupero utente: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
     // 🆕 ENDPOINT PUT per modificare un utente
-    @PutMapping(value = "/{username}", produces = "application/json")
-    @SneakyThrows
-    public ResponseEntity<InfoMsg> updateUtente(@PathVariable String username, 
-            @RequestBody Utenti utente, BindingResult bindingResult) {
+    @PutMapping(value = "/{id}", produces = "application/json")
+    public ResponseEntity<InfoMsg> updateUtente(@PathVariable Long id, 
+            @RequestBody Utenti utente, BindingResult bindingResult) throws BindingException {
         
-        log.info("Richiesta modifica utente: " + username);
+        log.info("Richiesta modifica utente: " + id);
         
         if (bindingResult.hasErrors()) {
             String MsgErr = errMessage.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale());
-            log.warning(MsgErr);
+            log.warn(MsgErr);
             throw new BindingException(MsgErr);
         }
         
-        Utenti existingUtente = utentiService.SelUser(username);
+        Utenti existingUtente = utentiService.SelUserById(id);
         if (existingUtente == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new InfoMsg(LocalDate.now(), "Utente non trovato"));
@@ -95,7 +96,14 @@ public class UtentiController {
         existingUtente.setNome(utente.getNome());
         existingUtente.setCognome(utente.getCognome());
         existingUtente.setEmail(utente.getEmail());
-        existingUtente.setCodiceFiscale(utente.getCodiceFiscale());
+        
+        // Aggiorna codice fiscale solo se non è null e non è vuoto
+        if (utente.getCodiceFiscale() != null && !utente.getCodiceFiscale().trim().isEmpty()) {
+            existingUtente.setCodiceFiscale(utente.getCodiceFiscale());
+        } else {
+            existingUtente.setCodiceFiscale(null);
+        }
+        
         existingUtente.setAttivo(utente.getAttivo());
         existingUtente.setPatologie(utente.getPatologie());
         existingUtente.setDescrizionePatologie(utente.getDescrizionePatologie());
@@ -114,26 +122,26 @@ public class UtentiController {
         utentiService.Save(existingUtente);
         
         return ResponseEntity.ok(new InfoMsg(LocalDate.now(), 
-                String.format("Utente %s modificato con successo", username)));
+                String.format("Utente %s modificato con successo", existingUtente.getUsername())));
     }
 
     // 🆕 ENDPOINT DELETE per eliminare un utente
-    @DeleteMapping(value = "/{username}", produces = "application/json")
-    public ResponseEntity<InfoMsg> deleteUtente(@PathVariable String username) {
-        log.info("Richiesta eliminazione utente: " + username);
-        
-        Utenti existingUtente = utentiService.SelUser(username);
+    @DeleteMapping(value = "/{id}", produces = "application/json")
+    public ResponseEntity<InfoMsg> deleteUtente(@PathVariable Long id) {
+        log.info("Richiesta eliminazione utente: " + id);
+
+        Utenti existingUtente = utentiService.SelUserById(id);
         if (existingUtente == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new InfoMsg(LocalDate.now(), "Utente non trovato"));
         }
         
         try {
-            utentiService.deleteUtente(username);
-            return ResponseEntity.ok(new InfoMsg(LocalDate.now(), 
-                    String.format("Utente %s eliminato con successo", username)));
+            utentiService.deleteUtente(id);
+            return ResponseEntity.ok(new InfoMsg(LocalDate.now(),
+                    String.format("Utente %s eliminato con successo", id)));
         } catch (Exception e) {
-            log.severe("Errore nell'eliminazione dell'utente: " + e.getMessage());
+            log.error("Errore nell'eliminazione dell'utente: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new InfoMsg(LocalDate.now(), "Errore nell'eliminazione dell'utente"));
         }
@@ -163,7 +171,7 @@ public class UtentiController {
             
             return ResponseEntity.ok(risultati);
         } catch (Exception e) {
-            log.severe("Errore nell'autocomplete utenti: " + e.getMessage());
+            log.error("Errore nell'autocomplete utenti: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -185,7 +193,7 @@ public class UtentiController {
             
             return ResponseEntity.ok(utentiFiltrati);
         } catch (Exception e) {
-            log.severe("Errore nel recupero utenti per usernames: " + e.getMessage());
+            log.error("Errore nel recupero utenti per usernames: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -207,11 +215,11 @@ public class UtentiController {
     }
 
     // 🆕 ENDPOINT PUT per cambiare stato utente (attivo/non attivo)
-    @PutMapping(value = "/{username}/toggle-status", produces = "application/json")
-    public ResponseEntity<InfoMsg> toggleUtenteStatus(@PathVariable String username) {
-        log.info("Richiesta cambio stato utente: " + username);
-        
-        Utenti existingUtente = utentiService.SelUser(username);
+    @PutMapping(value = "/{id}/toggle-status", produces = "application/json")
+    public ResponseEntity<InfoMsg> toggleUtenteStatus(@PathVariable Long id) {
+        log.info("Richiesta cambio stato utente: " + id);
+
+        Utenti existingUtente = utentiService.SelUserById(id);
         if (existingUtente == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new InfoMsg(LocalDate.now(), "Utente non trovato"));
@@ -224,20 +232,93 @@ public class UtentiController {
         utentiService.Save(existingUtente);
         
         return ResponseEntity.ok(new InfoMsg(LocalDate.now(), 
-                String.format("Stato utente %s cambiato in: %s", username, 
+                String.format("Stato utente %s cambiato in: %s", existingUtente.getUsername(), 
                         "Si".equals(nuovoStato) ? "Attivo" : "Non attivo")));
     }
 
+    // 🆕 ENDPOINT PUT per cambiare la password
+    @PutMapping(value = "/{id}/change-password", produces = "application/json")
+    public ResponseEntity<InfoMsg> changePassword(@PathVariable Long id,
+            @RequestBody java.util.Map<String, String> passwords) {
+        log.info("Richiesta cambio password per utente: " + id);
+        
+        String oldPassword = passwords.get("oldPassword");
+        String newPassword = passwords.get("newPassword");
+        
+        // Validazione parametri
+        if (oldPassword == null || oldPassword.isEmpty() || 
+            newPassword == null || newPassword.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new InfoMsg(LocalDate.now(), "Password corrente e nuova password sono obbligatorie"));
+        }
+        
+        // Verifica esistenza utente
+        Utenti existingUtente = utentiService.SelUserById(id);
+        if (existingUtente == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new InfoMsg(LocalDate.now(), "Utente non trovato"));
+        }
+        
+        // Verifica password corrente
+        if (!passwordEncoder.matches(oldPassword, existingUtente.getPassword())) {
+            log.warn("Password corrente non valida per utente: {}", existingUtente.getUsername());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new InfoMsg(LocalDate.now(), "Password corrente non valida"));
+        }
+        
+        // Validazione robustezza nuova password
+        if (!isPasswordStrong(newPassword)) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                    .body(new InfoMsg(LocalDate.now(), 
+                            "La nuova password deve contenere almeno 8 caratteri, " +
+                            "una lettera maiuscola, una minuscola, un numero e un carattere speciale"));
+        }
+        
+        // Verifica che la nuova password sia diversa dalla vecchia
+        if (passwordEncoder.matches(newPassword, existingUtente.getPassword())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new InfoMsg(LocalDate.now(), 
+                            "La nuova password deve essere diversa da quella corrente"));
+        }
+        
+        // Aggiorna la password
+        existingUtente.setPassword(passwordEncoder.encode(newPassword));
+        utentiService.Save(existingUtente);
+        
+        log.info("Password cambiata con successo per utente: " + existingUtente.getUsername());
+        return ResponseEntity.ok(new InfoMsg(LocalDate.now(), "Password cambiata con successo"));
+    }
+    
+    /**
+     * Valida la robustezza della password
+     * - Minimo 8 caratteri
+     * - Almeno una lettera maiuscola
+     * - Almeno una lettera minuscola
+     * - Almeno un numero
+     * - Almeno un carattere speciale
+     */
+    private boolean isPasswordStrong(String password) {
+        if (password == null || password.length() < 8) {
+            return false;
+        }
+        
+        boolean hasUpperCase = password.matches(".*[A-Z].*");
+        boolean hasLowerCase = password.matches(".*[a-z].*");
+        boolean hasDigit = password.matches(".*\\d.*");
+        boolean hasSpecialChar = password.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?].*");
+        
+        return hasUpperCase && hasLowerCase && hasDigit && hasSpecialChar;
+    }
+
     @PostMapping(value = "/inserisci", produces = "application/json")
-	@SneakyThrows
 	public ResponseEntity<InfoMsg> addNewUser(@RequestBody Utenti utente, 
-	    BindingResult bindingResult) {
+        BindingResult bindingResult) throws BindingException {
 
-	    Utenti checkUtente = utentiService.SelUser(utente.getUsername());
+	    Utenti checkUtente = utentiService.SelUserByUsername(utente.getUsername());
 
-	    if (bindingResult.hasErrors()) {
-	        String MsgErr = errMessage.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale());
-	        log.warning(MsgErr);
+        if (bindingResult.hasErrors()) {
+            String MsgErr = errMessage.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale());
+            log.warn(MsgErr);
 	        throw new BindingException(MsgErr);
 	    }
 	    

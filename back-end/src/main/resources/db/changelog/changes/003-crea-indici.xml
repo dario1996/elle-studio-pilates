@@ -21,13 +21,13 @@
             <column name="codice_fiscale" />
         </createIndex>
 
-<!-- Indici per la tabella corsi -->
+<!-- Indici per la tabella pacchetti -->
 
-        <createIndex indexName="idx_corso_stato" tableName="corsi">
+        <createIndex indexName="idx_pacchetto_stato" tableName="pacchetti">
             <column name="stato" />
         </createIndex>
 
-        <createIndex indexName="idx_corso_categoria" tableName="corsi">
+        <createIndex indexName="idx_pacchetto_categoria" tableName="pacchetti">
             <column name="categoria" />
         </createIndex>
 
@@ -53,15 +53,9 @@
             <column name="data_inizio"/>
             <column name="data_fine"/>
         </createIndex>
-    
-<!-- Indici per la tabella lezione_partecipanti -->
 
-        <createIndex tableName="lezione_partecipanti" indexName="idx_lezione_partecipanti_lezione">
-            <column name="lezione_id"/>
-        </createIndex>
-        
-        <createIndex tableName="lezione_partecipanti" indexName="idx_lezione_partecipanti_utenti">
-            <column name="partecipanti_username"/>
+        <createIndex tableName="lezioni" indexName="idx_lezioni_template">
+            <column name="template_id"/>
         </createIndex>
 
 <!-- Indici per la tabella vendite -->
@@ -70,8 +64,8 @@
             <column name="utente_id"/>
         </createIndex>
 
-        <createIndex tableName="vendite" indexName="idx_vendite_corso">
-            <column name="corso_id"/>
+        <createIndex tableName="vendite" indexName="idx_vendite_pacchetto">
+            <column name="pacchetto_id"/>
         </createIndex>
 
         <createIndex tableName="vendite" indexName="idx_vendite_stato">
@@ -85,38 +79,8 @@
         <createIndex tableName="vendite" indexName="idx_vendite_data_pagamento">
             <column name="data_pagamento"/>
         </createIndex>
-
-<!-- Indici per la tabella learning_data -->
-
-        <createIndex tableName="learning_data" indexName="idx_learning_data_email">
-            <column name="email" />
-        </createIndex>
-
-        <createIndex tableName="learning_data" indexName="idx_learning_data_content">
-            <column name="content_name" />
-        </createIndex>
-
-        <createIndex tableName="learning_data" indexName="idx_learning_data_processed_at">
-            <column name="processed_at" />
-        </createIndex>
-
-        <createIndex tableName="learning_data" indexName="idx_learning_data_completion_date">
-            <column name="completion_date" />
-        </createIndex>
-
-        <createIndex tableName="learning_data" indexName="idx_learning_data_employee_id">
-            <column name="employee_id" />
-        </createIndex>
-
-        <createIndex tableName="learning_data" indexName="idx_learning_data_content_id">
-            <column name="content_id" />
-        </createIndex>
-
-        <createIndex tableName="learning_data" indexName="idx_learning_data_processed">
-            <column name="processed" />
-        </createIndex>
     
-<!-- Indici per la tabella PROCESSING_LOG -->
+<!-- Indici per la tabella processing_log -->
 
         <createIndex tableName="processing_log" indexName="idx_processing_log_file_name">
             <column name="file_name" />
@@ -129,6 +93,32 @@
         <createIndex tableName="processing_log" indexName="idx_processing_log_created_at">
             <column name="created_at" />
         </createIndex>        
+
+<!-- Indici per la tabella calendario_settimanale -->
+
+        <createIndex tableName="calendario_settimanale" indexName="idx_calendario_giorno">
+            <column name="giorno_settimana"/>
+        </createIndex>
+        
+        <createIndex tableName="calendario_settimanale" indexName="idx_calendario_ora_inizio">
+            <column name="ora_inizio"/>
+        </createIndex>
+        
+        <createIndex tableName="calendario_settimanale" indexName="idx_calendario_tipo">
+            <column name="tipo_lezione"/>
+        </createIndex>
+        
+        <createIndex tableName="calendario_settimanale" indexName="idx_calendario_attivo">
+            <column name="attivo"/>
+        </createIndex>
+
+    <!-- Indici per la tabella lezione_partecipanti (partecipanti lezioni) -->
+        <createIndex tableName="lezione_partecipanti" indexName="idx_lp_lezione">
+            <column name="lezione_id"/>
+        </createIndex>
+        <createIndex tableName="lezione_partecipanti" indexName="idx_lp_utente">
+            <column name="utente_id"/>
+        </createIndex>
 
     </changeSet>
 

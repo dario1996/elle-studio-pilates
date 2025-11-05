@@ -6,7 +6,7 @@
       (buttonActionClick)="onButtonClick($event)"
     ></app-page-title>
     <div class="user-bar">
-      <app-notification></app-notification>
+      <!-- <app-notification></app-notification> -->
       <app-logged-user></app-logged-user>
     </div>
   </div>
@@ -162,7 +162,7 @@
             </div>
           </div>
 
-          <!-- Grafico Andamento Corsi Venduti -->
+          <!-- Grafico Andamento Pacchetti Venduti -->
           <div class="col-6 mb-4">
             <div class="appointments-card">
               <div class="appointments-header">
@@ -173,7 +173,7 @@
               </div>
               <div class="appointments-content">
                 <div style="position: relative; height: 300px;">
-                  <canvas #andamentoCorsiChart id="andamentoCorsiChart"></canvas>
+                  <canvas #andamentoPacchettiChart id="andamentoPacchettiChart"></canvas>
                 </div>
               </div>
             </div>
@@ -195,7 +195,7 @@
                   <tr>
                     <th class="border-0">Data</th>
                     <th class="border-0">Cliente</th>
-                    <th class="border-0">Corso</th>
+                    <th class="border-0">Pacchetto</th>
                     <th class="border-0">Importo</th>
                     <th class="border-0">Stato</th>
                   </tr>
@@ -204,7 +204,7 @@
                   <tr *ngFor="let vendita of statistiche?.venditePiuRecenti">
                     <td>{{ vendita.dataAcquisto | date:'dd/MM/yyyy' }}</td>
                     <td>{{ vendita.utenteId }}</td>
-                    <td>Corso {{ vendita.corsoId }}</td>
+                    <td>Pacchetto {{ vendita.pacchettoId }}</td>
                     <td class="fw-bold">{{ formattaImporto(vendita.importo) }}</td>
                     <td>
                       <span class="badge"

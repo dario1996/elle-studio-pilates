@@ -45,7 +45,7 @@ import { LoggedUserComponent } from '../../../../shared/components/logged-user/l
     FilterPanelComponent,
     PaginationFooterComponent,
     PageTitleComponent,
-    NotificationComponent,
+    // NotificationComponent,
     LoggedUserComponent
   ],
   templateUrl: './gestione-utenti.component.html',
@@ -86,14 +86,6 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
       class: 'btn-primary',
       action: 'add'
     },
-    /* IMPORT MASSIVO COMMENTATO
-    {
-      text: 'Import massivo',
-      icon: 'fas fa-upload',
-      class: 'btn-import',
-      action: 'bulk-import'
-    }
-    */
   ];
 
   columns: IColumnDef[] = UTENTI_COLUMNS;
@@ -146,7 +138,7 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
             ...u,
             nominativo: `${u.nome || ''} ${u.cognome || ''}`.trim() || u.username,
             attivo: u.attivo === 'Si' ? 'Attivo' : 'Non attivo',
-            ruoli: Array.isArray(u.ruoli) ? u.ruoli.join(', ') : (u.ruoli || ''),
+            ruoli: this.formatRuoli(u.ruoli),
             dataCreazione: this.formatDataCreazione(u.dataCreazione)
           };
           console.log('User mapped:', u.username, 'dataCreazione original:', u.dataCreazione, 'formatted:', formattedUser.dataCreazione);
@@ -226,8 +218,8 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
     });
   }
 
-  deleteUtente(username: string) {
-    this.userService.delUtente(username).subscribe({
+  deleteUtente(id: number) {
+    this.userService.delUtente(id).subscribe({
       next: () => {
         this.loadUtenti();
         this.toastr.success('Utente eliminato con successo');
@@ -239,8 +231,8 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
     });
   }
 
-  toggleUtenteStatus(username: string) {
-    this.userService.toggleUtenteStatus(username).subscribe({
+  toggleUtenteStatus(id: number) {
+    this.userService.toggleUtenteStatus(id).subscribe({
       next: () => {
         this.loadUtenti();
         this.toastr.success('Stato dell\'utente aggiornato con successo');
@@ -252,15 +244,15 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
     });
   }
 
-  updateUtente(username: string, utenteData: any) {
+  updateUtente(id: number, utenteData: any) {
     // Trova l'utente originale per preservare il campo attivo
-    const utenteOriginale = this.utentiOriginali.find(u => u.username === username);
+    const utenteOriginale = this.utentiOriginali.find(u => u.id === id);
     const dataCompleta = {
       ...utenteData,
       attivo: utenteOriginale?.attivo || 'Si' // Preserva lo stato attivo originale
     };
-    
-    this.userService.updUtente(username, dataCompleta).subscribe({
+
+    this.userService.updUtente(id, dataCompleta).subscribe({
       next: () => {
         this.loadUtenti();
         this.toastr.success('Utente modificato con successo');
@@ -329,13 +321,13 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
       case 'edit':
         import('../../components/form-utenti/form-utenti.component').then(({ FormUtentiComponent }) => {
           // Trova l'utente originale corrispondente
-          const utenteOriginale = this.utentiOriginali.find(u => u.username === e.item.username);
+          const utenteOriginale = this.utentiOriginali.find(u => u.id === e.item.id);
           this.modaleService.apri({
             titolo: 'Modifica utente',
             componente: FormUtentiComponent,
             dati: utenteOriginale || e.item, // Usa dati originali se disponibili
             onConferma: (formValue: any) =>
-              this.updateUtente(e.item.username, formValue),
+              this.updateUtente(e.item.id, formValue),
           });
         });
         break;
@@ -351,7 +343,7 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
                 : e.item.username) +
               '"?',
           },
-          onConferma: () => this.deleteUtente(e.item.username),
+          onConferma: () => this.deleteUtente(e.item.id),
         });
         break;
       case 'disable':
@@ -366,7 +358,7 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
                 : e.item.username) +
               '"?',
           },
-          onConferma: () => this.toggleUtenteStatus(e.item.username),
+          onConferma: () => this.toggleUtenteStatus(e.item.id),
         });
         break;
       case 'view':
@@ -424,6 +416,20 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
       console.error('Errore nel parsing della data:', dataCreazione, error);
       return '–';
     }
+  }
+
+  private formatRuoli(ruoli: any): string {
+    const ruoliArray = Array.isArray(ruoli) ? ruoli : [ruoli];
+    return ruoliArray.map(ruolo => {
+      switch(ruolo?.toUpperCase()) {
+        case 'ADMIN':
+          return 'Amministratore';
+        case 'USER':
+          return 'Cliente';
+        default:
+          return ruolo || '';
+      }
+    }).join(', ');
   }
 
   // Metodi per la ricerca rapida

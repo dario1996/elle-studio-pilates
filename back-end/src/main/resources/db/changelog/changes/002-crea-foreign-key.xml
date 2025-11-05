@@ -17,26 +17,33 @@
 
         <addForeignKeyConstraint 
             baseTableName="vendite" 
-            baseColumnNames="corso_id"
-            constraintName="fk_vendite_corso"
-            referencedTableName="corsi"
+            baseColumnNames="pacchetto_id"
+            constraintName="fk_vendite_pacchetto"
+            referencedTableName="pacchetti"
             referencedColumnNames="id"
             onDelete="CASCADE"/>
 
         <addForeignKeyConstraint 
+            baseTableName="lezioni"
+            baseColumnNames="template_id"
+            constraintName="fk_lezioni_calendario_template"
+            referencedTableName="calendario_settimanale"
+            referencedColumnNames="id"
+            onDelete="SET NULL"/>
+
+        <addForeignKeyConstraint
             baseTableName="lezione_partecipanti"
             baseColumnNames="lezione_id"
             constraintName="fk_lezione_partecipanti_lezione"
             referencedTableName="lezioni"
             referencedColumnNames="id"
             onDelete="CASCADE"/>
-        
-        <addForeignKeyConstraint 
+        <addForeignKeyConstraint
             baseTableName="lezione_partecipanti"
-            baseColumnNames="partecipanti_username"
-            constraintName="fk_lezione_partecipanti_utenti"
+            baseColumnNames="utente_id"
+            constraintName="fk_lezione_partecipanti_utente"
             referencedTableName="utenti"
-            referencedColumnNames="username"
+            referencedColumnNames="id"
             onDelete="CASCADE"/>
 
     </changeSet>

@@ -21,7 +21,10 @@ export class DettagliProfiloComponent implements OnInit {
     this.profiloForm = this.fb.group({
       nome: ['', Validators.required],
       cognome: ['', Validators.required],
-      codiceFiscale: ['', [Validators.required, codiceFiscaleValidator()]]
+      codiceFiscale: ['', [Validators.required, codiceFiscaleValidator()]],
+      indirizzo: ['', Validators.required],
+      città: ['', Validators.required],
+      telefono: ['']
     });
   }
 

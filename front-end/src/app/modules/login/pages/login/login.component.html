@@ -23,16 +23,16 @@
         <form #myForm="ngForm" (ngSubmit)="gestAuth()" class="login-form">
           <div class="mb-4">
             <label for="username" class="form-label"
-              >Inserisci la tua email</label
+              >Inserisci il tuo username</label
             >
             <input
-              type="email"
+              type="text"
               id="username"
               name="username"
               class="form-control"
               [(ngModel)]="userId"
               required
-              placeholder="latuaemail@gmail.com"
+              placeholder="Es. m.rossi"
               autocomplete="username"
             />
           </div>
@@ -73,7 +73,7 @@
             class="login-btn w-100 mb-4"
             [disabled]="myForm.invalid"
           >
-            Log in
+            Entra
           </button>
           <div class="text-center text-muted small mt-3">
             Non hai un account?
@@ -100,7 +100,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.3);
+            /* background: rgba(0, 0, 0, 0.3); */
           "
         ></div>
       </div>

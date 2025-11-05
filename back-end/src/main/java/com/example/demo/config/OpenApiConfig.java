@@ -16,7 +16,7 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("Sistema Gestione Formazione Aziendale API")
                         .description("REST API per la gestione della formazione aziendale. " +
-                                "Permette di registrare dipendenti, creare corsi e gestire assegnazioni.")
+                                "Permette di registrare dipendenti, creare pacchetti e gestire assegnazioni.")
                         .version("1.0.0")
                         .contact(new Contact()
                                 .name("Team di Sviluppo")

@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.demo.entity.Utenti;
  
-public interface UtenteRepository extends JpaRepository<Utenti, String> 
+public interface UtenteRepository extends JpaRepository<Utenti, Long> 
 {
 	boolean existsByUsername(String Username);
 	

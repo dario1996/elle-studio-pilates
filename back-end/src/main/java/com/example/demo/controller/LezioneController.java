@@ -6,8 +6,8 @@ import com.example.demo.exceptions.NotFoundException;
 import com.example.demo.exceptions.BindingException;
 import com.example.demo.service.LezioneService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +18,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/lezioni")
-@RequiredArgsConstructor
-@Slf4j
 @CrossOrigin(origins = "http://localhost:4200")
 public class LezioneController {
 
+    private static final Logger log = LoggerFactory.getLogger(LezioneController.class);
+
     private final LezioneService lezioneService;
+
+    public LezioneController(final LezioneService lezioneService) {
+        this.lezioneService = lezioneService;
+    }
 
     @GetMapping
     public ResponseEntity<List<LezioneDto>> getAllLezioni() {
