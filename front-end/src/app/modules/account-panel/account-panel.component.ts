@@ -49,12 +49,13 @@ export class AccountPanelComponent implements OnInit {
     nome: null,
     cognome: null,
     codice_fiscale: null,
+    indirizzo: null,
+    città: null,
+    telefono: null,
     certificato_medico: null,
     patologie: null,
     descrizione_patologie: null,
     obiettivi: null,
-    telefono: null,
-    azienda: null,
     attivo: null,
     data_creazione: null,
     password: null,
@@ -89,25 +90,24 @@ export class AccountPanelComponent implements OnInit {
     if (username) {
       this.userService.getUtenteByUsername(username).subscribe({
         next: (u) => {
-          // Handle field mapping between API response and component user object
           this.user = {
             ...this.user,
-            id: u.username || this.user.id, // use username as id if no id field
+            id: u.username || this.user.id,
             username: u.username,
             email: u.email,
             nome: u.nome,
             cognome: u.cognome,
-            // Handle both camelCase and snake_case from API
             codice_fiscale: u.codiceFiscale || (u as any).codice_fiscale || this.user.codice_fiscale,
+            indirizzo: (u as any).indirizzo || this.user.indirizzo,
+            città: (u as any).città || this.user.città,
+            telefono: (u as any).telefono || this.user.telefono,
             certificato_medico: u.certificatoMedico || (u as any).certificato_medico || this.user.certificato_medico,
             patologie: u.patologie,
             descrizione_patologie: u.descrizionePatologie || (u as any).descrizione_patologie || this.user.descrizione_patologie,
             obiettivi: u.obiettivi,
-            telefono: (u as any).telefono || this.user.telefono, // might not be in IUsers interface
-            azienda: (u as any).azienda || this.user.azienda, // might not be in IUsers interface
             attivo: u.attivo,
             data_creazione: u.dataCreazione || (u as any).data_creazione || this.user.data_creazione,
-            password: this.user.password, // keep hidden
+            password: this.user.password,
             ruoli: u.ruoli || [],
           };
           console.log('User data loaded from API:', this.user);

@@ -714,14 +714,17 @@
         <insert tableName="lezione_partecipanti">
             <column name="lezione_id" value="1"/>
             <column name="utente_id" value="2"/>
+            <column name="data_lezione" value="2025-11-15"/>
         </insert>
         <insert tableName="lezione_partecipanti">
             <column name="lezione_id" value="2"/>
             <column name="utente_id" value="3"/>
+            <column name="data_lezione" value="2025-11-15"/>
         </insert>
         <insert tableName="lezione_partecipanti">
             <column name="lezione_id" value="2"/>
             <column name="utente_id" value="2"/>
+            <column name="data_lezione" value="2025-11-15"/>
         </insert>
     </changeSet>
 
