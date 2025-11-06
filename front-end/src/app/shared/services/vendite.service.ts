@@ -7,6 +7,11 @@ export interface Vendita {
   id?: number;
   utenteId: string;
   pacchettoId: number;
+  pacchetto?: {
+    id: number;
+    nome: string;
+    prezzo: number;
+  };
   importo: number;
   stato: 'PENDING' | 'PAID' | 'CANCELLED';
   dataAcquisto: string;
@@ -44,6 +49,10 @@ export class VenditeService {
 
   getVenditeByUtente(username: string): Observable<Vendita[]> {
     return this.http.get<Vendita[]>(`${this.baseUrl}/utente/${username}`);
+  }
+
+  getVenditePendingByUtente(username: string): Observable<Vendita[]> {
+    return this.http.get<Vendita[]>(`${this.baseUrl}/utente/${username}/pending`);
   }
 
   getStatistiche(filtri?: { periodo?: string; dataInizio?: string; dataFine?: string }): Observable<StatisticheVendite> {

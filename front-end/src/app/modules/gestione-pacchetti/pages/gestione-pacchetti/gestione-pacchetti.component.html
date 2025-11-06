@@ -37,7 +37,7 @@
             <div class="pacchetto-body-compact">
               <div class="pacchetto-progress">
                 <div class="progress-info">
-                  <span>{{ pacchetto.lezioniRimaste }} di {{ pacchetto.lezioniTotali }} lezioni rimaste</span>
+                  <span>{{ pacchetto.lezioniRimaste }} lezioni prenotabili su {{ pacchetto.lezioniTotali }} acquistate</span>
                   <span>{{ getUsagePercentage(pacchetto) }}%</span>
                 </div>
                 <div class="progress-bar-container">
@@ -71,9 +71,9 @@
             <div class="pacchetto-header-row">
               <div class="pacchetto-info-main">
                 <h3 class="pacchetto-nome">{{ pacchetto.nome }}</h3>
-                <span class="pacchetto-badge-small" [ngClass]="'badge-' + pacchetto.categoria.toLowerCase()">
+                <!-- <span class="pacchetto-badge-small" [ngClass]="'badge-' + pacchetto.categoria.toLowerCase()">
                   {{ pacchetto.categoria }}
-                </span>
+                </span> -->
               </div>
               <button class="btn-info" 
                       (click)="toggleDescrizioneVisibile(pacchetto.id)" 
@@ -112,7 +112,7 @@
             <div class="pacchetto-footer-compact">
               <span class="pacchetto-price-compact">€ {{ pacchetto.prezzo.toFixed(2) }}</span>
               <button class="btn-acquista-compact" (click)="acquistaPacchetto(pacchetto)">
-                <i class="fas fa-cart-plus"></i>
+                <i class="fas fa-credit-card"></i>
                 Acquista
               </button>
             </div>

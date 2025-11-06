@@ -143,6 +143,14 @@ public class VenditaService {
     }
 
     /**
+     * Trova vendite pending per utente (per dashboard utente)
+     */
+    @Transactional(readOnly = true)
+    public List<Vendita> trovaVenditePendingPerUtente(String username) {
+        return venditaRepository.findByUtenteUsernameAndStatoOrderByDataAcquistoDesc(username, StatoVendita.PENDING);
+    }
+
+    /**
      * Trova vendite per pacchetto
      */
     @Transactional(readOnly = true)

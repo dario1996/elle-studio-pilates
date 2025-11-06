@@ -1,17 +1,18 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.Vendita;
-import com.example.demo.entity.Vendita.StatoVendita;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
+import com.example.demo.entity.Vendita;
+import com.example.demo.entity.Vendita.StatoVendita;
 
 /**
  * Repository per gestire le operazioni CRUD sulla tabella vendite
@@ -21,6 +22,10 @@ public interface VenditaRepository extends JpaRepository<Vendita, Long> {
 
     // Query per trovare vendite per utente
     List<Vendita> findByUtenteUsernameOrderByDataAcquistoDesc(String username);
+
+    // Query per trovare vendite per utente e stato (con fetch eager del pacchetto)
+    @Query("SELECT v FROM Vendita v LEFT JOIN FETCH v.pacchetto WHERE v.utente.username = :username AND v.stato = :stato ORDER BY v.dataAcquisto DESC")
+    List<Vendita> findByUtenteUsernameAndStatoOrderByDataAcquistoDesc(@Param("username") String username, @Param("stato") StatoVendita stato);
 
     // Query per trovare vendite per pacchetto
     List<Vendita> findByPacchettoIdOrderByDataAcquistoDesc(Long pacchettoId);

@@ -161,6 +161,16 @@ public class VenditaController {
     }
 
     /**
+     * Ottiene vendite pending per utente (per dashboard utente)
+     */
+    @GetMapping("/utente/{username}/pending")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<List<Vendita>> getVenditePendingPerUtente(@PathVariable String username) {
+        List<Vendita> vendite = venditaService.trovaVenditePendingPerUtente(username);
+        return ResponseEntity.ok(vendite);
+    }
+
+    /**
      * Ottiene vendite per pacchetto
      */
     @GetMapping("/pacchetto/{pacchettoId}")

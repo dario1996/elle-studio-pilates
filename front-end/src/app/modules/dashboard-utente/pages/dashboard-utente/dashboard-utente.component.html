@@ -107,21 +107,38 @@
           <div *ngIf="lezioniSuggerite.length === 0 && lezioniPrenotabili.length > 0" class="text-muted" style="font-size:0.9em;">Nessun suggerimento disponibile</div>
         </div>
       </div>
-      <!-- Card 3: Pagamenti da effettuare -->
+      <!-- Card 3: Acquisti in fase di verifica -->
   <div class="user-cards" #userCard>
         <div class="card-header">
-          <h3>Pagamenti da effettuare</h3>
+          <h3>Acquisti in fase di verifica</h3>
           <i class="fas fa-credit-card card-icon"></i>
         </div>
-        <div class="card-content">
-          <div *ngIf="pagamentiPendenti.length === 0" class="text-muted">Nessun pagamento in sospeso</div>
-          <div *ngFor="let pagamento of pagamentiPendenti">
-            <div>
-              <strong>{{ pagamento.titolo }}</strong> <br>
-              Importo: {{ pagamento.importo | currency:'EUR' }}<br>
-              <button class="btn btn-warning btn-sm mt-2">Paga ora</button>
+        <div class="card-content mt-3">
+          <div *ngIf="pagamentiPendenti.length === 0" class="empty-state">
+            <i class="fas fa-receipt fa-3x mb-3"></i>
+            <p>Nessun acquisto in attesa di verifica</p>
+          </div>
+          
+          <div class="pending-purchases-list" *ngIf="pagamentiPendenti.length > 0">
+            <div class="pending-purchase-card" *ngFor="let vendita of pagamentiPendenti">
+              <!-- Titolo pacchetto -->
+              <div class="purchase-title">
+                <i class="fas fa-box-open me-2"></i>
+                {{ vendita.pacchetto?.nome || 'Pacchetto' }}
+              </div>
+              
+              <!-- Importo e Data -->
+              <div class="purchase-info">
+                <div class="info-item">
+                  <span class="info-label">IMPORTO: </span>
+                  <span class="info-value">€ {{ vendita.importo.toFixed(2) }}</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">DATA ACQUISTO: </span>
+                  <span class="info-value">{{ formatDateOnly(vendita.dataAcquisto) }}</span>
+                </div>
+              </div>
             </div>
-            <hr>
           </div>
         </div>
       </div>

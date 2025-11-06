@@ -9,6 +9,7 @@ import { LezioniService, LezioneDto } from '../../../../core/services/lezioni.se
 import { TIPI_LEZIONE_CONFIG } from '../../../../modules/agenda/models/lezione.model';
 import { ILezione, TipoLezione, StatoLezione } from '../../../../shared/models/Lezione';
 import { AuthJwtService } from '../../../../core/services/authJwt.service';
+import { VenditeService, Vendita } from '../../../../shared/services/vendite.service';
 
 @Component({
   selector: 'app-dashboard-utente',
@@ -33,13 +34,14 @@ export class DashboardUtenteComponent implements OnInit, AfterViewInit {
   lezioniPrenotate: ILezione[] = [];
   lezioneIndex: number = 0;
   lezioniPrenotabili: LezioneDto[] = [];
-  pagamentiPendenti: { titolo: string; importo: number }[] = [];
+  pagamentiPendenti: Vendita[] = [];
   lezioniSuggerite: ILezione[] = [];
 
   constructor(
     private router: Router,
     private lezioniService: LezioniService,
-    private authService: AuthJwtService
+    private authService: AuthJwtService,
+    private venditeService: VenditeService
   ) {}
 
   @ViewChildren('userCard', { read: ElementRef }) userCardEls!: QueryList<ElementRef>;
@@ -47,6 +49,7 @@ export class DashboardUtenteComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     const username = this.authService.loggedUser();
     if (username) {
+      // Carica lezioni prenotate
       this.lezioniService.getLezioniPrenotate(username).subscribe({
         next: (lezioni) => {
           // Ordina per dataInizio crescente e filtra solo le lezioni future o di oggi
@@ -74,6 +77,16 @@ export class DashboardUtenteComponent implements OnInit, AfterViewInit {
         },
         error: (err) => {
           this.error = 'Errore nel caricamento delle lezioni prenotate';
+        }
+      });
+
+      // Carica vendite pending (acquisti in fase di verifica)
+      this.venditeService.getVenditePendingByUtente(username).subscribe({
+        next: (vendite) => {
+          this.pagamentiPendenti = vendite;
+        },
+        error: (err) => {
+          console.error('Errore nel caricamento vendite pending:', err);
         }
       });
     } else {
