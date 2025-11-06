@@ -87,4 +87,14 @@ public class UtentiServiceImpl implements UtentiService {
 		utente.setPacchettiDisponibili(pacchetti);
 		utentiRepository.save(utente);
 	}
+
+	// Implementazione per recuperare i pacchetti disponibili per un utente
+	@Override
+	@Transactional(readOnly = true)
+	public List<Pacchetto> getPacchettiDisponibiliPerUtente(Long utenteId) {
+		Utenti utente = utentiRepository.findById(utenteId)
+			.orElseThrow(() -> new RuntimeException("Utente non trovato con id: " + utenteId));
+		
+		return new java.util.ArrayList<>(utente.getPacchettiDisponibili());
+	}
 }

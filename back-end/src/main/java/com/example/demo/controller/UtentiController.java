@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.ModificaUtenteDTO;
 import com.example.demo.dto.UtenteAutocompleteDto;
+import com.example.demo.entity.Pacchetto;
 import com.example.demo.entity.Utenti;
 import com.example.demo.exceptions.BindingException;
 import com.example.demo.services.UtentiService;
@@ -238,6 +239,24 @@ public class UtentiController {
         return ResponseEntity.ok(new InfoMsg(LocalDate.now(), 
                 String.format("Stato utente %s cambiato in: %s", existingUtente.getUsername(), 
                         "Si".equals(nuovoStato) ? "Attivo" : "Non attivo")));
+    }
+
+    // 🆕 ENDPOINT GET per ottenere i pacchetti disponibili per un utente
+    @GetMapping(value = "/{id}/pacchetti-disponibili", produces = "application/json")
+    public ResponseEntity<List<Pacchetto>> getPacchettiDisponibili(@PathVariable Long id) {
+        log.info("Richiesta pacchetti disponibili per utente: " + id);
+        try {
+            Utenti utente = utentiService.SelUserById(id);
+            if (utente == null) {
+                return ResponseEntity.notFound().build();
+            }
+            
+            List<Pacchetto> pacchettiDisponibili = utentiService.getPacchettiDisponibiliPerUtente(id);
+            return ResponseEntity.ok(pacchettiDisponibili);
+        } catch (Exception e) {
+            log.error("Errore nel recupero pacchetti disponibili per utente " + id, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     // 🆕 ENDPOINT PUT per cambiare la password

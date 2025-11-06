@@ -4,6 +4,7 @@ import { NotificationComponent } from '../../../../core/notification/notificatio
 import { LoggedUserComponent } from '../../../../shared/components/logged-user/logged-user.component';
 import { PageTitleComponent } from '../../../../core/page-title/page-title.component';
 import { AuthJwtService } from '../../../../core/services/authJwt.service';
+import { UserService } from '../../../../core/services/data/user.service';
 import { PacchettiService, Pacchetto } from '../../../../core/services/pacchetti.service';
 import { inject } from '@angular/core';
 
@@ -20,6 +21,7 @@ import { inject } from '@angular/core';
 })
 export class GestionePacchettiComponent implements OnInit {
   private auth = inject(AuthJwtService);
+  private userService = inject(UserService);
   private pacchettiService = inject(PacchettiService);
 
   title: string = 'Gestione Pacchetti';
@@ -35,6 +37,9 @@ export class GestionePacchettiComponent implements OnInit {
   pacchettiAcquistati: any[] = [];
   pacchettiDisponibili: Pacchetto[] = [];
   loadingPacchetti = false;
+  
+  // Traccia quali descrizioni sono visibili
+  descrizioneVisibile: { [key: number]: boolean } = {};
 
   ngOnInit(): void {
     this.loadMockPacchettiAcquistati();
@@ -81,18 +86,39 @@ export class GestionePacchettiComponent implements OnInit {
     ];
   }
 
-  // Carica pacchetti disponibili dalla tabella pacchetti
+  // Carica pacchetti disponibili per l'utente dalla tabella utente_pacchetti_disponibili
   private loadPacchettiDisponibili(): void {
     this.loadingPacchetti = true;
-    this.pacchettiService.getPacchettiAttivi().subscribe({
-      next: (pacchetti) => {
-        this.pacchettiDisponibili = pacchetti;
-        this.loadingPacchetti = false;
+    
+    const username = this.auth.loggedUser();
+    
+    if (!username) {
+      console.error('Username non trovato');
+      this.loadingPacchetti = false;
+      this.showToastMessage('Errore: utente non autenticato', 'error');
+      return;
+    }
+    
+    // Prima recupera i dati dell'utente per ottenere l'ID
+    this.userService.getUtenteByUsername(username).subscribe({
+      next: (utente) => {
+        // Ora usa l'ID per recuperare i pacchetti disponibili
+        this.pacchettiService.getPacchettiDisponibiliPerUtente(utente.id).subscribe({
+          next: (pacchetti) => {
+            this.pacchettiDisponibili = pacchetti || [];
+            this.loadingPacchetti = false;
+          },
+          error: (error) => {
+            console.error('Errore nel caricamento dei pacchetti disponibili:', error);
+            this.loadingPacchetti = false;
+            this.showToastMessage('Errore nel caricamento dei pacchetti disponibili', 'error');
+          }
+        });
       },
       error: (error) => {
-        console.error('Errore nel caricamento dei pacchetti disponibili:', error);
+        console.error('Errore nel recupero dati utente:', error);
         this.loadingPacchetti = false;
-        this.showToastMessage('Errore nel caricamento dei pacchetti disponibili', 'error');
+        this.showToastMessage('Errore nel recupero dati utente', 'error');
       }
     });
   }
@@ -128,6 +154,11 @@ export class GestionePacchettiComponent implements OnInit {
   acquistaPacchetto(pacchetto: Pacchetto): void {
     this.showToastMessage(`Funzionalità acquisto pacchetto "${pacchetto.nome}" in sviluppo`, 'info');
     // TODO: Implementare la logica di acquisto pacchetto
+  }
+
+  // Toggle visibilità descrizione pacchetto
+  toggleDescrizioneVisibile(pacchettoId: number): void {
+    this.descrizioneVisibile[pacchettoId] = !this.descrizioneVisibile[pacchettoId];
   }
 
   // Toast notification methods

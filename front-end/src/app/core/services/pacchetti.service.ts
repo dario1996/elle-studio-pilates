@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
 
 export interface Pacchetto {
   id: number;
@@ -28,7 +29,9 @@ export interface PrenotazioneRequest {
   providedIn: 'root'
 })
 export class PacchettiService {
-  private apiUrl = '/api/pacchetti';
+  server: string = environment.server;
+  port: string = environment.port;
+  private apiUrl = `http://${this.server}:${this.port}/api/pacchetti`;
 
   constructor(private http: HttpClient) {}
 
@@ -67,7 +70,15 @@ export class PacchettiService {
    * Effettua una prenotazione
    */
   effettuaPrenotazione(prenotazione: PrenotazioneRequest): Observable<any> {
-    return this.http.post(`/api/prenotazioni`, prenotazione);
+    return this.http.post(`http://${this.server}:${this.port}/api/prenotazioni`, prenotazione);
+  }
+
+  /**
+   * Ottiene i pacchetti disponibili per l'utente loggato
+   * Recupera i pacchetti dalla tabella utente_pacchetti_disponibili
+   */
+  getPacchettiDisponibiliPerUtente(utenteId: number): Observable<Pacchetto[]> {
+    return this.http.get<Pacchetto[]>(`http://${this.server}:${this.port}/api/utenti/${utenteId}/pacchetti-disponibili`);
   }
 
   /**

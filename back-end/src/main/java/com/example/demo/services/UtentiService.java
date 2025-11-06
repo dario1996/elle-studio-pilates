@@ -27,4 +27,6 @@ public interface UtentiService
 
 	public void aggiornaPacchettiDisponibili(Long utenteId, List<Long> pacchettiIds);
 
+	public List<com.example.demo.entity.Pacchetto> getPacchettiDisponibiliPerUtente(Long utenteId);
+
 }
