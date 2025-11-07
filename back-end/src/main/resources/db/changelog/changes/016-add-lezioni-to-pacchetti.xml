@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="016-add-lezioni-to-pacchetti" author="assistant">
+        <comment>Aggiunge la colonna `lezioni` a `pacchetti` (contenente array JSON di tipi di lezione) e popola con [categoria] come fallback</comment>
+
+        <addColumn tableName="pacchetti">
+            <column name="lezioni" type="VARCHAR(1000)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <!-- Popola con un JSON array che contiene la categoria come fallback -->
+        <sql>UPDATE pacchetti SET lezioni = CONCAT('["', IFNULL(categoria, ''), '"]') WHERE lezioni IS NULL OR TRIM(lezioni) = '';</sql>
+
+        <rollback>
+            <dropColumn tableName="pacchetti" columnName="lezioni"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

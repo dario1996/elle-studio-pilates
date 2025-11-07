@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="017-set-lezioni-pacchetto-10" author="assistant">
+        <comment>Imposta la colonna `lezioni` per il pacchetto id=10 come array combo di tipi (sostituisci con i tipi desiderati)</comment>
+
+        <!-- Directly set lezioni for pacchetto id=10; preConditions removed to avoid parser issues -->
+        <sql>UPDATE pacchetti SET lezioni = '["STUDIO_POSTURALE","PILATES_MATWORK"]' WHERE id = 10;</sql>
+
+        <rollback>
+            <!-- Ripristina al fallback: array con la categoria originale -->
+            <sql>UPDATE pacchetti SET lezioni = CONCAT('["', IFNULL(categoria, ''), '"]') WHERE id = 10;</sql>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

@@ -61,4 +61,6 @@ export interface Pacchetto {
   attivo: boolean;
   venditaId?: number;
   lezioniResidue?: number;
+  isCombo?: boolean;
+  allowedTypes?: Array<{ templateId?: number; tipoLezione: string; titolo?: string; maxPartecipanti?: number; numeroLezioni?: number }>;
 }

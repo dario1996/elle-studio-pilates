@@ -16,4 +16,7 @@
     <include file="db/changelog/changes/010-add-pacchetto-utente-fk-to-prenotazioni.xml" />
     <include file="db/changelog/changes/011-add-numero-lezioni-to-pacchetti.xml" />
     <include file="db/changelog/changes/012-popola-lezioni-residue-pacchetti-utenti.xml" />
+    <include file="db/changelog/changes/013-create-pacchetto-calendario.xml" />
+    <include file="db/changelog/changes/016-add-lezioni-to-pacchetti.xml" />
+    <include file="db/changelog/changes/017-set-lezioni-pacchetto-10.xml" />
 </databaseChangeLog>

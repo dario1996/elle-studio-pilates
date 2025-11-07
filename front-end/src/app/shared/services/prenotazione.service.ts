@@ -43,14 +43,15 @@ export class PrenotazioneService {
   }
 
   /**
-   * Recupera le lezioni per un tipo specifico in un range di date
+   * Recupera le lezioni per un tipo di lezione (usa /slots che genera slot a partire da calendario_settimanale)
+   * ora il backend accetta SOLO `tipoLezione` come parametro (case-insensitive). `weeks` è opzionale (default 4).
    */
-  getLezioniPerTemplate(templateId: number, dataInizio: string, dataFine: string): Observable<LezioneDisponibile[]> {
+  getLezioniPerTipo(tipoLezione: string, weeks: number = 4): Observable<LezioneDisponibile[]> {
     const params = new HttpParams()
-      .set('dataInizio', dataInizio)
-      .set('dataFine', dataFine);
-    
-    return this.http.get<LezioneDisponibile[]>(`${this.baseUrl}/lezioni-per-template/${templateId}`, { params });
+      .set('tipoLezione', tipoLezione)
+      .set('weeks', String(weeks));
+
+    return this.http.get<LezioneDisponibile[]>(`${this.baseUrl}/slots`, { params });
   }
 
   /**
@@ -83,6 +84,16 @@ export class PrenotazioneService {
    */
   creaPrenotazione(request: PrenotazioneLezioneRequest): Observable<void> {
     return this.http.post<void>(this.baseUrl, request);
+  }
+
+  /**
+   * Crea una prenotazione lato server partendo da uno slot generato (o da tipoLezione).
+   * Il backend accetta ora un body con uno dei seguenti shape:
+   * - { lezioneId }
+   * - { tipoLezione, venditaId?, note? }
+   */
+  creaPrenotazioneUtente(payload: { lezioneId?: number, tipoLezione?: string, venditaId?: number, note?: string }): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/utente`, payload, { observe: 'response' });
   }
 
   /**

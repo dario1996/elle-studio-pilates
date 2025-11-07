@@ -63,8 +63,8 @@
                 </div>
               </div>
 
-              <!-- Sezione selezione tipo lezione -->
-              <div class="form-section" *ngIf="selectedPacchetto">
+              <!-- Sezione selezione tipo lezione (mostriamo la select solo per pacchetti COMBO) -->
+              <div class="form-section" *ngIf="selectedPacchetto && selectedPacchetto.isCombo">
                 <h3><i class="fas fa-dumbbell"></i> Seleziona Tipo Lezione</h3>
 
                 <div class="form-group">
@@ -81,9 +81,12 @@
                     </option>
                   </select>
                 </div>
-                
-                <!-- Dettagli tipo lezione selezionato -->
-                <div class="tipo-lezione-details" *ngIf="selectedTipoLezione">
+              </div>
+
+              <!-- Dettagli tipo lezione selezionato (mostriamo i dettagli anche per pacchetti non-combo che vengono auto-selezionati) -->
+              <div class="form-section" *ngIf="selectedTipoLezione">
+                <h3><i class="fas fa-dumbbell"></i> Tipo Lezione Selezionato</h3>
+                <div class="tipo-lezione-details">
                   <div class="detail-row">
                     <span class="label"><i class="fas fa-calendar-day"></i> Giorno:</span>
                     <span class="value">{{ selectedTipoLezione.giornoSettimana }}</span>
@@ -131,11 +134,11 @@
                 <!-- Lezioni disponibili raggruppate per data -->
                 <div class="form-group" *ngIf="selectedTipoLezione && !loading">
                   <div class="lezioni-list" *ngIf="lezioniDisponibili.length > 0; else nessunalezione">
-                    <div class="lezione-card" 
-                         *ngFor="let lezione of lezioniDisponibili"
-                         [class.selected]="selectedLezione?.lezioneId === lezione.lezioneId"
-                         [class.unavailable]="!lezione.disponibile"
-                         (click)="lezione.disponibile && onLezioneChange({target: {value: lezione.lezioneId}})">
+        <div class="lezione-card" 
+          *ngFor="let lezione of lezioniDisponibili"
+          [class.selected]="selectedLezione === lezione"
+          [class.unavailable]="!lezione.disponibile"
+          (click)="lezione.disponibile && selectLezione(lezione)">
                       <div class="lezione-header">
                         <h4>{{ lezione.dataInizio | date:'EEEE, d MMMM yyyy':'':'it' }}</h4>
                         <span class="lezione-orario">{{ lezione.dataInizio | date:'HH:mm' }} - {{ lezione.dataFine | date:'HH:mm' }}</span>
@@ -165,6 +168,13 @@
                   <i class="fas fa-spinner fa-spin"></i> Caricamento lezioni...
                 </div>
                 
+                <!-- Avviso se lo slot selezionato non è materializzato -->
+                <!-- <div class="alert alert-info mt-2" *ngIf="selectedLezione && selectedLezione.lezioneId == null">
+                  <i class="fas fa-info-circle"></i>
+                  Lo slot selezionato è generato dal template e non è ancora materializzato come lezione.
+                  La prenotazione diretta è possibile solo su lezioni già create; contatta l'amministrazione o attendi la materializzazione.
+                </div> -->
+
                 <!-- Messaggio seleziona tipo -->
                 <div class="no-slots" *ngIf="!selectedTipoLezione && !loading && selectedPacchetto">
                   <i class="fas fa-info-circle"></i>

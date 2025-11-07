@@ -337,7 +337,7 @@
         <insert tableName="pacchetti">
             <column name="nome" value="Prima Lezione - Analisi Posturale"/>
             <column name="descrizione" value="Anamnesi e approccio al metodo Pilates. Sessione introduttiva di valutazione posturale e conoscenza del metodo."/>
-            <column name="categoria" value="PRIMA_LEZIONE"/>
+            <column name="categoria" value="STUDIO_POSTURALE"/>
             <column name="livello" value="PRINCIPIANTE"/>
             <column name="durata_minuti" value="55"/>
             <column name="max_partecipanti" value="1"/>

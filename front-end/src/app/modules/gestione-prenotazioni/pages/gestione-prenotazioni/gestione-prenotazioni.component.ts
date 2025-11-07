@@ -49,7 +49,8 @@ export class GestionePrenotazioniComponent implements OnInit {
     this.prenotazioneForm = this.fb.group({
       pacchetto: ['', Validators.required],
       tipoLezione: ['', Validators.required],
-      lezione: ['', Validators.required],
+      // 'lezione' non è più obbligatorio per permettere richieste su slot generati dal template
+      lezione: [''],
       note: ['']
     });
   }
@@ -72,7 +73,7 @@ export class GestionePrenotazioniComponent implements OnInit {
           this.showToastMessage('Non hai ancora acquistato nessun pacchetto', 'info');
         }
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Errore durante il caricamento dei pacchetti', error);
         console.error('Dettaglio errore:', error.error);
         console.error('Status:', error.status);
@@ -97,7 +98,23 @@ export class GestionePrenotazioniComponent implements OnInit {
     });
     
     if (this.selectedPacchetto) {
-      this.caricaTipiLezionePerPacchetto();
+      // if pacchetto is COMBO, use allowedTypes provided by backend; otherwise load by categoria
+      if (this.selectedPacchetto.isCombo) {
+        // map allowedTypes to TipoLezione shape expected by component
+        this.tipiLezione = (this.selectedPacchetto.allowedTypes || []).map(at => ({
+          id: at.templateId || 0,
+          giornoSettimana: '',
+          oraInizio: '',
+          oraFine: '',
+          titolo: at.titolo || at.tipoLezione,
+          tipoLezione: at.tipoLezione,
+          istruttore: '',
+          maxPartecipanti: at.maxPartecipanti || 1,
+          attivo: true
+        } as any));
+      } else {
+        this.caricaTipiLezionePerPacchetto();
+      }
     }
   }
 
@@ -110,8 +127,17 @@ export class GestionePrenotazioniComponent implements OnInit {
       next: (tipi) => {
         this.tipiLezione = tipi;
         this.loading = false;
+        // If the pacchetto is NOT a combo, auto-select the first available tipo
+        // so the user doesn't have to choose (and we hide the select in the template).
+        if (!this.selectedPacchetto?.isCombo && this.tipiLezione.length > 0) {
+          this.selectedTipoLezione = this.tipiLezione[0];
+          // update form control so Validators.required (if present) is satisfied
+          this.prenotazioneForm.patchValue({ tipoLezione: String(this.selectedTipoLezione.id) });
+          // load lezioni for the auto-selected tipo
+          this.caricaLezioniPerTipo();
+        }
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Errore durante il caricamento dei tipi lezione', error);
         this.showToastMessage('Errore durante il caricamento dei tipi lezione per questo pacchetto', 'error');
         this.loading = false;
@@ -139,12 +165,27 @@ export class GestionePrenotazioniComponent implements OnInit {
     const dataInizio = oggi.toISOString().split('T')[0];
     const dataFine = new Date(oggi.getTime() + (28 * 24 * 60 * 60 * 1000)).toISOString().split('T')[0];
     
-    this.prenotazioneService.getLezioniPerTemplate(this.selectedTipoLezione.id, dataInizio, dataFine).subscribe({
-      next: (lezioni) => {
-        this.lezioniDisponibili = lezioni;
+    this.prenotazioneService.getLezioniPerTipo(this.selectedTipoLezione.tipoLezione, 4).subscribe({
+      next: (lezioni: any) => {
+        // Normalize backend SlotDTO -> LezioneDisponibile expected shape
+        this.lezioniDisponibili = (lezioni || []).map((s: any) => ({
+          lezioneId: s.lezioneId || null,
+          titolo: s.titolo,
+          dataInizio: s.dataInizio,
+          dataFine: s.dataFine,
+          istruttore: s.istruttore || this.selectedTipoLezione?.istruttore || '',
+          tipoLezione: this.selectedTipoLezione?.tipoLezione || '',
+          maxPartecipanti: s.maxPartecipanti || this.selectedTipoLezione?.maxPartecipanti || 0,
+          postiOccupati: s.prenotati || 0,
+          postiDisponibili: s.postiDisponibili != null ? s.postiDisponibili : (s.maxPartecipanti || this.selectedTipoLezione?.maxPartecipanti || 0),
+          // disponibile se postiDisponibili > 0 (sia per lezioni materializzate che generate dal template)
+          disponibile: (s.postiDisponibili == null) ? true : (s.postiDisponibili > 0),
+          giornoSettimana: this.selectedTipoLezione?.giornoSettimana || '',
+          templateId: s.templateId || this.selectedTipoLezione?.id
+        } as LezioneDisponibile));
         this.loading = false;
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Errore durante il caricamento delle lezioni', error);
         this.showToastMessage('Errore durante il caricamento delle lezioni', 'error');
         this.loading = false;
@@ -153,8 +194,36 @@ export class GestionePrenotazioniComponent implements OnInit {
   }
 
   onLezioneChange(event: any): void {
-    const lezioneId = parseInt(event.target.value);
+    // support both select change event ({ target: { value } }) and direct numeric id
+    let lezioneId: number | null = null;
+    if (typeof event === 'number') lezioneId = event;
+    else if (event && event.target && event.target.value != null) lezioneId = parseInt(event.target.value);
+
+    if (lezioneId == null || isNaN(lezioneId)) {
+      this.selectedLezione = null;
+      this.prenotazioneForm.patchValue({ lezione: '' });
+      return;
+    }
+
     this.selectedLezione = this.lezioniDisponibili.find(l => l.lezioneId === lezioneId) || null;
+    // ensure the form control is in sync so Validators.required passes
+    this.prenotazioneForm.patchValue({ lezione: String(lezioneId) });
+  }
+
+  /**
+   * Seleziona uno slot (lezione) cliccato nella UI. Accetta sia lezioni materializzate
+   * (con lezioneId) che generate dal template (lezioneId null). Se la lezione non è
+   * materializzata il form viene aggiornato ma il submit mostrerà un messaggio che
+   * la prenotazione è possibile solo su lezioni materializzate.
+   */
+  selectLezione(lezione: LezioneDisponibile): void {
+    this.selectedLezione = lezione;
+    // sincronizza il form control con l'id se presente, altrimenti svuota
+    if (lezione.lezioneId != null) {
+      this.prenotazioneForm.patchValue({ lezione: String(lezione.lezioneId) });
+    } else {
+      this.prenotazioneForm.patchValue({ lezione: '' });
+    }
   }
 
   selectOrario(orario: string): void {
@@ -177,30 +246,73 @@ export class GestionePrenotazioniComponent implements OnInit {
       this.clearMessages();
 
       const formData = this.prenotazioneForm.value;
-      const request = {
-        lezioneId: this.selectedLezione.lezioneId,
-        note: formData.note,
-        venditaId: this.selectedPacchetto ? this.selectedPacchetto.venditaId : undefined
-      };
 
-      this.prenotazioneService.creaPrenotazione(request).subscribe({
-        next: (response) => {
-          this.loading = false;
-          this.showToastMessage('Prenotazione effettuata con successo!', 'success');
-          this.prenotazioneForm.reset();
-          this.selectedLezione = null;
-          this.selectedTipoLezione = null;
-          this.selectedPacchetto = null;
-          this.lezioniDisponibili = [];
-          this.tipiLezione = [];
-          this.caricaPrenotazioniUtente();
-        },
-        error: (error) => {
-          this.loading = false;
-          const errorMsg = error.error?.message || 'Errore durante la prenotazione';
-          this.showToastMessage(errorMsg, 'error');
-        }
-      });
+      // If selectedLezione has a materialized lezioneId, use existing creaPrenotazione flow
+      if (this.selectedLezione.lezioneId != null) {
+        const request = {
+          lezioneId: this.selectedLezione.lezioneId,
+          note: formData.note,
+          venditaId: this.selectedPacchetto ? this.selectedPacchetto.venditaId : undefined
+        };
+
+        this.prenotazioneService.creaPrenotazione(request).subscribe({
+          next: (response) => {
+            this.loading = false;
+            this.showToastMessage('Prenotazione effettuata con successo!', 'success');
+            this.prenotazioneForm.reset();
+            this.selectedLezione = null;
+            this.selectedTipoLezione = null;
+            this.selectedPacchetto = null;
+            this.lezioniDisponibili = [];
+            this.tipiLezione = [];
+            this.caricaPrenotazioniUtente();
+          },
+          error: (error: any) => {
+            this.loading = false;
+            const errorMsg = error.error?.message || 'Errore durante la prenotazione';
+            this.showToastMessage(errorMsg, 'error');
+          }
+        });
+      } else {
+        // Slot generato: request the backend to book by tipoLezione (backend resolves a materialized lezione)
+        const payload: any = { tipoLezione: this.selectedTipoLezione?.tipoLezione || null };
+        if (this.selectedPacchetto) payload.venditaId = this.selectedPacchetto.venditaId;
+        if (formData.note) payload.note = formData.note;
+
+        this.prenotazioneService.creaPrenotazioneUtente(payload).subscribe({
+          next: (resp: any) => {
+            this.loading = false;
+            // backend returns 201 Created on success
+            const status = resp?.status || (resp?.body ? 200 : 0);
+            if (status === 201) {
+              this.showToastMessage('Prenotazione effettuata con successo!', 'success');
+            } else {
+              // fallback success message
+              this.showToastMessage('Prenotazione effettuata', 'success');
+            }
+            this.prenotazioneForm.reset();
+            this.selectedLezione = null;
+            this.selectedTipoLezione = null;
+            this.selectedPacchetto = null;
+            this.lezioniDisponibili = [];
+            this.tipiLezione = [];
+            this.caricaPrenotazioniUtente();
+          },
+          error: (error: any) => {
+            this.loading = false;
+            // map backend status codes to friendly messages
+            if (error?.status === 404) {
+              this.showToastMessage('Nessuna lezione materializzata trovata per questo tipo', 'error');
+            } else if (error?.status === 409) {
+              this.showToastMessage('Impossibile prenotare: la lezione è piena', 'error');
+            } else {
+              const errorMsg = error.error?.message || 'Errore durante la prenotazione';
+              this.showToastMessage(errorMsg, 'error');
+            }
+          }
+        });
+      }
+
     } else {
       this.showToastMessage('Completa tutti i campi obbligatori e seleziona una lezione', 'error');
       this.prenotazioneForm.markAllAsTouched();
@@ -251,7 +363,7 @@ export class GestionePrenotazioniComponent implements OnInit {
       next: (prenotazioni) => {
         this.prenotazioniUtente = prenotazioni;
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Errore durante il caricamento delle prenotazioni', error);
       }
     });
@@ -296,10 +408,10 @@ export class GestionePrenotazioniComponent implements OnInit {
             this.caricaLezioniPerTipo(); // Ricarica le lezioni disponibili
           }
         },
-        error: (error) => {
-          const errorMsg = error.error?.message || 'Errore durante la cancellazione';
-          this.showToastMessage(errorMsg, 'error');
-        }
+        error: (error: any) => {
+            const errorMsg = error.error?.message || 'Errore durante la cancellazione';
+            this.showToastMessage(errorMsg, 'error');
+          }
       });
     }
   }
