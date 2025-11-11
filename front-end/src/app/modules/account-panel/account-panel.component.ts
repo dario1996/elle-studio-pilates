@@ -61,7 +61,9 @@ export class AccountPanelComponent implements OnInit {
     indirizzo: null,
     città: null,
     telefono: null,
-    certificato_medico: null,
+    certificato_medico: null, // Vecchio campo VARCHAR (retrocompatibilità)
+    certificato_medico_nome: null, // Nuovo campo per nome file BLOB
+    certificato_medico_data_upload: null, // Nuovo campo per data upload BLOB
     patologie: null,
     descrizione_patologie: null,
     obiettivi: null,
@@ -77,8 +79,15 @@ export class AccountPanelComponent implements OnInit {
     return String(value);
   }
 
-  // Verifica se il certificato è presente
+  // Verifica se il certificato è presente (controlla il nuovo campo BLOB)
   hasCertificate(): boolean {
+    // Prima controlliamo il nuovo campo certificato_medico_nome (BLOB)
+    const certNome = this.user.certificato_medico_nome;
+    if (certNome !== null && certNome !== undefined && certNome !== '') {
+      return true;
+    }
+    
+    // Fallback al vecchio campo per retrocompatibilità
     const cert = this.user.certificato_medico;
     return cert !== null && 
            cert !== undefined && 
@@ -121,6 +130,10 @@ export class AccountPanelComponent implements OnInit {
             indirizzo: (u as any).indirizzo || this.user.indirizzo,
             città: (u as any).città || this.user.città,
             telefono: (u as any).telefono || this.user.telefono,
+            // Campi BLOB per certificato medico
+            certificato_medico_nome: (u as any).certificatoMedicoNome || (u as any).certificato_medico_nome || null,
+            certificato_medico_data_upload: (u as any).certificatoMedicoDataUpload || (u as any).certificato_medico_data_upload || null,
+            // Manteniamo il vecchio campo per retrocompatibilità
             certificato_medico: u.certificatoMedico || (u as any).certificato_medico || this.user.certificato_medico,
             patologie: u.patologie,
             descrizione_patologie: u.descrizionePatologie || (u as any).descrizione_patologie || this.user.descrizione_patologie,
@@ -131,6 +144,8 @@ export class AccountPanelComponent implements OnInit {
             ruoli: u.ruoli || [],
           };
           console.log('User data loaded from API:', this.user);
+          console.log('Certificato medico nome:', this.user.certificato_medico_nome);
+          console.log('Has certificate?', this.hasCertificate());
         },
         error: (err) => {
           console.warn('Impossibile caricare utente da API, uso dati fallback', err);
@@ -354,18 +369,31 @@ export class AccountPanelComponent implements OnInit {
 
     this.uploadingCertificate = true;
     
-    this.registrazioneService.uploadCertificatoMedico(this.selectedFile, this.user.id).subscribe({
-      next: (response) => {
+    // Usa l'endpoint protetto (utente già autenticato)
+    const formData = new FormData();
+    formData.append('file', this.selectedFile);
+    formData.append('userId', this.user.id.toString());
+    
+    this.http.post('http://localhost:8080/api/upload/certificato-medico', formData).subscribe({
+      next: (response: any) => {
         console.log('Certificato caricato:', response);
         this.uploadingCertificate = false;
         this.showToastMessage('Certificato medico caricato con successo!', 'success');
         
-        // Aggiorna i dati dell'utente - imposta "presente"
-        this.user.certificato_medico = 'presente';
+        // Aggiorna i campi BLOB dell'utente
+        this.user.certificato_medico_nome = this.selectedFile?.name || 'certificato.pdf';
+        this.user.certificato_medico_data_upload = new Date().toISOString();
+        this.user.certificato_medico = 'presente'; // Mantieni per retrocompatibilità
         
         // Reset del file input
         this.selectedFile = null;
         this.fileName = '';
+        
+        // Reset input file HTML
+        const fileInput = document.getElementById('certificateFileInput') as HTMLInputElement;
+        if (fileInput) {
+          fileInput.value = '';
+        }
       },
       error: (error) => {
         console.error('Errore upload certificato:', error);

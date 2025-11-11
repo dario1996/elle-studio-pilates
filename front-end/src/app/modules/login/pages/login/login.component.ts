@@ -111,10 +111,40 @@ export class LoginComponent implements OnInit {
     this.Auth.autenticaService(this.userId, this.password).subscribe({
       next: response => {
         console.log('Login effettuato con successo:', response);
-        this.autenticato.set(true);
+        
+        // Verifica se ci sono errori nella risposta
+        if (response.errorCode) {
+          // Gestisci i diversi tipi di errore
+          if (response.errorCode === 'ACCOUNT_DISABLED') {
+            this.errMsg = response.errorMessage || 'Il tuo account non è ancora stato attivato. Contatta l\'amministratore.';
+          } else if (response.errorCode === 'INVALID_CREDENTIALS') {
+            this.errMsg = response.errorMessage || 'Username o password errati. Riprova.';
+          } else {
+            this.errMsg = response.errorMessage || 'Errore durante il login. Riprova.';
+          }
+          this.viewMsg = true;
+          this.autenticato.set(false);
+        } else {
+          // Login riuscito
+          this.autenticato.set(true);
+        }
       },
       error: error => {
         console.error('Errore durante il login:', error);
+        
+        // Gestione errori HTTP
+        if (error.status === 403 && error.error?.errorCode) {
+          if (error.error.errorCode === 'ACCOUNT_DISABLED') {
+            this.errMsg = 'Il tuo account non è ancora stato attivato. Contatta l\'amministratore.';
+          } else if (error.error.errorCode === 'INVALID_CREDENTIALS') {
+            this.errMsg = 'Username o password errati. Riprova.';
+          } else {
+            this.errMsg = error.error.errorMessage || 'Errore durante il login. Riprova.';
+          }
+        } else {
+          this.errMsg = 'Errore di connessione. Riprova più tardi.';
+        }
+        
         this.viewMsg = true;
         this.autenticato.set(false);
       },

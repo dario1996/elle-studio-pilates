@@ -103,10 +103,54 @@ export class RegistrazioneComponent implements OnInit {
     this.registrazioneService.registraUtente(this.registrationData).subscribe({
       next: (response) => {
         console.log('Registrazione completata:', response);
-        // Reindirizza direttamente al login con parametro di successo
-        this.router.navigate(['/login'], { 
-          queryParams: { registered: 'true' } 
-        });
+        console.log('Tipo di certificato:', typeof this.registrationData.certificato);
+        console.log('Certificato presente?', !!this.registrationData.certificato);
+        console.log('Certificato è File?', this.registrationData.certificato instanceof File);
+        
+        // Se c'è un file certificato da caricare
+        if (this.registrationData.certificato && this.registrationData.certificato instanceof File) {
+          // Estrai l'ID utente dalla risposta
+          const userId = this.extractUserIdFromResponse(response);
+          console.log('UserId estratto:', userId);
+          
+          if (userId) {
+            console.log('Inizio upload certificato per userId:', userId);
+            // Carica il certificato medico come BLOB
+            this.registrazioneService.uploadCertificatoMedico(
+              this.registrationData.certificato, 
+              userId
+            ).subscribe({
+              next: (uploadResponse) => {
+                console.log('Certificato medico caricato con successo:', uploadResponse);
+                // Reindirizza al login
+                this.router.navigate(['/login'], { 
+                  queryParams: { registered: 'true' } 
+                });
+              },
+              error: (error) => {
+                console.error('Errore upload certificato:', error);
+                console.error('Dettagli errore:', error.error);
+                // Anche se l'upload fallisce, reindirizza comunque al login
+                // perché l'utente è stato registrato
+                this.router.navigate(['/login'], { 
+                  queryParams: { registered: 'true', certificateError: 'true' } 
+                });
+              }
+            });
+          } else {
+            console.warn('Nessun ID utente trovato nella risposta');
+            // Nessun ID utente trovato, reindirizza comunque
+            this.router.navigate(['/login'], { 
+              queryParams: { registered: 'true', certificateError: 'true' } 
+            });
+          }
+        } else {
+          console.log('Nessun certificato da caricare o tipo non valido');
+          // Nessun certificato da caricare, reindirizza direttamente
+          this.router.navigate(['/login'], { 
+            queryParams: { registered: 'true' } 
+          });
+        }
       },
       error: (error) => {
         console.error('Errore registrazione:', error);
@@ -115,6 +159,27 @@ export class RegistrazioneComponent implements OnInit {
         this.isSubmitting = false;
       }
     });
+  }
+  
+  /**
+   * Estrae l'ID utente dalla risposta del server
+   */
+  private extractUserIdFromResponse(response: any): number | null {
+    // Backend restituisce InfoMsg con campo userId
+    if (response.userId) return response.userId;
+    
+    // Prova altri percorsi comuni per l'ID
+    if (response.id) return response.id;
+    if (response.data?.id) return response.data.id;
+    if (response.data?.userId) return response.data.userId;
+    
+    // Se la risposta è una stringa che contiene l'ID
+    if (typeof response.data === 'string') {
+      const match = response.data.match(/\d+/);
+      if (match) return parseInt(match[0], 10);
+    }
+    
+    return null;
   }
 
   /**

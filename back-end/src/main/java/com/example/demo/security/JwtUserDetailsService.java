@@ -34,7 +34,10 @@ public class JwtUserDetailsService implements UserDetailsService {
 	    	log.warn("Utente non trovato: {}", username);
 	    	throw new UsernameNotFoundException("Utente non trovato: " + username);
     	}
-
+    	
+    	// Verifica se l'utente è attivo
+    	boolean isEnabled = utente.getAttivo() != null && 
+    	                    (utente.getAttivo().equalsIgnoreCase("Si") || utente.getAttivo().equals("1"));
 
         List<GrantedAuthority> authorities = utente.getRuoli().stream()
                 .map(ruolo -> new SimpleGrantedAuthority("ROLE_" + ruolo))
@@ -43,8 +46,10 @@ public class JwtUserDetailsService implements UserDetailsService {
         return new User(
                 utente.getUsername(),
                 utente.getPassword(),
-                utente.getAttivo().equalsIgnoreCase("Si"),
-                true, true, true,
+                isEnabled, // enabled
+                true,      // accountNonExpired
+                true,      // credentialsNonExpired
+                true,      // accountNonLocked
                 authorities
         );
     }

@@ -31,17 +31,17 @@ public class RegistrazioneService {
     /**
      * Registra un nuovo utente nel sistema
      */
-    public String registraUtente(RegistrazioneUtenteDTO dto) {
+    public Utenti registraUtente(RegistrazioneUtenteDTO dto) {
         log.info("Inizio registrazione utente: " + dto.getUsername());
 
         // Mapping DTO -> Entity
         Utenti nuovoUtente = mapDTOToEntity(dto);
 
         // Salvataggio nel database
-        utenteRepository.save(nuovoUtente);
+        Utenti savedUtente = utenteRepository.save(nuovoUtente);
 
-        log.info("Utente registrato con successo: " + dto.getUsername());
-        return String.format("Registrazione utente %s completata con successo", dto.getUsername());
+        log.info("Utente registrato con successo: " + dto.getUsername() + " con ID: " + savedUtente.getId());
+        return savedUtente;
     }
 
     /**

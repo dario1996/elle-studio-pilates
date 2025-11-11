@@ -47,6 +47,7 @@ public class JWTWebSecurityConfig {
                         .requestMatchers(HttpMethod.GET, refreshPath).permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/utenti/inserisci").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/registrazione/utente").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/registrazione/certificato-medico").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         // .requestMatchers(
                         // "/swagger-ui/**",

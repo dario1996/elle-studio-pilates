@@ -63,7 +63,14 @@ export class GestErrorInterceptor implements HttpInterceptor {
             this.handleLogout(false);
           }
         } else if ([403].indexOf(err.status) !== -1) {
-          this.router.navigate(['forbidden']);
+          // Non reindirizzare a forbidden se è l'endpoint di login
+          // Lascia che il componente gestisca gli errori di autenticazione
+          if (!request.url.includes('/auth') && !request.url.includes('/login')) {
+            this.router.navigate(['forbidden']);
+          } else {
+            // Per l'endpoint di login, passa l'errore al componente
+            return throwError(() => err);
+          }
         } else if (err.status === 404) {
           error = err.error.message;
         }

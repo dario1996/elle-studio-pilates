@@ -50,13 +50,14 @@ export class RegistrazioneService {
   }
 
   /**
-   * Upload certificato medico
+   * Upload certificato medico durante la registrazione (senza autenticazione)
    */
   uploadCertificatoMedico(file: File, userId: number): Observable<any> {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('userId', userId.toString());
     
-    return this.http.post(`http://localhost:8080/api/upload/certificato-medico`, formData);
+    // Usa l'endpoint di registrazione che non richiede autenticazione
+    return this.http.post(`${this.apiUrl}/certificato-medico`, formData);
   }
 }

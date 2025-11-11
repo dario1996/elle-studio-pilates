@@ -7,6 +7,8 @@ export interface Token {
   nome?: string;
   cognome?: string;
   displayName?: string;
+  errorCode?: string;
+  errorMessage?: string;
 }
 
 // Legacy interface for backward compatibility

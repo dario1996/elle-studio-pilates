@@ -2,10 +2,10 @@ package com.example.demo.controller;
 
 import java.util.Objects;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -66,36 +66,58 @@ public class JwtAuthenticationRestController
 	{
 		log.info("Autenticazione e Generazione Token");
 
-		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+		try {
+			authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
-		final UserDetails userDetails = userDetailsService
-				.loadUserByUsername(authenticationRequest.getUsername());
+			final UserDetails userDetails = userDetailsService
+					.loadUserByUsername(authenticationRequest.getUsername());
 
-		final String accessToken = jwtTokenUtil.generateToken(userDetails);
-		final String refreshToken = jwtTokenUtil.generateRefreshToken(userDetails);
-		
-		// Recuperare i dati utente dal database
-		Utenti utente = utentiRepository.findByUsername(authenticationRequest.getUsername());
-		String nome = utente != null ? utente.getNome() : "";
-		String cognome = utente != null ? utente.getCognome() : "";
-		String displayName = (nome + " " + cognome).trim();
-		String email = utente != null ? utente.getEmail() : "";
-		
-		log.warn("Access Token {}", accessToken);
-		log.warn("Refresh Token {}", refreshToken);
+			final String accessToken = jwtTokenUtil.generateToken(userDetails);
+			final String refreshToken = jwtTokenUtil.generateRefreshToken(userDetails);
+			
+			// Recuperare i dati utente dal database
+			Utenti utente = utentiRepository.findByUsername(authenticationRequest.getUsername());
+			String nome = utente != null ? utente.getNome() : "";
+			String cognome = utente != null ? utente.getCognome() : "";
+			String displayName = (nome + " " + cognome).trim();
+			String email = utente != null ? utente.getEmail() : "";
+			
+			log.warn("Access Token {}", accessToken);
+			log.warn("Refresh Token {}", refreshToken);
 
-		JwtTokensResponse response = new JwtTokensResponse(
-			accessToken, 
-			refreshToken, 
-			jwtConfig.getExpiration(), 
-			"Bearer",
-			nome,
-			cognome,
-			displayName.isEmpty() ? authenticationRequest.getUsername() : displayName,
-			email
-		);
+			JwtTokensResponse response = new JwtTokensResponse(
+				accessToken, 
+				refreshToken, 
+				jwtConfig.getExpiration(), 
+				"Bearer",
+				nome,
+				cognome,
+				displayName.isEmpty() ? authenticationRequest.getUsername() : displayName,
+				email
+			);
 
-		return ResponseEntity.ok(response);
+			return ResponseEntity.ok(response);
+			
+		} catch (AuthenticationException e) {
+			// Gestione errori di autenticazione con codici specifici
+			if (e.getMessage().contains("UTENTE DISABILITATO")) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(new JwtTokensResponse("ACCOUNT_DISABLED", 
+						"Il tuo account non è ancora stato attivato. Contatta l'amministratore."));
+			} else if (e.getMessage().contains("CREDENZIALI NON VALIDE")) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(new JwtTokensResponse("INVALID_CREDENTIALS", 
+						"Username o password errati. Riprova."));
+			}
+			return ResponseEntity.status(HttpStatus.FORBIDDEN)
+					.body(new JwtTokensResponse("AUTH_ERROR", 
+					"Errore durante l'autenticazione."));
+		} catch (Exception e) {
+			log.error("Errore inatteso durante l'autenticazione", e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(new JwtTokensResponse("SERVER_ERROR", 
+					"Errore del server. Riprova più tardi."));
+		}
 	}
 
 	@GetMapping("${sicurezza.refresh}")
