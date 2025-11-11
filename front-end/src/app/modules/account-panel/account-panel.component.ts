@@ -6,7 +6,9 @@ import { LoggedUserComponent } from '../../shared/components/logged-user/logged-
 import { PageTitleComponent } from '../../core/page-title/page-title.component';
 import { UserService } from '../../core/services/data/user.service';
 import { AuthJwtService } from '../../core/services/authJwt.service';
+import { RegistrazioneService } from '../../shared/services/registrazione.service';
 import { inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-account-panel',
@@ -24,6 +26,8 @@ export class AccountPanelComponent implements OnInit {
   private userService = inject(UserService);
   private auth = inject(AuthJwtService);
   private fb = inject(FormBuilder);
+  private registrazioneService = inject(RegistrazioneService);
+  private http = inject(HttpClient);
 
   title: string = 'Informazioni Account';
 
@@ -33,6 +37,11 @@ export class AccountPanelComponent implements OnInit {
   passwordLoading = false;
   passwordError = '';
   passwordSuccess = '';
+  
+  // Certificato medico
+  uploadingCertificate = false;
+  fileName = '';
+  selectedFile: File | null = null;
   
   // Toast notification properties
   showToast = false;
@@ -68,6 +77,17 @@ export class AccountPanelComponent implements OnInit {
     return String(value);
   }
 
+  // Verifica se il certificato è presente
+  hasCertificate(): boolean {
+    const cert = this.user.certificato_medico;
+    return cert !== null && 
+           cert !== undefined && 
+           cert !== '' && 
+           cert !== '-' && 
+           cert !== 'assente' && 
+           cert !== 'Assente';
+  }
+
   // patologie helper: show 'Nessuna' when value is 0, otherwise show content
   displayPatologie(patologie: any): string {
     if (patologie === null || patologie === undefined || patologie === '') return '-';
@@ -92,7 +112,7 @@ export class AccountPanelComponent implements OnInit {
         next: (u) => {
           this.user = {
             ...this.user,
-            id: u.username || this.user.id,
+            id: u.id || this.user.id, // Usa l'ID numerico, non lo username!
             username: u.username,
             email: u.email,
             nome: u.nome,
@@ -191,8 +211,8 @@ export class AccountPanelComponent implements OnInit {
     this.passwordError = '';
     this.passwordSuccess = '';
 
-    const username = this.auth.loggedUser();
-    if (!username) {
+    const userId = this.user?.id;
+    if (!userId) {
       this.passwordError = 'Errore: utente non identificato';
       this.passwordLoading = false;
       return;
@@ -201,7 +221,7 @@ export class AccountPanelComponent implements OnInit {
     const currentPassword = this.passwordForm.get('currentPassword')?.value;
     const newPassword = this.passwordForm.get('newPassword')?.value;
 
-    this.userService.changePassword(username, currentPassword, newPassword).subscribe({
+    this.userService.changePassword(userId, currentPassword, newPassword).subscribe({
       next: (response) => {
         this.passwordLoading = false;
         this.passwordSuccess = 'Password cambiata con successo!';
@@ -292,6 +312,127 @@ export class AccountPanelComponent implements OnInit {
     this.showToast = false;
     if (this.toastTimeout) {
       clearTimeout(this.toastTimeout);
+    }
+  }
+
+  // Certificato medico methods
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      
+      // Validazione: SOLO PDF
+      const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+      
+      if (!isPdf) {
+        this.showToastMessage('Sono accettati solo file in formato PDF', 'error');
+        input.value = '';
+        return;
+      }
+      
+      // Validazione dimensione file (max 10MB)
+      const maxSize = 10 * 1024 * 1024; // 10MB
+      if (file.size > maxSize) {
+        this.showToastMessage('Il file è troppo grande. Dimensione massima: 10MB', 'error');
+        input.value = '';
+        return;
+      }
+      
+      this.selectedFile = file;
+      this.fileName = file.name;
+      
+      // Avvia l'upload automaticamente
+      this.uploadCertificate();
+    }
+  }
+
+  uploadCertificate() {
+    if (!this.selectedFile || !this.user.id) {
+      this.showToastMessage('Errore durante l\'upload del certificato', 'error');
+      return;
+    }
+
+    this.uploadingCertificate = true;
+    
+    this.registrazioneService.uploadCertificatoMedico(this.selectedFile, this.user.id).subscribe({
+      next: (response) => {
+        console.log('Certificato caricato:', response);
+        this.uploadingCertificate = false;
+        this.showToastMessage('Certificato medico caricato con successo!', 'success');
+        
+        // Aggiorna i dati dell'utente - imposta "presente"
+        this.user.certificato_medico = 'presente';
+        
+        // Reset del file input
+        this.selectedFile = null;
+        this.fileName = '';
+      },
+      error: (error) => {
+        console.error('Errore upload certificato:', error);
+        this.uploadingCertificate = false;
+        this.showToastMessage('Errore durante il caricamento del certificato', 'error');
+        this.selectedFile = null;
+        this.fileName = '';
+      }
+    });
+  }
+
+  downloadCertificate() {
+    if (!this.user.id) {
+      this.showToastMessage('Errore durante il download del certificato', 'error');
+      return;
+    }
+
+    this.showToastMessage('Download in corso...', 'info');
+    
+    this.http.get(`http://localhost:8080/api/upload/certificato-medico/${this.user.id}`, {
+      responseType: 'blob',
+      observe: 'response'
+    }).subscribe({
+      next: (response) => {
+        const blob = response.body;
+        if (!blob) {
+          this.showToastMessage('Nessun file trovato', 'error');
+          return;
+        }
+
+        // Estrai il nome del file dall'header Content-Disposition
+        const contentDisposition = response.headers.get('Content-Disposition');
+        let filename = 'certificato_medico.pdf';
+        if (contentDisposition) {
+          const matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(contentDisposition);
+          if (matches != null && matches[1]) {
+            filename = matches[1].replace(/['"]/g, '');
+          }
+        }
+
+        // Crea un link temporaneo per il download
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+        
+        this.showToastMessage('Certificato scaricato con successo!', 'success');
+      },
+      error: (error) => {
+        console.error('Errore download certificato:', error);
+        if (error.status === 404) {
+          this.showToastMessage('Certificato medico non trovato', 'error');
+        } else {
+          this.showToastMessage('Errore durante il download del certificato', 'error');
+        }
+      }
+    });
+  }
+
+  triggerFileUpload() {
+    const fileInput = document.getElementById('certificateFileInput') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.click();
     }
   }
 }

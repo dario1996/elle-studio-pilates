@@ -25,7 +25,61 @@
 
       <div class="col col-center">
         <h3>Altri dettagli</h3>
-        <div class="info-row"><span>Certificato medico</span><span>{{ user.certificato_medico ? display(user.certificato_medico) : 'Assente' }}</span></div>
+        
+        <!-- Certificato medico con upload/download (solo PDF) -->
+        <div class="info-row certificate-row">
+          <span>Certificato medico (PDF)</span>
+          <span class="certificate-actions">
+            @if (hasCertificate()) {
+              <button 
+                class="btn btn-download btn-xs" 
+                (click)="downloadCertificate()"
+                title="Scarica certificato">
+                <i class="fas fa-download"></i> Scarica
+              </button>
+              <button 
+                class="btn btn-upload btn-xs" 
+                (click)="triggerFileUpload()"
+                [disabled]="uploadingCertificate"
+                title="Ricarica certificato">
+                @if (uploadingCertificate) {
+                  <i class="fas fa-spinner fa-spin"></i> Caricamento...
+                } @else {
+                  <i class="fas fa-sync-alt"></i> Sostituisci
+                }
+              </button>
+              <input 
+                type="file" 
+                id="certificateFileInput"
+                style="display: none;"
+                accept=".pdf,application/pdf"
+                (change)="onFileSelected($event)">
+            } @else {
+              <span class="certificate-status">
+                <i class="fas fa-times-circle text-danger me-1"></i>
+                Assente
+              </span>
+              <button 
+                class="btn btn-upload btn-xs" 
+                (click)="triggerFileUpload()"
+                [disabled]="uploadingCertificate"
+                title="Carica certificato">
+                @if (uploadingCertificate) {
+                  <i class="fas fa-spinner fa-spin"></i> Caricamento...
+                } @else {
+                  <i class="fas fa-upload"></i> Carica
+                }
+              </button>
+              <input 
+                type="file" 
+                id="certificateFileInput"
+                style="display: none;"
+                accept=".pdf,application/pdf"
+                (change)="onFileSelected($event)">
+            }
+          </span>
+        </div>
+        
         <div class="info-row"><span>Patologie</span><span>{{ user.patologie ? "Presenti" : 'Nessuna' }}</span></div>
         <div class="info-row"><span>Descrizione patologie</span><span>{{ display(user.descrizione_patologie) }}</span></div>
         <div class="info-row"><span>Obiettivi</span><span>{{ display(user.obiettivi) }}</span></div>

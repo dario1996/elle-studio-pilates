@@ -103,14 +103,10 @@ export class RegistrazioneComponent implements OnInit {
     this.registrazioneService.registraUtente(this.registrationData).subscribe({
       next: (response) => {
         console.log('Registrazione completata:', response);
-        
-        // Se c'è un file da caricare, lo carica dopo la registrazione
-        if (this.registrationData.certificato && this.registrationData.certificato instanceof File) {
-          // Per ora assumeremo userId = 1, in un sistema reale questo dovrebbe venire dalla risposta
-          this.uploadCertificato(this.registrationData.certificato, 1);
-        } else {
-          this.onRegistrationComplete();
-        }
+        // Reindirizza direttamente al login con parametro di successo
+        this.router.navigate(['/login'], { 
+          queryParams: { registered: 'true' } 
+        });
       },
       error: (error) => {
         console.error('Errore registrazione:', error);
@@ -119,40 +115,6 @@ export class RegistrazioneComponent implements OnInit {
         this.isSubmitting = false;
       }
     });
-  }
-
-  /**
-   * Upload del certificato medico
-   */
-  private uploadCertificato(file: File, userId: number) {
-    this.registrazioneService.uploadCertificatoMedico(file, userId).subscribe({
-      next: (response) => {
-        console.log('Upload certificato completato:', response);
-        this.onRegistrationComplete();
-      },
-      error: (error) => {
-        console.error('Errore upload certificato:', error);
-        // La registrazione è avvenuta, ma c'è stato un errore con l'upload
-        this.showSuccessAlert('Registrazione completata! Problema con l\'upload del certificato, puoi caricarlo successivamente.');
-        setTimeout(() => {
-          this.router.navigate(['/login']);
-        }, 3000);
-        this.isSubmitting = false;
-      }
-    });
-  }
-
-  /**
-   * Completa il processo di registrazione
-   */
-  private onRegistrationComplete() {
-    this.showSuccessAlert('Registrazione completata con successo! Verrai reindirizzato al login.');
-    
-    // Reindirizza al login dopo 3 secondi
-    setTimeout(() => {
-      this.router.navigate(['/login']);
-    }, 3000);
-    this.isSubmitting = false;
   }
 
   /**

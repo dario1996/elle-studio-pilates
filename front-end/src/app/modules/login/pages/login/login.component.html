@@ -1,4 +1,83 @@
 <div class="container-fluid vh-100">
+  <!-- Toast di successo registrazione -->
+  <div 
+    class="position-fixed top-0 start-50 translate-middle-x mt-4" 
+    style="z-index: 9999; max-width: 500px; width: 90%;"
+    *ngIf="registered"
+  >
+    <div class="alert alert-success alert-dismissible fade show shadow-lg" role="alert" style="border-left: 5px solid #28a745;">
+      <div class="d-flex align-items-start">
+        <i class="fas fa-check-circle fa-2x me-3" style="color: #28a745;"></i>
+        <div class="flex-grow-1">
+          <h5 class="alert-heading mb-2">Registrazione avvenuta con successo!</h5>
+          <p class="mb-0">
+            L'utenza verrà abilitata nel minor tempo possibile. Grazie!
+          </p>
+        </div>
+      </div>
+      <button 
+        type="button" 
+        class="btn-close" 
+        (click)="registered = false"
+        aria-label="Close"
+      ></button>
+    </div>
+  </div>
+
+  <!-- Alert errore login -->
+  <div 
+    class="position-fixed top-0 start-50 translate-middle-x mt-4" 
+    style="z-index: 9999; max-width: 500px; width: 90%;"
+    *ngIf="viewMsg"
+  >
+    <div class="alert alert-danger alert-dismissible fade show shadow-lg" role="alert">
+      <i class="fas fa-exclamation-circle me-2"></i>
+      {{ errMsg }}
+      <button 
+        type="button" 
+        class="btn-close" 
+        (click)="viewMsg = false"
+        aria-label="Close"
+      ></button>
+    </div>
+  </div>
+
+  <!-- Alert non autenticato -->
+  <div 
+    class="position-fixed top-0 start-50 translate-middle-x mt-4" 
+    style="z-index: 9999; max-width: 500px; width: 90%;"
+    *ngIf="notlogged"
+  >
+    <div class="alert alert-warning alert-dismissible fade show shadow-lg" role="alert">
+      <i class="fas fa-exclamation-triangle me-2"></i>
+      {{ errMsg2 }}
+      <button 
+        type="button" 
+        class="btn-close" 
+        (click)="notlogged = false"
+        aria-label="Close"
+      ></button>
+    </div>
+  </div>
+
+  <!-- Alert sessione scaduta -->
+  <div 
+    class="position-fixed top-0 start-50 translate-middle-x mt-4" 
+    style="z-index: 9999; max-width: 500px; width: 90%;"
+    *ngIf="expired"
+  >
+    <div class="alert alert-warning alert-dismissible fade show shadow-lg" role="alert">
+      <i class="fas fa-clock me-2"></i>
+      {{ errMsg3 }}
+      <button 
+        type="button" 
+        class="btn-close" 
+        (click)="expired = false"
+        aria-label="Close"
+      ></button>
+    </div>
+  </div>
+
   <div class="row h-100">
     <!-- Sinistra: Form -->
     <div

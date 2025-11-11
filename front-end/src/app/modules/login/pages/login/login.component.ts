@@ -40,9 +40,11 @@ export class LoginComponent implements OnInit {
   viewMsg = false;
   notlogged = false;
   expired = false;
+  registered = false; // Nuovo flag per registrazione completata
 
   nologged$: Observable<string | null> = of('');
   expired$: Observable<string | null> = of('');
+  registered$: Observable<string | null> = of(''); // Nuovo observable
 
   errMsg = 'Spiacente, username o password errati! Riprova';
   errMsg2 =
@@ -68,6 +70,13 @@ export class LoginComponent implements OnInit {
     );
     this.expired$.subscribe(param =>
       param ? (this.expired = true) : (this.expired = false),
+    );
+
+    this.registered$ = this.activeRoute.queryParamMap.pipe(
+      map((params: ParamMap) => params.get('registered')),
+    );
+    this.registered$.subscribe(param =>
+      param ? (this.registered = true) : (this.registered = false),
     );
   }
 
@@ -96,6 +105,7 @@ export class LoginComponent implements OnInit {
   gestAuth = () => {
     this.expired = false;
     this.notlogged = false;
+    this.registered = false; // Nascondi il toast quando l'utente tenta il login
     this.viewMsg = false;
 
     this.Auth.autenticaService(this.userId, this.password).subscribe({

@@ -1,113 +1,122 @@
 package com.example.demo.service;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
+import java.io.IOException;
+import java.time.LocalDateTime;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import com.example.demo.entity.Utenti;
+import com.example.demo.repository.UtenteRepository;
 
 /**
- * Service per la gestione dell'upload e download di file
+ * Service per la gestione dell'upload e download di certificati medici
+ * Salva i file come BLOB nel database
  */
 @Service
 public class FileUploadService {
 
-    @Value("${app.upload.dir:uploads}")
-    private String uploadDir;
+    @Autowired
+    private UtenteRepository utenteRepository;
 
-    private static final String CERTIFICATI_DIR = "certificati-medici";
+    private static final String PDF_CONTENT_TYPE = "application/pdf";
+    private static final long MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
 
     /**
-     * Salva il certificato medico dell'utente
+     * Salva il certificato medico dell'utente come BLOB nel database
+     * Accetta solo file PDF
      */
     public String saveCertificatoMedico(MultipartFile file, Long userId) throws IOException {
         
-        // Crea la directory se non esiste
-        Path uploadPath = Paths.get(uploadDir, CERTIFICATI_DIR);
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
+        // Validazione: file non vuoto
+        if (file.isEmpty()) {
+            throw new IllegalArgumentException("Il file è vuoto");
         }
 
-        // Genera nome file univoco
+        // Validazione: dimensione massima
+        if (file.getSize() > MAX_FILE_SIZE) {
+            throw new IllegalArgumentException("Il file supera la dimensione massima di 10 MB");
+        }
+
+        // Validazione: solo PDF
+        String contentType = file.getContentType();
         String originalFilename = file.getOriginalFilename();
-        String extension = "";
-        if (originalFilename != null && originalFilename.contains(".")) {
-            extension = originalFilename.substring(originalFilename.lastIndexOf("."));
-        }
         
-        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
-        String newFileName = "certificato_" + userId + "_" + timestamp + extension;
+        if (!PDF_CONTENT_TYPE.equals(contentType) || 
+            originalFilename == null || 
+            !originalFilename.toLowerCase().endsWith(".pdf")) {
+            throw new IllegalArgumentException("Sono accettati solo file PDF");
+        }
 
-        // Salva il file
-        Path filePath = uploadPath.resolve(newFileName);
-        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+        // Recupera l'utente
+        Utenti utente = utenteRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("Utente non trovato con ID: " + userId));
 
-        return newFileName;
+        // Salva il file come BLOB
+        utente.setCertificatoMedicoFile(file.getBytes());
+        utente.setCertificatoMedicoNome(originalFilename);
+        utente.setCertificatoMedicoDataUpload(LocalDateTime.now());
+        
+        utenteRepository.save(utente);
+
+        return originalFilename;
     }
 
     /**
-     * Recupera il certificato medico dell'utente
+     * Recupera il certificato medico dell'utente dal database
      */
-    public ResponseEntity<byte[]> getCertificatoMedico(Long userId) throws IOException {
+    public ResponseEntity<byte[]> getCertificatoMedico(Long userId) {
         
-        Path uploadPath = Paths.get(uploadDir, CERTIFICATI_DIR);
-        
-        // Cerca il file più recente per l'utente
-        String fileName = Files.list(uploadPath)
-            .map(Path::getFileName)
-            .map(Path::toString)
-            .filter(name -> name.startsWith("certificato_" + userId + "_"))
-            .sorted((a, b) -> b.compareTo(a)) // Ordine decrescente per avere il più recente
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException("Certificato medico non trovato"));
+        Utenti utente = utenteRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("Utente non trovato con ID: " + userId));
 
-        Path filePath = uploadPath.resolve(fileName);
-        Resource resource = new UrlResource(filePath.toUri());
-
-        if (!resource.exists()) {
-            throw new RuntimeException("File non trovato: " + fileName);
+        if (utente.getCertificatoMedicoFile() == null || utente.getCertificatoMedicoFile().length == 0) {
+            throw new RuntimeException("Certificato medico non trovato per l'utente");
         }
 
-        byte[] fileContent = Files.readAllBytes(filePath);
+        String fileName = utente.getCertificatoMedicoNome() != null ? 
+                         utente.getCertificatoMedicoNome() : 
+                         "certificato_" + userId + ".pdf";
         
         return ResponseEntity.ok()
-            .contentType(MediaType.APPLICATION_OCTET_STREAM)
+            .contentType(MediaType.APPLICATION_PDF)
             .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
-            .body(fileContent);
+            .body(utente.getCertificatoMedicoFile());
     }
 
     /**
-     * Elimina il certificato medico dell'utente
+     * Elimina il certificato medico dell'utente dal database
      */
     public boolean deleteCertificatoMedico(Long userId) {
         try {
-            Path uploadPath = Paths.get(uploadDir, CERTIFICATI_DIR);
+            Utenti utente = utenteRepository.findById(userId).orElse(null);
             
-            return Files.list(uploadPath)
-                .filter(path -> path.getFileName().toString().startsWith("certificato_" + userId + "_"))
-                .findFirst()
-                .map(path -> {
-                    try {
-                        return Files.deleteIfExists(path);
-                    } catch (IOException e) {
-                        return false;
-                    }
-                })
-                .orElse(false);
+            if (utente != null && utente.getCertificatoMedicoFile() != null) {
+                utente.setCertificatoMedicoFile(null);
+                utente.setCertificatoMedicoNome(null);
+                utente.setCertificatoMedicoDataUpload(null);
+                utenteRepository.save(utente);
+                return true;
+            }
+            
+            return false;
                 
-        } catch (IOException e) {
+        } catch (Exception e) {
             return false;
         }
+    }
+    
+    /**
+     * Verifica se l'utente ha un certificato medico
+     */
+    public boolean hasCertificato(Long userId) {
+        return utenteRepository.findById(userId)
+            .map(utente -> utente.getCertificatoMedicoFile() != null && 
+                          utente.getCertificatoMedicoFile().length > 0)
+            .orElse(false);
     }
 }

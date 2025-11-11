@@ -100,6 +100,125 @@
 .btn-row {
   padding-top: 12px; /* Ridotto da 16px */
 }
+
+/* Certificate row styling */
+.certificate-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.certificate-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.certificate-status {
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+.text-success {
+  color: #16a34a;
+}
+
+.text-danger {
+  color: #dc2626;
+}
+
+.btn-xs {
+  padding: 6px 12px;
+  font-size: 11px;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+/* .btn-download {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.btn-download:hover:not(:disabled) {
+  background: #2563eb;
+  border-color: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+} */
+
+.btn-download {
+  background-color: #f2f2f2 !important;
+  color: #7a4f2a !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  font-size: 12px !important;
+  border: none !important;
+}
+
+.btn-download:hover:not(:disabled) {
+  background: #dda360 !important;
+  color: black !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  font-size: 12px !important;
+  border: none !important;
+}
+
+/* .btn-upload {
+  background: #c99e67;
+  color: white;
+  border-color: #c99e67;
+}
+
+.btn-upload:hover:not(:disabled) {
+  background: #b8894f;
+  border-color: #b8894f;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(201, 158, 103, 0.3);
+} */
+
+.btn-upload {
+  background-color: #f2f2f2 !important;
+  color: #7a4f2a !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  font-size: 12px !important;
+  border: none !important;
+}
+
+.btn-upload:hover:not(:disabled) {
+  background: #dda360 !important;
+  color: black !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  font-size: 12px !important;
+  border: none !important;
+}
+
+.btn-xs:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.btn-xs i {
+  font-size: 10px;
+}
+
 @media (max-width: 768px) {
   .account-panel-container {
     padding: 0 12px; /* reduce outer padding on mobile like calendar */
@@ -125,6 +244,24 @@
   }
   .info-row > span:first-child { flex: 0 0 auto; width: 100%; font-size: 11px; } /* Ridotto da 13px */
   .info-row > span:last-child { text-align: left; width: 100%; word-break: break-word; font-size: 12px; } /* Aggiunto font-size */
+  
+  /* Certificate row responsive */
+  .certificate-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .certificate-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  
+  .btn-xs {
+    flex: 1;
+    justify-content: center;
+    min-width: 100px;
+  }
 }
 
 /* Toast Badge Notification - Elle Studio Theme */

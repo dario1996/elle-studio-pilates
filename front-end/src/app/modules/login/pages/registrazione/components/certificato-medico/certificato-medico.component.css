@@ -68,6 +68,7 @@
   width: 24px;
   height: 24px;
   transition: color 0.2s ease;
+  margin-right: 12px;
 }
 
 .file-upload-icon:hover {

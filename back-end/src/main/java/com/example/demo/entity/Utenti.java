@@ -58,8 +58,14 @@ public class Utenti
 	@Column(name = "codice_fiscale")
 	private String codiceFiscale;
 	
-	@Column(name = "certificato_medico")
-	private String certificatoMedico;
+	@Column(name = "certificato_medico_file", columnDefinition = "LONGBLOB")
+	private byte[] certificatoMedicoFile;
+	
+	@Column(name = "certificato_medico_nome")
+	private String certificatoMedicoNome;
+	
+	@Column(name = "certificato_medico_data_upload")
+	private LocalDateTime certificatoMedicoDataUpload;
 
 	@Column(name = "indirizzo")
 	private String indirizzo;
@@ -131,7 +137,9 @@ public class Utenti
 				String indirizzo,
 				String città,
 				String telefono,
-				String certificatoMedico,
+				byte[] certificatoMedicoFile,
+				String certificatoMedicoNome,
+				LocalDateTime certificatoMedicoDataUpload,
 				Boolean patologie,
 				String descrizionePatologie,
 				String obiettivi,
@@ -149,7 +157,9 @@ public class Utenti
 		this.indirizzo = indirizzo;
 		this.città = città;
 		this.telefono = telefono;
-		this.certificatoMedico = certificatoMedico;
+		this.certificatoMedicoFile = certificatoMedicoFile;
+		this.certificatoMedicoNome = certificatoMedicoNome;
+		this.certificatoMedicoDataUpload = certificatoMedicoDataUpload;
 		this.patologie = patologie;
 		this.descrizionePatologie = descrizionePatologie;
 		this.obiettivi = obiettivi;
@@ -252,13 +262,29 @@ public class Utenti
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
 	}
-
-	public String getCertificatoMedico() {
-		return certificatoMedico;
+	
+	public byte[] getCertificatoMedicoFile() {
+		return certificatoMedicoFile;
 	}
 
-	public void setCertificatoMedico(String certificatoMedico) {
-		this.certificatoMedico = certificatoMedico;
+	public void setCertificatoMedicoFile(byte[] certificatoMedicoFile) {
+		this.certificatoMedicoFile = certificatoMedicoFile;
+	}
+
+	public String getCertificatoMedicoNome() {
+		return certificatoMedicoNome;
+	}
+
+	public void setCertificatoMedicoNome(String certificatoMedicoNome) {
+		this.certificatoMedicoNome = certificatoMedicoNome;
+	}
+
+	public LocalDateTime getCertificatoMedicoDataUpload() {
+		return certificatoMedicoDataUpload;
+	}
+
+	public void setCertificatoMedicoDataUpload(LocalDateTime certificatoMedicoDataUpload) {
+		this.certificatoMedicoDataUpload = certificatoMedicoDataUpload;
 	}
 
 	public Boolean getPatologie() {

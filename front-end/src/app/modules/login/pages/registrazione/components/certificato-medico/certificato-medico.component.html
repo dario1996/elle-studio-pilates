@@ -15,14 +15,16 @@
       style="width: 100%; max-width: 450px"
     >
       <div class="mb-4">
-        <label class="form-label">Certificato medico</label>
+        <label class="form-label">Certificato medico (solo PDF) <span class="text-danger">*</span></label>
         <div class="file-upload-wrapper">
           <input
             type="text"
             class="form-control file-upload-display"
-            [value]="fileName || 'Aggiungi allegato'"
+            [value]="fileName || 'Aggiungi allegato PDF'"
             readonly
             (click)="fileInput.click()"
+            [class.is-invalid]="certificatoForm.get('certificato')?.invalid && 
+                                certificatoForm.get('certificato')?.touched"
           />
           <div class="file-upload-icon" (click)="fileInput.click()">
             <svg
@@ -44,9 +46,26 @@
             #fileInput
             type="file"
             style="display: none"
+            accept=".pdf,application/pdf"
             (change)="onFileChange($event)"
           />
         </div>
+        <small class="text-muted d-block mt-1">
+          <i class="fas fa-info-circle me-1"></i>
+          Formato accettato: solo PDF (max 10MB)
+        </small>
+        @if (uploadError) {
+          <div class="text-danger mt-2" style="font-size: 0.875rem;">
+            <i class="fas fa-exclamation-circle me-1"></i>
+            {{ uploadError }}
+          </div>
+        }
+        @if (certificatoForm.get('certificato')?.invalid && 
+             certificatoForm.get('certificato')?.touched) {
+          <div class="invalid-feedback d-block">
+            Il certificato medico è obbligatorio
+          </div>
+        }
       </div>
       <div class="mb-4">
         <label class="form-label"
@@ -76,15 +95,26 @@
       </div>
       <div class="mb-4">
         <label for="descrizionePatologie" class="form-label"
-          >Descrivi le tue patologie</label
-        >
+          >Descrivi le tue patologie
+          @if (certificatoForm.get('patologie')?.value === true) {
+            <span class="text-danger">*</span>
+          }
+        </label>
         <textarea
           id="descrizionePatologie"
           class="form-control"
           formControlName="descrizionePatologie"
           rows="3"
           placeholder="Digita in questo spazio"
+          [class.is-invalid]="certificatoForm.get('descrizionePatologie')?.invalid && 
+                              certificatoForm.get('descrizionePatologie')?.touched"
         ></textarea>
+        @if (certificatoForm.get('descrizionePatologie')?.invalid && 
+             certificatoForm.get('descrizionePatologie')?.touched) {
+          <div class="invalid-feedback d-block">
+            La descrizione delle patologie è obbligatoria quando selezioni "Sì"
+          </div>
+        }
       </div>
       <div class="mb-5">
         <label for="obiettivi" class="form-label"

@@ -84,7 +84,7 @@ public class RegistrazioneService {
         utente.setIndirizzo(dto.getIndirizzo());
         utente.setCittà(dto.getCittà());
         utente.setTelefono(dto.getTelefono());
-        utente.setCertificatoMedico(dto.getCertificatoMedico());
+        
         utente.setPatologie(dto.getPatologie());
         utente.setDescrizionePatologie(dto.getDescrizionePatologie());
         utente.setObiettivi(dto.getObiettivi());

@@ -37,8 +37,14 @@
             <column name="telefono" type="VARCHAR(20)">
                 <constraints nullable="true" />
             </column>
-            <column name="certificato_medico" type="VARCHAR(500)">
-                <constraints nullable="true" />
+            <column name="certificato_medico_file" type="LONGBLOB">
+                <constraints nullable="true"/>
+            </column>
+            <column name="certificato_medico_nome" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="certificato_medico_data_upload" type="TIMESTAMP">
+                <constraints nullable="true"/>
             </column>
             <column name="patologie" type="BOOLEAN">
                 <constraints nullable="true" />
