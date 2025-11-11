@@ -12,9 +12,9 @@
 
 /* Status colors similar to Bootstrap badges but with custom design */
 .status-badge-success {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
+  background-color: #ffe7c8;
+  color: #b08042;
+  border: 1px solid #ffe7c8;
 }
 
 .status-badge-info {

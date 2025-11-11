@@ -311,4 +311,16 @@ export class TabellaGenericaComponent {
     return this.shouldTruncate(formattedDate, length) ? 
            this.getTruncatedText(formattedDate, length) : formattedDate;
   }
+
+  /**
+   * Filtra le azioni in base alle condizioni definite
+   */
+  getFilteredActions(item: any): IAzioneDef[] {
+    return this.azioni.filter(azione => {
+      if (azione.condition) {
+        return azione.condition(item);
+      }
+      return true;
+    });
+  }
 }

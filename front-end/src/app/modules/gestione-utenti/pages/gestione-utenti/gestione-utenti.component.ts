@@ -361,6 +361,21 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
           onConferma: () => this.toggleUtenteStatus(e.item.id),
         });
         break;
+      case 'enable':
+        this.modaleService.apri({
+          titolo: 'Conferma attivazione',
+          componente: DisableConfirmComponent,
+          dati: {
+            messaggio:
+              'Vuoi davvero attivare l\'utente "' +
+              (e.item.nome && e.item.cognome 
+                ? e.item.nome + ' ' + e.item.cognome
+                : e.item.username) +
+              '"?',
+          },
+          onConferma: () => this.toggleUtenteStatus(e.item.id),
+        });
+        break;
       case 'view':
         import('../../components/dettaglio-utenti/dettaglio-utenti.component').then(({ DettaglioUtentiComponent }) => {
           this.modaleService.apri({

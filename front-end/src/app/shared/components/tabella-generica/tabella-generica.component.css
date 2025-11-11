@@ -516,6 +516,20 @@ th .fa {
   transition: all 0.25s ease !important;
 }
 
+/* Tasto attiva utente (success) */
+.action-buttons .btn-outline-success *,
+.action-buttons .btn-success * {
+  color: #28a745 !important;
+  justify-content: center;
+}
+
+.action-buttons .btn-outline-success:hover *,
+.action-buttons .btn-success:hover * {
+  color: #20c997 !important;
+  transform: translateY(-2px);
+  transition: all 0.25s ease !important;
+}
+
 /* ================== BADGE PERSONALIZZATI =================== */
 .badge {
   display: inline-block;

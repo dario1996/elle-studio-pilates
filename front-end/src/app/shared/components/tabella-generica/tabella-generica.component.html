@@ -88,7 +88,7 @@
         >
           <div class="action-buttons">
             <button
-              *ngFor="let azione of azioni"
+              *ngFor="let azione of getFilteredActions(row)"
               type="button"
               class="btn btn-sm"
               [ngClass]="{
@@ -96,6 +96,7 @@
                 'btn-danger': azione.color === 'danger',
                 'btn-secondary': azione.color === 'secondary',
                 'btn-warning': azione.color === 'warning',
+                'btn-success': azione.color === 'success'
               }"
               (click)="onAzione(azione.action, row)"
             >

@@ -63,9 +63,17 @@ export const UTENTI_AZIONI: IAzioneDef[] = [
   },
   {
     label: 'Disattiva',
-    icon: 'fa fa-user-slash',
+    icon: 'fa fa-user-xmark',
     action: AzioneType.Disable,
     color: AzioneColor.Warning,
+    condition: (item: any) => item.attivo === 'Attivo' || item.attivo === 'Si'
+  },
+  {
+    label: 'Attiva',
+    icon: 'fa fa-user-check',
+    action: AzioneType.Enable,
+    color: AzioneColor.Success,
+    condition: (item: any) => item.attivo === 'Non attivo' || item.attivo === 'No'
   },
 ];
 
