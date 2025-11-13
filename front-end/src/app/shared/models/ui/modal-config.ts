@@ -17,4 +17,5 @@ export interface IModaleConfig {
   showCloseButton?: boolean; // New option to control close button visibility
   customButtons?: IModalButton[]; // Array of custom buttons
   showDefaultButtons?: boolean; // Show default Chiudi/Conferma buttons (default: true)
+  isActivationMode?: boolean; // Modalità attivazione utente con pacchetti
 }

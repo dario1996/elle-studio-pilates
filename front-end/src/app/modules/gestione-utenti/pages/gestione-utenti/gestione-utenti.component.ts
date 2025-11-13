@@ -244,6 +244,35 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
     });
   }
 
+  attivaUtenteConPacchetti(id: number, formData: any) {
+    // Trova l'utente originale per preservare tutti i dati
+    const utenteOriginale = this.utentiOriginali.find(u => u.id === id);
+    
+    if (!utenteOriginale) {
+      this.toastr.error("Errore: utente non trovato");
+      return;
+    }
+    
+    // Combina i dati originali con l'attivazione e i pacchetti selezionati
+    const dataCompleta: IUsers = {
+      ...utenteOriginale,
+      pacchettiDisponibiliIds: formData.pacchettiDisponibiliIds || [],
+      attivo: 'Si' // Forza l'attivazione
+    };
+
+    this.userService.updUtente(id, dataCompleta).subscribe({
+      next: () => {
+        this.loadUtenti();
+        this.toastr.success('Utente attivato e pacchetti associati con successo');
+        this.modaleService.chiudi();
+      },
+      error: error => {
+        this.toastr.error("Errore durante l'attivazione dell'utente");
+        console.error('Errore attivazione utente con pacchetti:', error);
+      },
+    });
+  }
+
   updateUtente(id: number, utenteData: any) {
     // Trova l'utente originale per preservare il campo attivo
     const utenteOriginale = this.utentiOriginali.find(u => u.id === id);
@@ -362,18 +391,13 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
         });
         break;
       case 'enable':
-        this.modaleService.apri({
-          titolo: 'Conferma attivazione',
-          componente: DisableConfirmComponent,
-          dati: {
-            messaggio:
-              'Vuoi davvero attivare l\'utente "' +
-              (e.item.nome && e.item.cognome 
-                ? e.item.nome + ' ' + e.item.cognome
-                : e.item.username) +
-              '"?',
-          },
-          onConferma: () => this.toggleUtenteStatus(e.item.id),
+        import('../../components/attiva-utente/attiva-utente.component').then(({ AttivaUtenteComponent }) => {
+          this.modaleService.apri({
+            titolo: 'Conferma attivazione',
+            componente: AttivaUtenteComponent,
+            dati: e.item,
+            onConferma: (formData: any) => this.attivaUtenteConPacchetti(e.item.id, formData),
+          });
         });
         break;
       case 'view':

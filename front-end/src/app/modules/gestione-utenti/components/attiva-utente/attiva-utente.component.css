@@ -1,0 +1,118 @@
+/* Alert personalizzati */
+.alert {
+  border-radius: 0.25rem;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.813rem;
+  border: 1px solid;
+}
+
+.alert i {
+  font-size: 0.875rem;
+}
+
+.alert-warning {
+  background-color: #fff8e1;
+  border-color: #ffecb3;
+  color: #8a6d3b;
+}
+
+.alert-info {
+  background-color: #f8f9fa;
+  border-color: #e0e0e0;
+  color: #495057;
+}
+
+.alert-secondary {
+  background-color: #f8f9fa;
+  border-color: #e0e0e0;
+  color: #495057;
+}
+
+/* Sezione pacchetti */
+.pacchetti-section {
+  margin-top: 1rem;
+}
+
+/* List group per pacchetti */
+.list-group-item {
+  border: 1px solid #e0e0e0;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  font-size: 0.813rem;
+  background-color: #fff;
+}
+
+.list-group-item:hover {
+  background-color: #f8f9fa;
+  border-color: #c9a961;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.list-group-item input[type="checkbox"]:checked ~ div {
+  font-weight: 500;
+}
+
+.list-group-item input[type="checkbox"] {
+  cursor: pointer;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+  accent-color: #c9a961;
+}
+
+.list-group-item label {
+  cursor: pointer;
+  margin-bottom: 0;
+  width: 100%;
+}
+
+.list-group-item .fw-bold {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #212529;
+}
+
+.list-group-item .text-muted {
+  font-size: 0.75rem;
+  color: #6c757d;
+  line-height: 1.4;
+}
+
+/* Badge per pacchetti */
+.badge {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.688rem;
+  font-weight: 600;
+  border-radius: 0.25rem;
+}
+
+.badge.bg-secondary {
+  background-color: #495057 !important;
+  color: #fff;
+}
+
+.badge.bg-info {
+  background-color: #6c757d !important;
+  color: #fff;
+}
+
+.badge.bg-success {
+  background-color: #c9a961 !important;
+  color: #212529;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .list-group-item {
+    padding: 0.625rem;
+  }
+  
+  .alert {
+    font-size: 0.75rem;
+  }
+}

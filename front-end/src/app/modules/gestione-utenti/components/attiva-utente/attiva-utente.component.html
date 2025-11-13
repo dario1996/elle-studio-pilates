@@ -1,0 +1,56 @@
+<form [formGroup]="attivazioneForm" (ngSubmit)="onSubmit()">
+  
+  <!-- Messaggio di conferma -->
+  <div class="alert alert-warning mb-4">
+    <i class="fas fa-exclamation-triangle me-2"></i>
+    <strong>Vuoi davvero attivare l'utente "{{ nomeCompleto }}"?</strong>
+  </div>
+
+  <!-- Sezione Pacchetti -->
+  <div class="pacchetti-section">
+    <div class="alert alert-info mb-3">
+      <i class="fas fa-info-circle me-2"></i>
+      Seleziona i pacchetti che questo utente potrà visualizzare e acquistare.
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="list-group" *ngIf="pacchettiDisponibili.length > 0; else noPacchetti">
+          <label class="list-group-item" *ngFor="let pacchetto of pacchettiDisponibili">
+            <div class="d-flex align-items-start">
+              <input 
+                class="form-check-input me-3 mt-1" 
+                type="checkbox" 
+                [value]="pacchetto.id"
+                [checked]="isPacchettoSelected(pacchetto.id)"
+                (change)="togglePacchetto(pacchetto.id)">
+              <div class="flex-grow-1">
+                <div class="fw-bold">{{ pacchetto.nome }}</div>
+                <small class="text-muted d-block" *ngIf="pacchetto.descrizione">
+                  {{ pacchetto.descrizione }}
+                </small>
+                <div class="mt-1">
+                  <span class="badge bg-secondary me-2">{{ pacchetto.categoria }}</span>
+                  <span class="badge bg-info me-2">{{ pacchetto.livello }}</span>
+                  <span class="badge bg-success">€{{ pacchetto.prezzo }}</span>
+                </div>
+              </div>
+            </div>
+          </label>
+        </div>
+        <ng-template #noPacchetti>
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            Nessun pacchetto disponibile nel sistema.
+          </div>
+        </ng-template>
+      </div>
+    </div>
+
+    <div class="alert alert-secondary mt-3" *ngIf="getSelectedPacchettiCount() > 0">
+      <i class="fas fa-check-circle me-2"></i>
+      <strong>{{ getSelectedPacchettiCount() }}</strong> pacchetto/i selezionato/i
+    </div>
+  </div>
+
+</form>
