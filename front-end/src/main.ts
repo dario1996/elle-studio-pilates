@@ -6,9 +6,10 @@ import { HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ToastrModule } from 'ngx-toastr';
 import { registerLocaleData } from '@angular/common';
 import localeIt from '@angular/common/locales/it';
+import { ToastrModule } from 'ngx-toastr';
+import { ToastUniversaleService } from './app/shared/services/toast-universale.service';
 
 registerLocaleData(localeIt);
 // ✅ Funzione per il loader delle traduzioni
@@ -30,12 +31,11 @@ bootstrapApplication(AppComponent, {
         },
       }),
     ),
-
     // ✅ Supporto per ngx-toastr
     importProvidersFrom(BrowserAnimationsModule),
     importProvidersFrom(
       ToastrModule.forRoot({
-        positionClass: 'toast-bottom-right',
+        positionClass: 'toast-top-center', // ← CAMBIA QUESTA RIGA
         timeOut: 4000,
         closeButton: false,
         progressBar: false,
@@ -47,12 +47,12 @@ bootstrapApplication(AppComponent, {
         titleClass: 'radix-toast-title',
         messageClass: 'radix-toast-message',
         enableHtml: false,
-        // Disable all animations
-        easeTime: 0,
-        easing: 'linear'
+        easeTime: 500,  // ← DURATA ANIMAZIONE TOAST (300ms)
+        easing: 'ease-out'  // ← TIPO DI EASING
       }),
     ),
+    ToastUniversaleService,
 
-    appConfig.providers, // ✅ Usa i provider definiti in app.config.ts
+    ...appConfig.providers, // ✅ Usa i provider definiti in app.config.ts
   ],
 }).catch(err => console.error(err));

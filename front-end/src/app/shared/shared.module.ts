@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 // Import the DataTable component
-import { DataTableComponent } from './components/data-table/data-table.component';
+import { ToastUniversaleService } from './services/toast-universale.service';
 
 @NgModule({
   declarations: [],
@@ -12,11 +12,13 @@ import { DataTableComponent } from './components/data-table/data-table.component
     CommonModule,
     ImgFallbackDirective,
     FormsModule,
-    DataTableComponent, // Import the standalone component
   ],
   exports: [
     ImgFallbackDirective,
-    DataTableComponent, // Export for use in other modules
+    FormsModule,
   ],
+  providers: [
+    ToastUniversaleService
+  ]
 })
 export class SharedModule {}

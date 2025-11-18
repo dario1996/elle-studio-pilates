@@ -9,7 +9,7 @@ import { LezioniService, LezioneDto } from '../../../../core/services/lezioni.se
 import { TIPI_LEZIONE_CONFIG } from '../../../../shared/models/Lezione';
 import { ModaleService } from '../../../../core/services/modal.service';
 import { ModificaLezioneOverlayComponent } from '../../components/modifica-lezione-overlay/modifica-lezione-overlay.component';
-import { ToastrService } from 'ngx-toastr';
+import { ToastUniversaleService } from '../../../../shared/services/toast-universale.service';
 
 @Component({
   selector: 'app-home-dashboard',
@@ -37,7 +37,7 @@ export class HomeDashboardComponent implements OnInit {
     private dashboardService: DashboardService,
     private lezioniService: LezioniService,
     private modaleService: ModaleService,
-    private toastr: ToastrService
+    private toastUniversale: ToastUniversaleService
   ) {}
 
   ngOnInit(): void {
@@ -74,7 +74,7 @@ export class HomeDashboardComponent implements OnInit {
       dimensione: 'lg',
       onConferma: (lezioneModificata: any) => {
         console.log('Lezione modificata:', lezioneModificata);
-        this.toastr.success('Lezione modificata con successo!');
+        this.toastUniversale.success('Lezione modificata con successo!');
         // Ricarica gli appuntamenti per aggiornare la dashboard
         this.caricaAppuntamentiOggi();
       }
@@ -89,7 +89,7 @@ export class HomeDashboardComponent implements OnInit {
       dimensione: 'lg',
       onConferma: (lezioneModificata: any) => {
         console.log('Lezione modificata:', lezioneModificata);
-        this.toastr.success('Lezione modificata con successo!');
+        this.toastUniversale.success('Lezione modificata con successo!');
         // Ricarica gli appuntamenti per aggiornare la dashboard
         this.caricaAppuntamentiOggi();
       }
