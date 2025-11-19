@@ -62,6 +62,14 @@
             referencedColumnNames="id"
             onDelete="CASCADE"/>
 
+        <addForeignKeyConstraint 
+            constraintName="fk_password_reset_token_utente"
+            baseTableName="password_reset_tokens"
+            baseColumnNames="utente_id"
+            referencedTableName="utenti"
+            referencedColumnNames="id"
+            onDelete="CASCADE"/>
+
     </changeSet>
 
 </databaseChangeLog> 

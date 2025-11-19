@@ -29,7 +29,7 @@ import {
 } from '../../../../shared/config/utenti.config';
 import { NotificationComponent } from '../../../../core/notification/notification.component';
 import { LoggedUserComponent } from '../../../../shared/components/logged-user/logged-user.component';
-import { ToastUniversaleService } from '../../../../shared/services/toast-universale.service';
+import { ToastrUniversaleService } from '../../../../shared/services/toastr-universale.service';
 
 @Component({
   selector: 'app-gestione-utenti',
@@ -101,7 +101,7 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
   constructor(
     private userService: UserService,
     private modaleService: ModaleService,
-    private toastUniversale: ToastUniversaleService,
+    private toastrUniversale: ToastrUniversaleService,
     private cd: ChangeDetectorRef,
   ) {}
 
@@ -146,7 +146,7 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
         this.paginationInfo.totalItems = this.utenti.length;
       },
       error: error => {
-        this.toastUniversale.error('Errore nel caricamento degli utenti'
+        this.toastrUniversale.error('Errore nel caricamento degli utenti'
         );
         console.error('Errore caricamento utenti:', error);
       },
@@ -220,10 +220,10 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
     this.userService.delUtente(id).subscribe({
       next: () => {
         this.loadUtenti();
-        this.toastUniversale.success('Utente eliminato con successo');
+        this.toastrUniversale.success('Utente eliminato con successo');
       },
       error: error => {
-        this.toastUniversale.error("Errore durante l'eliminazione dell'utente");
+        this.toastrUniversale.error("Errore durante l'eliminazione dell'utente");
         console.error('Errore eliminazione utente:', error);
       },
     });
@@ -233,10 +233,10 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
     this.userService.toggleUtenteStatus(id).subscribe({
       next: () => {
         this.loadUtenti();
-        this.toastUniversale.success('Stato dell\'utente aggiornato con successo');
+        this.toastrUniversale.success('Stato dell\'utente aggiornato con successo');
       },
       error: error => {
-        this.toastUniversale.error("Errore durante l'aggiornamento dello stato dell'utente");
+        this.toastrUniversale.error("Errore durante l'aggiornamento dello stato dell'utente");
         console.error('Errore toggle status utente:', error);
       },
     });
@@ -247,7 +247,7 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
     const utenteOriginale = this.utentiOriginali.find(u => u.id === id);
     
     if (!utenteOriginale) {
-      this.toastUniversale.error("Errore: utente non trovato");
+      this.toastrUniversale.error("Errore: utente non trovato");
       return;
     }
     
@@ -261,11 +261,11 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
     this.userService.updUtente(id, dataCompleta).subscribe({
       next: () => {
         this.loadUtenti();
-        this.toastUniversale.success('Utente attivato e pacchetti associati con successo', 'Operazione Completata');
+        this.toastrUniversale.success('Utente attivato e pacchetti associati con successo', 'Operazione Completata');
         this.modaleService.chiudi();
       },
       error: error => {
-        this.toastUniversale.error("Errore durante l'attivazione dell'utente");
+        this.toastrUniversale.error("Errore durante l'attivazione dell'utente");
         console.error('Errore attivazione utente con pacchetti:', error);
       },
     });
@@ -282,11 +282,11 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
     this.userService.updUtente(id, dataCompleta).subscribe({
       next: () => {
         this.loadUtenti();
-        this.toastUniversale.success('Utente modificato con successo');
+        this.toastrUniversale.success('Utente modificato con successo');
         this.modaleService.chiudi();
       },
       error: (error) => {
-        this.toastUniversale.error('Errore durante la modifica dell\'utente');
+        this.toastrUniversale.error('Errore durante la modifica dell\'utente');
         console.error('Errore modifica utente:', error);
       },
     });
@@ -296,11 +296,11 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
     this.userService.insUtente(utenteData).subscribe({
       next: () => {
         this.loadUtenti();
-        this.toastUniversale.success('Utente aggiunto con successo');
+        this.toastrUniversale.success('Utente aggiunto con successo');
         this.modaleService.chiudi();
       },
       error: (error) => {
-        this.toastUniversale.error("Errore durante l'aggiunta dell'utente");
+        this.toastrUniversale.error("Errore durante l'aggiunta dell'utente");
         console.error('Errore aggiunta utente:', error);
       },
     });

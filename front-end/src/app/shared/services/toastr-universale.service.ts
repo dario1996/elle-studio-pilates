@@ -6,7 +6,7 @@ import { ToastConfig } from '../models/ToastConfig';
 @Injectable({
   providedIn: 'root'
 })
-export class ToastUniversaleService {
+export class ToastrUniversaleService {
   private defaultConfig: Partial<ToastConfig>;
 
   private readonly iconMap: Record<ToastType, string> = {

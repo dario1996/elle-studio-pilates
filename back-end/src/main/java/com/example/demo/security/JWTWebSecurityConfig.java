@@ -42,6 +42,11 @@ public class JWTWebSecurityConfig {
                 .headers(headers -> headers.frameOptions().disable()) // Allow H2 console frames
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        // Password reset endpoints (DEVONO essere PRIMA di /api/**)
+                        .requestMatchers(HttpMethod.POST, "/api/auth/password/reset-request").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/auth/password/validate-token").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/password/reset").permitAll()
+                        // Altri endpoint pubblici
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(HttpMethod.POST, authenticationPath).permitAll()
                         .requestMatchers(HttpMethod.GET, refreshPath).permitAll()
@@ -56,6 +61,7 @@ public class JWTWebSecurityConfig {
                         // "/swagger-ui.html",
                         // "/login"
                         // ).permitAll()
+                        // Tutti gli altri /api/** richiedono autenticazione
                         .requestMatchers("/api/**").authenticated()
                         .requestMatchers("/**").permitAll()
                 // .anyRequest().authenticated()

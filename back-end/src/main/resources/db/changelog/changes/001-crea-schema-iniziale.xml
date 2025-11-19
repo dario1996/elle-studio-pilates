@@ -318,4 +318,28 @@
         </createTable>
     </changeSet>
 
+    
+    <changeSet id="001-10" author="vincenzo">
+        <createTable tableName="password_reset_tokens">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="token" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="utente_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data_creazione" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data_scadenza" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="utilizzato" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>

@@ -9,7 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { registerLocaleData } from '@angular/common';
 import localeIt from '@angular/common/locales/it';
 import { ToastrModule } from 'ngx-toastr';
-import { ToastUniversaleService } from './app/shared/services/toast-universale.service';
+import { ToastrUniversaleService } from './app/shared/services/toastr-universale.service';
 
 registerLocaleData(localeIt);
 // ✅ Funzione per il loader delle traduzioni
@@ -51,7 +51,7 @@ bootstrapApplication(AppComponent, {
         easing: 'ease-out'  // ← TIPO DI EASING
       }),
     ),
-    ToastUniversaleService,
+    ToastrUniversaleService,
 
     ...appConfig.providers, // ✅ Usa i provider definiti in app.config.ts
   ],

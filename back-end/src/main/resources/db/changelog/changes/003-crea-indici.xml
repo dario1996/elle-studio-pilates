@@ -120,6 +120,14 @@
             <column name="utente_id"/>
         </createIndex>
 
+    <!-- Indici per la tabella password_reset_tokens -->  
+        <createIndex indexName="idx_password_reset_token" tableName="password_reset_tokens">
+            <column name="token"/>
+        </createIndex>
+        <createIndex indexName="idx_password_reset_utente" tableName="password_reset_tokens">
+            <column name="utente_id"/>
+        </createIndex>
+
     </changeSet>
 
 </databaseChangeLog> 

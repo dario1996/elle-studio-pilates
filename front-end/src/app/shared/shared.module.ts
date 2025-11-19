@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 // Import the DataTable component
-import { ToastUniversaleService } from './services/toast-universale.service';
+import { ToastrUniversaleService } from './services/toastr-universale.service';
 
 @NgModule({
   declarations: [],
@@ -18,7 +18,7 @@ import { ToastUniversaleService } from './services/toast-universale.service';
     FormsModule,
   ],
   providers: [
-    ToastUniversaleService
+    ToastrUniversaleService
   ]
 })
 export class SharedModule {}

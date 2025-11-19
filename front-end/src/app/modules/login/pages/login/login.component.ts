@@ -4,7 +4,7 @@ import {
   Router,
   RouterModule,
 } from '@angular/router';
-import { Component, effect, signal, OnInit } from '@angular/core';
+import { Component, effect, signal, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Observable, map, of } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -14,6 +14,11 @@ import { FormsModule } from '@angular/forms';
 import { SpinnerComponent } from '../../../../core/spinner/spinner.component';
 import { CommonModule } from '@angular/common';
 import { Ruoli } from '../../../../shared/models/Ruoli';
+import { ModaleService } from '../../../../core/services/modal.service';
+import { PasswordResetComponent } from '../../../password-reset/components/password-reset-content/password-reset';
+import { PasswordResetFormComponent } from '../../../password-reset/components/password-reset-form/password-reset-form.component';
+import { PasswordResetService } from '../../../../shared/services/password-reset.service';
+import { ToastrUniversaleService } from '../../../../shared/services/toastr-universale.service';
 
 @Component({
   selector: 'app-login',
@@ -41,10 +46,14 @@ export class LoginComponent implements OnInit {
   notlogged = false;
   expired = false;
   registered = false; // Nuovo flag per registrazione completata
+  
+  // Riferimento al componente password reset form
+  private passwordResetFormComponent: any = null;
 
   nologged$: Observable<string | null> = of('');
   expired$: Observable<string | null> = of('');
   registered$: Observable<string | null> = of(''); // Nuovo observable
+  token$: Observable<string | null> = of(''); // Observable per il token
 
   errMsg = 'Spiacente, username o password errati! Riprova';
   errMsg2 =
@@ -55,6 +64,9 @@ export class LoginComponent implements OnInit {
     private route: Router,
     private activeRoute: ActivatedRoute,
     private Auth: AuthJwtService,
+    private modaleService: ModaleService,
+    private passwordResetService: PasswordResetService,
+    private toastr: ToastrUniversaleService
   ) {}
 
   ngOnInit(): void {
@@ -78,6 +90,16 @@ export class LoginComponent implements OnInit {
     this.registered$.subscribe(param =>
       param ? (this.registered = true) : (this.registered = false),
     );
+
+    // Controlla se c'è un token per il reset password
+    this.token$ = this.activeRoute.queryParamMap.pipe(
+      map((params: ParamMap) => params.get('token')),
+    );
+    this.token$.subscribe(token => {
+      if (token) {
+        this.openPasswordResetFormModal(token);
+      }
+    });
   }
 
   private loggingEffect = effect(() => {
@@ -159,4 +181,168 @@ export class LoginComponent implements OnInit {
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
+
+  openPasswordResetModal() {
+    this.modaleService.apri({
+      titolo: 'Reimposta Password',
+      componente: PasswordResetComponent,
+      dimensione: 'md',
+      showCloseButton: true,
+      showDefaultButtons: false,
+      customButtons: [
+        {
+          text: 'Annulla',
+          cssClass: 'btn-cancel',
+          action: () => {
+            this.modaleService.chiudi();
+          }
+        },
+        {
+          text: 'Invia',
+          cssClass: 'btn-confirm',
+          disabled: false,
+          loading: false,
+          action: () => {
+            this.handlePasswordResetSubmit();
+          }
+        }
+      ]
+    });
+  }
+
+  handlePasswordResetSubmit() {
+    // Ottieni il riferimento al componente PasswordReset
+    const modalConfig = this.modaleService['configSubject'].value;
+    
+    if (modalConfig && modalConfig.customButtons && modalConfig.customButtons.length > 1) {
+      // Disabilita il pulsante e mostra loading
+      modalConfig.customButtons[1].loading = true;
+      modalConfig.customButtons[1].disabled = true;
+    }
+
+    // Recupera l'email dal componente (questo richiederà un'implementazione nel modal)
+    // Per ora simuliamo
+    const email = (document.getElementById('resetEmail') as HTMLInputElement)?.value;
+    
+    if (!email || !email.includes('@')) {
+      alert('Inserisci un\'email valida');
+      if (modalConfig && modalConfig.customButtons && modalConfig.customButtons.length > 1) {
+        modalConfig.customButtons[1].loading = false;
+        modalConfig.customButtons[1].disabled = false;
+      }
+      return;
+    }
+
+    this.passwordResetService.requestPasswordReset(email).subscribe({
+      next: (response) => {
+        console.log('Email inviata con successo:', response);
+        
+        // Mostra messaggio di successo
+        this.modaleService.chiudi();
+        
+        // Mostra toast di successo
+        this.toastr.success(
+          'Controlla la tua casella di posta per il link di reset password',
+          'Email inviata!',
+          { duration: 6000 }
+        );
+      },
+      error: (error) => {
+        console.error('Errore invio email:', error);
+        
+        // Mostra toast di errore
+        this.toastr.error(
+          error.error?.message || 'Errore durante l\'invio. Riprova più tardi.',
+          'Errore invio email'
+        );
+        
+        // Riabilita il pulsante
+        if (modalConfig && modalConfig.customButtons && modalConfig.customButtons.length > 1) {
+          modalConfig.customButtons[1].loading = false;
+          modalConfig.customButtons[1].disabled = false;
+        }
+      }
+    });
+  }
+
+  openPasswordResetFormModal(token: string) {
+    // Prima valida il token
+    this.passwordResetService.validateResetToken(token).subscribe({
+      next: (response) => {
+        if (response.valid) {
+          // Salva il token e lo username temporaneamente
+          sessionStorage.setItem('resetToken', token);
+          sessionStorage.setItem('resetUsername', response.username || '');
+          
+          this.modaleService.apri({
+            titolo: 'Imposta Nuova Password',
+            componente: PasswordResetFormComponent,
+            dimensione: 'md',
+            showCloseButton: true,
+            showDefaultButtons: false,
+            customButtons: [
+              {
+                text: 'Annulla',
+                cssClass: 'btn-cancel',
+                action: () => {
+                  sessionStorage.removeItem('resetToken');
+                  sessionStorage.removeItem('resetUsername');
+                  this.modaleService.chiudi();
+                  // Rimuovi il token dall'URL
+                  this.route.navigate(['/login']);
+                }
+              },
+              {
+                text: 'Conferma',
+                cssClass: 'btn-confirm',
+                disabled: false,
+                loading: false,
+                action: () => {
+                  this.handlePasswordResetFormSubmit();
+                }
+              }
+            ]
+          });
+        } else {
+          this.toastr.warning(
+            'Il link è scaduto o non valido. Richiedi un nuovo reset password.',
+            'Link non valido'
+          );
+          this.route.navigate(['/login']);
+        }
+      },
+      error: (error) => {
+        console.error('Errore validazione token:', error);
+        this.toastr.error(
+          'Il link è scaduto o non valido. Richiedi un nuovo reset password.',
+          'Errore validazione'
+        );
+        this.route.navigate(['/login']);
+      }
+    });
+  }
+
+  handlePasswordResetFormSubmit() {
+    // Recupera il componente dal window object
+    const componentInstance = (window as any).passwordResetFormComponent;
+    
+    if (componentInstance && typeof componentInstance.submitForm === 'function') {
+      // Controlla se il form è valido
+      if (componentInstance.isFormValid()) {
+        const modalConfig = this.modaleService['configSubject'].value;
+        
+        if (modalConfig && modalConfig.customButtons && modalConfig.customButtons.length > 1) {
+          modalConfig.customButtons[1].loading = true;
+          modalConfig.customButtons[1].disabled = true;
+        }
+        
+        // Chiama il metodo di submit del componente
+        componentInstance.submitForm();
+      } else {
+        // Marca tutti i campi come touched per mostrare gli errori
+        componentInstance.passwordForm.markAllAsTouched();
+      }
+    }
+  }
 }
+
