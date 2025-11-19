@@ -6,6 +6,7 @@ public enum TipoLezione {
     SEMI_PRIVATA("Semi-Privata"),
     PILATES_MATWORK("Matwork"),
     YOGA("Yoga"),
+    STUDIO_INTERMEDIO("Studio Intermedio"),
     REFORMER_INTERMEDIO("Reformer Intermedio"),
     STUDIO_POSTURALE("Studio Posturale");
 

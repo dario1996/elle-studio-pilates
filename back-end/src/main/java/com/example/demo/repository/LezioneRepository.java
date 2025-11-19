@@ -52,6 +52,8 @@ public interface LezioneRepository extends JpaRepository<Lezione, Long> {
     // Metodi per il generatore di lezioni
     boolean existsByTemplateIdAndDataInizio(Long templateId, LocalDateTime dataInizio);
 
+    java.util.Optional<Lezione> findByTemplateIdAndDataInizio(Long templateId, LocalDateTime dataInizio);
+
     List<Lezione> findByDataInizioAfterAndAttivaTrue(LocalDateTime dataInizio);
 
     List<Lezione> findByDataInizioBetween(LocalDateTime dataInizio, LocalDateTime dataFine);

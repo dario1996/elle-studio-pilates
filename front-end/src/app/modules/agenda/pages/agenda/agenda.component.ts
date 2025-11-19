@@ -14,6 +14,7 @@ import { LoggedUserComponent } from '../../../../shared/components/logged-user/l
 import { NotificationComponent } from '../../../../core/notification/notification.component';
 import { ModaleService } from '../../../../core/services/modal.service';
 import { LezioniService } from '../../../../core/services/lezioni.service';
+import { CalendarioService, CalendarioTemplate } from '../../../../shared/services/calendario.service';
 import { ToastrService } from 'ngx-toastr';
 import { ILezione, TipoLezione, TIPI_LEZIONE_CONFIG } from '../../../../shared/models/Lezione';
 import { FormLezioneComponent } from '../../components/form-lezione/form-lezione.component';
@@ -39,6 +40,8 @@ export class AgendaComponent implements OnInit {
   
   lezioni: ILezione[] = [];
   events: EventInput[] = [];
+  templateEvents: EventInput[] = [];
+  lezioneEvents: EventInput[] = [];
 
   calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
@@ -86,10 +89,13 @@ export class AgendaComponent implements OnInit {
     private cd: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router
+    ,
+    private calendarioService: CalendarioService
   ) {}
 
   ngOnInit(): void {
     this.loadLezioni();
+    this.loadCalendarioTemplates();
     
     // Ascolta l'evento di refresh per ricaricare le lezioni
     this.modaleService.refreshList$.subscribe(() => {
@@ -129,6 +135,62 @@ export class AgendaComponent implements OnInit {
     });
   }
 
+  private loadCalendarioTemplates(): void {
+    console.log('🔄 Caricamento template calendario settimanale...');
+    this.calendarioService.getCalendarioAttivo().subscribe({
+      next: (templates: CalendarioTemplate[]) => {
+        console.log('✅ Template calendario ricevuti:', templates.length);
+        // Converti templates in eventi ricorrenti FullCalendar
+        const recurringEvents: EventInput[] = templates.map(t => {
+          // mappa giorno string (LUNEDI) in daysOfWeek index 0=Sunday..6=Saturday -> FullCalendar usa 0=Sunday
+          const daysMap: any = {
+            'LUNEDI': 1,
+            'MARTEDI': 2,
+            'MERCOLEDI': 3,
+            'GIOVEDI': 4,
+            'VENERDI': 5,
+            'SABATO': 6,
+            'DOMENICA': 0
+          };
+
+          const day = daysMap[(t.giornoSettimana || '').toUpperCase()] ?? 1;
+
+          // oraInizio/oraFine sono in formato HH:mm:ss, manteniamo HH:mm
+          const startTime = (t.oraInizio || '').toString().slice(0,5);
+          const endTime = (t.oraFine || '').toString().slice(0,5);
+
+          // Se esiste una configurazione per il tipo di lezione, usiamo il suo colore (coerente con la leggenda)
+          const tipoKey = (t.tipoLezione || '') as unknown as TipoLezione;
+          const tipoConfig = TIPI_LEZIONE_CONFIG[tipoKey];
+          const eventColor = tipoConfig?.colore || t.colore || '#27AE60';
+
+          return {
+            id: `tpl-${t.id}`,
+            title: `${t.titolo} (${0}/${t.maxPartecipanti ?? 1})`,
+            daysOfWeek: [day],
+            startTime: startTime,
+            endTime: endTime,
+            backgroundColor: eventColor,
+            borderColor: eventColor,
+            textColor: '#ffffff',
+            extendedProps: {
+              template: t,
+              tipoLezione: t.tipoLezione,
+              posti: `${0}/${t.maxPartecipanti ?? 1}`
+            }
+          } as EventInput;
+        });
+
+  // Salva separatamente gli eventi ricorrenti dei template e poi unisci
+  this.templateEvents = [ ...recurringEvents ];
+  this.updateCalendarEvents();
+      },
+      error: (err) => {
+        console.error('Errore caricamento calendario templates', err);
+      }
+    });
+  }
+
   private loadLezioni(): void {
     console.log('🔄 loadLezioni() chiamato - ricaricando tutte le lezioni dal backend');
     this.lezioniService.getLezioni().subscribe({
@@ -147,7 +209,7 @@ export class AgendaComponent implements OnInit {
   }
 
   private convertLezioniToEvents(): void {
-    this.events = this.lezioni.map(lezione => ({
+    this.lezioneEvents = this.lezioni.map(lezione => ({
       id: lezione.id?.toString(),
       title: this.getEventTitle(lezione),
       start: lezione.dataInizio,
@@ -182,6 +244,8 @@ export class AgendaComponent implements OnInit {
 
   private updateCalendarEvents(): void {
     console.log('📅 updateCalendarEvents() chiamato con', this.events.length, 'eventi');
+    // Merge template events and lezione events so neither overwrites the other
+    this.events = [ ...(this.templateEvents || []), ...(this.lezioneEvents || []) ];
     this.calendarOptions = {
       ...this.calendarOptions,
       events: this.events
