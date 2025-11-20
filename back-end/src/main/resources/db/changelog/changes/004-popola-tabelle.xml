@@ -338,10 +338,12 @@
             <column name="nome" value="Prima Lezione - Analisi Posturale"/>
             <column name="descrizione" value="Anamnesi e approccio al metodo Pilates. Sessione introduttiva di valutazione posturale e conoscenza del metodo."/>
             <column name="categoria" value="PRIMA_LEZIONE"/>
+            <column name="categorie_lezioni" valueComputed="NULL"/>
             <column name="livello" value="PRINCIPIANTE"/>
             <column name="durata_minuti" value="55"/>
             <column name="max_partecipanti" value="1"/>
             <column name="prezzo" value="50.00"/>
+            <column name="numero_lezioni" value="1"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
@@ -351,10 +353,12 @@
             <column name="nome" value="Pilates Privato - 4 Lezioni"/>
             <column name="descrizione" value="Abbonamento mensile 4 lezioni private (55 minuti). Utilizzo di tutti i macchinari studio (Cadillac, Reformer, Tower, Chair, Barrel) e piccoli attrezzi."/>
             <column name="categoria" value="PRIVATA"/>
+            <column name="categorie_lezioni" valueComputed="NULL"/>
             <column name="livello" value="TUTTI"/>
             <column name="durata_minuti" value="55"/>
             <column name="max_partecipanti" value="1"/>
             <column name="prezzo" value="190.00"/>
+            <column name="numero_lezioni" value="4"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
@@ -364,10 +368,12 @@
             <column name="nome" value="Pilates Privato - 8 Lezioni"/>
             <column name="descrizione" value="Abbonamento mensile 8 lezioni private (55 minuti). Utilizzo di tutti i macchinari studio (Cadillac, Reformer, Tower, Chair, Barrel) e piccoli attrezzi."/>
             <column name="categoria" value="PRIVATA"/>
+            <column name="categorie_lezioni" valueComputed="NULL"/>
             <column name="livello" value="TUTTI"/>
             <column name="durata_minuti" value="55"/>
             <column name="max_partecipanti" value="1"/>
             <column name="prezzo" value="340.00"/>
+            <column name="numero_lezioni" value="8"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
@@ -377,10 +383,12 @@
             <column name="nome" value="Semi Privata - 4 Lezioni"/>
             <column name="descrizione" value="Abbonamento mensile 4 lezioni per 2 persone (50 minuti). Utilizzo di Reformer, Tower, Chair e piccoli attrezzi."/>
             <column name="categoria" value="SEMI_PRIVATA"/>
+            <column name="categorie_lezioni" valueComputed="NULL"/>
             <column name="livello" value="TUTTI"/>
             <column name="durata_minuti" value="50"/>
             <column name="max_partecipanti" value="2"/>
             <column name="prezzo" value="160.00"/>
+            <column name="numero_lezioni" value="4"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
@@ -390,10 +398,12 @@
             <column name="nome" value="Semi Privata - 8 Lezioni"/>
             <column name="descrizione" value="Abbonamento mensile 8 lezioni per 2 persone (50 minuti). Utilizzo di Reformer, Tower, Chair e piccoli attrezzi."/>
             <column name="categoria" value="SEMI_PRIVATA"/>
+            <column name="categorie_lezioni" valueComputed="NULL"/>
             <column name="livello" value="TUTTI"/>
             <column name="durata_minuti" value="50"/>
             <column name="max_partecipanti" value="2"/>
             <column name="prezzo" value="290.00"/>
+            <column name="numero_lezioni" value="8"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
@@ -403,10 +413,12 @@
             <column name="nome" value="Semi Privata 3-4 Persone - 4 Lezioni"/>
             <column name="descrizione" value="Abbonamento mensile 4 lezioni per 3-4 persone (50 minuti). Utilizzo di Reformer, Tower, Chair e piccoli attrezzi."/>
             <column name="categoria" value="SEMI_PRIVATA"/>
+            <column name="categorie_lezioni" valueComputed="NULL"/>
             <column name="livello" value="TUTTI"/>
             <column name="durata_minuti" value="50"/>
             <column name="max_partecipanti" value="4"/>
             <column name="prezzo" value="105.00"/>
+            <column name="numero_lezioni" value="4"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
@@ -416,10 +428,12 @@
             <column name="nome" value="Semi Privata 3-4 Persone - 8 Lezioni"/>
             <column name="descrizione" value="Abbonamento mensile 8 lezioni per 3-4 persone (50 minuti). Utilizzo di Reformer, Tower, Chair e piccoli attrezzi."/>
             <column name="categoria" value="SEMI_PRIVATA"/>
+            <column name="categorie_lezioni" valueComputed="NULL"/>
             <column name="livello" value="TUTTI"/>
             <column name="durata_minuti" value="50"/>
             <column name="max_partecipanti" value="4"/>
             <column name="prezzo" value="205.00"/>
+            <column name="numero_lezioni" value="8"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
@@ -429,10 +443,12 @@
             <column name="nome" value="Matwork - 4 Lezioni"/>
             <column name="descrizione" value="Abbonamento mensile 4 lezioni di gruppo Matwork (50 minuti, max 6 partecipanti). Pilates a corpo libero su tappetino con piccoli attrezzi."/>
             <column name="categoria" value="PILATES_MATWORK"/>
+            <column name="categorie_lezioni" valueComputed="NULL"/>
             <column name="livello" value="TUTTI"/>
             <column name="durata_minuti" value="50"/>
             <column name="max_partecipanti" value="6"/>
             <column name="prezzo" value="65.00"/>
+            <column name="numero_lezioni" value="4"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
@@ -442,10 +458,12 @@
             <column name="nome" value="Matwork - 8 Lezioni"/>
             <column name="descrizione" value="Abbonamento mensile 8 lezioni di gruppo Matwork (50 minuti, max 6 partecipanti). Pilates a corpo libero su tappetino con piccoli attrezzi."/>
             <column name="categoria" value="PILATES_MATWORK"/>
+            <column name="categorie_lezioni" valueComputed="NULL"/>
             <column name="livello" value="TUTTI"/>
             <column name="durata_minuti" value="50"/>
             <column name="max_partecipanti" value="6"/>
             <column name="prezzo" value="130.00"/>
+            <column name="numero_lezioni" value="8"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
@@ -455,10 +473,12 @@
             <column name="nome" value="Combo 8 Reformer + 4 Matwork"/>
             <column name="descrizione" value="Abbonamento combo: 8 lezioni Reformer semi private (3/4 persone) + 4 lezioni Matwork. Validità 1 mese."/>
             <column name="categoria" value="COMBO"/>
+            <column name="categorie_lezioni" value='["STUDIO_INTERMEDIO", "PILATES_MATWORK"]'/>
             <column name="livello" value="TUTTI"/>
             <column name="durata_minuti" value="50"/>
             <column name="max_partecipanti" value="6"/>
             <column name="prezzo" value="260.00"/>
+            <column name="numero_lezioni" value="12"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
@@ -468,10 +488,12 @@
             <column name="nome" value="Combo 4 Reformer + 4 Matwork"/>
             <column name="descrizione" value="Abbonamento combo: 4 lezioni Reformer semi private (3/4 persone) + 4 lezioni Matwork gruppo (max 6 partecipanti). Validità 1 mese."/>
             <column name="categoria" value="COMBO"/>
+            <column name="categorie_lezioni" value='["STUDIO_INTERMEDIO", "PILATES_MATWORK"]'/>
             <column name="livello" value="TUTTI"/>
             <column name="durata_minuti" value="50"/>
             <column name="max_partecipanti" value="6"/>
             <column name="prezzo" value="165.00"/>
+            <column name="numero_lezioni" value="8"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
@@ -481,10 +503,12 @@
             <column name="nome" value="Combo 4 Reformer + 4 Yoga"/>
             <column name="descrizione" value="Abbonamento combo: 4 lezioni Reformer semi private (3/4 persone) + 4 lezioni Yoga. Validità 1 mese."/>
             <column name="categoria" value="COMBO"/>
+            <column name="categorie_lezioni" value='["STUDIO_INTERMEDIO", "YOGA"]'/>
             <column name="livello" value="TUTTI"/>
             <column name="durata_minuti" value="50"/>
             <column name="max_partecipanti" value="6"/>
             <column name="prezzo" value="155.00"/>
+            <column name="numero_lezioni" value="8"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
@@ -494,10 +518,12 @@
             <column name="nome" value="Combo 4 Matwork + 4 Yoga"/>
             <column name="descrizione" value="Abbonamento combo: 4 lezioni Matwork gruppo (max 6 partecipanti) + 4 lezioni Yoga. Validità 1 mese."/>
             <column name="categoria" value="COMBO"/>
+            <column name="categorie_lezioni" value='["PILATES_MATWORK", "YOGA"]'/>
             <column name="livello" value="TUTTI"/>
             <column name="durata_minuti" value="50"/>
             <column name="max_partecipanti" value="6"/>
             <column name="prezzo" value="115.00"/>
+            <column name="numero_lezioni" value="8"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
@@ -507,10 +533,12 @@
             <column name="nome" value="Yoga - 4 Lezioni"/>
             <column name="descrizione" value="Abbonamento mensile 4 lezioni di gruppo Yoga (60 minuti). Tutti i programmi Yoga disponibili."/>
             <column name="categoria" value="YOGA"/>
+            <column name="categorie_lezioni" valueComputed="NULL"/>
             <column name="livello" value="TUTTI"/>
             <column name="durata_minuti" value="60"/>
             <column name="max_partecipanti" value="8"/>
             <column name="prezzo" value="55.00"/>
+            <column name="numero_lezioni" value="4"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
@@ -520,10 +548,12 @@
             <column name="nome" value="Yoga - 8 Lezioni"/>
             <column name="descrizione" value="Abbonamento mensile 8 lezioni di gruppo Yoga (60 minuti). Tutti i programmi Yoga disponibili."/>
             <column name="categoria" value="YOGA"/>
+            <column name="categorie_lezioni" valueComputed="NULL"/>
             <column name="livello" value="TUTTI"/>
             <column name="durata_minuti" value="60"/>
             <column name="max_partecipanti" value="8"/>
             <column name="prezzo" value="110.00"/>
+            <column name="numero_lezioni" value="8"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
@@ -656,6 +686,17 @@
             <column name="data_acquisto" value="2025-02-02 10:15:00"/>
             <column name="data_pagamento" value="2025-02-03 11:30:00"/>
             <column name="note" value="Lezione privata singola"/>
+        </insert>
+
+        <!-- Vendita COMBO per m.rossi (utente_id=2) -->
+        <insert tableName="vendite">
+            <column name="utente_id" value="2"/>
+            <column name="pacchetto_id" value="10"/>
+            <column name="importo" value="260.00"/>
+            <column name="stato" value="PAID"/>
+            <column name="data_acquisto" value="2025-11-15 14:30:00"/>
+            <column name="data_pagamento" value="2025-11-15 14:35:00"/>
+            <column name="note" value="Combo 8 Reformer + 4 Matwork - Pagamento immediato"/>
         </insert>
 
     </changeSet>

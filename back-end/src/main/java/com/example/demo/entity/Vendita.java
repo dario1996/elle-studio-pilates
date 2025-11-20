@@ -53,6 +53,12 @@ public class Vendita {
     @Column(name = "note", columnDefinition = "TEXT")
     private String note;
 
+    @Column(name = "lezioni_rimanenti")
+    private Integer lezioniRimanenti;
+
+    @Column(name = "data_prima_prenotazione")
+    private LocalDateTime dataPrimaPrenotazione;
+
     // Enum per lo stato della vendita
     public enum StatoVendita {
         PENDING,
@@ -137,6 +143,22 @@ public class Vendita {
         this.note = note;
     }
 
+    public Integer getLezioniRimanenti() {
+        return lezioniRimanenti;
+    }
+
+    public void setLezioniRimanenti(Integer lezioniRimanenti) {
+        this.lezioniRimanenti = lezioniRimanenti;
+    }
+
+    public LocalDateTime getDataPrimaPrenotazione() {
+        return dataPrimaPrenotazione;
+    }
+
+    public void setDataPrimaPrenotazione(LocalDateTime dataPrimaPrenotazione) {
+        this.dataPrimaPrenotazione = dataPrimaPrenotazione;
+    }
+
     // Metodi di utilità
     public boolean isPagata() {
         return stato == StatoVendita.PAID;
@@ -156,6 +178,10 @@ public class Vendita {
     public void marcaComePagata() {
         this.stato = StatoVendita.PAID;
         this.dataPagamento = LocalDateTime.now();
+        // Inizializza lezioni rimanenti dal pacchetto
+        if (this.pacchetto != null && this.pacchetto.getNumeroLezioni() != null) {
+            this.lezioniRimanenti = this.pacchetto.getNumeroLezioni();
+        }
     }
 
     /**
@@ -168,6 +194,40 @@ public class Vendita {
         }
     }
 
+    /**
+     * Decrementa il numero di lezioni rimanenti
+     */
+    public void decrementaLezioniRimanenti() {
+        if (this.lezioniRimanenti != null && this.lezioniRimanenti > 0) {
+            this.lezioniRimanenti--;
+        }
+    }
+
+    /**
+     * Incrementa il numero di lezioni rimanenti (in caso di cancellazione prenotazione)
+     */
+    public void incrementaLezioniRimanenti() {
+        if (this.lezioniRimanenti != null) {
+            this.lezioniRimanenti++;
+        }
+    }
+
+    /**
+     * Controlla se ci sono ancora lezioni disponibili
+     */
+    public boolean hasLezioniDisponibili() {
+        return this.lezioniRimanenti != null && this.lezioniRimanenti > 0;
+    }
+
+    /**
+     * Imposta la data della prima prenotazione se non già impostata
+     */
+    public void setDataPrimaPrenotazioneSeNecessario() {
+        if (this.dataPrimaPrenotazione == null) {
+            this.dataPrimaPrenotazione = LocalDateTime.now();
+        }
+    }
+
     @Override
     public String toString() {
         return "Vendita{" +
@@ -176,6 +236,7 @@ public class Vendita {
                 ", stato=" + stato +
                 ", dataAcquisto=" + dataAcquisto +
                 ", dataPagamento=" + dataPagamento +
+                ", lezioniRimanenti=" + lezioniRimanenti +
                 '}';
     }
 }

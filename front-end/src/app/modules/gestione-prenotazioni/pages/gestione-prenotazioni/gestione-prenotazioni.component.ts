@@ -1,20 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { LoggedUserComponent } from '../../../../shared/components/logged-user/logged-user.component';
 import { PageTitleComponent } from '../../../../core/page-title/page-title.component';
 import { NotificationComponent } from '../../../../core/notification/notification.component';
 import { AuthJwtService } from '../../../../core/services/authJwt.service';
 import { inject } from '@angular/core';
 import { PrenotazioneService } from '../../../../shared/services/prenotazione.service';
-import { LezioneDisponibile, PrenotazioneLezioneResponse, TipoLezione, Pacchetto } from '../../../../shared/models/prenotazione.model';
+import { 
+  LezioneDisponibile, 
+  PrenotazioneLezioneResponse, 
+  TipoLezione, 
+  Pacchetto,
+  PrenotazioneRicorrenteRequest,
+  PrenotazioneLezione
+} from '../../../../shared/models/prenotazione.model';
 
 @Component({
   selector: 'app-gestione-prenotazioni',
   templateUrl: './gestione-prenotazioni.component.html',
   styleUrls: ['./gestione-prenotazioni.component.css'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, PageTitleComponent, LoggedUserComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, PageTitleComponent, LoggedUserComponent],
 })
 export class GestionePrenotazioniComponent implements OnInit {
   private fb = inject(FormBuilder);
@@ -34,6 +41,13 @@ export class GestionePrenotazioniComponent implements OnInit {
   error: string | null = null;
   successMessage: string | null = null;
   
+  // Accordion per orari raggruppati per giorno
+  templatesPerGiorno: Map<string, TipoLezione[]> = new Map();
+  giorniConOrari: string[] = [];
+  accordionAperto: string | null = null;
+  selectedTemplate: TipoLezione | null = null;
+  categoriaLezioneSelezionata: string | null = null;
+  
   // Toast notification properties
   showToast = false;
   toastMessage = '';
@@ -44,6 +58,11 @@ export class GestionePrenotazioniComponent implements OnInit {
   // Modal gestione prenotazioni
   showGestioneModal = false;
   prenotazioniUtente: PrenotazioneLezioneResponse[] = [];
+
+  // Prenotazioni ricorrenti
+  previewDate: string[] = []; // Array delle date che verranno prenotate
+  showPreviewModal = false;
+  confermaInCorso = false;
 
   constructor() {
     this.prenotazioneForm = this.fb.group({
@@ -86,18 +105,29 @@ export class GestionePrenotazioniComponent implements OnInit {
     const pacchettoId = parseInt(event.target.value);
     this.selectedPacchetto = this.pacchetti.find(p => p.id === pacchettoId) || null;
     
+    console.log('Pacchetto selezionato:', this.selectedPacchetto);
+    console.log('Categoria:', this.selectedPacchetto?.categoria);
+    console.log('CategorieLezioni:', this.selectedPacchetto?.categorieLezioni);
+    console.log('Is COMBO:', this.isPackettoCombo());
+    console.log('Categorie parsed:', this.getCategorieLezioniCombo());
+    
     // Reset selezioni successive
     this.selectedTipoLezione = null;
     this.selectedLezione = null;
+    this.selectedTemplate = null;
+    this.categoriaLezioneSelezionata = null;
     this.lezioniDisponibili = [];
     this.tipiLezione = [];
+    this.templatesPerGiorno = new Map();
+    this.giorniConOrari = [];
+    this.accordionAperto = null;
     this.prenotazioneForm.patchValue({
       tipoLezione: '',
       lezione: ''
     });
     
     if (this.selectedPacchetto) {
-      this.caricaTipiLezionePerPacchetto();
+      this.caricaTemplatesPerCategoria();
     }
   }
 
@@ -116,6 +146,130 @@ export class GestionePrenotazioniComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  caricaTemplatesPerCategoria(): void {
+    if (!this.selectedPacchetto) return;
+    
+    // Se è un COMBO, non caricare nulla finché non viene selezionato il tipo lezione
+    if (this.isPackettoCombo()) {
+      console.log('Pacchetto COMBO selezionato, attendere selezione tipo lezione');
+      return;
+    }
+    
+    this.loading = true;
+    // Usa la categoria del pacchetto per filtrare i template
+    this.prenotazioneService.getTemplatesPerTipoLezione(this.selectedPacchetto.categoria).subscribe({
+      next: (templates) => {
+        console.log('Templates ricevuti per categoria', this.selectedPacchetto!.categoria, templates);
+        this.raggruppaPergiornoSettimana(templates);
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Errore durante il caricamento dei template', error);
+        this.showToastMessage('Errore durante il caricamento degli orari disponibili', 'error');
+        this.loading = false;
+      }
+    });
+  }
+
+  onTipoLezioneComboChange(event: any): void {
+    const categoriaSelezionata = event.target.value;
+    if (!categoriaSelezionata) return;
+    
+    this.loading = true;
+    this.templatesPerGiorno = new Map();
+    this.giorniConOrari = [];
+    this.accordionAperto = null;
+    this.selectedTemplate = null;
+    
+    this.prenotazioneService.getTemplatesPerTipoLezione(categoriaSelezionata).subscribe({
+      next: (templates) => {
+        console.log('Templates ricevuti per tipo lezione COMBO', categoriaSelezionata, templates);
+        this.raggruppaPergiornoSettimana(templates);
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Errore durante il caricamento dei template', error);
+        this.showToastMessage('Errore durante il caricamento degli orari disponibili', 'error');
+        this.loading = false;
+      }
+    });
+  }
+
+  raggruppaPergiornoSettimana(templates: TipoLezione[]): void {
+    this.templatesPerGiorno = new Map();
+    this.giorniConOrari = [];
+    
+    const giorniOrdinati = ['LUNEDI', 'MARTEDI', 'MERCOLEDI', 'GIOVEDI', 'VENERDI', 'SABATO', 'DOMENICA'];
+    
+    templates.forEach(template => {
+      const giorno = template.giornoSettimana;
+      if (!this.templatesPerGiorno.has(giorno)) {
+        this.templatesPerGiorno.set(giorno, []);
+      }
+      this.templatesPerGiorno.get(giorno)!.push(template);
+    });
+    
+    // Ordina i giorni
+    this.giorniConOrari = giorniOrdinati.filter(g => this.templatesPerGiorno.has(g));
+    
+    console.log('Templates raggruppati per giorno:', this.templatesPerGiorno);
+    console.log('Giorni con orari:', this.giorniConOrari);
+  }
+
+  toggleAccordion(giorno: string): void {
+    this.accordionAperto = this.accordionAperto === giorno ? null : giorno;
+  }
+
+  isAccordionAperto(giorno: string): boolean {
+    return this.accordionAperto === giorno;
+  }
+
+  getTemplatesPerGiorno(giorno: string): TipoLezione[] {
+    return this.templatesPerGiorno.get(giorno) || [];
+  }
+
+  selezionaTemplate(template: TipoLezione): void {
+    this.selectedTemplate = template;
+    console.log('Template selezionato:', template);
+    
+    // Genera preview delle date
+    if (this.selectedPacchetto?.lezioniRimanenti) {
+      this.generaPreviewDate(template.giornoSettimana, this.selectedPacchetto.lezioniRimanenti);
+    }
+  }
+
+  isPackettoCombo(): boolean {
+    return this.selectedPacchetto?.categoria === 'COMBO';
+  }
+
+  getCategorieLezioniCombo(): string[] {
+    if (!this.selectedPacchetto?.categorieLezioni) return [];
+    try {
+      // Se categorieLezioni è già un array, ritornalo
+      if (Array.isArray(this.selectedPacchetto.categorieLezioni)) {
+        return this.selectedPacchetto.categorieLezioni;
+      }
+      // Altrimenti prova a parsarlo come JSON string
+      return JSON.parse(this.selectedPacchetto.categorieLezioni as any);
+    } catch {
+      return [];
+    }
+  }
+
+  formatTipoLezione(tipo: string): string {
+    const mappings: {[key: string]: string} = {
+      'PRIVATA': 'Privata',
+      'PRIMA_LEZIONE': 'Prima Lezione',
+      'SEMI_PRIVATA': 'Semi Privata',
+      'PILATES_MATWORK': 'Pilates Matwork',
+      'YOGA': 'Yoga',
+      'STUDIO_INTERMEDIO': 'Studio Intermedio',
+      'REFORMER_INTERMEDIO': 'Reformer Intermedio',
+      'STUDIO_POSTURALE': 'Studio Posturale'
+    };
+    return mappings[tipo] || tipo;
   }
 
   onTipoLezioneChange(event: any): void {
@@ -300,5 +454,123 @@ export class GestionePrenotazioniComponent implements OnInit {
         }
       });
     }
+  }
+
+  // ============================================
+  // METODI PER PRENOTAZIONI RICORRENTI
+  // ============================================
+
+  /**
+   * Genera array delle date per le prossime N settimane
+   * Replica la logica del backend: trova il prossimo giorno richiesto (es. lunedì)
+   * senza aggiungere 7 giorni fissi
+   */
+  generaPreviewDate(giornoSettimana: string, numeroLezioni: number): void {
+    const giorniMap: {[key: string]: number} = {
+      'LUNEDI': 1, 'MARTEDI': 2, 'MERCOLEDI': 3, 'GIOVEDI': 4,
+      'VENERDI': 5, 'SABATO': 6, 'DOMENICA': 0
+    };
+    
+    const targetDay = giorniMap[giornoSettimana.toUpperCase()];
+    const oggi = new Date();
+    
+    // Trova la prima occorrenza del giorno richiesto partendo da oggi
+    let primaData = new Date(oggi);
+    
+    // Cerca il prossimo giorno target
+    while (primaData.getDay() !== targetDay) {
+      primaData.setDate(primaData.getDate() + 1);
+    }
+    
+    // Se la prima occorrenza è oggi, passa alla settimana successiva
+    // (non si può prenotare lo stesso giorno)
+    if (primaData.toDateString() === oggi.toDateString()) {
+      primaData.setDate(primaData.getDate() + 7);
+    }
+    
+    // Genera N date settimanali
+    this.previewDate = [];
+    for (let i = 0; i < numeroLezioni; i++) {
+      const data = new Date(primaData);
+      data.setDate(data.getDate() + (i * 7));
+      this.previewDate.push(data.toISOString().split('T')[0]);
+    }
+    
+    console.log('Preview date generate:', this.previewDate);
+  }
+
+  /**
+   * Mostra modal di conferma con anteprima
+   */
+  mostraPreviewPrenotazione(): void {
+    if (!this.selectedTemplate || !this.selectedPacchetto) {
+      this.showToastMessage('Seleziona un orario per continuare', 'error');
+      return;
+    }
+    
+    if (!this.selectedPacchetto.lezioniRimanenti || this.selectedPacchetto.lezioniRimanenti === 0) {
+      this.showToastMessage('Non hai lezioni disponibili in questo pacchetto', 'error');
+      return;
+    }
+    
+    this.showPreviewModal = true;
+  }
+
+  /**
+   * Chiude modal preview
+   */
+  chiudiPreviewModal(): void {
+    this.showPreviewModal = false;
+  }
+
+  /**
+   * Conferma e invia prenotazione ricorrente
+   */
+  confermaPrenotazioneRicorrente(): void {
+    if (!this.selectedPacchetto || !this.selectedTemplate) return;
+    
+    this.confermaInCorso = true;
+    
+    const request: PrenotazioneRicorrenteRequest = {
+      venditaId: this.selectedPacchetto.id,
+      templateId: this.selectedTemplate.id,
+      tipoLezione: this.categoriaLezioneSelezionata || undefined,
+      numeroLezioni: this.selectedPacchetto.lezioniRimanenti
+    };
+    
+    this.prenotazioneService.prenotaRicorrente(request).subscribe({
+      next: (response) => {
+        this.confermaInCorso = false;
+        this.showPreviewModal = false;
+        this.showToastMessage(
+          `${response.numeroPrenotazioni} lezioni prenotate con successo!`,
+          'success'
+        );
+        
+        // Reset selezioni e ricarica pacchetti
+        this.selectedTemplate = null;
+        this.selectedPacchetto = null;
+        this.previewDate = [];
+        this.caricaPacchetti();
+      },
+      error: (error) => {
+        this.confermaInCorso = false;
+        const errorMsg = error.error?.message || 'Errore durante la prenotazione';
+        this.showToastMessage(errorMsg, 'error');
+      }
+    });
+  }
+
+  /**
+   * Formatta data in italiano
+   */
+  formatDataItaliana(dataString: string): string {
+    const data = new Date(dataString + 'T00:00:00');
+    return data.toLocaleDateString('it-IT', {
+      weekday: 'long',
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric'
+    });
   }
 }

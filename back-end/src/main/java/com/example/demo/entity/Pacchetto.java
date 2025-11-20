@@ -23,6 +23,12 @@ public class Pacchetto {
     @Column(length = 100)
     private String categoria; // PILATES, YOGA, MATWORK, etc.
 
+    @Column(name = "categorie_lezioni", columnDefinition = "JSON")
+    private String categorieLezioni; // Array JSON per pacchetti COMBO
+
+    @Column(name = "numero_lezioni")
+    private Integer numeroLezioni; // Numero totale di lezioni nel pacchetto
+
     @Column(length = 50)
     private String livello; // PRINCIPIANTE, INTERMEDIO, AVANZATO
 
@@ -76,6 +82,22 @@ public class Pacchetto {
 
     public void setCategoria(String categoria) {
         this.categoria = categoria;
+    }
+
+    public String getCategorieLezioni() {
+        return categorieLezioni;
+    }
+
+    public void setCategorieLezioni(String categorieLezioni) {
+        this.categorieLezioni = categorieLezioni;
+    }
+
+    public Integer getNumeroLezioni() {
+        return numeroLezioni;
+    }
+
+    public void setNumeroLezioni(Integer numeroLezioni) {
+        this.numeroLezioni = numeroLezioni;
     }
 
     public String getDescrizione() {

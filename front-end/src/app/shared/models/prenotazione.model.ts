@@ -53,9 +53,70 @@ export interface Pacchetto {
   nome: string;
   descrizione?: string;
   categoria: string;
+  categorieLezioni?: string[] | string; // Array JSON per pacchetti COMBO
   livello?: string;
   durataMinuti?: number;
   maxPartecipanti?: number;
   prezzo: number;
   attivo: boolean;
+  numeroLezioni?: number; // Numero totale di lezioni nel pacchetto
+  lezioniRimanenti?: number; // Lezioni ancora disponibili
+}
+
+// Request per creare prenotazioni ricorrenti
+export interface PrenotazioneRicorrenteRequest {
+  venditaId: number;
+  templateId: number;
+  tipoLezione?: string; // Per pacchetti COMBO
+  numeroLezioni?: number; // Opzionale, default = tutte disponibili
+}
+
+// Response dopo creazione prenotazioni ricorrenti
+export interface PrenotazioneRicorrenteResponse {
+  messaggio: string;
+  numeroPrenotazioni: number;
+  prenotazioni: PrenotazioneLezione[];
+}
+
+// Singola prenotazione di lezione
+export interface PrenotazioneLezione {
+  id: number;
+  venditaId: number;
+  utenteId: number;
+  templateId: number;
+  dataLezione: string; // LocalDate format YYYY-MM-DD
+  oraInizio: string; // HH:mm
+  oraFine: string; // HH:mm
+  tipoLezione: string;
+  stato: 'CONFERMATA' | 'CANCELLATA' | 'IN_CODA' | 'SPOSTAMENTO_RICHIESTO';
+  numeroSpostamenti: number;
+  gruppoId: string;
+  note?: string;
+  puoEssereSpostata: boolean; // Calcolato dal backend (>24h)
+  titolo: string; // Titolo template
+  utenteNome: string; // Nome completo utente
+  istruttore: string; // Nome istruttore
+}
+
+// Richiesta di spostamento
+export interface RichiestaSpostamentoRequest {
+  prenotazioneId: number;
+  tipoRichiesta: 'VA_IN_CODA' | 'CAMBIO_GRUPPO';
+  dataRichiesta?: string; // Solo per CAMBIO_GRUPPO
+  motivazione: string;
+}
+
+// Risposta richiesta spostamento
+export interface RichiestaSpostamento {
+  id: number;
+  prenotazioneId: number;
+  utenteId: number;
+  tipoRichiesta: 'VA_IN_CODA' | 'CAMBIO_GRUPPO';
+  stato: 'PENDING' | 'APPROVED' | 'REJECTED';
+  dataOriginale: string;
+  dataRichiesta?: string;
+  motivazione: string;
+  rispostaAdmin?: string;
+  dataCreazione: string;
+  dataRisposta?: string;
 }
