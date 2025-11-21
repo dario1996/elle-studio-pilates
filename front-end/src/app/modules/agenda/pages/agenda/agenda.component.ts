@@ -75,6 +75,7 @@ export class AgendaComponent implements OnInit {
     select: this.handleDateSelect.bind(this),
     eventClick: this.handleEventClick.bind(this),
     eventContent: this.renderEventContent.bind(this),
+    eventDidMount: this.styleEventElement.bind(this),
     events: []
   };
 
@@ -217,8 +218,8 @@ export class AgendaComponent implements OnInit {
   }
 
   private loadPrenotazioni(): void {
-    console.log('🔄 loadPrenotazioni() chiamato - caricando prenotazioni dal backend');
-    this.prenotazioneService.getMiePrenotazioniRicorrenti().subscribe({
+    console.log('🔄 loadPrenotazioni() chiamato - caricando TUTTE le prenotazioni dal backend');
+    this.prenotazioneService.getTuttePrenotazioni().subscribe({
       next: (data) => {
         console.log('✅ Prenotazioni caricate dal backend:', data.length, 'prenotazioni');
         this.prenotazioni = data;
@@ -353,6 +354,12 @@ export class AgendaComponent implements OnInit {
       return;
     }
     
+    const template = clickInfo.event.extendedProps['template'];
+    if (template) {
+      this.apriModalDettaglioTemplate(clickInfo.event);
+      return;
+    }
+    
     const lezione = clickInfo.event.extendedProps['lezione'] as ILezione;
     if (lezione) {
       this.apriModalDettaglio(lezione);
@@ -371,6 +378,11 @@ export class AgendaComponent implements OnInit {
     const templateId = eventInfo.event.extendedProps?.templateId;
     const maxPartecipanti = eventInfo.event.extendedProps?.maxPartecipanti || 1;
     const eventDate = eventInfo.event.start;
+    
+    if (!eventDate) {
+      return { html: `<div class="fc-event-title">${template.titolo || ''}</div>` };
+    }
+    
     const dataStr = eventDate.toISOString().split('T')[0]; // YYYY-MM-DD
     
     // Conta prenotazioni confermate per questa data e template
@@ -381,9 +393,45 @@ export class AgendaComponent implements OnInit {
     ).length;
     
     const baseTitle = template.titolo || eventInfo.event.title;
+    const isFull = prenotazioniCount >= maxPartecipanti;
+    
+    const checkIcon = isFull ? '<i class="fas fa-check-circle" style="color: #d1fae5; font-size: 18px; margin-left: 8px;"></i>' : '';
     const titleWithCount = `${baseTitle} (${prenotazioniCount}/${maxPartecipanti})`;
     
-    return { html: `<div class="fc-event-title">${titleWithCount}</div>` };
+    return { 
+      html: `<div class="fc-event-title" style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 2px 4px;">
+               <span>${titleWithCount}</span>${checkIcon}
+             </div>` 
+    };
+  }
+
+  // Applica stili personalizzati all'elemento dell'evento
+  styleEventElement(info: any) {
+    const template = info.event.extendedProps?.template;
+    if (!template) return;
+
+    const templateId = info.event.extendedProps?.templateId;
+    const maxPartecipanti = info.event.extendedProps?.maxPartecipanti || 1;
+    const eventDate = info.event.start;
+    
+    if (!eventDate) return;
+    
+    const dataStr = eventDate.toISOString().split('T')[0];
+    
+    const prenotazioniCount = this.prenotazioni.filter(p => 
+      p.templateId === templateId && 
+      p.dataLezione === dataStr &&
+      p.stato === 'CONFERMATA'
+    ).length;
+    
+    const isFull = prenotazioniCount >= maxPartecipanti;
+    
+    if (isFull) {
+      // Applica stile verde a tutto l'elemento
+      info.el.style.backgroundColor = '#059669';
+      info.el.style.borderColor = '#059669';
+      info.el.style.opacity = '0.9';
+    }
   }
 
   // Apertura modal per creazione nuova lezione
@@ -462,6 +510,56 @@ export class AgendaComponent implements OnInit {
 
       this.modaleService.apri({
         titolo: 'Dettagli Prenotazione',
+        componente: DettaglioLezioneComponent,
+        dati: dettagliObj,
+        customButtons: [
+          {
+            text: 'Chiudi',
+            cssClass: 'btn-secondary',
+            action: () => this.modaleService.chiudi()
+          }
+        ],
+        showDefaultButtons: false
+      });
+    });
+  }
+
+  // Apertura modal per dettaglio slot (template)
+  apriModalDettaglioTemplate(event: any): void {
+    import('../../components/dettaglio-lezione/dettaglio-lezione.component').then(({ DettaglioLezioneComponent }) => {
+      const template = event.extendedProps?.template;
+      const templateId = event.extendedProps?.templateId;
+      const maxPartecipanti = event.extendedProps?.maxPartecipanti || 1;
+      const eventDate = event.start;
+      
+      if (!eventDate || !template) return;
+      
+      const dataStr = eventDate.toISOString().split('T')[0];
+      
+      // Trova le prenotazioni per questo slot
+      const prenotazioniSlot = this.prenotazioni.filter(p => 
+        p.templateId === templateId && 
+        p.dataLezione === dataStr &&
+        p.stato === 'CONFERMATA'
+      );
+      
+      const partecipanti = prenotazioniSlot.map(p => ({ nome: p.utenteNome }));
+      
+      const dettagliObj = {
+        id: templateId,
+        titolo: template.titolo,
+        dataInizio: `${dataStr}T${template.oraInizio}`,
+        dataFine: `${dataStr}T${template.oraFine}`,
+        istruttore: template.istruttore,
+        tipo: template.tipoLezione,
+        maxPartecipanti: maxPartecipanti,
+        partecipanti: partecipanti,
+        attiva: true,
+        note: template.note || `Slot calendario settimanale - ${prenotazioniSlot.length}/${maxPartecipanti} prenotazioni`
+      };
+
+      this.modaleService.apri({
+        titolo: 'Dettagli Slot',
         componente: DettaglioLezioneComponent,
         dati: dettagliObj,
         customButtons: [

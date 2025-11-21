@@ -196,7 +196,7 @@ public class PrenotazioneRicorrenteService {
     }
 
     /**
-     * Ottiene tutte le prenotazioni future di un utente
+     * Ottiene le prenotazioni future dell'utente
      */
     public List<PrenotazioneLezione> getPrenotazioniFuture(String username) {
         Utenti utente = utenteRepository.findByUsername(username);
@@ -206,6 +206,14 @@ public class PrenotazioneRicorrenteService {
 
         return prenotazioneRepository.findPrenotazioniFuture(
                 utente, LocalDate.now(), PrenotazioneLezione.StatoPrenotazione.CONFERMATA);
+    }
+
+    /**
+     * Ottiene TUTTE le prenotazioni future (per admin)
+     */
+    public List<PrenotazioneLezione> getTuttePrenotazioniFuture() {
+        return prenotazioneRepository.findByDataLezioneAfterAndStato(
+                LocalDate.now(), PrenotazioneLezione.StatoPrenotazione.CONFERMATA);
     }
 
     /**

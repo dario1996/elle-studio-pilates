@@ -29,6 +29,11 @@ public interface PrenotazioneLezioneRepository extends JpaRepository<Prenotazion
                                                       @Param("stato") StatoPrenotazione stato);
 
     /**
+     * Trova TUTTE le prenotazioni future (per admin)
+     */
+    List<PrenotazioneLezione> findByDataLezioneAfterAndStato(LocalDate dataOggi, StatoPrenotazione stato);
+
+    /**
      * Trova tutte le prenotazioni di una vendita
      */
     List<PrenotazioneLezione> findByVenditaOrderByDataLezioneAsc(Vendita vendita);

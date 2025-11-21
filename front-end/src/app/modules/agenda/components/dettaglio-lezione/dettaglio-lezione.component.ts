@@ -66,8 +66,17 @@ export class DettaglioLezioneComponent implements OnInit, OnDestroy {
   private loadPartecipantiDettagli() {
     if (this.partecipantiLoaded) return;
     this.partecipantiLoaded = true;
+    
+    // Se partecipanti è già un array di oggetti con nome, usalo direttamente
     if (this.lezione?.partecipanti && this.lezione.partecipanti.length > 0) {
-      this.userService.getUtentiByUsernames(this.lezione.partecipanti).subscribe({
+      // Controlla se il primo elemento è un oggetto con proprietà 'nome'
+      if (typeof this.lezione.partecipanti[0] === 'object' && 'nome' in this.lezione.partecipanti[0]) {
+        this.partecipantiDettagli = this.lezione.partecipanti as any[];
+        return;
+      }
+      
+      // Altrimenti sono username, caricali dal servizio
+      this.userService.getUtentiByUsernames(this.lezione.partecipanti as string[]).subscribe({
         next: (utenti) => {
           this.partecipantiDettagli = utenti;
         },

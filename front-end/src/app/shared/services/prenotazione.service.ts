@@ -134,6 +134,13 @@ export class PrenotazioneService {
   }
 
   /**
+   * Recupera TUTTE le prenotazioni future (per admin)
+   */
+  getTuttePrenotazioni(): Observable<PrenotazioneLezione[]> {
+    return this.http.get<PrenotazioneLezione[]>(`${this.baseUrl}/tutte-prenotazioni`);
+  }
+
+  /**
    * Cancella una singola prenotazione ricorrente
    */
   cancellaPrenotazioneRicorrente(prenotazioneId: number): Observable<{messaggio: string}> {

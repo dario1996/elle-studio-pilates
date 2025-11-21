@@ -57,7 +57,10 @@ export class GestionePrenotazioniComponent implements OnInit {
 
   // Modal gestione prenotazioni
   showGestioneModal = false;
-  prenotazioniUtente: PrenotazioneLezioneResponse[] = [];
+  prenotazioniUtente: PrenotazioneLezione[] = [];
+  prenotazioniFiltrate: PrenotazioneLezione[] = [];
+  filtroStato: string = 'TUTTE';
+  filtroOrdinamento: string = 'DATA_ASC';
 
   // Prenotazioni ricorrenti
   previewDate: string[] = []; // Array delle date che verranno prenotate
@@ -399,9 +402,10 @@ export class GestionePrenotazioniComponent implements OnInit {
 
   // Metodi per gestione prenotazioni esistenti
   caricaPrenotazioniUtente(): void {
-    this.prenotazioneService.getMiePrenotazioniFuture().subscribe({
+    this.prenotazioneService.getMiePrenotazioniRicorrenti().subscribe({
       next: (prenotazioni) => {
         this.prenotazioniUtente = prenotazioni;
+        this.applicaFiltri();
       },
       error: (error) => {
         console.error('Errore durante il caricamento delle prenotazioni', error);
@@ -428,7 +432,89 @@ export class GestionePrenotazioniComponent implements OnInit {
     });
   }
 
-  modificaPrenotazione(prenotazione: PrenotazioneLezioneResponse, index: number): void {
+  applicaFiltri(): void {
+    let risultato = [...this.prenotazioniUtente];
+
+    // Filtro per stato
+    if (this.filtroStato !== 'TUTTE') {
+      risultato = risultato.filter(p => p.stato === this.filtroStato);
+    }
+
+    // Ordinamento
+    if (this.filtroOrdinamento === 'DATA_ASC') {
+      risultato.sort((a, b) => new Date(a.dataLezione).getTime() - new Date(b.dataLezione).getTime());
+    } else if (this.filtroOrdinamento === 'DATA_DESC') {
+      risultato.sort((a, b) => new Date(b.dataLezione).getTime() - new Date(a.dataLezione).getTime());
+    }
+
+    this.prenotazioniFiltrate = risultato;
+  }
+
+  onFiltroStatoChange(event: Event): void {
+    const select = event.target as HTMLSelectElement;
+    this.filtroStato = select.value;
+    this.applicaFiltri();
+  }
+
+  onFiltroOrdinamentoChange(event: Event): void {
+    const select = event.target as HTMLSelectElement;
+    this.filtroOrdinamento = select.value;
+    this.applicaFiltri();
+  }
+
+  formatDatePrenotazione(dataStr: string): string {
+    const data = new Date(dataStr);
+    const dd = data.getDate().toString().padStart(2, '0');
+    const mm = (data.getMonth() + 1).toString().padStart(2, '0');
+    const yyyy = data.getFullYear();
+    return `${dd}/${mm}/${yyyy}`;
+  }
+
+  formatTime(timeStr: string): string {
+    if (!timeStr) return '';
+    const [hours, minutes] = timeStr.split(':');
+    return `${hours}:${minutes}`;
+  }
+
+  getStatoBadgeClass(stato: string): string {
+    switch (stato) {
+      case 'CONFERMATA':
+        return 'badge-confermata';
+      case 'CANCELLATA':
+        return 'badge-cancellata';
+      case 'IN_ATTESA':
+        return 'badge-attesa';
+      default:
+        return 'badge-default';
+    }
+  }
+
+  getStatoLabel(stato: string): string {
+    switch (stato) {
+      case 'CONFERMATA':
+        return 'Confermata';
+      case 'CANCELLATA':
+        return 'Cancellata';
+      case 'IN_ATTESA':
+        return 'In Attesa';
+      default:
+        return stato;
+    }
+  }
+
+  puoCancellare(prenotazione: PrenotazioneLezione): boolean {
+    if (prenotazione.stato !== 'CONFERMATA') {
+      return false;
+    }
+
+    const dataLezione = new Date(prenotazione.dataLezione);
+    const oggi = new Date();
+    oggi.setHours(0, 0, 0, 0);
+    
+    return dataLezione >= oggi;
+  }
+
+  modificaPrenotazione(prenotazione: PrenotazioneLezione, index: number): void {
     // Implementa la logica di modifica
     this.showToastMessage(`Modifica prenotazione per ${prenotazione.titolo}`, 'info');
     
@@ -436,20 +522,18 @@ export class GestionePrenotazioniComponent implements OnInit {
     // Per ora mostriamo solo una notifica
   }
 
-  cancellaPrenotazione(prenotazione: PrenotazioneLezioneResponse, index: number): void {
-    const conferma = confirm(`Sei sicuro di voler cancellare la prenotazione per ${prenotazione.titolo} del ${this.formatDate(prenotazione.dataInizio)}?`);
+  cancellaPrenotazione(prenotazione: PrenotazioneLezione): void {
+    const conferma = confirm(`Sei sicuro di voler cancellare la prenotazione per "${prenotazione.titolo}" del ${this.formatDatePrenotazione(prenotazione.dataLezione)}?`);
 
     if (conferma) {
-      this.prenotazioneService.cancellaPrenotazione(prenotazione.id).subscribe({
-        next: () => {
-          this.prenotazioniUtente.splice(index, 1);
+      this.prenotazioneService.cancellaPrenotazioneRicorrente(prenotazione.id).subscribe({
+        next: (response) => {
           this.showToastMessage('Prenotazione cancellata con successo', 'success');
-          if (this.selectedTipoLezione) {
-            this.caricaLezioniPerTipo(); // Ricarica le lezioni disponibili
-          }
+          this.caricaPrenotazioniUtente();
+          this.caricaPacchetti();
         },
         error: (error) => {
-          const errorMsg = error.error?.message || 'Errore durante la cancellazione';
+          const errorMsg = error.error?.messaggio || 'Errore durante la cancellazione';
           this.showToastMessage(errorMsg, 'error');
         }
       });

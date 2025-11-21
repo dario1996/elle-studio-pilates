@@ -234,40 +234,63 @@
       </button>
     </div>
     
+    <!-- Filtri -->
+    <div class="modal-filters">
+      <div class="filter-group">
+        <label for="filtroStato">Stato</label>
+        <select id="filtroStato" class="form-select-sm" (change)="onFiltroStatoChange($event)" [value]="filtroStato">
+          <option value="TUTTE">Tutte</option>
+          <option value="CONFERMATA">Confermate</option>
+          <option value="IN_ATTESA">In Attesa</option>
+          <option value="CANCELLATA">Cancellate</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="filtroOrdinamento">Ordinamento</label>
+        <select id="filtroOrdinamento" class="form-select-sm" (change)="onFiltroOrdinamentoChange($event)" [value]="filtroOrdinamento">
+          <option value="DATA_ASC">Data (crescente)</option>
+          <option value="DATA_DESC">Data (decrescente)</option>
+        </select>
+      </div>
+    </div>
+    
     <div class="modal-body">
       <!-- Lista prenotazioni -->
-      <div class="prenotazioni-list" *ngIf="prenotazioniUtente.length > 0; else nessunaPrenotazione">
-        <div class="prenotazione-item" *ngFor="let prenotazione of prenotazioniUtente; let i = index">
-          <div class="prenotazione-info">
-            <div class="prenotazione-pacchetto">
-              <span class="pacchetto-nome">{{ prenotazione.titolo }}</span>
-              <span class="pacchetto-categoria">{{ prenotazione.tipoLezione }}</span>
-            </div>
-            <div class="prenotazione-dettagli">
-              <span class="prenotazione-data">
-                <i class="fas fa-calendar"></i>
-                {{ formatDate(prenotazione.dataInizio) }}
+      <div class="prenotazioni-list" *ngIf="prenotazioniFiltrate.length > 0; else nessunaPrenotazione">
+        <div class="prenotazione-item" *ngFor="let prenotazione of prenotazioniFiltrate">
+          <div class="prenotazione-header-row">
+            <div class="prenotazione-title-section">
+              <h5>{{ prenotazione.titolo }}</h5>
+              <span class="stato-badge" [ngClass]="getStatoBadgeClass(prenotazione.stato)">
+                {{ getStatoLabel(prenotazione.stato) }}
               </span>
-              <span class="prenotazione-orario">
-                <i class="fas fa-clock"></i>
-                {{ prenotazione.dataInizio | date:'HH:mm' }} - {{ prenotazione.dataFine | date:'HH:mm' }}
-              </span>
-              <span class="prenotazione-istruttore">
-                <i class="fas fa-user"></i>
-                {{ prenotazione.istruttore }}
-              </span>
-            </div>
-            <div class="prenotazione-note" *ngIf="prenotazione.note">
-              <small>{{ prenotazione.note }}</small>
             </div>
           </div>
           
-          <div class="prenotazione-actions">
-            <button type="button" class="btn-action btn-edit" (click)="modificaPrenotazione(prenotazione, i)">
-              <i class="fas fa-edit"></i>
-            </button>
-            <button type="button" class="btn-action btn-delete" (click)="cancellaPrenotazione(prenotazione, i)">
-              <i class="fas fa-trash"></i>
+          <div class="prenotazione-info">
+            <div class="info-row">
+              <div class="info-item">
+                <i class="fas fa-calendar-day"></i>
+                <div class="info-content">
+                  <span class="info-label">Data</span>
+                  <span class="info-value">{{ formatDatePrenotazione(prenotazione.dataLezione) }}</span>
+                </div>
+              </div>
+
+              <div class="info-item">
+                <i class="fas fa-clock"></i>
+                <div class="info-content">
+                  <span class="info-label">Orario</span>
+                  <span class="info-value">{{ formatTime(prenotazione.oraInizio) }} - {{ formatTime(prenotazione.oraFine) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="prenotazione-actions" *ngIf="puoCancellare(prenotazione)">
+            <button type="button" class="btn-action btn-delete" (click)="cancellaPrenotazione(prenotazione)" title="Cancella prenotazione">
+              <i class="fas fa-times me-1"></i>
+              Cancella
             </button>
           </div>
         </div>
@@ -278,7 +301,8 @@
         <div class="empty-state">
           <i class="fas fa-calendar-times"></i>
           <h4>Nessuna prenotazione trovata</h4>
-          <p>Non hai ancora effettuato prenotazioni.</p>
+          <p *ngIf="filtroStato !== 'TUTTE'">Prova a cambiare i filtri di ricerca.</p>
+          <p *ngIf="filtroStato === 'TUTTE'">Non hai ancora effettuato prenotazioni.</p>
         </div>
       </ng-template>
     </div>

@@ -904,6 +904,50 @@ textarea.form-control {
   color: #374151;
 }
 
+/* Filtri nel modal */
+.modal-filters {
+  display: flex;
+  gap: 16px;
+  padding: 16px 24px;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.filter-group label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-select-sm {
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.form-select-sm:focus {
+  border-color: #c99e67;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(201, 158, 103, 0.1);
+}
+
+.form-select-sm:hover {
+  border-color: #c99e67;
+}
+
 .modal-close {
   background: none;
   border: none;
@@ -947,103 +991,162 @@ textarea.form-control {
 
 .prenotazione-item {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid #c99e67;
+  border-top: 4px solid #c99e67;
+  border-radius: 12px;
   background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   transition: all 0.2s ease;
 }
 
 .prenotazione-item:hover {
-  border-color: #c99e67;
-  box-shadow: 0 2px 8px rgba(201, 158, 103, 0.1);
+  box-shadow: 0 4px 8px rgba(201, 158, 103, 0.15);
 }
 
-.prenotazione-info {
-  flex: 1;
+.prenotazione-header-row {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #f3e8d7;
 }
 
-.prenotazione-pacchetto {
+.prenotazione-title-section {
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
-.pacchetto-nome {
+.prenotazione-title-section h5 {
+  margin: 0;
+  font-size: 16px;
   font-weight: 600;
-  font-size: 14px;
-  color: #374151;
+  color: #1e293b;
 }
 
-.pacchetto-categoria {
-  background: #c99e67;
-  color: white;
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 10px;
-  font-weight: 600;
+/* Badge stato */
+.stato-badge {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.prenotazione-dettagli {
+.badge-confermata {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+.badge-cancellata {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+.badge-attesa {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  color: #92400e;
+  border: 1px solid #fcd34d;
+}
+
+.badge-default {
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+.prenotazione-info {
   display: flex;
-  align-items: center;
-  gap: 16px;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.prenotazione-data,
-.prenotazione-orario {
+.info-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.info-item {
   display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 12px;
-  color: #6b7280;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #fff8f3 0%, #fef9f5 100%);
+  border-radius: 8px;
+  border: 1px solid #f3e8d7;
 }
 
-.prenotazione-data i,
-.prenotazione-orario i {
+.info-item i {
   color: #c99e67;
-  font-size: 11px;
+  font-size: 18px;
+  width: 20px;
+  text-align: center;
+  margin-top: 2px;
+  flex-shrink: 0;
 }
 
-.prenotazione-note {
-  color: #6b7280;
-  font-size: 11px;
-  font-style: italic;
+.info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.info-label {
+  font-size: 10px;
+  color: #94a3b8;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  font-size: 14px;
+  color: #1e293b;
+  font-weight: 500;
 }
 
 .prenotazione-actions {
   display: flex;
-  align-items: center;
+  justify-content: flex-end;
   gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid #f3e8d7;
 }
 
 .btn-action {
-  background: none;
-  border: 1px solid transparent;
-  padding: 8px;
+  padding: 8px 16px;
   border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
+  gap: 6px;
+  border: 1px solid;
 }
 
-.btn-action i {
-  font-size: 12px;
+.btn-delete {
+  background: white;
+  color: #dc2626;
+  border-color: #dc2626;
 }
 
-.btn-edit {
-  color: #3b82f6;
-  border-color: #e0e7ff;
+.btn-delete:hover {
+  background: #dc2626;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+}
   background: #f0f9ff;
 }
 

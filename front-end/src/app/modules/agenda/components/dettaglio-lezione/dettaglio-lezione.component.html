@@ -59,14 +59,21 @@
     </div>
 
     <!-- Partecipanti -->
-    <div class="row mb-2" *ngIf="lezione.partecipanti && lezione.partecipanti.length > 0">
+    <div class="row mb-2" *ngIf="partecipantiDettagli && partecipantiDettagli.length > 0">
       <div class="col-12">
-        <div class="info-card">
-          <h5 class="info-card-title"><i class="fas fa-users"></i> Partecipanti Iscritti</h5>
+        <div class="info-card participants-card">
+          <h5 class="info-card-title">
+            <i class="fas fa-user-friends" style="color: #c99e67;"></i> 
+            Partecipanti Iscritti ({{ partecipantiDettagli.length }})
+          </h5>
           <div class="participants-list">
             <div class="participant-badge" *ngFor="let partecipante of partecipantiDettagli">
-              <i class="fas fa-user"></i>
-              {{ partecipante.nome }} {{ partecipante.cognome }}
+              <div class="participant-icon">
+                <i class="fas fa-user-circle"></i>
+              </div>
+              <div class="participant-info">
+                <span class="participant-name">{{ partecipante.nome || partecipante }}</span>
+              </div>
             </div>
           </div>
         </div>

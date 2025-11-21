@@ -134,6 +134,25 @@ public class PrenotazioneController {
     }
 
     /**
+     * Ottiene TUTTE le prenotazioni future (solo admin)
+     */
+    @GetMapping("/tutte-prenotazioni")
+    public ResponseEntity<List<PrenotazioneDTO>> getTuttePrenotazioni() {
+        try {
+            List<PrenotazioneLezione> prenotazioni = prenotazioneRicorrenteService.getTuttePrenotazioniFuture();
+
+            List<PrenotazioneDTO> dtos = prenotazioni.stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(dtos);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    /**
      * Cancella una prenotazione
      */
     @DeleteMapping("/cancella/{prenotazioneId}")
