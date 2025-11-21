@@ -19,6 +19,25 @@ export interface Vendita {
   note?: string;
 }
 
+export interface PacchettoAcquistato {
+  venditaId: number;
+  pacchettoId: number;
+  pacchettoNome: string;
+  categoria: string;
+  descrizione?: string;
+  livello: string;
+  durataMinuti: number;
+  maxPartecipanti: number;
+  prezzo: number;
+  dataAcquisto: string;
+  dataPagamento?: string;
+  stato: string; // "ATTIVO" o "COMPLETATO"
+  lezioniTotali: number;
+  lezioniPrenotate: number;
+  lezioniRimaste: number;
+  note?: string;
+}
+
 export interface StatisticheVendite {
   totaleVendite: number;
   totaleFatturato: number;
@@ -53,6 +72,10 @@ export class VenditeService {
 
   getVenditePendingByUtente(username: string): Observable<Vendita[]> {
     return this.http.get<Vendita[]>(`${this.baseUrl}/utente/${username}/pending`);
+  }
+
+  getPacchettiAcquistatiByUtente(username: string): Observable<PacchettoAcquistato[]> {
+    return this.http.get<PacchettoAcquistato[]>(`${this.baseUrl}/utente/${username}/pacchetti-acquistati`);
   }
 
   getStatistiche(filtri?: { periodo?: string; dataInizio?: string; dataFine?: string }): Observable<StatisticheVendite> {

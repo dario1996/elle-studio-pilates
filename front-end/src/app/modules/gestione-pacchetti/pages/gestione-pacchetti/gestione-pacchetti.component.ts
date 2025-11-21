@@ -6,6 +6,7 @@ import { PageTitleComponent } from '../../../../core/page-title/page-title.compo
 import { AuthJwtService } from '../../../../core/services/authJwt.service';
 import { UserService } from '../../../../core/services/data/user.service';
 import { PacchettiService, Pacchetto } from '../../../../core/services/pacchetti.service';
+import { VenditeService, PacchettoAcquistato } from '../../../../shared/services/vendite.service';
 import { inject } from '@angular/core';
 
 @Component({
@@ -23,6 +24,7 @@ export class GestionePacchettiComponent implements OnInit {
   private auth = inject(AuthJwtService);
   private userService = inject(UserService);
   private pacchettiService = inject(PacchettiService);
+  private venditeService = inject(VenditeService);
 
   title: string = 'Gestione Pacchetti';
 
@@ -34,56 +36,43 @@ export class GestionePacchettiComponent implements OnInit {
   private toastTimeout?: number;
 
   // Pacchetti
-  pacchettiAcquistati: any[] = [];
+  pacchettiAcquistati: PacchettoAcquistato[] = [];
   pacchettiDisponibili: Pacchetto[] = [];
   loadingPacchetti = false;
+  loadingAcquistati = false;
   
   // Traccia quali descrizioni sono visibili
   descrizioneVisibile: { [key: number]: boolean } = {};
 
   ngOnInit(): void {
-    this.loadMockPacchettiAcquistati();
+    this.loadPacchettiAcquistati();
     this.loadPacchettiDisponibili();
   }
 
-  // Carica pacchetti acquistati (mock data per ora)
-  private loadMockPacchettiAcquistati(): void {
-    // Mock data - verrà sostituito con chiamata API reale
-    this.pacchettiAcquistati = [
-      {
-        id: 1,
-        pacchettoNome: 'Pilates Base - Pacchetto 10 lezioni',
-        categoria: 'PILATES',
-        lezioniTotali: 10,
-        lezioniRimaste: 7,
-        dataAcquisto: '2025-09-15',
-        dataScadenza: '2025-12-15',
-        prezzo: 200.00,
-        stato: 'ATTIVO'
+  // Carica pacchetti acquistati (PAID) dall'utente loggato
+  private loadPacchettiAcquistati(): void {
+    this.loadingAcquistati = true;
+    
+    const username = this.auth.loggedUser();
+    
+    if (!username) {
+      console.error('Username non trovato');
+      this.loadingAcquistati = false;
+      this.showToastMessage('Errore: utente non autenticato', 'error');
+      return;
+    }
+    
+    this.venditeService.getPacchettiAcquistatiByUtente(username).subscribe({
+      next: (pacchetti) => {
+        this.pacchettiAcquistati = pacchetti || [];
+        this.loadingAcquistati = false;
       },
-      {
-        id: 2,
-        pacchettoNome: 'Yoga Rilassante - Pacchetto 5 lezioni',
-        categoria: 'YOGA',
-        lezioniTotali: 5,
-        lezioniRimaste: 2,
-        dataAcquisto: '2025-08-20',
-        dataScadenza: '2025-11-20',
-        prezzo: 150.00,
-        stato: 'ATTIVO'
-      },
-      {
-        id: 3,
-        pacchettoNome: 'Matwork Avanzato - Pacchetto Mensile',
-        categoria: 'MATWORK',
-        lezioniTotali: 12,
-        lezioniRimaste: 0,
-        dataAcquisto: '2025-07-01',
-        dataScadenza: '2025-08-01',
-        prezzo: 350.00,
-        stato: 'SCADUTO'
+      error: (error) => {
+        console.error('Errore nel caricamento dei pacchetti acquistati:', error);
+        this.loadingAcquistati = false;
+        this.showToastMessage('Errore nel caricamento dei pacchetti acquistati', 'error');
       }
-    ];
+    });
   }
 
   // Carica pacchetti disponibili per l'utente dalla tabella utente_pacchetti_disponibili
@@ -135,19 +124,10 @@ export class GestionePacchettiComponent implements OnInit {
   }
 
   // Calcola la percentuale di utilizzo del pacchetto
-  getUsagePercentage(pacchetto: any): number {
+  getUsagePercentage(pacchetto: PacchettoAcquistato): number {
     if (!pacchetto.lezioniTotali) return 0;
-    const used = pacchetto.lezioniTotali - pacchetto.lezioniRimaste;
-    return Math.round((used / pacchetto.lezioniTotali) * 100);
-  }
-
-  // Verifica se il pacchetto sta per scadere (entro 30 giorni)
-  isExpiringSoon(dataScadenza: string): boolean {
-    if (!dataScadenza) return false;
-    const scadenza = new Date(dataScadenza);
-    const oggi = new Date();
-    const giorni = Math.ceil((scadenza.getTime() - oggi.getTime()) / (1000 * 60 * 60 * 24));
-    return giorni > 0 && giorni <= 30;
+    const percentuale = Math.round((pacchetto.lezioniPrenotate / pacchetto.lezioniTotali) * 100);
+    return percentuale;
   }
 
   // Acquista un pacchetto (placeholder)

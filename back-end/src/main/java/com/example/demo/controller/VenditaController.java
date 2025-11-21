@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.PacchettoAcquistatoDTO;
 import com.example.demo.entity.Vendita;
 import com.example.demo.entity.Vendita.StatoVendita;
 import com.example.demo.service.VenditaService;
@@ -168,6 +169,16 @@ public class VenditaController {
     public ResponseEntity<List<Vendita>> getVenditePendingPerUtente(@PathVariable String username) {
         List<Vendita> vendite = venditaService.trovaVenditePendingPerUtente(username);
         return ResponseEntity.ok(vendite);
+    }
+
+    /**
+     * Ottiene pacchetti acquistati (PAID) per utente con dettagli completi
+     */
+    @GetMapping("/utente/{username}/pacchetti-acquistati")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<List<PacchettoAcquistatoDTO>> getPacchettiAcquistatiPerUtente(@PathVariable String username) {
+        List<PacchettoAcquistatoDTO> pacchetti = venditaService.getPacchettiAcquistatiPerUtente(username);
+        return ResponseEntity.ok(pacchetti);
     }
 
     /**

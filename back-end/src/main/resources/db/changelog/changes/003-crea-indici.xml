@@ -31,6 +31,10 @@
             <column name="categoria" />
         </createIndex>
 
+        <createIndex indexName="idx_pacchetto_num_lezioni" tableName="pacchetti">
+            <column name="num_lezioni" />
+        </createIndex>
+
 <!-- Indici per la tabella lezioni -->
 
         <createIndex tableName="lezioni" indexName="idx_lezioni_data_inizio">

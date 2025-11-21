@@ -12,6 +12,7 @@ export interface Pacchetto {
   durataMinuti: number;
   maxPartecipanti: number;
   prezzo: number;
+  numLezioni?: number;
   attivo: boolean;
   dataCreazione?: string;
   dataModifica?: string;

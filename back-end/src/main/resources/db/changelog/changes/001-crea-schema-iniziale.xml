@@ -101,10 +101,13 @@
                 <constraints nullable="true"/>
             </column>
             <column name="prezzo" type="DECIMAL(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="num_lezioni" type="INTEGER">
                 <constraints nullable="true"/>
             </column>
             <column name="stato" type="VARCHAR(20)" defaultValue="PIANIFICATO">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
             <column name="attivo" type="BOOLEAN" defaultValueBoolean="true">
                 <constraints nullable="false"/>

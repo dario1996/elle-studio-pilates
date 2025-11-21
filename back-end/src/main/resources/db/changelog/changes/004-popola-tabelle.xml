@@ -342,6 +342,7 @@
             <column name="durata_minuti" value="55"/>
             <column name="max_partecipanti" value="1"/>
             <column name="prezzo" value="50.00"/>
+            <column name="num_lezioni" value="1"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
@@ -355,6 +356,7 @@
             <column name="durata_minuti" value="55"/>
             <column name="max_partecipanti" value="1"/>
             <column name="prezzo" value="190.00"/>
+            <column name="num_lezioni" value="4"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
@@ -368,6 +370,7 @@
             <column name="durata_minuti" value="55"/>
             <column name="max_partecipanti" value="1"/>
             <column name="prezzo" value="340.00"/>
+            <column name="num_lezioni" value="8"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
@@ -381,6 +384,7 @@
             <column name="durata_minuti" value="50"/>
             <column name="max_partecipanti" value="2"/>
             <column name="prezzo" value="160.00"/>
+            <column name="num_lezioni" value="4"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
@@ -394,6 +398,7 @@
             <column name="durata_minuti" value="50"/>
             <column name="max_partecipanti" value="2"/>
             <column name="prezzo" value="290.00"/>
+            <column name="num_lezioni" value="8"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
@@ -407,6 +412,7 @@
             <column name="durata_minuti" value="50"/>
             <column name="max_partecipanti" value="4"/>
             <column name="prezzo" value="105.00"/>
+            <column name="num_lezioni" value="4"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
@@ -420,6 +426,7 @@
             <column name="durata_minuti" value="50"/>
             <column name="max_partecipanti" value="4"/>
             <column name="prezzo" value="205.00"/>
+            <column name="num_lezioni" value="8"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
@@ -433,6 +440,7 @@
             <column name="durata_minuti" value="50"/>
             <column name="max_partecipanti" value="6"/>
             <column name="prezzo" value="65.00"/>
+            <column name="num_lezioni" value="4"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
@@ -446,6 +454,7 @@
             <column name="durata_minuti" value="50"/>
             <column name="max_partecipanti" value="6"/>
             <column name="prezzo" value="130.00"/>
+            <column name="num_lezioni" value="8"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
@@ -459,6 +468,7 @@
             <column name="durata_minuti" value="50"/>
             <column name="max_partecipanti" value="6"/>
             <column name="prezzo" value="260.00"/>
+            <column name="num_lezioni" value="12"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
@@ -472,6 +482,7 @@
             <column name="durata_minuti" value="50"/>
             <column name="max_partecipanti" value="6"/>
             <column name="prezzo" value="165.00"/>
+            <column name="num_lezioni" value="8"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
@@ -485,6 +496,7 @@
             <column name="durata_minuti" value="50"/>
             <column name="max_partecipanti" value="6"/>
             <column name="prezzo" value="155.00"/>
+            <column name="num_lezioni" value="8"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
@@ -498,6 +510,7 @@
             <column name="durata_minuti" value="50"/>
             <column name="max_partecipanti" value="6"/>
             <column name="prezzo" value="115.00"/>
+            <column name="num_lezioni" value="8"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
@@ -511,6 +524,7 @@
             <column name="durata_minuti" value="60"/>
             <column name="max_partecipanti" value="8"/>
             <column name="prezzo" value="55.00"/>
+            <column name="num_lezioni" value="4"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>
@@ -524,6 +538,7 @@
             <column name="durata_minuti" value="60"/>
             <column name="max_partecipanti" value="8"/>
             <column name="prezzo" value="110.00"/>
+            <column name="num_lezioni" value="8"/>
             <column name="attivo" value="1"/>
             <column name="data_creazione" valueComputed="CURRENT_TIMESTAMP"/>
         </insert>

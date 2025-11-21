@@ -17,10 +17,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.dto.PacchettoAcquistatoDTO;
 import com.example.demo.entity.Pacchetto;
 import com.example.demo.entity.Utenti;
 import com.example.demo.entity.Vendita;
 import com.example.demo.entity.Vendita.StatoVendita;
+import com.example.demo.repository.LezioneRepository;
 import com.example.demo.repository.PacchettoRepository;
 import com.example.demo.repository.UtenteRepository;
 import com.example.demo.repository.VenditaRepository;
@@ -40,6 +42,9 @@ public class VenditaService {
 
     @Autowired
     private PacchettoRepository pacchettoRepository;
+
+    @Autowired
+    private LezioneRepository lezioneRepository;
 
     // ===== OPERAZIONI CRUD =====
 
@@ -148,6 +153,72 @@ public class VenditaService {
     @Transactional(readOnly = true)
     public List<Vendita> trovaVenditePendingPerUtente(String username) {
         return venditaRepository.findByUtenteUsernameAndStatoOrderByDataAcquistoDesc(username, StatoVendita.PENDING);
+    }
+
+    /**
+     * Ottiene i pacchetti acquistati (PAID) per utente con dettagli completi
+     * Include il conteggio delle lezioni prenotate
+     */
+    @Transactional(readOnly = true)
+    public List<PacchettoAcquistatoDTO> getPacchettiAcquistatiPerUtente(String username) {
+        // Recupera tutte le vendite PAID per questo utente
+        List<Vendita> vendite = venditaRepository.findByUtenteUsernameAndStato(username, StatoVendita.PAID);
+
+        // Recupera tutte le lezioni prenotate dall'utente
+        List<com.example.demo.entity.Lezione> lezioniPrenotate = lezioneRepository.findLezioniPrenotateByUsername(username);
+
+        // Converte le vendite in DTO con i dettagli completi
+        return vendite.stream()
+                .map(vendita -> {
+                    PacchettoAcquistatoDTO dto = new PacchettoAcquistatoDTO();
+                    Pacchetto pacchetto = vendita.getPacchetto();
+                    
+                    // Dati base della vendita
+                    dto.setVenditaId(vendita.getId());
+                    dto.setPacchettoId(pacchetto.getId());
+                    dto.setPacchettoNome(pacchetto.getNome());
+                    dto.setCategoria(pacchetto.getCategoria());
+                    dto.setDescrizione(pacchetto.getDescrizione());
+                    dto.setLivello(pacchetto.getLivello());
+                    dto.setDurataMinuti(pacchetto.getDurataMinuti());
+                    dto.setMaxPartecipanti(pacchetto.getMaxPartecipanti());
+                    dto.setPrezzo(vendita.getImporto());
+                    dto.setNumLezioni(pacchetto.getNumLezioni());
+                    dto.setDataAcquisto(vendita.getDataAcquisto());
+                    dto.setDataPagamento(vendita.getDataPagamento());
+                    dto.setNote(vendita.getNote());
+                    
+                    // Usa il campo num_lezioni dalla tabella pacchetti
+                    Integer lezioniTotali = pacchetto.getNumLezioni();
+                    dto.setLezioniTotali(lezioniTotali != null ? lezioniTotali : 0);
+                    
+                    // Conta quante lezioni sono state prenotate per questo pacchetto
+                    // (basato sulla vendita specifica)
+                    long lezioniPrenotateCount = lezioniPrenotate.stream()
+                            .filter(lezione -> {
+                                // Qui dovresti avere una logica per associare la lezione alla vendita
+                                // Per ora contiamo tutte le lezioni del tipo corrispondente
+                                String tipoLezione = lezione.getTipoLezione() != null ? 
+                                        lezione.getTipoLezione().toString().toUpperCase() : "";
+                                String categoria = pacchetto.getCategoria() != null ? 
+                                        pacchetto.getCategoria().toUpperCase() : "";
+                                return tipoLezione.contains(categoria) || categoria.contains(tipoLezione);
+                            })
+                            .count();
+                    
+                    dto.setLezioniPrenotate((int) lezioniPrenotateCount);
+                    dto.setLezioniRimaste(dto.getLezioniTotali() - dto.getLezioniPrenotate());
+                    
+                    // Determina lo stato
+                    if (dto.getLezioniRimaste() <= 0) {
+                        dto.setStato("COMPLETATO");
+                    } else {
+                        dto.setStato("ATTIVO");
+                    }
+                    
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
     /**
