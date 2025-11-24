@@ -9,7 +9,8 @@ import { LezioniService, LezioneDto } from '../../../../core/services/lezioni.se
 import { TIPI_LEZIONE_CONFIG } from '../../../../modules/agenda/models/lezione.model';
 import { ILezione, TipoLezione, StatoLezione } from '../../../../shared/models/Lezione';
 import { AuthJwtService } from '../../../../core/services/authJwt.service';
-import { VenditeService, Vendita } from '../../../../shared/services/vendite.service';
+import { VenditeService, Vendita, PacchettoAcquistato } from '../../../../shared/services/vendite.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard-utente',
@@ -34,8 +35,44 @@ export class DashboardUtenteComponent implements OnInit, AfterViewInit {
   lezioniPrenotate: ILezione[] = [];
   lezioneIndex: number = 0;
   lezioniPrenotabili: LezioneDto[] = [];
-  pagamentiPendenti: Vendita[] = [];
-  lezioniSuggerite: ILezione[] = [];
+  pacchettiAcquistati: PacchettoAcquistato[] = [];
+  
+  // Statistiche dashboard
+  totaleLezioniPrenotate: number = 0;
+  lezioniCompletate: number = 0;
+  prossimaLezione: ILezione | null = null;
+  
+  // Mini calendario (prossimi 7 giorni)
+  giorniCalendario: { data: Date; lezioni: ILezione[] }[] = [];
+
+  // Configurazione immagini per tipi lezione (URL o icone)
+  readonly LEZIONI_IMAGES: Record<string, { image: string; gradient: string; icon: string }> = {
+    'PRIVATA': {
+      image: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      gradient: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
+      icon: 'fas fa-user'
+    },
+    'SEMI_PRIVATA': {
+      image: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+      gradient: 'linear-gradient(135deg, rgba(240, 147, 251, 0.1) 0%, rgba(245, 87, 108, 0.1) 100%)',
+      icon: 'fas fa-user-friends'
+    },
+    'PILATES_MATWORK': {
+      image: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+      gradient: 'linear-gradient(135deg, rgba(79, 172, 254, 0.1) 0%, rgba(0, 242, 254, 0.1) 100%)',
+      icon: 'fas fa-dumbbell'
+    },
+    'YOGA': {
+      image: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+      gradient: 'linear-gradient(135deg, rgba(67, 233, 123, 0.1) 0%, rgba(56, 249, 215, 0.1) 100%)',
+      icon: 'fas fa-spa'
+    },
+    'PRIMA_LEZIONE': {
+      image: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+      gradient: 'linear-gradient(135deg, rgba(250, 112, 154, 0.1) 0%, rgba(254, 225, 64, 0.1) 100%)',
+      icon: 'fas fa-star'
+    }
+  };
 
   constructor(
     private router: Router,
@@ -49,44 +86,52 @@ export class DashboardUtenteComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     const username = this.authService.loggedUser();
     if (username) {
-      // Carica lezioni prenotate
-      this.lezioniService.getLezioniPrenotate(username).subscribe({
-        next: (lezioni) => {
-          // Ordina per dataInizio crescente e filtra solo le lezioni future o di oggi
+      this.loading = true;
+      
+      // Carica tutti i dati in parallelo
+      forkJoin({
+        lezioniPrenotate: this.lezioniService.getLezioniPrenotate(username),
+        pacchettiAcquistati: this.venditeService.getPacchettiAcquistatiByUtente(username)
+      }).subscribe({
+        next: (result) => {
+          // Processa lezioni prenotate
           const oggi = new Date();
           oggi.setHours(0, 0, 0, 0);
           
-          this.lezioniPrenotate = lezioni
+          this.lezioniPrenotate = result.lezioniPrenotate
             .filter(lezione => {
               const dataLezione = new Date(lezione.dataInizio);
               dataLezione.setHours(0, 0, 0, 0);
-              return dataLezione >= oggi; // Mostra solo lezioni di oggi o future
+              return dataLezione >= oggi;
             })
             .sort((a, b) => {
               const dateA = new Date(a.dataInizio).getTime();
               const dateB = new Date(b.dataInizio).getTime();
               return dateA - dateB;
             });
+          
           this.lezioneIndex = 0;
-
-          // SUGGERIMENTI: prendi lezioni già frequentate, scegli 3 random (se disponibili)
-          const lezioniUniche = this.lezioniPrenotate.filter((lez, idx, arr) =>
-            arr.findIndex(l => l.titolo === lez.titolo && l.tipo === lez.tipo) === idx
-          );
-          this.lezioniSuggerite = this.getRandomLezioni(lezioniUniche, 3);
+          this.totaleLezioniPrenotate = this.lezioniPrenotate.length;
+          this.prossimaLezione = this.lezioniPrenotate.length > 0 ? this.lezioniPrenotate[0] : null;
+          
+          // Calcola lezioni completate (lezioni nel passato)
+          this.lezioniCompletate = result.lezioniPrenotate.filter(lezione => {
+            const dataLezione = new Date(lezione.dataInizio);
+            return dataLezione < oggi;
+          }).length;
+          
+          // Genera mini calendario
+          this.generaMiniCalendario();
+          
+          // Pacchetti acquistati
+          this.pacchettiAcquistati = result.pacchettiAcquistati.filter(p => p.lezioniRimaste > 0);
+          
+          this.loading = false;
         },
         error: (err) => {
-          this.error = 'Errore nel caricamento delle lezioni prenotate';
-        }
-      });
-
-      // Carica vendite pending (acquisti in fase di verifica)
-      this.venditeService.getVenditePendingByUtente(username).subscribe({
-        next: (vendite) => {
-          this.pagamentiPendenti = vendite;
-        },
-        error: (err) => {
-          console.error('Errore nel caricamento vendite pending:', err);
+          this.error = 'Errore nel caricamento dei dati';
+          this.loading = false;
+          console.error(err);
         }
       });
     } else {
@@ -234,5 +279,70 @@ export class DashboardUtenteComponent implements OnInit, AfterViewInit {
   /** Indice finale della coppia di lezioni visualizzate (per la paginazione) */
   getLezioneIndexEnd(): number {
     return Math.min(this.lezioneIndex + 2, this.lezioniPrenotate.length);
+  }
+
+  /** Genera il mini calendario con i prossimi 7 giorni */
+  generaMiniCalendario(): void {
+    this.giorniCalendario = [];
+    const oggi = new Date();
+    oggi.setHours(0, 0, 0, 0);
+    
+    for (let i = 0; i < 7; i++) {
+      const data = new Date(oggi);
+      data.setDate(data.getDate() + i);
+      
+      const lezioniDelGiorno = this.lezioniPrenotate.filter(lezione => {
+        const dataLezione = new Date(lezione.dataInizio);
+        dataLezione.setHours(0, 0, 0, 0);
+        return dataLezione.getTime() === data.getTime();
+      });
+      
+      this.giorniCalendario.push({ data, lezioni: lezioniDelGiorno });
+    }
+  }
+
+  /** Ottiene l'immagine/gradient per un tipo lezione */
+  getLezioneImage(tipo: string): string {
+    return this.LEZIONI_IMAGES[tipo]?.image || this.LEZIONI_IMAGES['PRIVATA'].image;
+  }
+
+  /** Ottiene il gradient di sfondo per un tipo lezione */
+  getLezioneGradient(tipo: string): string {
+    return this.LEZIONI_IMAGES[tipo]?.gradient || this.LEZIONI_IMAGES['PRIVATA'].gradient;
+  }
+
+  /** Ottiene l'icona per un tipo lezione */
+  getLezioneIcon(tipo: string): string {
+    return this.LEZIONI_IMAGES[tipo]?.icon || 'fas fa-calendar';
+  }
+
+  /** Calcola la percentuale di utilizzo del pacchetto */
+  getProgressPercentage(pacchetto: PacchettoAcquistato): number {
+    if (pacchetto.lezioniTotali === 0) return 0;
+    return Math.round(((pacchetto.lezioniTotali - pacchetto.lezioniRimaste) / pacchetto.lezioniTotali) * 100);
+  }
+
+  /** Restituisce il nome abbreviato del giorno */
+  getNomeGiorno(data: Date): string {
+    const giorni = ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'];
+    return giorni[data.getDay()];
+  }
+
+  /** Controlla se una data è oggi */
+  isOggi(data: Date): boolean {
+    const oggi = new Date();
+    return data.getDate() === oggi.getDate() &&
+           data.getMonth() === oggi.getMonth() &&
+           data.getFullYear() === oggi.getFullYear();
+  }
+
+  /** Naviga alla pagina prenotazioni */
+  vaiAPrenotazioni(): void {
+    this.router.navigate(['/prenotazioni']);
+  }
+
+  /** Naviga alla pagina pacchetti */
+  vaiAPacchetti(): void {
+    this.router.navigate(['/gestione-pacchetti']);
   }
 }

@@ -2,146 +2,202 @@
   <div class="page-header">
     <app-page-title [title]="title" [showButton]="false"></app-page-title>
     <div class="user-bar">
-      <!-- <app-notification></app-notification> -->
       <app-logged-user></app-logged-user>
     </div>
-
-    <!-- ...existing code... -->
   </div>
+
   <div class="page-content">
-    <div class="dashboard-utente-cards">
-      <!-- Card 1: Lezioni prenotate -->
-      <div class="user-cards" #userCard>
-          <div class="card-header">
-            <h3>Lezioni prenotate</h3>
-            <i class="fas fa-calendar-check card-icon"></i>
+    <!-- Loading state -->
+    <div *ngIf="loading" class="loading-state">
+      <i class="fas fa-spinner fa-spin fa-3x"></i>
+      <p>Caricamento dati...</p>
+    </div>
+
+    <!-- Error state -->
+    <div *ngIf="error" class="error-state">
+      <i class="fas fa-exclamation-triangle fa-3x"></i>
+      <p>{{ error }}</p>
+    </div>
+
+    <!-- Dashboard content -->
+    <div *ngIf="!loading && !error" class="dashboard-grid">
+      
+      <!-- Row 1: Stats Cards -->
+      <div class="stats-row">
+        <!-- Stat 1: Prossima lezione -->
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-label">Prossima Lezione</div>
+            <i class="fas fa-calendar-star stat-icon"></i>
           </div>
-          <div class="card-content mt-3">
-            <div *ngIf="lezioniPrenotate.length === 0" class="empty-state">
-              <i class="fas fa-calendar-times fa-3x mb-3"></i>
-              <p>Nessuna lezione prenotata</p>
+          <div class="stat-content">
+            <div class="stat-value" *ngIf="prossimaLezione">
+              {{ formatDateOnly(prossimaLezione.dataInizio) }}
             </div>
-            <ng-container *ngIf="lezioniCorrenti.length > 0">
-              <div class="d-flex align-items-center justify-content-between mb-3">
-                <button class="btn btn-link p-0 nav-arrow" (click)="prevLezione()" [disabled]="lezioneIndex === 0">
-                  <i class="fas fa-chevron-left"></i>
-                </button>
-                <div class="lessons-container flex-grow-1">
-                  <div class="lesson-card" *ngFor="let lezione of lezioniCorrenti; let i = index" [class.lesson-card-primary]="i === 0" [class.lesson-card-secondary]="i === 1" [class.lesson-card-tertiary]="i === 2">
-                    <!-- Badge giorni mancanti -->
-                    <div class="lesson-badge" [ngClass]="getGiorniBadgeClass(lezione.dataInizio)">
-                      <i class="fas fa-calendar-day me-1"></i>
-                      {{ getGiorniMancantiText(lezione.dataInizio) }}
+            <div class="stat-value" *ngIf="!prossimaLezione">--</div>
+            <div class="stat-subtitle" *ngIf="prossimaLezione">
+              {{ formatTimeRange(prossimaLezione.dataInizio, prossimaLezione.dataFine) }}
+            </div>
+            <div class="stat-subtitle" *ngIf="!prossimaLezione">
+              Nessuna lezione in programma
+            </div>
+          </div>
+        </div>
+
+        <!-- Stat 2: Lezioni prenotate -->
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-label">Lezioni Prenotate</div>
+            <i class="fas fa-calendar-check stat-icon"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-value">{{ totaleLezioniPrenotate }}</div>
+            <div class="stat-subtitle">In programma</div>
+          </div>
+        </div>
+
+        <!-- Stat 3: Lezioni completate -->
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-label">Lezioni Completate</div>
+            <i class="fas fa-check-circle stat-icon"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-value">{{ lezioniCompletate }}</div>
+            <div class="stat-subtitle">Totali</div>
+          </div>
+        </div>
+
+        <!-- Stat 4: Pacchetti attivi -->
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-label">Pacchetti Attivi</div>
+            <i class="fas fa-box-open stat-icon"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-value">{{ pacchettiAcquistati.length }}</div>
+            <div class="stat-subtitle">Disponibili</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2: Main Content -->
+      <div class="content-row">
+        
+        <!-- Col 1: Lezioni Prenotate con Immagini -->
+        <div class="card card-lezioni">
+          <div class="card-header-modern">
+            <h3><i class="fas fa-calendar-alt me-2"></i>Le Tue Lezioni</h3>
+            <button class="btn-text" (click)="vaiAPrenotazioni()">
+              Vedi tutte <i class="fas fa-arrow-right ms-1"></i>
+            </button>
+          </div>
+          
+          <div class="card-body-modern">
+            <div *ngIf="lezioniPrenotate.length === 0" class="empty-state-modern">
+              <i class="fas fa-calendar-times fa-3x"></i>
+              <p>Nessuna lezione prenotata</p>
+              <button class="btn-primary-modern mt-3" (click)="vaiAPrenotazioni()">
+                Prenota ora
+              </button>
+            </div>
+
+            <div *ngIf="lezioniPrenotate.length > 0" class="lezioni-list">
+              <div class="lezione-card-modern" *ngFor="let lezione of lezioniPrenotate.slice(0, 3)">
+                <!-- Immagine/Gradient lezione -->
+                <div class="lezione-image" [style.background]="getLezioneImage(lezione.tipo)">
+                  <i [class]="getLezioneIcon(lezione.tipo)"></i>
+                  <div class="lezione-badge-overlay" [ngClass]="getGiorniBadgeClass(lezione.dataInizio)">
+                    {{ getGiorniMancantiText(lezione.dataInizio) }}
+                  </div>
+                </div>
+
+                <!-- Info lezione -->
+                <div class="lezione-info">
+                  <h4>{{ lezione.titolo }}</h4>
+                  <div class="lezione-tipo">
+                    <span class="tipo-badge">{{ getLabelTipoLezione(lezione.tipo) }}</span>
+                  </div>
+                  <div class="lezione-details">
+                    <div class="detail-item">
+                      <i class="fas fa-calendar"></i>
+                      <span>{{ formatDateOnly(lezione.dataInizio) }}</span>
                     </div>
-                    
-                    <!-- Titolo lezione -->
-                    <h4 class="lesson-title">{{ lezione.titolo }}</h4>
-                    
-                    <!-- Tipo lezione -->
-                    <div class="lesson-type">
-                      <i class="fas fa-tag me-2"></i>
-                      {{ getLabelTipoLezione(lezione.tipo) }}
+                    <div class="detail-item">
+                      <i class="fas fa-clock"></i>
+                      <span>{{ formatTimeRange(lezione.dataInizio, lezione.dataFine) }}</span>
                     </div>
-                    
-                    <!-- Data e ora -->
-                    <div class="lesson-datetime">
-                      <div class="datetime-item">
-                        <i class="fas fa-calendar me-2"></i>
-                        <span>{{ formatDateOnly(lezione.dataInizio) }}</span>
-                      </div>
-                      <div class="datetime-item">
-                        <i class="fas fa-clock me-2"></i>
-                        <span>{{ formatTimeRange(lezione.dataInizio, lezione.dataFine) }}</span>
-                      </div>
-                    </div>
-                    
-                    <!-- Istruttore -->
-                    <div class="lesson-instructor">
-                      <i class="fas fa-user-circle me-2"></i>
-                      {{ lezione.istruttore }}
+                    <div class="detail-item">
+                      <i class="fas fa-user-circle"></i>
+                      <span>{{ lezione.istruttore }}</span>
                     </div>
                   </div>
                 </div>
-                <button class="btn btn-link p-0 nav-arrow" (click)="nextLezione()" [disabled]="lezioneIndex >= lezioniPrenotate.length - 2">
-                  <i class="fas fa-chevron-right"></i>
-                </button>
-              </div>
-              <div class="pagination-info" *ngIf="lezioniPrenotate.length > 2">
-                <span class="pagination-text">{{ lezioneIndex + 1 }} - {{ getLezioneIndexEnd() }} di {{ lezioniPrenotate.length }}</span>
-              </div>
-            </ng-container>
-          </div>
-      </div>
-      <!-- Card 2: Ti potrebbero interessare (suggerite + prenotabili) -->
-  <div class="user-cards" #userCard>
-        <div class="card-header">
-          <h3>Ti potrebbero interessare</h3>
-          <i class="fas fa-calendar-plus card-icon"></i>
-        </div>
-        <div class="card-content">
-          <div *ngIf="lezioniPrenotabili.length === 0 && lezioniSuggerite.length === 0 && lezioniPrenotate.length === 0" class="text-muted">Nessuna lezione prenotabile</div>
-          <div *ngFor="let lezione of lezioniPrenotabili">
-            <div>
-              <strong>{{ lezione.titolo }}</strong> <br>
-              {{ getLabelTipoLezione(lezione.tipoLezione) }}<br>
-              {{ formatTime(lezione.dataInizio, lezione.dataFine) }}<br>
-              Istruttore: {{ lezione.istruttore }}
-              <button class="btn btn-primary btn-sm mt-2">Prenota</button>
-            </div>
-            <hr>
-          </div>
-          <!-- SUGGERIMENTI: Lezioni consigliate -->
-          <div *ngIf="lezioniSuggerite.length > 0">
-            <div class="suggested-lessons-small">
-              <div *ngFor="let lezione of lezioniSuggerite" class="suggested-row d-flex align-items-center justify-content-between mb-2" (click)="openSuggerimentoPopup(lezione)" style="cursor:pointer;">
-                <div>
-                  <strong>{{ lezione.titolo }}</strong> <br>
-                  <span>{{ getLabelTipoLezione(lezione.tipo) }}</span><br>
-                  <span>{{ formatTime(lezione.dataInizio, lezione.dataFine) }}</span><br>
-                  <span>Istruttore: {{ lezione.istruttore }}</span>
-                </div>
-                <button class="btn btn-primary btn-sm ms-2" style="font-size: 0.85em; padding: 0.25em 0.8em;" (click)="$event.stopPropagation(); prenotaSuggerita(lezione)">Prenota</button>
               </div>
             </div>
           </div>
-          <div *ngIf="lezioniSuggerite.length === 0 && lezioniPrenotabili.length > 0" class="text-muted" style="font-size:0.9em;">Nessun suggerimento disponibile</div>
         </div>
-      </div>
-      <!-- Card 3: Acquisti in fase di verifica -->
-  <div class="user-cards" #userCard>
-        <div class="card-header">
-          <h3>Acquisti in fase di verifica</h3>
-          <i class="fas fa-credit-card card-icon"></i>
-        </div>
-        <div class="card-content mt-3">
-          <div *ngIf="pagamentiPendenti.length === 0" class="empty-state">
-            <i class="fas fa-receipt fa-3x mb-3"></i>
-            <p>Nessun acquisto in attesa di verifica</p>
-          </div>
+
+        <!-- Col 2: Sidebar (Mini Calendario + Pacchetti) -->
+        <div class="sidebar-column">
           
-          <div class="pending-purchases-list" *ngIf="pagamentiPendenti.length > 0">
-            <div class="pending-purchase-card" *ngFor="let vendita of pagamentiPendenti">
-              <!-- Titolo pacchetto -->
-              <div class="purchase-title">
-                <i class="fas fa-box-open me-2"></i>
-                {{ vendita.pacchetto?.nome || 'Pacchetto' }}
-              </div>
-              
-              <!-- Importo e Data -->
-              <div class="purchase-info">
-                <div class="info-item">
-                  <span class="info-label">IMPORTO: </span>
-                  <span class="info-value">€ {{ vendita.importo.toFixed(2) }}</span>
-                </div>
-                <div class="info-item">
-                  <span class="info-label">DATA ACQUISTO: </span>
-                  <span class="info-value">{{ formatDateOnly(vendita.dataAcquisto) }}</span>
+          <!-- Mini Calendario -->
+          <div class="card card-calendar">
+            <div class="card-header-modern">
+              <h3><i class="fas fa-calendar-week me-2"></i>Prossimi 7 Giorni</h3>
+            </div>
+            <div class="card-body-modern">
+              <div class="mini-calendar">
+                <div class="calendar-day" *ngFor="let giorno of giorniCalendario" 
+                     [class.today]="isOggi(giorno.data)"
+                     [class.has-lessons]="giorno.lezioni.length > 0">
+                  <div class="day-name">{{ getNomeGiorno(giorno.data) }}</div>
+                  <div class="day-number">{{ giorno.data.getDate() }}</div>
+                  <div class="day-indicator" *ngIf="giorno.lezioni.length > 0">
+                    <span class="lesson-dot" *ngFor="let lesson of giorno.lezioni.slice(0, 3)"></span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+
+          <!-- Pacchetti Attivi -->
+          <div class="card card-pacchetti">
+            <div class="card-header-modern">
+              <h3><i class="fas fa-box-open me-2"></i>I Tuoi Pacchetti</h3>
+              <button class="btn-text" (click)="vaiAPacchetti()">
+                Acquista <i class="fas fa-plus ms-1"></i>
+              </button>
+            </div>
+            <div class="card-body-modern">
+              <div *ngIf="pacchettiAcquistati.length === 0" class="empty-state-small">
+                <i class="fas fa-box"></i>
+                <p>Nessun pacchetto attivo</p>
+              </div>
+
+              <div class="pacchetti-list" *ngIf="pacchettiAcquistati.length > 0">
+                <div class="pacchetto-item" *ngFor="let pacchetto of pacchettiAcquistati">
+                  <div class="pacchetto-header">
+                    <div class="pacchetto-name">{{ pacchetto.pacchettoNome }}</div>
+                    <div class="pacchetto-count">{{ pacchetto.lezioniRimaste }}/{{ pacchetto.lezioniTotali }}</div>
+                  </div>
+                  <div class="pacchetto-progress">
+                    <div class="progress-bar-container">
+                      <div class="progress-bar-fill" [style.width.%]="getProgressPercentage(pacchetto)"></div>
+                    </div>
+                  </div>
+                  <div class="pacchetto-footer">
+                    <span class="pacchetto-categoria">{{ pacchetto.categoria }}</span>
+                    <span class="pacchetto-rimaste">{{ pacchetto.lezioniRimaste }} rimaste</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
+
     </div>
   </div>
 </div>
