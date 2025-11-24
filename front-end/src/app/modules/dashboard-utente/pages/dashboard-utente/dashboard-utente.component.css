@@ -9,7 +9,7 @@
   overflow-x: hidden;
   position: relative;
   z-index: 1;
-  padding: 2rem;
+  padding: 12px;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
   scrollbar-width: thin;
@@ -43,7 +43,7 @@
   flex-direction: column;
   gap: 1.5rem;
   max-width: 1400px;
-  margin: 0 auto;
+  margin-top: 32px;
   width: 100%;
 }
 
