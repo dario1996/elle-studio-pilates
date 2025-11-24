@@ -83,6 +83,9 @@ public class RegistrazioneController {
 
             // Registrazione utente
             Utenti savedUtente = registrazioneService.registraUtente(registrazioneDTO);
+            
+            // Invio email di conferma registrazione
+            registrazioneService.invioMailRegistrazione(savedUtente.getEmail(), savedUtente.getUsername());
 
             log.info("Registrazione completata con successo per: " + registrazioneDTO.getUsername() + " con ID: " + savedUtente.getId());
 

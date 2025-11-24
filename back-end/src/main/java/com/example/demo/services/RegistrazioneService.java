@@ -4,6 +4,9 @@ import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +18,9 @@ import com.example.demo.repository.UtenteRepository;
 @Service
 @Transactional
 public class RegistrazioneService {
+
+    @Autowired
+    private JavaMailSender mailSender;
 
     private static final Logger log = LoggerFactory.getLogger(RegistrazioneService.class);
 
@@ -98,5 +104,40 @@ public class RegistrazioneService {
         }
 
         return utente;
+    }
+
+    /**
+     * Invia email di conferma registrazione
+     */
+    public void invioMailRegistrazione(String email, String username) {
+        log.info("Invio email di conferma registrazione a: " + email);
+        
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom("vincenzo.cusaniello@gmail.com");
+            message.setTo(email);
+            message.setSubject("Benvenuto in Elle Studio Pilates!");
+            
+            String emailBody = String.format(
+                "Ciao %s!\n\n" +
+                "Benvenuto in Elle Studio Pilates!\n\n" +
+                "La tua registrazione è stata completata con successo.\n" +
+                "L'utenza verrà abilitata nel più breve tempo possibile e riceverai una mail quando questo avverrà.\n\n" +
+                "Quando questo accadrà potrai accedere al sistema utilizzando le credenziali che hai scelto.\n\n" +
+                "Se non hai richiesto questa registrazione, ti preghiamo di contattarci immediatamente.\n\n" +
+                "Grazie per esserti registrato!\n" +
+                "Elle Studio Pilates",
+                username
+            );
+            
+            message.setText(emailBody);
+            mailSender.send(message);
+            
+            log.info("Email di conferma registrazione inviata con successo a: " + email);
+            
+        } catch (Exception e) {
+            log.error("Errore durante l'invio dell'email di conferma registrazione: " + e.getMessage(), e);
+            // Non blocchiamo la registrazione se l'email fallisce
+        }
     }
 }
