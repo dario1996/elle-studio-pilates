@@ -1,5 +1,4 @@
-/* ==================== MODERN DASHBOARD LAYOUT ==================== */
-
+/* ==================== LAYOUT ==================== */
 .page-content {
   flex: 1 1 auto;
   min-height: 0;
@@ -7,16 +6,11 @@
   flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
-  position: relative;
-  z-index: 1;
   padding: 12px;
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
   scrollbar-width: thin;
   scrollbar-color: #c99e67 #f8f8f8;
 }
 
-/* Loading & Error States */
 .loading-state, .error-state {
   display: flex;
   flex-direction: column;
@@ -27,17 +21,9 @@
   text-align: center;
 }
 
-.loading-state i {
-  color: #c99e67;
-  margin-bottom: 1rem;
-}
+.loading-state i { color: #c99e67; margin-bottom: 1rem; }
+.error-state i { color: #ef4444; margin-bottom: 1rem; }
 
-.error-state i {
-  color: #ef4444;
-  margin-bottom: 1rem;
-}
-
-/* Dashboard Grid Layout */
 .dashboard-grid {
   display: flex;
   flex-direction: column;
@@ -47,7 +33,7 @@
   width: 100%;
 }
 
-/* ==================== STATS ROW ==================== */
+/* ==================== STATS ==================== */
 .stats-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -65,12 +51,9 @@
   gap: 0.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
-  min-height: 0;
 }
 
-.stat-card:hover {
-  box-shadow: 0 4px 12px rgba(201, 158, 103, 0.2);
-}
+.stat-card:hover { box-shadow: 0 4px 12px rgba(201, 158, 103, 0.2); }
 
 .stat-header {
   display: flex;
@@ -91,7 +74,6 @@
 .stat-icon {
   font-size: 1.125rem;
   color: #c99e67;
-  flex-shrink: 0;
 }
 
 .stat-content {
@@ -113,7 +95,7 @@
   font-weight: 500;
 }
 
-/* ==================== CONTENT ROW ==================== */
+/* ==================== CARDS ==================== */
 .content-row {
   display: grid;
   grid-template-columns: 1fr 380px;
@@ -121,7 +103,6 @@
   align-items: start;
 }
 
-/* ==================== MODERN CARDS (STILE GESTIONE PACCHETTI) ==================== */
 .card {
   background-color: white;
   border-radius: 12px;
@@ -132,13 +113,10 @@
   display: flex;
   flex-direction: column;
   min-height: 0;
-  overflow: hidden;
   transition: all 0.3s ease;
 }
 
-.card:hover {
-  box-shadow: 0 4px 12px rgba(201, 158, 103, 0.2);
-}
+.card:hover { box-shadow: 0 4px 12px rgba(201, 158, 103, 0.2); }
 
 .card-header-modern {
   font-size: 0.875rem;
@@ -150,7 +128,6 @@
   justify-content: space-between;
   border-bottom: 2px solid #c99e67;
   padding-bottom: 0.625rem;
-  flex-shrink: 0;
 }
 
 .card-header-modern h3 {
@@ -178,8 +155,6 @@
   padding: 0.25rem 0.5rem;
   border-radius: 6px;
   transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
 }
 
 .btn-text:hover {
@@ -193,25 +168,12 @@
   overflow-y: auto;
 }
 
-.card-body-modern::-webkit-scrollbar {
-  width: 6px;
-}
+.card-body-modern::-webkit-scrollbar { width: 6px; }
+.card-body-modern::-webkit-scrollbar-track { background: #f3f4f6; border-radius: 3px; }
+.card-body-modern::-webkit-scrollbar-thumb { background: #c99e67; border-radius: 3px; }
+.card-body-modern::-webkit-scrollbar-thumb:hover { background: #b88e57; }
 
-.card-body-modern::-webkit-scrollbar-track {
-  background: #f3f4f6;
-  border-radius: 3px;
-}
-
-.card-body-modern::-webkit-scrollbar-thumb {
-  background: #c99e67;
-  border-radius: 3px;
-}
-
-.card-body-modern::-webkit-scrollbar-thumb:hover {
-  background: #b88e57;
-}
-
-/* ==================== LEZIONI LIST WITH IMAGES ==================== */
+/* ==================== LEZIONI ==================== */
 .lezioni-list {
   display: flex;
   flex-direction: column;
@@ -235,12 +197,10 @@
 
 .lezione-image {
   width: 120px;
-  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  overflow: hidden;
 }
 
 .lezione-image i {
@@ -263,25 +223,10 @@
   z-index: 2;
 }
 
-.badge-oggi {
-  background: rgba(22, 101, 52, 0.95);
-  color: white;
-}
-
-.badge-domani {
-  background: rgba(30, 64, 175, 0.95);
-  color: white;
-}
-
-.badge-settimana {
-  background: rgba(146, 64, 14, 0.95);
-  color: white;
-}
-
-.badge-futuro {
-  background: rgba(107, 33, 168, 0.95);
-  color: white;
-}
+.badge-oggi { background: rgba(22, 101, 52, 0.95); color: white; }
+.badge-domani { background: rgba(30, 64, 175, 0.95); color: white; }
+.badge-settimana { background: rgba(146, 64, 14, 0.95); color: white; }
+.badge-futuro { background: rgba(107, 33, 168, 0.95); color: white; }
 
 .lezione-info {
   flex: 1;
@@ -296,12 +241,6 @@
   font-weight: 600;
   color: #1f2937;
   margin: 0;
-}
-
-.lezione-tipo {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
 }
 
 .tipo-badge {
@@ -336,14 +275,13 @@
   width: 14px;
 }
 
-/* ==================== SIDEBAR COLUMN ==================== */
+/* ==================== SIDEBAR & CALENDAR ==================== */
 .sidebar-column {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
 }
 
-/* ==================== MINI CALENDAR ==================== */
 .mini-calendar {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -407,7 +345,7 @@
   background: #10b981;
 }
 
-/* ==================== PACCHETTI LIST ==================== */
+/* ==================== PACCHETTI ==================== */
 .pacchetti-list {
   display: flex;
   flex-direction: column;
@@ -422,9 +360,7 @@
   transition: all 0.3s ease;
 }
 
-.pacchetto-item:hover {
-  border-color: #c99e67;
-}
+.pacchetto-item:hover { border-color: #c99e67; }
 
 .pacchetto-header {
   display: flex;
@@ -445,9 +381,7 @@
   color: #c99e67;
 }
 
-.pacchetto-progress {
-  margin-bottom: 0.5rem;
-}
+.pacchetto-progress { margin-bottom: 0.5rem; }
 
 .progress-bar-container {
   width: 100%;
@@ -473,15 +407,8 @@
   border-top: 1px solid #e5e7eb;
 }
 
-.pacchetto-categoria {
-  color: #6b7280;
-  font-weight: 500;
-}
-
-.pacchetto-rimaste {
-  color: #374151;
-  font-weight: 600;
-}
+.pacchetto-categoria { color: #6b7280; font-weight: 500; }
+.pacchetto-rimaste { color: #374151; font-weight: 600; }
 
 /* ==================== EMPTY STATES ==================== */
 .empty-state-modern {
@@ -491,7 +418,6 @@
   justify-content: center;
   padding: 2rem 1.5rem;
   text-align: center;
-  color: #9ca3af;
 }
 
 .empty-state-modern i {
@@ -512,7 +438,6 @@
   align-items: center;
   padding: 2rem 1rem;
   text-align: center;
-  color: #9ca3af;
 }
 
 .empty-state-small i {
@@ -527,97 +452,24 @@
   margin: 0;
 }
 
-/* ==================== BUTTONS ==================== */
-.btn-primary-modern {
-  background: white;
-  border: 1px solid white;
-  border-radius: 6px;
-  padding: 8px 12px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: #374151;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.05);
-}
-
-.btn-primary-modern:hover {
-  background: white;
-  color: #846843;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
-  border: 0.5px solid #c99e67;
-  border-radius: 6px;
-}
-
-.btn-primary-modern:active {
-  transform: translateY(0);
-}
-
-/* ==================== RESPONSIVE DESIGN ==================== */
+/* ==================== RESPONSIVE ==================== */
 @media (max-width: 1024px) {
-  .content-row {
-    grid-template-columns: 1fr;
-  }
-  
-  .sidebar-column {
-    grid-row: 1;
-  }
+  .content-row { grid-template-columns: 1fr; }
+  .sidebar-column { grid-row: 1; }
 }
 
 @media (max-width: 768px) {
-  .page-content {
-    padding: 1rem;
-  }
-  
-  .stats-row {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-  }
-  
-  .stat-card {
-    padding: 1rem;
-  }
-  
-  .stat-icon {
-    width: 44px;
-    height: 44px;
-    font-size: 1.25rem;
-  }
-  
-  .stat-value {
-    font-size: 1.5rem;
-  }
-  
-  .lezione-card-modern {
-    flex-direction: column;
-  }
-  
-  .lezione-image {
-    width: 100%;
-    height: 120px;
-  }
-  
-  .mini-calendar {
-    gap: 0.375rem;
-  }
-  
-  .calendar-day {
-    padding: 0.5rem 0.125rem;
-  }
+  .page-content { padding: 1rem; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .stat-card { padding: 1rem; }
+  .stat-value { font-size: 1.5rem; }
+  .lezione-card-modern { flex-direction: column; }
+  .lezione-image { width: 100%; height: 120px; }
+  .calendar-day { padding: 0.5rem 0.125rem; }
 }
 
 @media (max-width: 480px) {
-  .stats-row {
-    grid-template-columns: 1fr;
-  }
-  
-  .card-header-modern {
-    padding: 1.25rem;
-  }
-  
-  .card-body-modern {
-    padding: 1.25rem;
-  }
+  .stats-row { grid-template-columns: 1fr; }
 }
 
 /* ==================== UTILITIES ==================== */
@@ -625,640 +477,3 @@
 .me-2 { margin-right: 0.5rem; }
 .ms-1 { margin-left: 0.25rem; }
 .mt-3 { margin-top: 1rem; }
-
-.dashboard-utente-cards {
-  display: flex;
-  align-items: stretch;
-  margin-top: 32px;
-  height: 100%;
-  width: 100%;
-    gap: 20px;
-  justify-content: space-between;
-  align-items: stretch;
-}
-
-.user-cards {
-  justify-items: center;
-  background: white;
-  border-radius: 16px;
-  padding: 24px 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  border: 1px solid #c99e67;
-  border-top: 4px solid #c99e67;
-  transition: all 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  height: auto;
-  box-sizing: border-box;
-}
-
-.card-content {
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-
-/* Empty state */
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
-  color: #9ca3af;
-  text-align: center;
-}
-
-.empty-state i {
-  opacity: 0.5;
-  font-size: 2rem;
-}
-
-.empty-state p {
-  margin: 0;
-  font-size: 13px;
-}
-
-/* Navigation arrows */
-.nav-arrow {
-  color: #c99e67;
-  font-size: 16px;
-  transition: all 0.3s ease;
-  padding: 4px !important;
-}
-
-.nav-arrow:hover:not(:disabled) {
-  color: #a67c52;
-  transform: scale(1.1);
-}
-
-.nav-arrow:disabled {
-  color: #d1d5db;
-  cursor: not-allowed;
-}
-
-/* Lessons container */
-.lessons-container {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 0 8px;
-}
-
-/* Lesson card */
-.lesson-card {
-  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-  border-radius: 10px;
-  padding: 12px;
-  position: relative;
-  transition: all 0.3s ease;
-  border-left: 3px solid #2196f3;
-}
-
-.lesson-card:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 3px 10px rgba(33, 150, 243, 0.15);
-}
-
-/* Colori pastello diversi per ogni card */
-.lesson-card-primary {
-  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-  border-left-color: #2196f3;
-}
-
-.lesson-card-secondary {
-  background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
-  border-left-color: #9c27b0;
-}
-
-.lesson-card-tertiary {
-  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-  border-left-color: #ff9800;
-}
-
-/* Lesson badge (giorni mancanti) */
-.lesson-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 3px 10px;
-  border-radius: 16px;
-  font-size: 10px;
-  font-weight: 600;
-  margin-bottom: 8px;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-}
-
-.badge-oggi {
-  background: #dcfce7;
-  color: #166534;
-  border: 1px solid #86efac;
-}
-
-.badge-domani {
-  background: #dbeafe;
-  color: #1e40af;
-  border: 1px solid #93c5fd;
-}
-
-.badge-settimana {
-  background: #fef3c7;
-  color: #92400e;
-  border: 1px solid #fde68a;
-}
-
-.badge-futuro {
-  background: #f3e8ff;
-  color: #6b21a8;
-  border: 1px solid #d8b4fe;
-}
-
-.badge-passato {
-  background: #f3f4f6;
-  color: #6b7280;
-  border: 1px solid #d1d5db;
-}
-
-/* Lesson title */
-.lesson-title {
-  font-size: 14px;
-  font-weight: 700;
-  color: #111827;
-  margin: 0 0 6px 0;
-  line-height: 1.3;
-}
-
-/* Lesson type */
-.lesson-type {
-  display: flex;
-  align-items: center;
-  font-size: 11px;
-  color: #374151;
-  font-weight: 500;
-  margin-bottom: 8px;
-  padding: 4px 8px;
-  background: rgba(255, 255, 255, 0.6);
-  border-radius: 5px;
-  width: fit-content;
-}
-
-/* Lesson datetime */
-.lesson-datetime {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-bottom: 8px;
-}
-
-.datetime-item {
-  display: flex;
-  align-items: center;
-  font-size: 12px;
-  color: #4b5563;
-}
-
-.datetime-item i {
-  color: #6b7280;
-  width: 14px;
-  font-size: 11px;
-}
-
-/* Lesson instructor */
-.lesson-instructor {
-  display: flex;
-  align-items: center;
-  font-size: 12px;
-  color: #374151;
-  font-weight: 500;
-  padding-top: 8px;
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-.lesson-instructor i {
-  color: #6b7280;
-  font-size: 11px;
-}
-
-/* Pagination info */
-.pagination-info {
-  text-align: center;
-  padding-top: 10px;
-  border-top: 1px solid #e5e7eb;
-}
-
-.pagination-text {
-  font-size: 11px;
-  color: #6b7280;
-  font-weight: 500;
-}
-
-.btn-link:not([disabled]) .fa-chevron-left,
-.btn-link:not([disabled]) .fa-chevron-right {
-  color: #dbaf00; /* oro */
-  transition: color 0.2s;
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.suggested-lessons-small {
-  font-size: 12px;
-  padding: 12px;
-}
-.suggested-lessons-small .lesson-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 4px 0;
-  align-items: center;
-}
-.suggested-lessons-small .lesson-row .label {
-  color: #6b7280;
-  font-weight: 600;
-  font-size: 12px;
-  flex: 0 0 40%;
-  text-align: left;
-}
-.suggested-lessons-small .lesson-row .value {
-  color: #374151;
-  font-size: 13px;
-  flex: 1 1 60%;
-  text-align: right;
-  word-break: break-word;
-}
-.suggested-lessons-small .suggested-row {
-  border-bottom: 1px solid #eee;
-  padding-bottom: 0.3em;
-  margin-bottom: 0.2em;
-}
-.suggested-lessons-small strong,
-.suggested-lessons-small span {
-  font-size: 12px;
-}
-
-
-@media (max-width: 991px) {
-  .dashboard-utente-cards {
-    flex-direction: column;
-    align-items: center;
-    padding: 24px 12px 24px 12px;
-    gap: 1.2rem;
-    min-height: unset;
-    width: 100%;
-    overflow-x: unset;
-  }
-
-  .user-cards {
-    width: 100%;
-    max-width: 520px;
-    min-width: unset;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .suggested-lessons-small .lesson-row {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .suggested-lessons-small .lesson-row .value {
-    text-align: left;
-  }
-}
-
-.card-content {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.btn {
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-.btn-primary {
-  background: #374151;
-  color: white;
-}
-.btn-primary:hover {
-  background: #1f2937;
-}
-.btn-warning {
-  background: #c99e67;
-  color: #fff;
-}
-.btn-warning:hover {
-  background: #a67c52;
-}
-.mt-2 {
-  margin-top: 8px;
-}
-.text-muted {
-  color: #6b7280;
-}
-hr {
-  border: none;
-  border-top: 1px solid #eee;
-  margin: 8px 0;
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.card-header h3 {
-  font-size: 16px;
-  font-weight: 600;
-  color: #374151;
-  margin: 0;
-}
-
-.card-icon {
-  width: 20px;
-  height: 20px;
-  color: #9ca3af;
-  font-size: 18px;
-}
-
-.card-content {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.btn {
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-.btn-primary {
-  background: #374151;
-  color: white;
-}
-.btn-primary:hover {
-  background: #1f2937;
-}
-.btn-warning {
-  background: #c99e67;
-  color: #fff;
-}
-.btn-warning:hover {
-  background: #a67c52;
-}
-.mt-2 {
-  margin-top: 8px;
-}
-.text-muted {
-  color: #6b7280;
-}
-hr {
-  border: none;
-  border-top: 1px solid #eee;
-  margin: 8px 0;
-}
-/* ================== MODERN TABS (Radix UI Inspired) =================== */
-.tabs-container {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden; /* Prevent content overflow */
-}
-
-.tabs-list {
-  display: flex;
-  border-bottom: 1px solid var(--color-border);
-  margin-bottom: var(--spacing-lg);
-  background: transparent;
-}
-
-.tab-trigger {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  padding: var(--spacing-sm) var(--spacing-md);
-  font-family: var(--font-family);
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--color-muted-foreground);
-  background: transparent;
-  border: none;
-  border-radius: 6px 6px 0 0;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-  user-select: none;
-}
-
-.tab-trigger:hover {
-  color: var(--color-foreground);
-  background: var(--color-accent);
-}
-
-.tab-trigger:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
-
-.tab-trigger.active {
-  color: var(--color-primary);
-  background: transparent;
-}
-
-.tab-trigger.active::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--color-primary);
-  border-radius: 2px 2px 0 0;
-}
-
-.tab-trigger i {
-  font-size: 0.875rem;
-}
-
-.tabs-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-
-.tab-panel {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  overflow: hidden; /* Prevent tab content overflow */
-  animation: fadeIn 0.2s ease-in;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ================== TABLE AND PAGINATION LAYOUT =================== */
-.table-container {
-  flex: 1;
-  min-height: 0;
-  overflow: hidden; /* Prevent table from overflowing */
-}
-
-.pagination-container {
-  flex-shrink: 0;
-  flex-basis: auto;
-  padding-top: var(--spacing-sm);
-  border-top: 1px solid var(--color-border);
-  background: var(--color-background);
-  position: relative;
-  z-index: 10; /* Ensure pagination stays on top */
-}
-
-/* ================== EMPTY STATE =================== */
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: var(--spacing-2xl);
-  text-align: center;
-  color: var(--color-muted-foreground);
-}
-
-.empty-state i {
-  color: var(--color-muted-foreground);
-  margin-bottom: var(--spacing-lg);
-  opacity: 0.5;
-}
-
-.empty-state h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--color-foreground);
-  margin: 0 0 var(--spacing-sm) 0;
-}
-
-.empty-state p {
-  font-size: 0.875rem;
-  margin: 0;
-}
-
-/* ================== RESPONSIVE =================== */
-@media (max-width: 768px) {
-  .tabs-list {
-    overflow-x: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-  
-  .tabs-list::-webkit-scrollbar {
-    display: none;
-  }
-  
-  .tab-trigger {
-    flex-shrink: 0;
-    padding: var(--spacing-sm);
-    font-size: 0.8rem;
-  }
-  
-  .tab-trigger span {
-    display: none;
-  }
-  
-  .tab-trigger i {
-    font-size: 1rem;
-  }
-}
-
-/* ================== PENDING PURCHASES =================== */
-.pending-purchases-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.pending-purchase-card {
-  background: #ffffff;
-  border-radius: 8px;
-  padding: 12px;
-  border: 1px solid #e5e7eb;
-  /* border-left: 3px solid #f59e0b; */
-  transition: all 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.pending-purchase-card:hover {
-  border-color: #f59e0b;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-.purchase-title {
-  font-size: 13px;
-  font-weight: 700;
-  color: #111827;
-  display: flex;
-  align-items: center;
-}
-
-.purchase-title i {
-  color: #f59e0b;
-  font-size: 12px;
-}
-
-.purchase-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  font-size: 11px;
-  color: #6b7280;
-}
-
-.info-item {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.info-label {
-  font-size: 10px;
-  color: #9ca3af;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-}
-
-.info-value {
-  font-size: 12px;
-  font-weight: 700;
-  color: #111827;
-}
-
-.purchase-info i {
-  color: #9ca3af;
-  font-size: 10px;
-}
