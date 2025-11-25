@@ -106,7 +106,7 @@
 .card {
   background-color: white;
   border-radius: 12px;
-  border: 1px solid #c99e67;
+  /* border: 1px solid #c99e67; */
   border-top: 4px solid #c99e67;
   padding: 1rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -160,6 +160,27 @@
 .btn-text:hover {
   background: rgba(201, 158, 103, 0.1);
   color: #a67c52;
+}
+
+.btn-prenota-ora {
+  background: transparent;
+  background-color: #f2f2f2 !important;
+  color: #000000 !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  font-size: 12px !important;
+  border: none !important;
+  min-height: 32px !important;
+}
+
+.btn-prenota-ora:hover {
+  background: transparent;
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  font-size: 12px !important;
+  border: none !important;
 }
 
 .card-body-modern {
