@@ -54,6 +54,7 @@ export interface Pacchetto {
   descrizione?: string;
   categoria: string;
   categorieLezioni?: string[] | string; // Array JSON per pacchetti COMBO
+  distribuzioneLezioni?: { [categoria: string]: number } | string; // Numero lezioni per categoria (COMBO)
   livello?: string;
   durataMinuti?: number;
   maxPartecipanti?: number;
@@ -61,6 +62,7 @@ export interface Pacchetto {
   attivo: boolean;
   numeroLezioni?: number; // Numero totale di lezioni nel pacchetto
   lezioniRimanenti?: number; // Lezioni ancora disponibili
+  venditaId?: number; // ID della vendita (quando caricato da pacchetti-utente)
 }
 
 // Request per creare prenotazioni ricorrenti

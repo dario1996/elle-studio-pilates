@@ -142,11 +142,16 @@ public class PrenotazioneRicorrenteService {
     private LocalDate calcolaPrimaDataDisponibile(GiornoSettimana giornoSettimana) {
         LocalDate oggi = LocalDate.now();
         DayOfWeek targetDay = convertGiornoSettimana(giornoSettimana);
-        LocalDate primaData = oggi.plusDays(7); // 7 giorni di anticipo minimo
+        LocalDate primaData = oggi;
 
         // Trova la prima occorrenza del giorno della settimana
         while (primaData.getDayOfWeek() != targetDay) {
             primaData = primaData.plusDays(1);
+        }
+        
+        // Se la prima occorrenza è oggi, passa alla settimana successiva
+        if (primaData.equals(oggi)) {
+            primaData = primaData.plusWeeks(1);
         }
 
         return primaData;
@@ -232,5 +237,85 @@ public class PrenotazioneRicorrenteService {
 
         Long partecipanti = prenotazioneRepository.countPartecipantiByTemplateAndData(templateId, data);
         return partecipanti < template.getMaxPartecipanti();
+    }
+
+    /**
+     * Crea prenotazioni COMBO per multiple categorie
+     * Transazione atomica: se fallisce una categoria, rollback completo
+     * 
+     * @param venditaId ID della vendita (pacchetto COMBO acquistato)
+     * @param selezioni Lista di selezioni per categoria
+     * @param username Username dell'utente
+     * @return Lista aggregata di tutte le prenotazioni create
+     */
+    @Transactional
+    public List<PrenotazioneLezione> creaPrenotazioniCombo(
+            Long venditaId,
+            List<com.example.demo.dto.PrenotazioneComboRequest.CategoriaSelection> selezioni,
+            String username) {
+
+        System.out.println("=== DEBUG creaPrenotazioniCombo ===");
+        System.out.println("venditaId ricevuto: " + venditaId);
+        System.out.println("username: " + username);
+        System.out.println("numero selezioni: " + selezioni.size());
+
+        // Verifica che la vendita esista
+        Vendita vendita = venditaRepository.findById(venditaId)
+                .orElseThrow(() -> new RuntimeException("Vendita non trovata"));
+
+        Utenti utente = utenteRepository.findByUsername(username);
+        if (utente == null) {
+            throw new RuntimeException("Utente non trovato");
+        }
+
+        // Verifica che sia un pacchetto COMBO
+        if (!"COMBO".equals(vendita.getPacchetto().getCategoria())) {
+            throw new RuntimeException("Il pacchetto selezionato non è di tipo COMBO");
+        }
+
+        // Calcola totale lezioni richieste
+        int totaleLezioniRichieste = selezioni.stream()
+                .mapToInt(com.example.demo.dto.PrenotazioneComboRequest.CategoriaSelection::getNumeroLezioni)
+                .sum();
+
+        // Verifica che non superi le lezioni disponibili
+        if (totaleLezioniRichieste > vendita.getLezioniRimanenti()) {
+            throw new RuntimeException(String.format(
+                    "Totale lezioni richieste (%d) supera quelle disponibili (%d)",
+                    totaleLezioniRichieste,
+                    vendita.getLezioniRimanenti()
+            ));
+        }
+
+        List<PrenotazioneLezione> tuttePrenotazioni = new ArrayList<>();
+
+        // Processa ogni selezione di categoria
+        for (com.example.demo.dto.PrenotazioneComboRequest.CategoriaSelection selezione : selezioni) {
+            CalendarioSettimanale template = calendarioRepository.findById(selezione.getTemplateId())
+                    .orElseThrow(() -> new RuntimeException(
+                            "Template non trovato per categoria " + selezione.getCategoria()
+                    ));
+
+            // Verifica che il template corrisponda alla categoria
+            if (!selezione.getCategoria().equals(template.getTipoLezione().name())) {
+                throw new RuntimeException(String.format(
+                        "Il template selezionato non corrisponde alla categoria %s",
+                        selezione.getCategoria()
+                ));
+            }
+
+            // Crea prenotazioni per questa categoria
+            List<PrenotazioneLezione> prenotazioniCategoria = creaPrenotazioniRicorrenti(
+                    venditaId,
+                    selezione.getTemplateId(),
+                    username,
+                    selezione.getCategoria(),
+                    selezione.getNumeroLezioni()
+            );
+
+            tuttePrenotazioni.addAll(prenotazioniCategoria);
+        }
+
+        return tuttePrenotazioni;
     }
 }

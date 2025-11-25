@@ -69,25 +69,8 @@
                 </div>
               </div>
 
-              <!-- Sezione selezione tipo lezione per COMBO -->
-              <div class="form-section" *ngIf="selectedPacchetto && isPackettoCombo()">
-                <h3><i class="fas fa-list-ul"></i> Seleziona Tipo Lezione</h3>
-                
-                <div class="form-group">
-                  <label for="tipoLezioneCombo">Tipo Lezione *</label>
-                  <select 
-                    id="tipoLezioneCombo" 
-                    class="form-control"
-                    [(ngModel)]="categoriaLezioneSelezionata"
-                    [ngModelOptions]="{standalone: true}"
-                    (change)="onTipoLezioneComboChange($event)">
-                    <option value="">-- Seleziona tipo di lezione --</option>
-                    <option *ngFor="let cat of getCategorieLezioniCombo()" [value]="cat">
-                      {{ formatTipoLezione(cat) }}
-                    </option>
-                  </select>
-                </div>
-              </div>
+              <!-- Nota: La sezione selezione tipo lezione per COMBO è stata rimossa -->
+              <!-- Il wizard COMBO si apre automaticamente quando si seleziona un pacchetto COMBO -->
 
               <!-- Sezione note -->
               <div class="form-section" *ngIf="selectedTemplate">
@@ -106,7 +89,8 @@
             </div>
             
             <!-- Colonna destra: Date e Orari disponibili -->
-            <div class="right-column">
+            <!-- Nascosto se è un pacchetto COMBO (il wizard gestisce tutto) -->
+            <div class="right-column" *ngIf="selectedPacchetto && !isPackettoCombo()">
               
               <div class="form-section">
                 <h3><i class="fas fa-calendar-alt"></i> Orari Disponibili</h3>
@@ -210,17 +194,6 @@
       </div>
     </div>
     
-  </div>
-</div>
-
-<!-- Toast Badge Notification -->
-<div class="toast-badge" [class.show]="showToast" [ngClass]="toastType">
-  <div class="toast-content">
-    <i class="toast-icon">{{ toastIcon }}</i>
-    <span class="toast-message">{{ toastMessage }}</span>
-    <button type="button" class="toast-close" (click)="hideToast()">
-      close
-    </button>
   </div>
 </div>
 

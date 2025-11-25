@@ -14,6 +14,7 @@ import {
   RichiestaSpostamentoRequest,
   RichiestaSpostamento
 } from '../models/prenotazione.model';
+import { PrenotazioneComboRequest } from '../models/combo-wizard.model';
 
 @Injectable({
   providedIn: 'root'
@@ -159,5 +160,12 @@ export class PrenotazioneService {
    */
   getMieRichiesteSpostamento(): Observable<RichiestaSpostamento[]> {
     return this.http.get<RichiestaSpostamento[]>(`${this.baseUrl}/mie-richieste-spostamento`);
+  }
+
+  /**
+   * Crea prenotazioni COMBO (multiple categorie)
+   */
+  prenotaCombo(request: PrenotazioneComboRequest): Observable<PrenotazioneRicorrenteResponse> {
+    return this.http.post<PrenotazioneRicorrenteResponse>(`${this.baseUrl}/prenota-ricorrente-combo`, request);
   }
 }

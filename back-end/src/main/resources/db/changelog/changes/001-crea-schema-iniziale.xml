@@ -112,6 +112,9 @@
             <column name="categorie_lezioni" type="JSON">
                 <constraints nullable="true" />
             </column>
+            <column name="distribuzione_lezioni" type="JSON">
+                <constraints nullable="true" />
+            </column>
             <column name="numero_lezioni" type="INTEGER">
                 <constraints nullable="true" />
             </column>

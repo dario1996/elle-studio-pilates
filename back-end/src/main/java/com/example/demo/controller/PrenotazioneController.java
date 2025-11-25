@@ -53,6 +53,13 @@ public class PrenotazioneController {
             // Recupera tutte le vendite PAID per questo utente
             List<Vendita> vendite = venditaRepository.findByUtenteUsernameAndStato(username, StatoVendita.PAID);
 
+            System.out.println("=== DEBUG getPacchettiUtente ===");
+            System.out.println("Username: " + username);
+            System.out.println("Numero vendite PAID: " + vendite.size());
+            for (Vendita v : vendite) {
+                System.out.println("  - Vendita ID: " + v.getId() + ", Pacchetto: " + v.getPacchetto().getNome() + " (ID: " + v.getPacchetto().getId() + ")");
+            }
+
             // Converte le vendite in DTO con i dettagli del pacchetto
             List<PacchettoUtenteDTO> pacchetti = vendite.stream()
                     .map(vendita -> {
@@ -66,6 +73,7 @@ public class PrenotazioneController {
                         dto.setPrezzo(vendita.getImporto());
                         dto.setAttivo(vendita.getPacchetto().getAttivo());
                         dto.setCategorieLezioni(vendita.getPacchetto().getCategorieLezioni());
+                        dto.setDistribuzioneLezioni(vendita.getPacchetto().getDistribuzioneLezioni());
                         dto.setNumeroLezioni(vendita.getPacchetto().getNumeroLezioni());
                         dto.setLezioniRimanenti(vendita.getLezioniRimanenti());
                         return dto;
@@ -108,6 +116,39 @@ public class PrenotazioneController {
                     dtos
             ));
         } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse(e.getMessage()));
+        }
+    }
+
+    /**
+     * Crea prenotazioni COMBO per multiple categorie
+     */
+    @PostMapping("/prenota-ricorrente-combo")
+    public ResponseEntity<?> prenotaCombo(
+            @RequestBody com.example.demo.dto.PrenotazioneComboRequest request,
+            Authentication authentication) {
+        try {
+            String username = authentication.getName();
+
+            List<PrenotazioneLezione> prenotazioni = prenotazioneRicorrenteService.creaPrenotazioniCombo(
+                    request.getVenditaId(),
+                    request.getSelezioni(),
+                    username
+            );
+
+            // Converti in DTO
+            List<PrenotazioneDTO> dtos = prenotazioni.stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(new PrenotazioneRicorrenteResponse(
+                    "Prenotazioni COMBO create con successo",
+                    dtos.size(),
+                    dtos
+            ));
+        } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ErrorResponse(e.getMessage()));
         }
@@ -421,6 +462,7 @@ public class PrenotazioneController {
         private java.math.BigDecimal prezzo;
         private Boolean attivo;
         private String categorieLezioni;
+        private String distribuzioneLezioni;
         private Integer numeroLezioni;
         private Integer lezioniRimanenti;
 
@@ -495,6 +537,14 @@ public class PrenotazioneController {
 
         public void setCategorieLezioni(String categorieLezioni) {
             this.categorieLezioni = categorieLezioni;
+        }
+
+        public String getDistribuzioneLezioni() {
+            return distribuzioneLezioni;
+        }
+
+        public void setDistribuzioneLezioni(String distribuzioneLezioni) {
+            this.distribuzioneLezioni = distribuzioneLezioni;
         }
 
         public Integer getNumeroLezioni() {

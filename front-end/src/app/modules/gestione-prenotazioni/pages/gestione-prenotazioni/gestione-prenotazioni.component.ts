@@ -6,7 +6,11 @@ import { PageTitleComponent } from '../../../../core/page-title/page-title.compo
 import { NotificationComponent } from '../../../../core/notification/notification.component';
 import { AuthJwtService } from '../../../../core/services/authJwt.service';
 import { inject } from '@angular/core';
+import { ToastrUniversaleService } from '../../../../shared/services/toastr-universale.service';
 import { PrenotazioneService } from '../../../../shared/services/prenotazione.service';
+import { ModaleService } from '../../../../core/services/modal.service';
+import { IModaleConfig } from '../../../../shared/models/ui/modal-config';
+import { PrenotazioneComboWizardComponent } from '../../components/prenotazione-combo-wizard/prenotazione-combo-wizard.component';
 import { 
   LezioneDisponibile, 
   PrenotazioneLezioneResponse, 
@@ -27,6 +31,8 @@ export class GestionePrenotazioniComponent implements OnInit {
   private fb = inject(FormBuilder);
   private auth = inject(AuthJwtService);
   private prenotazioneService = inject(PrenotazioneService);
+  private toastr = inject(ToastrUniversaleService);
+  private modaleService = inject(ModaleService);
 
   title: string = 'Prenotazioni';
   
@@ -47,13 +53,6 @@ export class GestionePrenotazioniComponent implements OnInit {
   accordionAperto: string | null = null;
   selectedTemplate: TipoLezione | null = null;
   categoriaLezioneSelezionata: string | null = null;
-  
-  // Toast notification properties
-  showToast = false;
-  toastMessage = '';
-  toastType: 'success' | 'error' | 'info' = 'success';
-  toastIcon = '';
-  private toastTimeout?: number;
 
   // Modal gestione prenotazioni
   showGestioneModal = false;
@@ -79,6 +78,16 @@ export class GestionePrenotazioniComponent implements OnInit {
   ngOnInit(): void {
     this.caricaPacchetti();
     this.caricaPrenotazioniUtente();
+    
+    // Ascolta chiusura modale per refresh dopo conferma wizard COMBO
+    this.modaleService.config$.subscribe(config => {
+      // Se il modale si chiude (config = null) e c'era un wizard COMBO, ricarica i dati
+      if (config === null && this.selectedPacchetto?.categoria === 'COMBO') {
+        this.caricaPacchetti();
+        this.caricaPrenotazioniUtente();
+        this.selectedPacchetto = null;
+      }
+    });
   }
 
   caricaPacchetti(): void {
@@ -91,14 +100,14 @@ export class GestionePrenotazioniComponent implements OnInit {
         this.loading = false;
         if (pacchetti.length === 0) {
           console.warn('Nessun pacchetto trovato per questo utente');
-          this.showToastMessage('Non hai ancora acquistato nessun pacchetto', 'info');
+          this.toastr.info('Non hai ancora acquistato nessun pacchetto');
         }
       },
       error: (error) => {
         console.error('Errore durante il caricamento dei pacchetti', error);
         console.error('Dettaglio errore:', error.error);
         console.error('Status:', error.status);
-        this.showToastMessage('Errore durante il caricamento dei pacchetti acquistati', 'error');
+        this.toastr.error('Errore durante il caricamento dei pacchetti acquistati');
         this.loading = false;
       }
     });
@@ -110,26 +119,30 @@ export class GestionePrenotazioniComponent implements OnInit {
     
     console.log('Pacchetto selezionato:', this.selectedPacchetto);
     console.log('Categoria:', this.selectedPacchetto?.categoria);
-    console.log('CategorieLezioni:', this.selectedPacchetto?.categorieLezioni);
     console.log('Is COMBO:', this.isPackettoCombo());
-    console.log('Categorie parsed:', this.getCategorieLezioniCombo());
-    
-    // Reset selezioni successive
-    this.selectedTipoLezione = null;
-    this.selectedLezione = null;
-    this.selectedTemplate = null;
-    this.categoriaLezioneSelezionata = null;
-    this.lezioniDisponibili = [];
-    this.tipiLezione = [];
-    this.templatesPerGiorno = new Map();
-    this.giorniConOrari = [];
-    this.accordionAperto = null;
-    this.prenotazioneForm.patchValue({
-      tipoLezione: '',
-      lezione: ''
-    });
     
     if (this.selectedPacchetto) {
+      // Se è un COMBO, apri subito il wizard
+      if (this.isPackettoCombo()) {
+        this.apriComboWizard();
+        return;
+      }
+      
+      // Reset selezioni successive per pacchetti normali
+      this.selectedTipoLezione = null;
+      this.selectedLezione = null;
+      this.selectedTemplate = null;
+      this.categoriaLezioneSelezionata = null;
+      this.lezioniDisponibili = [];
+      this.tipiLezione = [];
+      this.templatesPerGiorno = new Map();
+      this.giorniConOrari = [];
+      this.accordionAperto = null;
+      this.prenotazioneForm.patchValue({
+        tipoLezione: '',
+        lezione: ''
+      });
+      
       this.caricaTemplatesPerCategoria();
     }
   }
@@ -145,7 +158,7 @@ export class GestionePrenotazioniComponent implements OnInit {
       },
       error: (error) => {
         console.error('Errore durante il caricamento dei tipi lezione', error);
-        this.showToastMessage('Errore durante il caricamento dei tipi lezione per questo pacchetto', 'error');
+        this.toastr.error('Errore durante il caricamento dei tipi lezione per questo pacchetto');
         this.loading = false;
       }
     });
@@ -170,7 +183,7 @@ export class GestionePrenotazioniComponent implements OnInit {
       },
       error: (error) => {
         console.error('Errore durante il caricamento dei template', error);
-        this.showToastMessage('Errore durante il caricamento degli orari disponibili', 'error');
+        this.toastr.error('Errore durante il caricamento degli orari disponibili');
         this.loading = false;
       }
     });
@@ -194,7 +207,7 @@ export class GestionePrenotazioniComponent implements OnInit {
       },
       error: (error) => {
         console.error('Errore durante il caricamento dei template', error);
-        this.showToastMessage('Errore durante il caricamento degli orari disponibili', 'error');
+        this.toastr.error('Errore durante il caricamento degli orari disponibili');
         this.loading = false;
       }
     });
@@ -245,6 +258,24 @@ export class GestionePrenotazioniComponent implements OnInit {
 
   isPackettoCombo(): boolean {
     return this.selectedPacchetto?.categoria === 'COMBO';
+  }
+
+  apriComboWizard(): void {
+    if (!this.selectedPacchetto) return;
+    
+    const config: IModaleConfig = {
+      titolo: `Prenota Pacchetto COMBO: ${this.selectedPacchetto.nome}`,
+      componente: PrenotazioneComboWizardComponent,
+      dati: {
+        pacchetto: this.selectedPacchetto,
+        venditaId: this.selectedPacchetto.venditaId
+      },
+      dimensione: 'large',
+      showDefaultButtons: false,
+      showCloseButton: true
+    };
+    
+    this.modaleService.apri(config);
   }
 
   getCategorieLezioniCombo(): string[] {
@@ -302,7 +333,7 @@ export class GestionePrenotazioniComponent implements OnInit {
       },
       error: (error) => {
         console.error('Errore durante il caricamento delle lezioni', error);
-        this.showToastMessage('Errore durante il caricamento delle lezioni', 'error');
+        this.toastr.error('Errore durante il caricamento delle lezioni');
         this.loading = false;
       }
     });
@@ -341,7 +372,7 @@ export class GestionePrenotazioniComponent implements OnInit {
       this.prenotazioneService.creaPrenotazione(request).subscribe({
         next: (response) => {
           this.loading = false;
-          this.showToastMessage('Prenotazione effettuata con successo!', 'success');
+          this.toastr.success('Prenotazione effettuata con successo!');
           this.prenotazioneForm.reset();
           this.selectedLezione = null;
           this.selectedTipoLezione = null;
@@ -353,42 +384,18 @@ export class GestionePrenotazioniComponent implements OnInit {
         error: (error) => {
           this.loading = false;
           const errorMsg = error.error?.message || 'Errore durante la prenotazione';
-          this.showToastMessage(errorMsg, 'error');
+          this.toastr.error(errorMsg);
         }
       });
     } else {
-      this.showToastMessage('Completa tutti i campi obbligatori e seleziona una lezione', 'error');
+      this.toastr.error('Completa tutti i campi obbligatori e seleziona una lezione');
       this.prenotazioneForm.markAllAsTouched();
-    }
-  }
-
-  // Toast notification methods - Badge style
-  showToastMessage(message: string, type: 'success' | 'error' | 'info' = 'success') {
-    this.toastMessage = message;
-    this.toastType = type;
-    this.toastIcon = type === 'success' ? 'success' : type === 'error' ? 'error' : 'info';
-    this.showToast = true;
-    
-    // Auto hide after 3 seconds
-    if (this.toastTimeout) {
-      clearTimeout(this.toastTimeout);
-    }
-    this.toastTimeout = window.setTimeout(() => {
-      this.hideToast();
-    }, 3000);
-  }
-  
-  hideToast() {
-    this.showToast = false;
-    if (this.toastTimeout) {
-      clearTimeout(this.toastTimeout);
     }
   }
 
   clearMessages(): void {
     this.error = null;
     this.successMessage = null;
-    this.hideToast();
   }
 
   getMinDate(): string {
@@ -516,7 +523,7 @@ export class GestionePrenotazioniComponent implements OnInit {
 
   modificaPrenotazione(prenotazione: PrenotazioneLezione, index: number): void {
     // Implementa la logica di modifica
-    this.showToastMessage(`Modifica prenotazione per ${prenotazione.titolo}`, 'info');
+    this.toastr.info(`Modifica prenotazione per ${prenotazione.titolo}`);
     
     // Qui potresti aprire un altro modal con form di modifica
     // Per ora mostriamo solo una notifica
@@ -528,13 +535,13 @@ export class GestionePrenotazioniComponent implements OnInit {
     if (conferma) {
       this.prenotazioneService.cancellaPrenotazioneRicorrente(prenotazione.id).subscribe({
         next: (response) => {
-          this.showToastMessage('Prenotazione cancellata con successo', 'success');
+          this.toastr.success('Prenotazione cancellata con successo');
           this.caricaPrenotazioniUtente();
           this.caricaPacchetti();
         },
         error: (error) => {
           const errorMsg = error.error?.messaggio || 'Errore durante la cancellazione';
-          this.showToastMessage(errorMsg, 'error');
+          this.toastr.error(errorMsg);
         }
       });
     }
@@ -588,12 +595,12 @@ export class GestionePrenotazioniComponent implements OnInit {
    */
   mostraPreviewPrenotazione(): void {
     if (!this.selectedTemplate || !this.selectedPacchetto) {
-      this.showToastMessage('Seleziona un orario per continuare', 'error');
+      this.toastr.error('Seleziona un orario per continuare');
       return;
     }
     
     if (!this.selectedPacchetto.lezioniRimanenti || this.selectedPacchetto.lezioniRimanenti === 0) {
-      this.showToastMessage('Non hai lezioni disponibili in questo pacchetto', 'error');
+      this.toastr.error('Non hai lezioni disponibili in questo pacchetto');
       return;
     }
     
@@ -626,9 +633,8 @@ export class GestionePrenotazioniComponent implements OnInit {
       next: (response) => {
         this.confermaInCorso = false;
         this.showPreviewModal = false;
-        this.showToastMessage(
-          `${response.numeroPrenotazioni} lezioni prenotate con successo!`,
-          'success'
+        this.toastr.success(
+          `${response.numeroPrenotazioni} lezioni prenotate con successo!`
         );
         
         // Reset selezioni e ricarica pacchetti
@@ -640,7 +646,7 @@ export class GestionePrenotazioniComponent implements OnInit {
       error: (error) => {
         this.confermaInCorso = false;
         const errorMsg = error.error?.message || 'Errore durante la prenotazione';
-        this.showToastMessage(errorMsg, 'error');
+        this.toastr.error(errorMsg);
       }
     });
   }

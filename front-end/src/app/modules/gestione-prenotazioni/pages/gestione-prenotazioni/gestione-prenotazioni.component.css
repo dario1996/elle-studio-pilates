@@ -460,133 +460,6 @@ textarea.form-control {
   }
 }
 
-/* Toast Badge Notification System - Elle Studio Theme */
-.toast-badge {
-  position: fixed;
-  top: 90px;
-  left: 50%;
-  transform: translateX(-50%) translateY(-20px);
-  z-index: 9999;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  pointer-events: none;
-}
-
-.toast-badge.show {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: all;
-  transform: translateX(-50%) translateY(0);
-}
-
-.toast-badge .toast-content {
-  display: flex;
-  align-items: center;
-  padding: 10px 18px 10px 14px;
-  gap: 10px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.06);
-  border: 1px solid #e5e7eb;
-  min-width: 280px;
-  max-width: 400px;
-}
-
-.toast-badge.success .toast-content {
-  border: 2px solid #c99e67;
-  background: #fff9f0;
-}
-
-.toast-badge.error .toast-content {
-  border: 2px solid #dc8686;
-  background: #fff5f5;
-}
-
-.toast-badge.info .toast-content {
-  border: 2px solid #c99e67;
-  background: #fffbf7;
-}
-
-.toast-badge .toast-icon {
-  flex-shrink: 0;
-  font-size: 16px;
-  font-weight: 500;
-  font-style: italic;
-  color: #6b7280;
-}
-
-.toast-badge.success .toast-icon {
-  color: #c99e67;
-}
-
-.toast-badge.error .toast-icon {
-  color: #dc8686;
-}
-
-.toast-badge.info .toast-icon {
-  color: #c99e67;
-}
-
-.toast-badge .toast-message {
-  flex: 1;
-  font-size: 13px;
-  font-weight: 500;
-  color: #374151;
-  line-height: 1.4;
-}
-
-.toast-badge .toast-close {
-  background: none;
-  border: none;
-  padding: 2px;
-  cursor: pointer;
-  color: #9ca3af;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  font-size: 13px;
-  font-style: italic;
-  text-decoration: underline;
-}
-
-.toast-badge .toast-close:hover {
-  color: #c99e67;
-}
-
-.toast-badge .toast-close i {
-  font-size: 14px;
-}
-
-/* Animazione di ingresso/uscita */
-@keyframes badgeSlideIn {
-  0% {
-    opacity: 0;
-    transform: translateX(-50%) translateY(-30px) scale(0.9);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0) scale(1);
-  }
-}
-
-@keyframes badgeSlideOut {
-  0% {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(-50%) translateY(-30px) scale(0.9);
-  }
-}
-
-.toast-badge.show {
-  animation: badgeSlideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
 /* Responsive badge */
 @media (max-width: 480px) {
   .toast-badge {
@@ -1147,8 +1020,7 @@ textarea.form-control {
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
 }
-  background: #f0f9ff;
-}
+
 
 .btn-edit:hover {
   background: #dbeafe;

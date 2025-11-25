@@ -26,6 +26,9 @@ public class Pacchetto {
     @Column(name = "categorie_lezioni", columnDefinition = "JSON")
     private String categorieLezioni; // Array JSON per pacchetti COMBO
 
+    @Column(name = "distribuzione_lezioni", columnDefinition = "JSON")
+    private String distribuzioneLezioni; // Oggetto JSON {categoria: numeroLezioni} per COMBO
+
     @Column(name = "numero_lezioni")
     private Integer numeroLezioni; // Numero totale di lezioni nel pacchetto
 
@@ -90,6 +93,14 @@ public class Pacchetto {
 
     public void setCategorieLezioni(String categorieLezioni) {
         this.categorieLezioni = categorieLezioni;
+    }
+
+    public String getDistribuzioneLezioni() {
+        return distribuzioneLezioni;
+    }
+
+    public void setDistribuzioneLezioni(String distribuzioneLezioni) {
+        this.distribuzioneLezioni = distribuzioneLezioni;
     }
 
     public Integer getNumeroLezioni() {

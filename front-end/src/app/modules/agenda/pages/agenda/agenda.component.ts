@@ -167,10 +167,8 @@ export class AgendaComponent implements OnInit {
           const startTime = (t.oraInizio || '').toString().slice(0,5);
           const endTime = (t.oraFine || '').toString().slice(0,5);
 
-          // Se esiste una configurazione per il tipo di lezione, usiamo il suo colore (coerente con la leggenda)
-          const tipoKey = (t.tipoLezione || '') as unknown as TipoLezione;
-          const tipoConfig = TIPI_LEZIONE_CONFIG[tipoKey];
-          const eventColor = tipoConfig?.colore || t.colore || '#27AE60';
+          // Usa il colore gold dello studio per tutti gli slot
+          const eventColor = '#c99e67';
 
           return {
             id: `tpl-${t.id}`,
@@ -427,7 +425,7 @@ export class AgendaComponent implements OnInit {
     const isFull = prenotazioniCount >= maxPartecipanti;
     
     if (isFull) {
-      // Applica stile verde a tutto l'elemento
+      // Applica stile verde agli slot pieni
       info.el.style.backgroundColor = '#059669';
       info.el.style.borderColor = '#059669';
       info.el.style.opacity = '0.9';

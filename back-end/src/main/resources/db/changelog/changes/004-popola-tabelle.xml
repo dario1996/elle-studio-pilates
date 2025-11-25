@@ -474,6 +474,7 @@
             <column name="descrizione" value="Abbonamento combo: 8 lezioni Reformer semi private (3/4 persone) + 4 lezioni Matwork. Validità 1 mese."/>
             <column name="categoria" value="COMBO"/>
             <column name="categorie_lezioni" value='["STUDIO_INTERMEDIO", "PILATES_MATWORK"]'/>
+            <column name="distribuzione_lezioni" value='{"STUDIO_INTERMEDIO": 8, "PILATES_MATWORK": 4}'/>
             <column name="livello" value="TUTTI"/>
             <column name="durata_minuti" value="50"/>
             <column name="max_partecipanti" value="6"/>
@@ -489,6 +490,7 @@
             <column name="descrizione" value="Abbonamento combo: 4 lezioni Reformer semi private (3/4 persone) + 4 lezioni Matwork gruppo (max 6 partecipanti). Validità 1 mese."/>
             <column name="categoria" value="COMBO"/>
             <column name="categorie_lezioni" value='["STUDIO_INTERMEDIO", "PILATES_MATWORK"]'/>
+            <column name="distribuzione_lezioni" value='{"STUDIO_INTERMEDIO": 4, "PILATES_MATWORK": 4}'/>
             <column name="livello" value="TUTTI"/>
             <column name="durata_minuti" value="50"/>
             <column name="max_partecipanti" value="6"/>
@@ -504,6 +506,7 @@
             <column name="descrizione" value="Abbonamento combo: 4 lezioni Reformer semi private (3/4 persone) + 4 lezioni Yoga. Validità 1 mese."/>
             <column name="categoria" value="COMBO"/>
             <column name="categorie_lezioni" value='["STUDIO_INTERMEDIO", "YOGA"]'/>
+            <column name="distribuzione_lezioni" value='{"STUDIO_INTERMEDIO": 4, "YOGA": 4}'/>
             <column name="livello" value="TUTTI"/>
             <column name="durata_minuti" value="50"/>
             <column name="max_partecipanti" value="6"/>
@@ -519,6 +522,7 @@
             <column name="descrizione" value="Abbonamento combo: 4 lezioni Matwork gruppo (max 6 partecipanti) + 4 lezioni Yoga. Validità 1 mese."/>
             <column name="categoria" value="COMBO"/>
             <column name="categorie_lezioni" value='["PILATES_MATWORK", "YOGA"]'/>
+            <column name="distribuzione_lezioni" value='{"PILATES_MATWORK": 4, "YOGA": 4}'/>
             <column name="livello" value="TUTTI"/>
             <column name="durata_minuti" value="50"/>
             <column name="max_partecipanti" value="6"/>
@@ -694,6 +698,7 @@
             <column name="pacchetto_id" value="10"/>
             <column name="importo" value="260.00"/>
             <column name="stato" value="PAID"/>
+            <column name="lezioni_rimanenti" value="12"/>
             <column name="data_acquisto" value="2025-11-15 14:30:00"/>
             <column name="data_pagamento" value="2025-11-15 14:35:00"/>
             <column name="note" value="Combo 8 Reformer + 4 Matwork - Pagamento immediato"/>
