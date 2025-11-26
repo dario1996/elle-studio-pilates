@@ -96,11 +96,12 @@ export class GestionePrenotazioniComponent implements OnInit {
     this.prenotazioneService.getPacchettiUtente().subscribe({
       next: (pacchetti) => {
         console.log('Pacchetti ricevuti:', pacchetti);
-        this.pacchetti = pacchetti;
+        // Filtra solo i pacchetti con lezioni rimanenti
+        this.pacchetti = pacchetti.filter(p => (p.lezioniRimanenti ?? 0) > 0);
         this.loading = false;
-        if (pacchetti.length === 0) {
-          console.warn('Nessun pacchetto trovato per questo utente');
-          this.toastr.info('Non hai ancora acquistato nessun pacchetto');
+        if (this.pacchetti.length === 0) {
+          console.warn('Nessun pacchetto con lezioni disponibili');
+          this.toastr.info('Non hai pacchetti con lezioni disponibili');
         }
       },
       error: (error) => {

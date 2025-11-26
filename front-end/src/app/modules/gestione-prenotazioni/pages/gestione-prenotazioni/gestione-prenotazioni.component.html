@@ -127,10 +127,10 @@
                               </span>
                             </div>
                             <div class="orario-details">
-                              <span class="detail-item">
+                              <!-- <span class="detail-item">
                                 <i class="fas fa-user"></i>
                                 {{ template.istruttore }}
-                              </span>
+                              </span> -->
                               <span class="detail-item" *ngIf="template.titolo">
                                 <i class="fas fa-tag"></i>
                                 {{ template.titolo }}
@@ -244,26 +244,19 @@
             <div class="info-row">
               <div class="info-item">
                 <i class="fas fa-calendar-day"></i>
-                <div class="info-content">
-                  <span class="info-label">Data</span>
-                  <span class="info-value">{{ formatDatePrenotazione(prenotazione.dataLezione) }}</span>
-                </div>
+                <span class="info-value">{{ formatDatePrenotazione(prenotazione.dataLezione) }}</span>
               </div>
 
               <div class="info-item">
                 <i class="fas fa-clock"></i>
-                <div class="info-content">
-                  <span class="info-label">Orario</span>
-                  <span class="info-value">{{ formatTime(prenotazione.oraInizio) }} - {{ formatTime(prenotazione.oraFine) }}</span>
-                </div>
+                <span class="info-value">{{ formatTime(prenotazione.oraInizio) }} - {{ formatTime(prenotazione.oraFine) }}</span>
               </div>
             </div>
           </div>
           
           <div class="prenotazione-actions" *ngIf="puoCancellare(prenotazione)">
             <button type="button" class="btn-action btn-delete" (click)="cancellaPrenotazione(prenotazione)" title="Cancella prenotazione">
-              <i class="fas fa-times me-1"></i>
-              Cancella
+              <i class="fas fa-times"></i>
             </button>
           </div>
         </div>

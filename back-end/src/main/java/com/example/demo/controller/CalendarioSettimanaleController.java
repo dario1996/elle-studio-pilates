@@ -62,12 +62,8 @@ public class CalendarioSettimanaleController {
     @GetMapping("/per-tipo-lezione/{tipoLezione}")
     public ResponseEntity<List<CalendarioSettimanaleDto>> getCalendarioPerTipoLezione(@PathVariable String tipoLezione) {
         log.info("GET /api/calendario-settimanale/per-tipo-lezione/{} - Recupero calendario per tipo lezione", tipoLezione);
-        List<CalendarioSettimanaleDto> templates = calendarioService.getAllCalendarioAttivo();
-        // Filtra per tipoLezione
-        List<CalendarioSettimanaleDto> filtered = templates.stream()
-            .filter(t -> t.getTipoLezione().toString().equals(tipoLezione))
-            .collect(java.util.stream.Collectors.toList());
-        return ResponseEntity.ok(filtered);
+        List<CalendarioSettimanaleDto> templates = calendarioService.getCalendarioConPostiPrenotati(tipoLezione);
+        return ResponseEntity.ok(templates);
     }
 
     @PostMapping

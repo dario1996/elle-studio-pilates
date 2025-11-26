@@ -136,7 +136,7 @@ export class PrenotazioneComboWizardComponent implements OnInit {
       const selezione: CategoriaSelection = {
         categoria: categoria,
         templateSelezionato: null,
-        numeroLezioni: numeroLezioniPredefinito,
+        numeroLezioni: 0, // Inizializza a 0, verrà impostato quando si seleziona un template
         numeroLezioniPredefinito: numeroLezioniPredefinito,
         dateGenerate: []
       };
@@ -208,7 +208,11 @@ export class PrenotazioneComboWizardComponent implements OnInit {
       const selezione = this.wizardState.selezioni.get(this.categoriaCorrente);
       if (selezione) {
         selezione.templateSelezionato = template;
-        selezione.numeroLezioni = selezione.numeroLezioni;
+        // Se numeroLezioni è ancora 0, usa il valore predefinito
+        if (selezione.numeroLezioni === 0) {
+          selezione.numeroLezioni = selezione.numeroLezioniPredefinito;
+          this.numeroLezioniSelezionate = selezione.numeroLezioniPredefinito;
+        }
         
         // Genera preview date per questo template
         this.generaPreviewDate(template.giornoSettimana, selezione.numeroLezioni);
@@ -402,6 +406,11 @@ export class PrenotazioneComboWizardComponent implements OnInit {
       'DOMENICA': 'Domenica'
     };
     return giorniMap[giorno] || giorno;
+  }
+
+  formatTime(time: string): string {
+    // Converte HH:MM:SS in HH:MM
+    return time.slice(0, 5);
   }
 
   formatCategoria(categoria: string): string {

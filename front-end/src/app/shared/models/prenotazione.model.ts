@@ -46,6 +46,7 @@ export interface TipoLezione {
   colore?: string;
   note?: string;
   attivo: boolean;
+  postiPrenotati?: number;
 }
 
 export interface Pacchetto {

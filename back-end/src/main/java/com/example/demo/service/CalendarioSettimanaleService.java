@@ -3,14 +3,18 @@ package com.example.demo.service;
 import com.example.demo.dto.CalendarioSettimanaleDto;
 import com.example.demo.entity.CalendarioSettimanale;
 import com.example.demo.enums.GiornoSettimana;
+import com.example.demo.enums.TipoLezione;
 import com.example.demo.exceptions.NotFoundException;
 import com.example.demo.mapper.CalendarioSettimanaleMapper;
 import com.example.demo.repository.CalendarioSettimanaleRepository;
+import com.example.demo.repository.PrenotazioneLezioneRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,11 +25,14 @@ public class CalendarioSettimanaleService {
 
     private final CalendarioSettimanaleRepository calendarioRepository;
     private final CalendarioSettimanaleMapper calendarioMapper;
+    private final PrenotazioneLezioneRepository prenotazioneRepository;
 
     public CalendarioSettimanaleService(final CalendarioSettimanaleRepository calendarioRepository,
-                                        final CalendarioSettimanaleMapper calendarioMapper) {
+                                        final CalendarioSettimanaleMapper calendarioMapper,
+                                        final PrenotazioneLezioneRepository prenotazioneRepository) {
         this.calendarioRepository = calendarioRepository;
         this.calendarioMapper = calendarioMapper;
+        this.prenotazioneRepository = prenotazioneRepository;
     }
 
     /**
@@ -137,5 +144,57 @@ public class CalendarioSettimanaleService {
 
         calendario.setAttivo(!calendario.getAttivo());
         calendarioRepository.save(calendario);
+    }
+
+    /**
+     * Recupera i template del calendario con i posti prenotati calcolati per la prossima occorrenza
+     */
+    @Transactional(readOnly = true)
+    public List<CalendarioSettimanaleDto> getCalendarioConPostiPrenotati(String tipoLezione) {
+        log.debug("Recupero calendario per tipo lezione {} con posti prenotati", tipoLezione);
+        
+        List<CalendarioSettimanale> templates = calendarioRepository.findByAttivoTrueOrderByGiornoSettimanaAscOraInizioAsc()
+                .stream()
+                .filter(t -> t.getTipoLezione().toString().equals(tipoLezione))
+                .collect(Collectors.toList());
+        
+        return templates.stream()
+                .map(template -> {
+                    CalendarioSettimanaleDto dto = calendarioMapper.toDto(template);
+                    LocalDate prossimaData = calcolaProssimaOccorrenza(template.getGiornoSettimana());
+                    Long prenotati = prenotazioneRepository.countPartecipantiByTemplateAndData(template.getId(), prossimaData);
+                    dto.setPostiPrenotati(prenotati.intValue());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    private LocalDate calcolaProssimaOccorrenza(GiornoSettimana giornoSettimana) {
+        LocalDate oggi = LocalDate.now();
+        DayOfWeek targetDay = convertGiornoSettimana(giornoSettimana);
+        LocalDate prossimaData = oggi;
+        
+        while (prossimaData.getDayOfWeek() != targetDay) {
+            prossimaData = prossimaData.plusDays(1);
+        }
+        
+        if (prossimaData.equals(oggi)) {
+            prossimaData = prossimaData.plusWeeks(1);
+        }
+        
+        return prossimaData;
+    }
+    
+    private DayOfWeek convertGiornoSettimana(GiornoSettimana giorno) {
+        switch (giorno) {
+            case LUNEDI: return DayOfWeek.MONDAY;
+            case MARTEDI: return DayOfWeek.TUESDAY;
+            case MERCOLEDI: return DayOfWeek.WEDNESDAY;
+            case GIOVEDI: return DayOfWeek.THURSDAY;
+            case VENERDI: return DayOfWeek.FRIDAY;
+            case SABATO: return DayOfWeek.SATURDAY;
+            case DOMENICA: return DayOfWeek.SUNDAY;
+            default: throw new IllegalArgumentException("Giorno non valido: " + giorno);
+        }
     }
 }
