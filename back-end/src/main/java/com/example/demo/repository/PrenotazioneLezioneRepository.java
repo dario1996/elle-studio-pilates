@@ -1,16 +1,17 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.PrenotazioneLezione;
-import com.example.demo.entity.PrenotazioneLezione.StatoPrenotazione;
-import com.example.demo.entity.Vendita;
-import com.example.demo.entity.Utenti;
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
-import java.util.List;
+import com.example.demo.entity.PrenotazioneLezione;
+import com.example.demo.entity.PrenotazioneLezione.StatoPrenotazione;
+import com.example.demo.entity.Utenti;
+import com.example.demo.entity.Vendita;
 
 @Repository
 public interface PrenotazioneLezioneRepository extends JpaRepository<PrenotazioneLezione, Long> {
@@ -77,4 +78,13 @@ public interface PrenotazioneLezioneRepository extends JpaRepository<Prenotazion
      * Trova tutte le prenotazioni in coda
      */
     List<PrenotazioneLezione> findByStatoOrderByDataLezioneAsc(StatoPrenotazione stato);
+
+    /**
+     * Trova le prenotazioni di un utente per username, stato e data >= oggi
+     */
+    List<PrenotazioneLezione> findByUtente_UsernameAndStatoAndDataLezioneGreaterThanEqual(
+            String username,
+            StatoPrenotazione stato,
+            LocalDate dataLezione
+    );
 }

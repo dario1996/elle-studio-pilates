@@ -10,6 +10,7 @@ import { TIPI_LEZIONE_CONFIG } from '../../../../modules/agenda/models/lezione.m
 import { ILezione, TipoLezione, StatoLezione } from '../../../../shared/models/Lezione';
 import { AuthJwtService } from '../../../../core/services/authJwt.service';
 import { VenditeService, Vendita, PacchettoAcquistato } from '../../../../shared/services/vendite.service';
+import { DashboardService } from '../../../../shared/services/dashboard.service';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -44,6 +45,9 @@ export class DashboardUtenteComponent implements OnInit, AfterViewInit {
   
   // Mini calendario (prossimi 7 giorni)
   giorniCalendario: { data: Date; lezioni: ILezione[] }[] = [];
+  giornoSelezionato: Date | null = null;
+  lezioniGiornoSelezionato: ILezione[] = [];
+  visualizzaTutte: boolean = false; // Flag per mostrare tutte le lezioni
 
   // Configurazione immagini per tipi lezione (URL o icone)
   readonly LEZIONI_IMAGES: Record<string, { image: string; gradient: string; icon: string }> = {
@@ -78,7 +82,8 @@ export class DashboardUtenteComponent implements OnInit, AfterViewInit {
     private router: Router,
     private lezioniService: LezioniService,
     private authService: AuthJwtService,
-    private venditeService: VenditeService
+    private venditeService: VenditeService,
+    private dashboardService: DashboardService
   ) {}
 
   @ViewChildren('userCard', { read: ElementRef }) userCardEls!: QueryList<ElementRef>;
@@ -90,11 +95,40 @@ export class DashboardUtenteComponent implements OnInit, AfterViewInit {
       
       // Carica tutti i dati in parallelo
       forkJoin({
+        statistiche: this.dashboardService.getStatisticheUtente(),
         lezioniPrenotate: this.lezioniService.getLezioniPrenotate(username),
         pacchettiAcquistati: this.venditeService.getPacchettiAcquistatiByUtente(username)
       }).subscribe({
         next: (result) => {
-          // Processa lezioni prenotate
+          // Usa le statistiche dal backend
+          this.totaleLezioniPrenotate = result.statistiche.totaleLezioniPrenotate;
+          this.lezioniCompletate = result.statistiche.lezioniCompletate;
+          
+          // Imposta la prossima lezione
+          if (result.statistiche.prossimaLezione) {
+            const pl = result.statistiche.prossimaLezione;
+            // Crea un oggetto ILezione dalla prossima lezione
+            const dataInizio = new Date(pl.dataLezione + 'T' + pl.oraInizio);
+            const dataFine = new Date(pl.dataLezione + 'T' + pl.oraFine);
+            
+            this.prossimaLezione = {
+              id: 0,
+              titolo: pl.tipoLezione, // Usa il tipo come titolo
+              tipo: pl.tipoLezione, // Proprieta 'tipo' invece di 'tipoLezione'
+              dataInizio: dataInizio, // Date invece di string
+              dataFine: dataFine, // Date invece di string
+              stato: pl.stato,
+              istruttore: '',
+              numeroPartecipanti: 0,
+              maxPartecipanti: 0,
+              attiva: true,
+              partecipanti: [] // Aggiungi array vuoto per partecipanti
+            } as ILezione;
+          } else {
+            this.prossimaLezione = null;
+          }
+          
+          // Processa lezioni prenotate per la visualizzazione
           const oggi = new Date();
           oggi.setHours(0, 0, 0, 0);
           
@@ -111,14 +145,6 @@ export class DashboardUtenteComponent implements OnInit, AfterViewInit {
             });
           
           this.lezioneIndex = 0;
-          this.totaleLezioniPrenotate = this.lezioniPrenotate.length;
-          this.prossimaLezione = this.lezioniPrenotate.length > 0 ? this.lezioniPrenotate[0] : null;
-          
-          // Calcola lezioni completate (lezioni nel passato)
-          this.lezioniCompletate = result.lezioniPrenotate.filter(lezione => {
-            const dataLezione = new Date(lezione.dataInizio);
-            return dataLezione < oggi;
-          }).length;
           
           // Genera mini calendario
           this.generaMiniCalendario();
@@ -334,6 +360,71 @@ export class DashboardUtenteComponent implements OnInit, AfterViewInit {
     return data.getDate() === oggi.getDate() &&
            data.getMonth() === oggi.getMonth() &&
            data.getFullYear() === oggi.getFullYear();
+  }
+
+  /** Seleziona un giorno nel calendario per visualizzare le lezioni */
+  selezionaGiorno(data: Date): void {
+    this.visualizzaTutte = false; // Disattiva la visualizzazione "tutte"
+    this.giornoSelezionato = data;
+    
+    // Filtra le lezioni per il giorno selezionato
+    this.lezioniGiornoSelezionato = this.lezioniPrenotate.filter(lezione => {
+      const dataLezione = new Date(lezione.dataInizio);
+      dataLezione.setHours(0, 0, 0, 0);
+      const dataSelezionata = new Date(data);
+      dataSelezionata.setHours(0, 0, 0, 0);
+      return dataLezione.getTime() === dataSelezionata.getTime();
+    });
+  }
+
+  /** Verifica se un giorno è selezionato */
+  isGiornoSelezionato(data: Date): boolean {
+    if (!this.giornoSelezionato) return false;
+    return data.getDate() === this.giornoSelezionato.getDate() &&
+           data.getMonth() === this.giornoSelezionato.getMonth() &&
+           data.getFullYear() === this.giornoSelezionato.getFullYear();
+  }
+
+  /** Mostra tutte le lezioni in ordine cronologico */
+  mostraLeTutteLezioni(): void {
+    this.visualizzaTutte = true;
+    this.giornoSelezionato = null;
+  }
+
+  /** Reset della visualizzazione */
+  resetVisualizzazione(): void {
+    this.visualizzaTutte = false;
+    this.giornoSelezionato = null;
+    this.lezioniGiornoSelezionato = [];
+  }
+
+  /** Ottiene le lezioni da visualizzare nella card principale */
+  getLezioniDaVisualizzare(): ILezione[] {
+    if (this.visualizzaTutte) {
+      return this.lezioniPrenotate; // Già ordinate per data
+    }
+    if (this.giornoSelezionato) {
+      return this.lezioniGiornoSelezionato;
+    }
+    return [];
+  }
+
+  /** Ottiene il titolo della card in base alla modalità */
+  getTitoloCard(): string {
+    if (this.visualizzaTutte) {
+      return 'Tutte le Tue Lezioni';
+    }
+    if (this.giornoSelezionato) {
+      return 'Lezioni del ' + this.formatDateOnly(this.giornoSelezionato);
+    }
+    return 'Le Tue Lezioni';
+  }
+
+  /** Formatta giorno della settimana in italiano */
+  formatGiornoSettimana(data: Date | string): string {
+    const d = typeof data === 'string' ? new Date(data) : data;
+    const giorni = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+    return giorni[d.getDay()];
   }
 
   /** Naviga alla pagina prenotazioni */

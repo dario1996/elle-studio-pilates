@@ -1,20 +1,24 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.*;
-import com.example.demo.enums.GiornoSettimana;
-import com.example.demo.enums.TipoLezione;
-import com.example.demo.repository.*;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import com.example.demo.entity.CalendarioSettimanale;
+import com.example.demo.entity.PrenotazioneLezione;
+import com.example.demo.entity.Utenti;
+import com.example.demo.entity.Vendita;
+import com.example.demo.enums.GiornoSettimana;
+import com.example.demo.repository.CalendarioSettimanaleRepository;
+import com.example.demo.repository.PrenotazioneLezioneRepository;
+import com.example.demo.repository.UtenteRepository;
+import com.example.demo.repository.VenditaRepository;
 
 /**
  * Service per la gestione delle prenotazioni ricorrenti
@@ -128,6 +132,10 @@ public class PrenotazioneRicorrenteService {
         // Salva tutte le prenotazioni
         prenotazioni = prenotazioneRepository.saveAll(prenotazioni);
 
+        // Aggiorna il contatore totale_lezioni_prenotate dell'utente
+        utente.setTotaleLezioniPrenotate(utente.getTotaleLezioniPrenotate() + lezioniDaCreare);
+        utenteRepository.save(utente);
+
         // Aggiorna la vendita
         vendita.setLezioniRimanenti(vendita.getLezioniRimanenti() - lezioniDaCreare);
         vendita.setDataPrimaPrenotazioneSeNecessario();
@@ -193,6 +201,13 @@ public class PrenotazioneRicorrenteService {
         // Cancella la prenotazione
         prenotazione.setStato(PrenotazioneLezione.StatoPrenotazione.CANCELLATA);
         prenotazioneRepository.save(prenotazione);
+
+        // Decrementa il contatore totale_lezioni_prenotate dell'utente
+        Utenti utente = prenotazione.getUtente();
+        if (utente.getTotaleLezioniPrenotate() > 0) {
+            utente.setTotaleLezioniPrenotate(utente.getTotaleLezioniPrenotate() - 1);
+            utenteRepository.save(utente);
+        }
 
         // Restituisci la lezione al pacchetto
         Vendita vendita = prenotazione.getVendita();

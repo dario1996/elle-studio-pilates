@@ -12,12 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dto.LezioneDto;
 import com.example.demo.entity.Lezione;
+import com.example.demo.entity.PrenotazioneLezione;
 import com.example.demo.entity.Utenti;
 import com.example.demo.enums.TipoLezione;
 import com.example.demo.exceptions.BindingException;
 import com.example.demo.exceptions.NotFoundException;
 import com.example.demo.mapper.LezioneMapper;
 import com.example.demo.repository.LezioneRepository;
+import com.example.demo.repository.PrenotazioneLezioneRepository;
 import com.example.demo.services.PacchettoService;
 import com.example.demo.services.UtentiService;
 
@@ -31,15 +33,18 @@ public class LezioneService {
     private final LezioneMapper lezioneMapper;
     private final UtentiService utentiService;
     private final PacchettoService pacchettoService;
+    private final PrenotazioneLezioneRepository prenotazioneLezioneRepository;
 
     public LezioneService(final LezioneRepository lezioneRepository,
                           final LezioneMapper lezioneMapper,
                           final UtentiService utentiService,
-                          final PacchettoService pacchettoService) {
+                          final PacchettoService pacchettoService,
+                          final PrenotazioneLezioneRepository prenotazioneLezioneRepository) {
         this.lezioneRepository = lezioneRepository;
         this.lezioneMapper = lezioneMapper;
         this.utentiService = utentiService;
         this.pacchettoService = pacchettoService;
+        this.prenotazioneLezioneRepository = prenotazioneLezioneRepository;
     }
 
     @Transactional(readOnly = true)
@@ -90,11 +95,46 @@ public class LezioneService {
     @Transactional(readOnly = true)
     public List<LezioneDto> getLezioniPrenotate(String username) {
         log.info("Recupero lezioni prenotate per utente (username): {}", username);
-        List<Lezione> lezioni = lezioneRepository.findLezioniPrenotateByUsername(username);
-        log.info("Trovate {} lezioni prenotate per utente: {}", lezioni.size(), username);
-        return lezioni.stream()
+        
+        // 1. Recupera lezioni dal sistema vecchio (tabella lezioni + lezione_partecipanti)
+        List<Lezione> lezioniVecchie = lezioneRepository.findLezioniPrenotateByUsername(username);
+        log.info("Trovate {} lezioni dal sistema vecchio per utente: {}", lezioniVecchie.size(), username);
+        
+        List<LezioneDto> result = new ArrayList<>();
+        
+        // Converti lezioni vecchie
+        result.addAll(lezioniVecchie.stream()
                 .map(lezioneMapper::toDto)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
+        
+        // 2. Recupera prenotazioni dal sistema nuovo (tabella prenotazioni_lezioni)
+        List<PrenotazioneLezione> prenotazioni = prenotazioneLezioneRepository
+                .findByUtente_UsernameAndStatoAndDataLezioneGreaterThanEqual(
+                        username,
+                        PrenotazioneLezione.StatoPrenotazione.CONFERMATA,
+                        java.time.LocalDate.now()
+                );
+        log.info("Trovate {} prenotazioni dal sistema nuovo per utente: {}", prenotazioni.size(), username);
+        
+        // Converti prenotazioni in LezioneDto
+        for (PrenotazioneLezione p : prenotazioni) {
+            LezioneDto dto = new LezioneDto();
+            dto.setId(p.getId());
+            dto.setTitolo(p.getTipoLezione());
+            dto.setDataInizio(LocalDateTime.of(p.getDataLezione(), p.getOraInizio()));
+            dto.setDataFine(LocalDateTime.of(p.getDataLezione(), p.getOraFine()));
+            dto.setIstruttore(p.getTemplate() != null ? p.getTemplate().getIstruttore() : "");
+            dto.setTipoLezione(TipoLezione.valueOf(p.getTipoLezione()));
+            dto.setAttiva(true);
+            dto.setPartecipanti(List.of(username));
+            result.add(dto);
+        }
+        
+        // Ordina per data
+        result.sort((a, b) -> a.getDataInizio().compareTo(b.getDataInizio()));
+        
+        log.info("Totale {} lezioni prenotate (vecchie + nuove) per utente: {}", result.size(), username);
+        return result;
     }
 
     public LezioneDto createLezione(LezioneDto lezioneDto) throws BindingException {

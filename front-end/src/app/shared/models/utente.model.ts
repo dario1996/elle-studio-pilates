@@ -16,6 +16,7 @@ export interface Utente {
   dataCreazione?: Date;
   dataModifica?: Date;
   confirmPassword?: string;
+  totaleLezioniPrenotate?: number;
   
   // Campi calcolati per la visualizzazione
   nominativo?: string;

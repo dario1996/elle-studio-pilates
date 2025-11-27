@@ -92,6 +92,9 @@ public class Utenti
 	@Column(name = "data_modifica")
 	private LocalDateTime dataModifica;
 	
+	@Column(name = "totale_lezioni_prenotate", nullable = false)
+	private Integer totaleLezioniPrenotate = 0;
+	
 	@ManyToMany
 	@JoinTable(
 	    name = "utente_pacchetti_disponibili",
@@ -144,7 +147,8 @@ public class Utenti
 				String descrizionePatologie,
 				String obiettivi,
 				LocalDateTime dataCreazione,
-				LocalDateTime dataModifica) {
+				LocalDateTime dataModifica,
+				Integer totaleLezioniPrenotate) {
 		this.id = id;
 		this.username = username;
 		this.email = email;
@@ -165,6 +169,7 @@ public class Utenti
 		this.obiettivi = obiettivi;
 		this.dataCreazione = dataCreazione;
 		this.dataModifica = dataModifica;
+		this.totaleLezioniPrenotate = totaleLezioniPrenotate;
 	}
 
 	public Long getId() {
@@ -333,6 +338,14 @@ public class Utenti
 
 	public void setPacchettiDisponibili(Set<Pacchetto> pacchettiDisponibili) {
 		this.pacchettiDisponibili = pacchettiDisponibili;
+	}
+
+	public Integer getTotaleLezioniPrenotate() {
+		return totaleLezioniPrenotate;
+	}
+
+	public void setTotaleLezioniPrenotate(Integer totaleLezioniPrenotate) {
+		this.totaleLezioniPrenotate = totaleLezioniPrenotate;
 	}
 	
 }

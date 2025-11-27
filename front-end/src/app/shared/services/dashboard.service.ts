@@ -3,6 +3,20 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { LezioneDto } from '../../core/services/lezioni.service';
 
+export interface ProssimaLezioneDto {
+  dataLezione: string;
+  oraInizio: string;
+  oraFine: string;
+  tipoLezione: string;
+  stato: string;
+}
+
+export interface DashboardStatisticheDto {
+  prossimaLezione: ProssimaLezioneDto | null;
+  totaleLezioniPrenotate: number;
+  lezioniCompletate: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,5 +30,12 @@ export class DashboardService {
    */
   getAppuntamentiOggi(): Observable<LezioneDto[]> {
     return this.http.get<LezioneDto[]>(`${this.apiUrl}/dashboard/appuntamenti-oggi`);
+  }
+
+  /**
+   * Ottiene le statistiche della dashboard utente
+   */
+  getStatisticheUtente(): Observable<DashboardStatisticheDto> {
+    return this.http.get<DashboardStatisticheDto>(`${this.apiUrl}/dashboard/statistiche-utente`);
   }
 }

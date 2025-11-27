@@ -71,7 +71,7 @@
         <!-- Stat 4: Pacchetti attivi -->
         <div class="stat-card">
           <div class="stat-header">
-            <div class="stat-label">Pacchetti Attivi</div>
+            <div class="stat-label">Pacchetti non usati</div>
             <i class="fas fa-box-open stat-icon"></i>
           </div>
           <div class="stat-content">
@@ -87,14 +87,20 @@
         <!-- Col 1: Lezioni Prenotate con Immagini -->
         <div class="card card-lezioni">
           <div class="card-header-modern">
-            <h3><i class="fas fa-calendar-alt me-2"></i>Le Tue Lezioni</h3>
-            <button class="btn-text" (click)="vaiAPrenotazioni()">
-              Vedi tutte <i class="fas fa-arrow-right ms-1"></i>
-            </button>
+            <h3><i class="fas fa-calendar-alt me-2"></i>{{ getTitoloCard() }}</h3>
+            <div class="header-actions">
+              <button class="btn-text" *ngIf="giornoSelezionato || visualizzaTutte" (click)="resetVisualizzazione()">
+                <i class="fas fa-times me-1"></i> Reset
+              </button>
+              <button class="btn-text" (click)="mostraLeTutteLezioni()">
+                Vedi tutte <i class="fas fa-arrow-right ms-1"></i>
+              </button>
+            </div>
           </div>
           
           <div class="card-body-modern">
-            <div *ngIf="lezioniPrenotate.length === 0" class="empty-state-modern">
+            <!-- Stato vuoto quando non ci sono selezioni -->
+            <div *ngIf="!visualizzaTutte && !giornoSelezionato && lezioniPrenotate.length === 0" class="empty-state-modern">
               <i class="fas fa-calendar-times fa-3x"></i>
               <p>Nessuna lezione prenotata</p>
               <button class="btn-prenota-ora mt-3" (click)="vaiAPrenotazioni()">
@@ -102,38 +108,46 @@
               </button>
             </div>
 
-            <div *ngIf="lezioniPrenotate.length > 0" class="lezioni-list">
-              <div class="lezione-card-modern" *ngFor="let lezione of lezioniPrenotate.slice(0, 3)">
-                <!-- Immagine/Gradient lezione -->
-                <div class="lezione-image" [style.background]="getLezioneImage(lezione.tipo)">
-                  <i [class]="getLezioneIcon(lezione.tipo)"></i>
-                  <div class="lezione-badge-overlay" [ngClass]="getGiorniBadgeClass(lezione.dataInizio)">
-                    {{ getGiorniMancantiText(lezione.dataInizio) }}
+            <!-- Messaggio quando nessun giorno è selezionato -->
+            <div *ngIf="!visualizzaTutte && !giornoSelezionato && lezioniPrenotate.length > 0" class="empty-state-modern">
+              <i class="fas fa-calendar-check fa-3x"></i>
+              <p>Seleziona un giorno dal calendario</p>
+              <p class="subtitle">oppure clicca su "Vedi tutte" per visualizzare tutte le lezioni</p>
+            </div>
+
+            <!-- Lista lezioni del giorno selezionato o tutte le lezioni -->
+            <div *ngIf="(visualizzaTutte || giornoSelezionato) && getLezioniDaVisualizzare().length > 0" class="lezioni-list-main">
+              <div class="lezione-card-full" *ngFor="let lezione of getLezioniDaVisualizzare()">
+                <div class="lezione-header-full">
+                  <div class="lezione-date-info">
+                    <div class="lezione-day-name">{{ formatGiornoSettimana(lezione.dataInizio) }}</div>
+                    <div class="lezione-date">{{ formatDateOnly(lezione.dataInizio) }}</div>
+                  </div>
+                  <div class="lezione-time-info">
+                    <i class="fas fa-clock"></i>
+                    {{ formatTimeRange(lezione.dataInizio, lezione.dataFine) }}
                   </div>
                 </div>
-
-                <!-- Info lezione -->
-                <div class="lezione-info">
-                  <h4>{{ lezione.titolo }}</h4>
-                  <div class="lezione-tipo">
-                    <span class="tipo-badge">{{ getLabelTipoLezione(lezione.tipo) }}</span>
+                <div class="lezione-body-full">
+                  <div class="lezione-type-badge">
+                    <i [class]="getLezioneIcon(lezione.tipo)"></i>
+                    {{ getLabelTipoLezione(lezione.tipo) }}
                   </div>
-                  <div class="lezione-details">
-                    <div class="detail-item">
-                      <i class="fas fa-calendar"></i>
-                      <span>{{ formatDateOnly(lezione.dataInizio) }}</span>
-                    </div>
-                    <div class="detail-item">
-                      <i class="fas fa-clock"></i>
-                      <span>{{ formatTimeRange(lezione.dataInizio, lezione.dataFine) }}</span>
-                    </div>
-                    <div class="detail-item">
-                      <i class="fas fa-user-circle"></i>
-                      <span>{{ lezione.istruttore }}</span>
-                    </div>
+                  <div class="lezione-details-full" *ngIf="lezione.istruttore">
+                    <i class="fas fa-user-tie"></i>
+                    {{ lezione.istruttore }}
                   </div>
                 </div>
               </div>
+            </div>
+
+            <!-- Messaggio quando il giorno selezionato non ha lezioni -->
+            <div *ngIf="giornoSelezionato && getLezioniDaVisualizzare().length === 0" class="empty-state-modern">
+              <i class="fas fa-calendar-day fa-3x"></i>
+              <p>Nessuna lezione per questo giorno</p>
+              <button class="btn-prenota-ora mt-3" (click)="vaiAPrenotazioni()">
+                Prenota ora
+              </button>
             </div>
           </div>
         </div>
@@ -150,11 +164,13 @@
               <div class="mini-calendar">
                 <div class="calendar-day" *ngFor="let giorno of giorniCalendario" 
                      [class.today]="isOggi(giorno.data)"
-                     [class.has-lessons]="giorno.lezioni.length > 0">
+                     [class.has-lessons]="giorno.lezioni.length > 0"
+                     [class.selected]="isGiornoSelezionato(giorno.data)"
+                     (click)="selezionaGiorno(giorno.data)">
                   <div class="day-name">{{ getNomeGiorno(giorno.data) }}</div>
                   <div class="day-number">{{ giorno.data.getDate() }}</div>
                   <div class="day-indicator" *ngIf="giorno.lezioni.length > 0">
-                    <span class="lesson-dot" *ngFor="let lesson of giorno.lezioni.slice(0, 3)"></span>
+                    <span class="lesson-count">{{ giorno.lezioni.length }}</span>
                   </div>
                 </div>
               </div>

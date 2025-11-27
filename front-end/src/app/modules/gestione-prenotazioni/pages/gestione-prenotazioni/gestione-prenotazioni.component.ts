@@ -624,7 +624,7 @@ export class GestionePrenotazioniComponent implements OnInit {
     this.confermaInCorso = true;
     
     const request: PrenotazioneRicorrenteRequest = {
-      venditaId: this.selectedPacchetto.id,
+      venditaId: this.selectedPacchetto.venditaId!, // Usa venditaId invece di id
       templateId: this.selectedTemplate.id,
       tipoLezione: this.categoriaLezioneSelezionata || undefined,
       numeroLezioni: this.selectedPacchetto.lezioniRimanenti

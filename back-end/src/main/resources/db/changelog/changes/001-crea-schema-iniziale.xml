@@ -70,6 +70,9 @@
             <column name="data_modifica" type="TIMESTAMP">
                 <constraints nullable="true" />
             </column>
+            <column name="totale_lezioni_prenotate" type="INT" defaultValue="0">
+                <constraints nullable="false" />
+            </column>
         </createTable>
     </changeSet>
 
