@@ -24,6 +24,7 @@ import com.example.demo.entity.RichiestaSpostamento;
 import com.example.demo.repository.VenditaRepository;
 import com.example.demo.service.PrenotazioneRicorrenteService;
 import com.example.demo.service.RichiestaSpostamentoService;
+import com.example.demo.service.SpostamentoLezioneService;
 
 /**
  * Controller REST per gestire le prenotazioni
@@ -41,6 +42,9 @@ public class PrenotazioneController {
 
     @Autowired
     private RichiestaSpostamentoService richiestaSpostamentoService;
+
+    @Autowired
+    private SpostamentoLezioneService spostamentoLezioneService;
 
     /**
      * Recupera i pacchetti acquistati e pagati dall'utente corrente
@@ -190,6 +194,40 @@ public class PrenotazioneController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    /**
+     * Richiedi spostamento lezione (automatico o richiesta admin)
+     */
+    @PostMapping("/richiedi-spostamento/{prenotazioneId}")
+    public ResponseEntity<?> richiediSpostamentoLezione(
+            @PathVariable Long prenotazioneId,
+            @RequestBody(required = false) SpostamentoRequest request,
+            Authentication authentication) {
+        try {
+            String username = authentication.getName();
+            String motivazione = request != null ? request.getMotivazione() : null;
+
+            boolean spostamentoAutomatico = spostamentoLezioneService.richiediSpostamento(
+                    prenotazioneId, username, motivazione);
+
+            if (spostamentoAutomatico) {
+                return ResponseEntity.ok(new SpostamentoResponse(
+                        true,
+                        "Lezione spostata automaticamente alla prima settimana disponibile",
+                        null
+                ));
+            } else {
+                return ResponseEntity.ok(new SpostamentoResponse(
+                        false,
+                        "Nessuna data disponibile. Richiesta inviata all'amministratore",
+                        "La richiesta verrà elaborata dal personale. Riceverai una notifica."
+                ));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse(e.getMessage()));
         }
     }
 
@@ -561,6 +599,48 @@ public class PrenotazioneController {
 
         public void setLezioniRimanenti(Integer lezioniRimanenti) {
             this.lezioniRimanenti = lezioniRimanenti;
+        }
+    }
+
+    /**
+     * Request DTO per spostamento lezione
+     */
+    public static class SpostamentoRequest {
+        private String motivazione;
+
+        public String getMotivazione() {
+            return motivazione;
+        }
+
+        public void setMotivazione(String motivazione) {
+            this.motivazione = motivazione;
+        }
+    }
+
+    /**
+     * Response DTO per spostamento lezione
+     */
+    public static class SpostamentoResponse {
+        private boolean spostamentoAutomatico;
+        private String messaggio;
+        private String dettaglio;
+
+        public SpostamentoResponse(boolean spostamentoAutomatico, String messaggio, String dettaglio) {
+            this.spostamentoAutomatico = spostamentoAutomatico;
+            this.messaggio = messaggio;
+            this.dettaglio = dettaglio;
+        }
+
+        public boolean isSpostamentoAutomatico() {
+            return spostamentoAutomatico;
+        }
+
+        public String getMessaggio() {
+            return messaggio;
+        }
+
+        public String getDettaglio() {
+            return dettaglio;
         }
     }
 }

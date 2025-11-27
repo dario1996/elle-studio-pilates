@@ -390,7 +390,7 @@
             <column name="tipo_lezione" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="stato" type="VARCHAR(20)" defaultValue="CONFERMATA">
+            <column name="stato" type="VARCHAR(30)" defaultValue="CONFERMATA">
                 <constraints nullable="false"/>
             </column>
             <column name="numero_spostamenti" type="INTEGER" defaultValue="0">

@@ -66,6 +66,15 @@ export class GestionePrenotazioniComponent implements OnInit {
   showPreviewModal = false;
   confermaInCorso = false;
 
+  // Modal spostamento
+  showSpostamentoModal = false;
+  prenotazioniSpostabili: PrenotazioneLezione[] = [];
+  prenotazioneSelezionataPerSpostamento: PrenotazioneLezione | null = null;
+  spostamentoInCorso = false;
+  mostraFormMotivazione = false;
+  motivazioneSpostamento = '';
+  messaggioLimiteGiorni = '';
+
   constructor() {
     this.prenotazioneForm = this.fb.group({
       pacchetto: ['', Validators.required],
@@ -511,15 +520,49 @@ export class GestionePrenotazioniComponent implements OnInit {
   }
 
   puoCancellare(prenotazione: PrenotazioneLezione): boolean {
+    // Disabilitiamo la cancellazione, ora si usa solo lo spostamento
+    return false;
+  }
+
+  puoSpostare(prenotazione: PrenotazioneLezione): boolean {
+    // Può spostare solo se confermata e se > 24h dall'inizio
     if (prenotazione.stato !== 'CONFERMATA') {
       return false;
     }
 
-    const dataLezione = new Date(prenotazione.dataLezione);
-    const oggi = new Date();
-    oggi.setHours(0, 0, 0, 0);
+    const dataOraLezione = new Date(prenotazione.dataLezione + 'T' + prenotazione.oraInizio);
+    const ora24PrimaDiLezione = new Date(dataOraLezione);
+    ora24PrimaDiLezione.setHours(ora24PrimaDiLezione.getHours() - 24);
     
-    return dataLezione >= oggi;
+    return new Date() < ora24PrimaDiLezione;
+  }
+
+  richiediSpostamento(prenotazione: PrenotazioneLezione): void {
+    if (prenotazione.numeroSpostamenti >= 1) {
+      this.toastr.warning('Hai già effettuato il massimo numero di spostamenti per questa prenotazione');
+      return;
+    }
+
+    const motivazione = prompt('Inserisci la motivazione dello spostamento (opzionale):');
+    if (motivazione === null) {
+      return; // Utente ha annullato
+    }
+
+    this.prenotazioneService.richiediSpostamentoLezione(prenotazione.id, motivazione || undefined).subscribe({
+      next: (response) => {
+        if (response.spostamentoAutomatico) {
+          this.toastr.success(response.messaggio, 'Spostamento Automatico');
+        } else {
+          this.toastr.info(response.messaggio + (response.dettaglio ? '\n' + response.dettaglio : ''), 'Richiesta Inviata');
+        }
+        this.caricaPrenotazioniUtente();
+        this.caricaPacchetti();
+      },
+      error: (error) => {
+        const errorMsg = error.error?.errore || error.error?.messaggio || 'Errore durante la richiesta di spostamento';
+        this.toastr.error(errorMsg);
+      }
+    });
   }
 
   modificaPrenotazione(prenotazione: PrenotazioneLezione, index: number): void {
@@ -613,6 +656,106 @@ export class GestionePrenotazioniComponent implements OnInit {
    */
   chiudiPreviewModal(): void {
     this.showPreviewModal = false;
+  }
+
+  /**
+   * Apre modal spostamento lezione
+   */
+  apriModaleSpostamento(): void {
+    // Filtra le prenotazioni che possono essere spostate
+    this.prenotazioniSpostabili = this.prenotazioniUtente.filter(p => this.puoSpostare(p));
+    this.prenotazioneSelezionataPerSpostamento = null;
+    this.showSpostamentoModal = true;
+  }
+
+  /**
+   * Chiude modal spostamento
+   */
+  chiudiModaleSpostamento(): void {
+    this.showSpostamentoModal = false;
+    this.prenotazioneSelezionataPerSpostamento = null;
+    this.mostraFormMotivazione = false;
+    this.motivazioneSpostamento = '';
+    this.messaggioLimiteGiorni = '';
+  }
+
+  /**
+   * Seleziona una prenotazione per lo spostamento
+   */
+  selezionaPrenotazionePerSpostamento(prenotazione: PrenotazioneLezione): void {
+    this.prenotazioneSelezionataPerSpostamento = prenotazione;
+  }
+
+  /**
+   * Procede con la richiesta di spostamento
+   */
+  procedeSpostamento(): void {
+    if (!this.prenotazioneSelezionataPerSpostamento) {
+      this.toastr.warning('Seleziona una prenotazione da spostare');
+      return;
+    }
+
+    // Se siamo nel form motivazione, invia la richiesta con motivazione
+    if (this.mostraFormMotivazione) {
+      this.inviaRichiestaConMotivazione();
+      return;
+    }
+
+    this.spostamentoInCorso = true;
+    const prenotazioneId = this.prenotazioneSelezionataPerSpostamento.id;
+
+    // Prima chiamata senza motivazione per verificare se può essere automatico
+    this.prenotazioneService.richiediSpostamentoLezione(prenotazioneId).subscribe({
+      next: (response) => {
+        if (response.spostamentoAutomatico) {
+          // Spostamento automatico riuscito
+          this.spostamentoInCorso = false;
+          this.showSpostamentoModal = false;
+          this.toastr.success(response.messaggio);
+          if (response.dettaglio) {
+            this.toastr.info(response.dettaglio);
+          }
+          this.caricaPrenotazioniUtente();
+        } else {
+          // Serve richiesta manuale con motivazione - mostra form
+          this.spostamentoInCorso = false;
+          this.messaggioLimiteGiorni = response.messaggio;
+          this.mostraFormMotivazione = true;
+        }
+      },
+      error: (error) => {
+        this.spostamentoInCorso = false;
+        this.toastr.error(error.error?.message || 'Errore nella richiesta di spostamento');
+      }
+    });
+  }
+
+  /**
+   * Invia richiesta spostamento con motivazione
+   */
+  private inviaRichiestaConMotivazione(): void {
+    if (!this.motivazioneSpostamento || !this.motivazioneSpostamento.trim()) {
+      this.toastr.warning('Inserisci una motivazione per la richiesta');
+      return;
+    }
+
+    if (!this.prenotazioneSelezionataPerSpostamento) return;
+
+    this.spostamentoInCorso = true;
+    const prenotazioneId = this.prenotazioneSelezionataPerSpostamento.id;
+
+    this.prenotazioneService.richiediSpostamentoLezione(prenotazioneId, this.motivazioneSpostamento).subscribe({
+      next: (response) => {
+        this.spostamentoInCorso = false;
+        this.showSpostamentoModal = false;
+        this.toastr.success(response.messaggio);
+        this.caricaPrenotazioniUtente();
+      },
+      error: (error) => {
+        this.spostamentoInCorso = false;
+        this.toastr.error(error.error?.message || 'Errore nella richiesta di spostamento');
+      }
+    });
   }
 
   /**

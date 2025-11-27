@@ -168,4 +168,14 @@ export class PrenotazioneService {
   prenotaCombo(request: PrenotazioneComboRequest): Observable<PrenotazioneRicorrenteResponse> {
     return this.http.post<PrenotazioneRicorrenteResponse>(`${this.baseUrl}/prenota-ricorrente-combo`, request);
   }
+
+  /**
+   * Richiedi spostamento lezione (automatico o richiesta admin)
+   */
+  richiediSpostamentoLezione(prenotazioneId: number, motivazione?: string): Observable<{spostamentoAutomatico: boolean, messaggio: string, dettaglio?: string}> {
+    return this.http.post<{spostamentoAutomatico: boolean, messaggio: string, dettaglio?: string}>(
+      `${this.baseUrl}/richiedi-spostamento/${prenotazioneId}`,
+      { motivazione }
+    );
+  }
 }
