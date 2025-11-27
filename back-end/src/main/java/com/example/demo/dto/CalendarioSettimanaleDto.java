@@ -37,6 +37,8 @@ public class CalendarioSettimanaleDto {
 
     private Boolean attivo;
 
+    private Integer postiPrenotati;
+
     public CalendarioSettimanaleDto() {
     }
 
@@ -152,6 +154,14 @@ public class CalendarioSettimanaleDto {
         this.attivo = attivo;
     }
 
+    public Integer getPostiPrenotati() {
+        return postiPrenotati;
+    }
+
+    public void setPostiPrenotati(Integer postiPrenotati) {
+        this.postiPrenotati = postiPrenotati;
+    }
+
     public static Builder builder() {
         return new Builder();
     }
@@ -168,6 +178,7 @@ public class CalendarioSettimanaleDto {
         private String colore;
         private String note;
         private Boolean attivo;
+        private Integer postiPrenotati;
 
         private Builder() {
         }
@@ -224,6 +235,11 @@ public class CalendarioSettimanaleDto {
 
         public Builder attivo(Boolean attivo) {
             this.attivo = attivo;
+            return this;
+        }
+
+        public Builder postiPrenotati(Integer postiPrenotati) {
+            this.postiPrenotati = postiPrenotati;
             return this;
         }
 

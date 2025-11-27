@@ -14,8 +14,11 @@ import { LoggedUserComponent } from '../../../../shared/components/logged-user/l
 import { NotificationComponent } from '../../../../core/notification/notification.component';
 import { ModaleService } from '../../../../core/services/modal.service';
 import { LezioniService } from '../../../../core/services/lezioni.service';
+import { CalendarioService, CalendarioTemplate } from '../../../../shared/services/calendario.service';
+import { PrenotazioneService } from '../../../../shared/services/prenotazione.service';
 import { ToastrService } from 'ngx-toastr';
 import { ILezione, TipoLezione, TIPI_LEZIONE_CONFIG } from '../../../../shared/models/Lezione';
+import { PrenotazioneLezione } from '../../../../shared/models/prenotazione.model';
 import { FormLezioneComponent } from '../../components/form-lezione/form-lezione.component';
 import { DettaglioLezioneComponent } from '../../components/dettaglio-lezione/dettaglio-lezione.component';
 import { LeggendaColoriComponent } from '../../components/leggenda-colori/leggenda-colori.component';
@@ -38,7 +41,11 @@ export class AgendaComponent implements OnInit {
   icon: string = 'fas fa-calendar-alt';
   
   lezioni: ILezione[] = [];
+  prenotazioni: PrenotazioneLezione[] = [];
   events: EventInput[] = [];
+  templateEvents: EventInput[] = [];
+  lezioneEvents: EventInput[] = [];
+  prenotazioneEvents: EventInput[] = [];
 
   calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
@@ -67,6 +74,8 @@ export class AgendaComponent implements OnInit {
     },
     select: this.handleDateSelect.bind(this),
     eventClick: this.handleEventClick.bind(this),
+    eventContent: this.renderEventContent.bind(this),
+    eventDidMount: this.styleEventElement.bind(this),
     events: []
   };
 
@@ -81,20 +90,25 @@ export class AgendaComponent implements OnInit {
 
   constructor(
     private lezioniService: LezioniService,
+    private prenotazioneService: PrenotazioneService,
     private modaleService: ModaleService,
     private toastr: ToastrService,
     private cd: ChangeDetectorRef,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private calendarioService: CalendarioService
   ) {}
 
   ngOnInit(): void {
-    this.loadLezioni();
+    // this.loadLezioni(); // Commentato: ora usiamo solo prenotazioni_lezioni
+    this.loadPrenotazioni();
+    this.loadCalendarioTemplates();
     
     // Ascolta l'evento di refresh per ricaricare le lezioni
     this.modaleService.refreshList$.subscribe(() => {
-      console.log('🔄 Ricevuto evento refresh, ricaricando lezioni...');
-      this.loadLezioni();
+      console.log('🔄 Ricevuto evento refresh, ricaricando prenotazioni...');
+      // this.loadLezioni(); // Commentato
+      this.loadPrenotazioni();
     });
     
     // Controlla se deve aprire il form di creazione o modifica
@@ -129,6 +143,61 @@ export class AgendaComponent implements OnInit {
     });
   }
 
+  private loadCalendarioTemplates(): void {
+    console.log('🔄 Caricamento template calendario settimanale...');
+    this.calendarioService.getCalendarioAttivo().subscribe({
+      next: (templates: CalendarioTemplate[]) => {
+        console.log('✅ Template calendario ricevuti:', templates.length);
+        // Converti templates in eventi ricorrenti FullCalendar
+        const recurringEvents: EventInput[] = templates.map(t => {
+          // mappa giorno string (LUNEDI) in daysOfWeek index 0=Sunday..6=Saturday -> FullCalendar usa 0=Sunday
+          const daysMap: any = {
+            'LUNEDI': 1,
+            'MARTEDI': 2,
+            'MERCOLEDI': 3,
+            'GIOVEDI': 4,
+            'VENERDI': 5,
+            'SABATO': 6,
+            'DOMENICA': 0
+          };
+
+          const day = daysMap[(t.giornoSettimana || '').toUpperCase()] ?? 1;
+
+          // oraInizio/oraFine sono in formato HH:mm:ss, manteniamo HH:mm
+          const startTime = (t.oraInizio || '').toString().slice(0,5);
+          const endTime = (t.oraFine || '').toString().slice(0,5);
+
+          // Usa il colore gold dello studio per tutti gli slot
+          const eventColor = '#c99e67';
+
+          return {
+            id: `tpl-${t.id}`,
+            title: `${t.titolo}`,
+            daysOfWeek: [day],
+            startTime: startTime,
+            endTime: endTime,
+            backgroundColor: eventColor,
+            borderColor: eventColor,
+            textColor: '#ffffff',
+            extendedProps: {
+              template: t,
+              tipoLezione: t.tipoLezione,
+              maxPartecipanti: t.maxPartecipanti ?? 1,
+              templateId: t.id
+            }
+          } as EventInput;
+        });
+
+  // Salva separatamente gli eventi ricorrenti dei template e poi unisci
+  this.templateEvents = [ ...recurringEvents ];
+  this.updateCalendarEventsWithCounts();
+      },
+      error: (err) => {
+        console.error('Errore caricamento calendario templates', err);
+      }
+    });
+  }
+
   private loadLezioni(): void {
     console.log('🔄 loadLezioni() chiamato - ricaricando tutte le lezioni dal backend');
     this.lezioniService.getLezioni().subscribe({
@@ -146,8 +215,24 @@ export class AgendaComponent implements OnInit {
     });
   }
 
+  private loadPrenotazioni(): void {
+    console.log('🔄 loadPrenotazioni() chiamato - caricando TUTTE le prenotazioni dal backend');
+    this.prenotazioneService.getTuttePrenotazioni().subscribe({
+      next: (data) => {
+        console.log('✅ Prenotazioni caricate dal backend:', data.length, 'prenotazioni');
+        this.prenotazioni = data;
+        this.updateCalendarEventsWithCounts();
+        console.log('📅 Calendario aggiornato con prenotazioni');
+      },
+      error: (error) => {
+        console.error('❌ Errore nel caricamento delle prenotazioni:', error);
+        this.toastr.error('Errore nel caricamento delle prenotazioni');
+      }
+    });
+  }
+
   private convertLezioniToEvents(): void {
-    this.events = this.lezioni.map(lezione => ({
+    this.lezioneEvents = this.lezioni.map(lezione => ({
       id: lezione.id?.toString(),
       title: this.getEventTitle(lezione),
       start: lezione.dataInizio,
@@ -163,6 +248,32 @@ export class AgendaComponent implements OnInit {
         maxPartecipanti: lezione.maxPartecipanti
       }
     }));
+  }
+
+  private convertPrenotazioniToEvents(): void {
+    this.prenotazioneEvents = this.prenotazioni.map(pren => {
+      // Determina il colore in base al tipo di lezione
+      const tipoKey = pren.tipoLezione as TipoLezione;
+      const tipoConfig = TIPI_LEZIONE_CONFIG[tipoKey] || TIPI_LEZIONE_CONFIG[TipoLezione.PRIVATA];
+      
+      return {
+        id: `pren-${pren.id}`,
+        title: `${pren.titolo} (1/1) - ${pren.utenteNome}`,
+        start: `${pren.dataLezione}T${pren.oraInizio}`,
+        end: `${pren.dataLezione}T${pren.oraFine}`,
+        backgroundColor: tipoConfig.colore,
+        borderColor: tipoConfig.colore,
+        textColor: '#ffffff',
+        extendedProps: {
+          prenotazione: pren,
+          tipo: 'prenotazione',
+          stato: pren.stato,
+          utenteNome: pren.utenteNome,
+          gruppoId: pren.gruppoId,
+          tipoLezione: pren.tipoLezione
+        }
+      };
+    });
   }
 
   private getEventTitle(lezione: ILezione): string {
@@ -182,11 +293,47 @@ export class AgendaComponent implements OnInit {
 
   private updateCalendarEvents(): void {
     console.log('📅 updateCalendarEvents() chiamato con', this.events.length, 'eventi');
+    // Merge template events, lezione events and prenotazione events
+    this.events = [ 
+      ...(this.templateEvents || []), 
+      ...(this.lezioneEvents || []),
+      ...(this.prenotazioneEvents || [])
+    ];
     this.calendarOptions = {
       ...this.calendarOptions,
       events: this.events
     };
     console.log('✅ calendarOptions aggiornato');
+  }
+
+  private updateCalendarEventsWithCounts(): void {
+    console.log('📅 updateCalendarEventsWithCounts() chiamato');
+    
+    // Mantieni gli eventi ricorrenti dei template e aggiorna solo i titoli con i conteggi dinamici
+    // Nota: FullCalendar non supporta titoli diversi per ogni occorrenza di un evento ricorrente,
+    // quindi mostreremo un conteggio totale o generico
+    const updatedTemplateEvents = this.templateEvents.map(event => {
+      const templateId = event.extendedProps?.['templateId'];
+      const maxPartecipanti = event.extendedProps?.['maxPartecipanti'] || 1;
+      
+      // Estrai il titolo base (senza conteggio)
+      const baseTitle = event.title?.replace(/\s*\(\d+\/\d+\).*$/, '') || '';
+      
+      // Mantieni l'evento ricorrente ma con il placeholder per il conteggio
+      return {
+        ...event,
+        title: `${baseTitle} (0/${maxPartecipanti})` // FullCalendar mostrerà questo su tutte le ricorrenze
+      };
+    });
+    
+    this.events = [...updatedTemplateEvents];
+    
+    this.calendarOptions = {
+      ...this.calendarOptions,
+      events: this.events
+    };
+    
+    console.log('✅ Calendario aggiornato con template ricorrenti');
   }
 
   // Handler per la selezione di una data/ora (creazione nuova lezione)
@@ -199,9 +346,89 @@ export class AgendaComponent implements OnInit {
 
   // Handler per il click su un evento esistente
   handleEventClick(clickInfo: EventClickArg): void {
+    const prenotazione = clickInfo.event.extendedProps['prenotazione'] as PrenotazioneLezione;
+    if (prenotazione) {
+      this.apriModalDettaglioPrenotazione(prenotazione);
+      return;
+    }
+    
+    const template = clickInfo.event.extendedProps['template'];
+    if (template) {
+      this.apriModalDettaglioTemplate(clickInfo.event);
+      return;
+    }
+    
     const lezione = clickInfo.event.extendedProps['lezione'] as ILezione;
     if (lezione) {
       this.apriModalDettaglio(lezione);
+    }
+  }
+
+  // Renderizza il contenuto degli eventi con conteggio dinamico
+  renderEventContent(eventInfo: any) {
+    const template = eventInfo.event.extendedProps?.template;
+    if (!template) {
+      // Non è un template, usa il titolo di default
+      return { html: `<div class="fc-event-title">${eventInfo.event.title}</div>` };
+    }
+
+    // È un template ricorrente, calcola il conteggio per questa specifica data
+    const templateId = eventInfo.event.extendedProps?.templateId;
+    const maxPartecipanti = eventInfo.event.extendedProps?.maxPartecipanti || 1;
+    const eventDate = eventInfo.event.start;
+    
+    if (!eventDate) {
+      return { html: `<div class="fc-event-title">${template.titolo || ''}</div>` };
+    }
+    
+    const dataStr = eventDate.toISOString().split('T')[0]; // YYYY-MM-DD
+    
+    // Conta prenotazioni confermate per questa data e template
+    const prenotazioniCount = this.prenotazioni.filter(p => 
+      p.templateId === templateId && 
+      p.dataLezione === dataStr &&
+      p.stato === 'CONFERMATA'
+    ).length;
+    
+    const baseTitle = template.titolo || eventInfo.event.title;
+    const isFull = prenotazioniCount >= maxPartecipanti;
+    
+    const checkIcon = isFull ? '<i class="fas fa-check-circle" style="color: #d1fae5; font-size: 18px; margin-left: 8px;"></i>' : '';
+    const titleWithCount = `${baseTitle} (${prenotazioniCount}/${maxPartecipanti})`;
+    
+    return { 
+      html: `<div class="fc-event-title" style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 2px 4px;">
+               <span>${titleWithCount}</span>${checkIcon}
+             </div>` 
+    };
+  }
+
+  // Applica stili personalizzati all'elemento dell'evento
+  styleEventElement(info: any) {
+    const template = info.event.extendedProps?.template;
+    if (!template) return;
+
+    const templateId = info.event.extendedProps?.templateId;
+    const maxPartecipanti = info.event.extendedProps?.maxPartecipanti || 1;
+    const eventDate = info.event.start;
+    
+    if (!eventDate) return;
+    
+    const dataStr = eventDate.toISOString().split('T')[0];
+    
+    const prenotazioniCount = this.prenotazioni.filter(p => 
+      p.templateId === templateId && 
+      p.dataLezione === dataStr &&
+      p.stato === 'CONFERMATA'
+    ).length;
+    
+    const isFull = prenotazioniCount >= maxPartecipanti;
+    
+    if (isFull) {
+      // Applica stile verde agli slot pieni
+      info.el.style.backgroundColor = '#059669';
+      info.el.style.borderColor = '#059669';
+      info.el.style.opacity = '0.9';
     }
   }
 
@@ -257,6 +484,89 @@ export class AgendaComponent implements OnInit {
         componente: DettaglioLezioneComponent,
         dati: lezione,
         customButtons: customButtons,
+        showDefaultButtons: false
+      });
+    });
+  }
+
+  // Apertura modal per dettaglio prenotazione
+  apriModalDettaglioPrenotazione(prenotazione: PrenotazioneLezione): void {
+    import('../../components/dettaglio-lezione/dettaglio-lezione.component').then(({ DettaglioLezioneComponent }) => {
+      // Crea un oggetto compatibile per visualizzare i dettagli della prenotazione
+      const dettagliObj = {
+        id: prenotazione.id,
+        titolo: prenotazione.titolo,
+        dataInizio: `${prenotazione.dataLezione}T${prenotazione.oraInizio}`,
+        dataFine: `${prenotazione.dataLezione}T${prenotazione.oraFine}`,
+        istruttore: prenotazione.istruttore,
+        tipo: prenotazione.tipoLezione,
+        maxPartecipanti: 1,
+        partecipanti: [{ nome: prenotazione.utenteNome }],
+        attiva: prenotazione.stato === 'CONFERMATA',
+        note: prenotazione.note || `Stato: ${prenotazione.stato}${prenotazione.gruppoId ? ' - Gruppo: ' + prenotazione.gruppoId : ''}`
+      };
+
+      this.modaleService.apri({
+        titolo: 'Dettagli Prenotazione',
+        componente: DettaglioLezioneComponent,
+        dati: dettagliObj,
+        customButtons: [
+          {
+            text: 'Chiudi',
+            cssClass: 'btn-secondary',
+            action: () => this.modaleService.chiudi()
+          }
+        ],
+        showDefaultButtons: false
+      });
+    });
+  }
+
+  // Apertura modal per dettaglio slot (template)
+  apriModalDettaglioTemplate(event: any): void {
+    import('../../components/dettaglio-lezione/dettaglio-lezione.component').then(({ DettaglioLezioneComponent }) => {
+      const template = event.extendedProps?.template;
+      const templateId = event.extendedProps?.templateId;
+      const maxPartecipanti = event.extendedProps?.maxPartecipanti || 1;
+      const eventDate = event.start;
+      
+      if (!eventDate || !template) return;
+      
+      const dataStr = eventDate.toISOString().split('T')[0];
+      
+      // Trova le prenotazioni per questo slot
+      const prenotazioniSlot = this.prenotazioni.filter(p => 
+        p.templateId === templateId && 
+        p.dataLezione === dataStr &&
+        p.stato === 'CONFERMATA'
+      );
+      
+      const partecipanti = prenotazioniSlot.map(p => ({ nome: p.utenteNome }));
+      
+      const dettagliObj = {
+        id: templateId,
+        titolo: template.titolo,
+        dataInizio: `${dataStr}T${template.oraInizio}`,
+        dataFine: `${dataStr}T${template.oraFine}`,
+        istruttore: template.istruttore,
+        tipo: template.tipoLezione,
+        maxPartecipanti: maxPartecipanti,
+        partecipanti: partecipanti,
+        attiva: true,
+        note: template.note || `Slot calendario settimanale - ${prenotazioniSlot.length}/${maxPartecipanti} prenotazioni`
+      };
+
+      this.modaleService.apri({
+        titolo: 'Dettagli Slot',
+        componente: DettaglioLezioneComponent,
+        dati: dettagliObj,
+        customButtons: [
+          {
+            text: 'Chiudi',
+            cssClass: 'btn-secondary',
+            action: () => this.modaleService.chiudi()
+          }
+        ],
         showDefaultButtons: false
       });
     });

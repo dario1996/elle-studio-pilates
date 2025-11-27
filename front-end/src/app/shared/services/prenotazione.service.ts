@@ -7,8 +7,14 @@ import {
   PrenotazioneLezioneResponse, 
   LezioneDisponibile,
   TipoLezione,
-  Pacchetto 
+  Pacchetto,
+  PrenotazioneRicorrenteRequest,
+  PrenotazioneRicorrenteResponse,
+  PrenotazioneLezione,
+  RichiestaSpostamentoRequest,
+  RichiestaSpostamento
 } from '../models/prenotazione.model';
+import { PrenotazioneComboRequest } from '../models/combo-wizard.model';
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +43,13 @@ export class PrenotazioneService {
    */
   getTipiLezionePerPacchetto(pacchettoId: number): Observable<TipoLezione[]> {
     return this.http.get<TipoLezione[]>(`${this.baseUrl}/tipi-lezione/pacchetto/${pacchettoId}`);
+  }
+
+  /**
+   * Recupera i template del calendario settimanale per un tipo di lezione specifico
+   */
+  getTemplatesPerTipoLezione(tipoLezione: string): Observable<TipoLezione[]> {
+    return this.http.get<TipoLezione[]>(`${environment.apiUrl}/calendario-settimanale/per-tipo-lezione/${tipoLezione}`);
   }
 
   /**
@@ -101,5 +114,58 @@ export class PrenotazioneService {
    */
   cancellaPrenotazione(prenotazioneId: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${prenotazioneId}`);
+  }
+
+  // ============================================
+  // NUOVI METODI PER PRENOTAZIONI RICORRENTI
+  // ============================================
+
+  /**
+   * Crea prenotazioni ricorrenti (N lezioni settimanali)
+   */
+  prenotaRicorrente(request: PrenotazioneRicorrenteRequest): Observable<PrenotazioneRicorrenteResponse> {
+    return this.http.post<PrenotazioneRicorrenteResponse>(`${this.baseUrl}/prenota-ricorrente`, request);
+  }
+
+  /**
+   * Recupera le prenotazioni future dell'utente (nuovo formato)
+   */
+  getMiePrenotazioniRicorrenti(): Observable<PrenotazioneLezione[]> {
+    return this.http.get<PrenotazioneLezione[]>(`${this.baseUrl}/mie-prenotazioni`);
+  }
+
+  /**
+   * Recupera TUTTE le prenotazioni future (per admin)
+   */
+  getTuttePrenotazioni(): Observable<PrenotazioneLezione[]> {
+    return this.http.get<PrenotazioneLezione[]>(`${this.baseUrl}/tutte-prenotazioni`);
+  }
+
+  /**
+   * Cancella una singola prenotazione ricorrente
+   */
+  cancellaPrenotazioneRicorrente(prenotazioneId: number): Observable<{messaggio: string}> {
+    return this.http.delete<{messaggio: string}>(`${this.baseUrl}/cancella/${prenotazioneId}`);
+  }
+
+  /**
+   * Crea una richiesta di spostamento prenotazione
+   */
+  creaRichiestaSpostamento(request: RichiestaSpostamentoRequest): Observable<RichiestaSpostamento> {
+    return this.http.post<RichiestaSpostamento>(`${this.baseUrl}/richiesta-spostamento`, request);
+  }
+
+  /**
+   * Recupera le richieste di spostamento dell'utente
+   */
+  getMieRichiesteSpostamento(): Observable<RichiestaSpostamento[]> {
+    return this.http.get<RichiestaSpostamento[]>(`${this.baseUrl}/mie-richieste-spostamento`);
+  }
+
+  /**
+   * Crea prenotazioni COMBO (multiple categorie)
+   */
+  prenotaCombo(request: PrenotazioneComboRequest): Observable<PrenotazioneRicorrenteResponse> {
+    return this.http.post<PrenotazioneRicorrenteResponse>(`${this.baseUrl}/prenota-ricorrente-combo`, request);
   }
 }
