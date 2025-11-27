@@ -164,9 +164,6 @@ public class VenditaService {
         // Recupera tutte le vendite PAID per questo utente
         List<Vendita> vendite = venditaRepository.findByUtenteUsernameAndStato(username, StatoVendita.PAID);
 
-        // Recupera tutte le lezioni prenotate dall'utente
-        List<com.example.demo.entity.Lezione> lezioniPrenotate = lezioneRepository.findLezioniPrenotateByUsername(username);
-
         // Converte le vendite in DTO con i dettagli completi
         return vendite.stream()
                 .map(vendita -> {
@@ -183,31 +180,27 @@ public class VenditaService {
                     dto.setDurataMinuti(pacchetto.getDurataMinuti());
                     dto.setMaxPartecipanti(pacchetto.getMaxPartecipanti());
                     dto.setPrezzo(vendita.getImporto());
-                    dto.setNumLezioni(pacchetto.getNumLezioni());
+                    dto.setNumLezioni(pacchetto.getNumeroLezioni());
                     dto.setDataAcquisto(vendita.getDataAcquisto());
                     dto.setDataPagamento(vendita.getDataPagamento());
                     dto.setNote(vendita.getNote());
                     
-                    // Usa il campo num_lezioni dalla tabella pacchetti
-                    Integer lezioniTotali = pacchetto.getNumLezioni();
+                    // Usa il campo numero_lezioni dalla tabella pacchetti
+                    Integer lezioniTotali = pacchetto.getNumeroLezioni();
                     dto.setLezioniTotali(lezioniTotali != null ? lezioniTotali : 0);
                     
-                    // Conta quante lezioni sono state prenotate per questo pacchetto
-                    // (basato sulla vendita specifica)
-                    long lezioniPrenotateCount = lezioniPrenotate.stream()
-                            .filter(lezione -> {
-                                // Qui dovresti avere una logica per associare la lezione alla vendita
-                                // Per ora contiamo tutte le lezioni del tipo corrispondente
-                                String tipoLezione = lezione.getTipoLezione() != null ? 
-                                        lezione.getTipoLezione().toString().toUpperCase() : "";
-                                String categoria = pacchetto.getCategoria() != null ? 
-                                        pacchetto.getCategoria().toUpperCase() : "";
-                                return tipoLezione.contains(categoria) || categoria.contains(tipoLezione);
-                            })
-                            .count();
+                    // Usa direttamente il campo lezioni_rimanenti dalla tabella vendite
+                    Integer lezioniRimanenti = vendita.getLezioniRimanenti();
+                    dto.setLezioniRimaste(lezioniRimanenti != null ? lezioniRimanenti : dto.getLezioniTotali());
                     
-                    dto.setLezioniPrenotate((int) lezioniPrenotateCount);
-                    dto.setLezioniRimaste(dto.getLezioniTotali() - dto.getLezioniPrenotate());
+                    // Logica per lezioni prenotate:
+                    // Se lezioniRimaste == 0, significa che sono state prenotate tutte -> mostra lezioniTotali
+                    // Se lezioniRimaste > 0, significa che non sono state ancora prenotate -> mostra 0
+                    if (dto.getLezioniRimaste() == 0) {
+                        dto.setLezioniPrenotate(dto.getLezioniTotali());
+                    } else {
+                        dto.setLezioniPrenotate(0);
+                    }
                     
                     // Determina lo stato
                     if (dto.getLezioniRimaste() <= 0) {

@@ -65,6 +65,7 @@ export class GestionePacchettiComponent implements OnInit {
     this.venditeService.getPacchettiAcquistatiByUtente(username).subscribe({
       next: (pacchetti) => {
         this.pacchettiAcquistati = pacchetti || [];
+        console.log('Pacchetti acquistati:', this.pacchettiAcquistati);
         this.loadingAcquistati = false;
       },
       error: (error) => {
