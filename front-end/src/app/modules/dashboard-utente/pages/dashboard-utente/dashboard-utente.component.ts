@@ -47,7 +47,7 @@ export class DashboardUtenteComponent implements OnInit, AfterViewInit {
   giorniCalendario: { data: Date; lezioni: ILezione[] }[] = [];
   giornoSelezionato: Date | null = null;
   lezioniGiornoSelezionato: ILezione[] = [];
-  visualizzaTutte: boolean = false; // Flag per mostrare tutte le lezioni
+  visualizzaTutte: boolean = true; // Modificato: mostra tutte le lezioni di default
 
   // Configurazione immagini per tipi lezione (URL o icone)
   readonly LEZIONI_IMAGES: Record<string, { image: string; gradient: string; icon: string }> = {
@@ -253,6 +253,26 @@ export class DashboardUtenteComponent implements OnInit, AfterViewInit {
     return `${h1}:${min1}-${h2}:${min2}`;
   }
 
+  /** Formatta il giorno della settimana e la data completa */
+  formatGiornoData(data: string | Date): string {
+    const d = typeof data === 'string' ? new Date(data) : data as Date;
+    const giorni = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+    const mesi = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 
+                  'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
+    const giornoSettimana = giorni[d.getDay()];
+    const giorno = d.getDate();
+    const mese = mesi[d.getMonth()];
+    return `${giornoSettimana} ${giorno} ${mese}`;
+  }
+
+  /** Formatta solo l'ora nel formato HH:mm */
+  formatOra(data: string | Date): string {
+    const d = typeof data === 'string' ? new Date(data) : data as Date;
+    const h = d.getHours().toString().padStart(2, '0');
+    const min = d.getMinutes().toString().padStart(2, '0');
+    return `${h}:${min}`;
+  }
+
   getLabelTipoLezione(tipo: string): string {
     return TIPI_LEZIONE_CONFIG[tipo as keyof typeof TIPI_LEZIONE_CONFIG]?.label || tipo;
   }
@@ -364,6 +384,12 @@ export class DashboardUtenteComponent implements OnInit, AfterViewInit {
 
   /** Seleziona un giorno nel calendario per visualizzare le lezioni */
   selezionaGiorno(data: Date): void {
+    // Se clicco sullo stesso giorno già selezionato, torno a visualizzare tutte
+    if (this.isGiornoSelezionato(data)) {
+      this.mostraLeTutteLezioni();
+      return;
+    }
+    
     this.visualizzaTutte = false; // Disattiva la visualizzazione "tutte"
     this.giornoSelezionato = data;
     

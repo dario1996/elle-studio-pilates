@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -16,8 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.dto.DashboardStatisticheDto;
 import com.example.demo.dto.LezioneDto;
 import com.example.demo.entity.Lezione;
+import com.example.demo.entity.PrenotazioneLezione;
 import com.example.demo.entity.Utenti;
 import com.example.demo.repository.LezioneRepository;
+import com.example.demo.repository.PrenotazioneLezioneRepository;
 import com.example.demo.repository.UtenteRepository;
 import com.example.demo.service.LezioneService;
 
@@ -31,13 +35,16 @@ public class DashboardController {
     private final LezioneService lezioneService;
     private final UtenteRepository utenteRepository;
     private final LezioneRepository lezioneRepository;
+    private final PrenotazioneLezioneRepository prenotazioneRepository;
 
     public DashboardController(final LezioneService lezioneService,
                               final UtenteRepository utenteRepository,
-                              final LezioneRepository lezioneRepository) {
+                              final LezioneRepository lezioneRepository,
+                              final PrenotazioneLezioneRepository prenotazioneRepository) {
         this.lezioneService = lezioneService;
         this.utenteRepository = utenteRepository;
         this.lezioneRepository = lezioneRepository;
+        this.prenotazioneRepository = prenotazioneRepository;
     }
 
     @GetMapping("/appuntamenti-oggi")
@@ -69,30 +76,73 @@ public class DashboardController {
             
             LocalDateTime oggi = LocalDateTime.now();
             
-            // Recupera tutte le lezioni prenotate dall'utente
-            List<Lezione> tutteLezioni = lezioneRepository.findLezioniPrenotateByUsername(username);
+            // Recupera tutte le prenotazioni dell'utente (sia dalle lezioni che dalle prenotazioni)
+            List<Lezione> lezioniPartecipante = lezioneRepository.findLezioniPrenotateByUsername(username);
+            List<PrenotazioneLezione> prenotazioni = prenotazioneRepository.findByUtenteOrderByDataLezioneAsc(utente);
             
-            // Filtra le lezioni future
-            List<Lezione> lezioniFuture = tutteLezioni.stream()
-                .filter(l -> l.getDataInizio().isAfter(oggi))
-                .sorted((a, b) -> a.getDataInizio().compareTo(b.getDataInizio()))
+            // Combina le due liste per avere tutte le lezioni dell'utente
+            List<LocalDateTime> tutteDataOreLezioni = new ArrayList<>();
+            
+            // Aggiungi le lezioni dove l'utente è partecipante
+            for (Lezione l : lezioniPartecipante) {
+                tutteDataOreLezioni.add(l.getDataInizio());
+            }
+            
+            // Aggiungi le prenotazioni confermate
+            for (PrenotazioneLezione p : prenotazioni) {
+                if (p.getStato() == PrenotazioneLezione.StatoPrenotazione.CONFERMATA) {
+                    tutteDataOreLezioni.add(LocalDateTime.of(p.getDataLezione(), p.getOraInizio()));
+                }
+            }
+            
+            // Filtra le lezioni future e ordina
+            List<LocalDateTime> lezioniFuture = tutteDataOreLezioni.stream()
+                .filter(dt -> dt.isAfter(oggi))
+                .sorted()
                 .toList();
             
             // Calcola lezioni completate (nel passato)
-            int lezioniCompletate = (int) tutteLezioni.stream()
-                .filter(l -> l.getDataInizio().isBefore(oggi))
+            int lezioniCompletate = (int) tutteDataOreLezioni.stream()
+                .filter(dt -> dt.isBefore(oggi))
                 .count();
             
             // Determina la prossima lezione
             DashboardStatisticheDto.ProssimaLezioneDto prossimaLezione = null;
             if (!lezioniFuture.isEmpty()) {
-                Lezione prima = lezioniFuture.get(0);
+                LocalDateTime prossimaDataOra = lezioniFuture.get(0);
+                
+                // Cerca i dettagli della prossima lezione sia nelle lezioni che nelle prenotazioni
+                String tipoLezione = "";
+                LocalTime oraFine = prossimaDataOra.toLocalTime().plusHours(1); // default 1 ora
+                
+                // Cerca prima nelle prenotazioni
+                for (PrenotazioneLezione p : prenotazioni) {
+                    LocalDateTime dataOraPrenotazione = LocalDateTime.of(p.getDataLezione(), p.getOraInizio());
+                    if (dataOraPrenotazione.equals(prossimaDataOra) && 
+                        p.getStato() == PrenotazioneLezione.StatoPrenotazione.CONFERMATA) {
+                        tipoLezione = p.getTipoLezione();
+                        oraFine = p.getOraFine();
+                        break;
+                    }
+                }
+                
+                // Se non trovata nelle prenotazioni, cerca nelle lezioni
+                if (tipoLezione.isEmpty()) {
+                    for (Lezione l : lezioniPartecipante) {
+                        if (l.getDataInizio().equals(prossimaDataOra)) {
+                            tipoLezione = l.getTipoLezione().name();
+                            oraFine = l.getDataFine().toLocalTime();
+                            break;
+                        }
+                    }
+                }
+                
                 prossimaLezione = new DashboardStatisticheDto.ProssimaLezioneDto(
-                    prima.getDataInizio().toLocalDate(),
-                    prima.getDataInizio().toLocalTime(),
-                    prima.getDataFine().toLocalTime(),
-                    prima.getTipoLezione().name(),
-                    prima.getAttiva() ? "CONFERMATA" : "CANCELLATA"
+                    prossimaDataOra.toLocalDate(),
+                    prossimaDataOra.toLocalTime(),
+                    oraFine,
+                    tipoLezione,
+                    "CONFERMATA"
                 );
             }
             
