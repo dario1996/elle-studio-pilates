@@ -416,12 +416,12 @@
     
     <div class="modal-body">
       <!-- STEP 1: Selezione prenotazione -->
-      <div *ngIf="!mostraFormMotivazione">
+      <div [hidden]="mostraFormMotivazione" class="step-content">
         <!-- Istruzioni -->
         <div class="info-banner mb-3">
           <i class="fas fa-info-circle"></i>
           <div class="banner-text">
-            Seleziona la prenotazione da spostare. Se possibile, verrà spostata automaticamente alla prima settimana disponibile entro 37 giorni.
+            Seleziona la prenotazione da spostare. Se possibile, verrà spostata automaticamente alla prima settimana disponibile entro 37 giorni dalla prima prenotazione del tuo pacchetto.
             Altrimenti dovrai inserire una motivazione per la richiesta all'amministratore.
           </div>
         </div>
@@ -474,14 +474,44 @@
       </div>
 
       <!-- STEP 2: Form motivazione -->
-      <div *ngIf="mostraFormMotivazione">
+      <div [hidden]="!mostraFormMotivazione" class="step-content">
+        <!-- Messaggio dal backend -->
+        <div *ngIf="messaggioLimiteGiorni" class="alert alert-danger mb-3">
+          <i class="fas fa-exclamation-circle"></i>
+          <div class="alert-content">
+            <strong>{{ messaggioLimiteGiorni }}</strong>
+          </div>
+        </div>
+
+        <!-- Alert informativo -->
+        <div class="alert alert-info mb-3">
+          <i class="fas fa-info-circle"></i>
+          <div class="alert-content">
+            <h5>ℹ️ Come funziona lo spostamento lezioni</h5>
+            <p class="mb-2">Per garantire che tu possa usufruire di tutte le lezioni del tuo pacchetto, il sistema cerca automaticamente di spostare la tua lezione:</p>
+            <ul class="alert-list">
+              <li><strong>Stesso giorno della settimana</strong> (es. se la lezione è lunedì, cerca altri lunedì)</li>
+              <li><strong>Stesso orario</strong> della lezione originale</li>
+              <li><strong>Entro 37 giorni</strong> dalla prima volta che hai usato il pacchetto</li>
+              <li><strong>Con posti disponibili</strong> nel gruppo</li>
+              <li><strong>Senza conflitti</strong> con altre tue prenotazioni</li>
+            </ul>
+          </div>
+        </div>
+
         <!-- Alert limite giorni superato -->
         <div class="alert alert-warning mb-3">
           <i class="fas fa-exclamation-triangle"></i>
           <div class="alert-content">
-            <h5>Limite di 37 giorni superato</h5>
-            <p>{{ messaggioLimiteGiorni }}</p>
-            <p class="mb-0"><strong>È necessario inserire una motivazione per inoltrare la richiesta all'amministratore.</strong></p>
+            <h5>⚠️ Spostamento automatico non disponibile</h5>
+            <p class="mb-2"><strong>Il sistema non ha trovato date disponibili</strong> che rispettino tutti i requisiti sopra elencati.</p>
+            <p class="mb-2">Questo può succedere perché:</p>
+            <ul class="alert-list">
+              <li>Tutte le date disponibili superano i 37 giorni dal primo utilizzo del pacchetto</li>
+              <li>Gli slot nello stesso giorno/orario sono già tutti pieni</li>
+              <li>Hai già altre prenotazioni negli orari disponibili</li>
+            </ul>
+            <p class="mb-0"><strong>💡 Soluzione:</strong> Inserisci una motivazione e l'amministratore valuterà la tua richiesta, proponendoti soluzioni alternative (cambio orario, giorno diverso, ecc.).</p>
           </div>
         </div>
 

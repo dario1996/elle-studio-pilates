@@ -25,7 +25,7 @@ import {
   templateUrl: './gestione-prenotazioni.component.html',
   styleUrls: ['./gestione-prenotazioni.component.css'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, PageTitleComponent, LoggedUserComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, PageTitleComponent, LoggedUserComponent]
 })
 export class GestionePrenotazioniComponent implements OnInit {
   private fb = inject(FormBuilder);
@@ -747,9 +747,10 @@ export class GestionePrenotazioniComponent implements OnInit {
     this.prenotazioneService.richiediSpostamentoLezione(prenotazioneId, this.motivazioneSpostamento).subscribe({
       next: (response) => {
         this.spostamentoInCorso = false;
-        this.showSpostamentoModal = false;
         this.toastr.success(response.messaggio);
         this.caricaPrenotazioniUtente();
+        // Chiudi completamente il modale dopo l'invio con successo
+        this.chiudiModaleSpostamento();
       },
       error: (error) => {
         this.spostamentoInCorso = false;

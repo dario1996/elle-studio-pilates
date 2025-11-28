@@ -1640,6 +1640,14 @@ textarea.form-control {
 }
 
 /* Stili per form motivazione spostamento */
+.step-content {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.step-content[hidden] {
+  display: none !important;
+}
+
 .alert {
   display: flex;
   align-items: flex-start;
@@ -1649,34 +1657,106 @@ textarea.form-control {
   border-left: 4px solid;
 }
 
+.alert-danger {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  border-left-color: #dc2626;
+  color: #7f1d1d;
+}
+
+.alert-danger i {
+  font-size: 24px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #dc2626;
+}
+
+.alert-info {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  border-left-color: #3b82f6;
+  color: #1e3a8a;
+}
+
+.alert-info i {
+  font-size: 24px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #3b82f6;
+}
+
 .alert-warning {
   background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
   border-left-color: #f59e0b;
   color: #92400e;
 }
 
-.alert i {
-  font-size: 20px;
+.alert-warning i {
+  font-size: 24px;
   flex-shrink: 0;
   margin-top: 2px;
   color: #f59e0b;
 }
 
+.alert-content {
+  flex: 1;
+}
+
 .alert-content h5 {
-  margin: 0 0 8px 0;
+  margin: 0 0 12px 0;
   font-size: 16px;
   font-weight: 700;
+}
+
+.alert-danger .alert-content h5,
+.alert-danger .alert-content strong {
+  color: #7f1d1d;
+}
+
+.alert-info .alert-content h5 {
+  color: #1e3a8a;
+}
+
+.alert-warning .alert-content h5 {
   color: #92400e;
 }
 
 .alert-content p {
   margin: 0 0 8px 0;
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .alert-content p:last-child {
   margin-bottom: 0;
+}
+
+.alert-info .alert-content strong {
+  font-weight: 700;
+  color: #1e40af;
+}
+
+.alert-warning .alert-content strong {
+  font-weight: 700;
+  color: #78350f;
+}
+
+.alert-list {
+  margin: 8px 0;
+  padding-left: 20px;
+  list-style: disc;
+}
+
+.alert-list li {
+  margin: 4px 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.alert-info .alert-list li {
+  color: #1e3a8a;
+}
+
+.alert-warning .alert-list li {
+  color: #92400e;
 }
 
 .prenotazione-selezionata {
