@@ -501,6 +501,8 @@ export class GestionePrenotazioniComponent implements OnInit {
         return 'badge-cancellata';
       case 'IN_ATTESA':
         return 'badge-attesa';
+      case 'SPOSTAMENTO_RICHIESTO':
+        return 'badge-spostamento-richiesto';
       default:
         return 'badge-default';
     }
@@ -514,6 +516,8 @@ export class GestionePrenotazioniComponent implements OnInit {
         return 'Cancellata';
       case 'IN_ATTESA':
         return 'In Attesa';
+      case 'SPOSTAMENTO_RICHIESTO':
+        return 'Spostamento Richiesto';
       default:
         return stato;
     }
@@ -526,6 +530,7 @@ export class GestionePrenotazioniComponent implements OnInit {
 
   puoSpostare(prenotazione: PrenotazioneLezione): boolean {
     // Può spostare solo se confermata e se > 24h dall'inizio
+    // Escludi se ha già una richiesta di spostamento pendente
     if (prenotazione.stato !== 'CONFERMATA') {
       return false;
     }
@@ -673,10 +678,13 @@ export class GestionePrenotazioniComponent implements OnInit {
    */
   chiudiModaleSpostamento(): void {
     this.showSpostamentoModal = false;
-    this.prenotazioneSelezionataPerSpostamento = null;
-    this.mostraFormMotivazione = false;
-    this.motivazioneSpostamento = '';
-    this.messaggioLimiteGiorni = '';
+    // Resetta lo stato dopo un piccolo delay per evitare il flash del primo step
+    setTimeout(() => {
+      this.prenotazioneSelezionataPerSpostamento = null;
+      this.mostraFormMotivazione = false;
+      this.motivazioneSpostamento = '';
+      this.messaggioLimiteGiorni = '';
+    }, 300);
   }
 
   /**
@@ -684,6 +692,7 @@ export class GestionePrenotazioniComponent implements OnInit {
    */
   selezionaPrenotazionePerSpostamento(prenotazione: PrenotazioneLezione): void {
     this.prenotazioneSelezionataPerSpostamento = prenotazione;
+
   }
 
   /**
@@ -695,22 +704,16 @@ export class GestionePrenotazioniComponent implements OnInit {
       return;
     }
 
-    // Se siamo nel form motivazione, invia la richiesta con motivazione
-    if (this.mostraFormMotivazione) {
-      this.inviaRichiestaConMotivazione();
-      return;
-    }
-
     this.spostamentoInCorso = true;
     const prenotazioneId = this.prenotazioneSelezionataPerSpostamento.id;
 
-    // Prima chiamata senza motivazione per verificare se può essere automatico
+    // Chiamata senza motivazione per verificare se può essere automatico
     this.prenotazioneService.richiediSpostamentoLezione(prenotazioneId).subscribe({
       next: (response) => {
         if (response.spostamentoAutomatico) {
           // Spostamento automatico riuscito
           this.spostamentoInCorso = false;
-          this.showSpostamentoModal = false;
+          this.chiudiModaleSpostamento();
           this.toastr.success(response.messaggio);
           if (response.dettaglio) {
             this.toastr.info(response.dettaglio);
@@ -721,6 +724,11 @@ export class GestionePrenotazioniComponent implements OnInit {
           this.spostamentoInCorso = false;
           this.messaggioLimiteGiorni = response.messaggio;
           this.mostraFormMotivazione = true;
+          console.log('Passaggio a STEP 2:', {
+            mostraFormMotivazione: this.mostraFormMotivazione,
+            messaggioLimiteGiorni: this.messaggioLimiteGiorni,
+            messaggio: response.messaggio
+          });
         }
       },
       error: (error) => {
@@ -733,7 +741,7 @@ export class GestionePrenotazioniComponent implements OnInit {
   /**
    * Invia richiesta spostamento con motivazione
    */
-  private inviaRichiestaConMotivazione(): void {
+  inviaRichiestaConMotivazione(): void {
     if (!this.motivazioneSpostamento || !this.motivazioneSpostamento.trim()) {
       this.toastr.warning('Inserisci una motivazione per la richiesta');
       return;

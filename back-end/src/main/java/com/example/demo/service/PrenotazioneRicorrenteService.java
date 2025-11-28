@@ -224,8 +224,19 @@ public class PrenotazioneRicorrenteService {
             throw new RuntimeException("Utente non trovato");
         }
 
-        return prenotazioneRepository.findPrenotazioniFuture(
+        // Recupera prenotazioni CONFERMATA e SPOSTAMENTO_RICHIESTO
+        List<PrenotazioneLezione> confermate = prenotazioneRepository.findPrenotazioniFuture(
                 utente, LocalDate.now(), PrenotazioneLezione.StatoPrenotazione.CONFERMATA);
+        
+        List<PrenotazioneLezione> spostamentoRichiesto = prenotazioneRepository.findPrenotazioniFuture(
+                utente, LocalDate.now(), PrenotazioneLezione.StatoPrenotazione.SPOSTAMENTO_RICHIESTO);
+        
+        // Unisci le due liste e ordina per data
+        List<PrenotazioneLezione> tutte = new java.util.ArrayList<>(confermate);
+        tutte.addAll(spostamentoRichiesto);
+        tutte.sort((a, b) -> a.getDataLezione().compareTo(b.getDataLezione()));
+        
+        return tutte;
     }
 
     /**

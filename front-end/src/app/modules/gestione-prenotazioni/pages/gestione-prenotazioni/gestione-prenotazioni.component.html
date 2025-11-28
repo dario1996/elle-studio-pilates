@@ -219,6 +219,7 @@
           <option value="TUTTE">Tutte</option>
           <option value="CONFERMATA">Confermate</option>
           <option value="IN_ATTESA">In Attesa</option>
+          <option value="SPOSTAMENTO_RICHIESTO">Spostamento Richiesto</option>
           <option value="CANCELLATA">Cancellate</option>
         </select>
       </div>
@@ -416,7 +417,7 @@
     
     <div class="modal-body">
       <!-- STEP 1: Selezione prenotazione -->
-      <div [hidden]="mostraFormMotivazione" class="step-content">
+      <div *ngIf="!mostraFormMotivazione" class="step-content">
         <!-- Istruzioni -->
         <div class="info-banner mb-3">
           <i class="fas fa-info-circle"></i>
@@ -474,22 +475,23 @@
       </div>
 
       <!-- STEP 2: Form motivazione -->
-      <div [hidden]="!mostraFormMotivazione" class="step-content">
+      <div *ngIf="mostraFormMotivazione" class="step-content">
+        
         <!-- Messaggio dal backend -->
-        <div *ngIf="messaggioLimiteGiorni" class="alert alert-danger mb-3">
+        <!-- <div *ngIf="messaggioLimiteGiorni" class="custom-alert custom-alert-danger mb-3">
           <i class="fas fa-exclamation-circle"></i>
-          <div class="alert-content">
+          <div class="custom-alert-content">
             <strong>{{ messaggioLimiteGiorni }}</strong>
           </div>
-        </div>
+        </div> -->
 
         <!-- Alert informativo -->
-        <div class="alert alert-info mb-3">
+        <!-- <div class="custom-alert custom-alert-info mb-3">
           <i class="fas fa-info-circle"></i>
-          <div class="alert-content">
+          <div class="custom-alert-content">
             <h5>ℹ️ Come funziona lo spostamento lezioni</h5>
             <p class="mb-2">Per garantire che tu possa usufruire di tutte le lezioni del tuo pacchetto, il sistema cerca automaticamente di spostare la tua lezione:</p>
-            <ul class="alert-list">
+            <ul class="custom-alert-list">
               <li><strong>Stesso giorno della settimana</strong> (es. se la lezione è lunedì, cerca altri lunedì)</li>
               <li><strong>Stesso orario</strong> della lezione originale</li>
               <li><strong>Entro 37 giorni</strong> dalla prima volta che hai usato il pacchetto</li>
@@ -497,16 +499,16 @@
               <li><strong>Senza conflitti</strong> con altre tue prenotazioni</li>
             </ul>
           </div>
-        </div>
+        </div> -->
 
         <!-- Alert limite giorni superato -->
-        <div class="alert alert-warning mb-3">
+        <div class="custom-alert custom-alert-warning mb-3">
           <i class="fas fa-exclamation-triangle"></i>
-          <div class="alert-content">
-            <h5>⚠️ Spostamento automatico non disponibile</h5>
+          <div class="custom-alert-content">
+            <h5>Spostamento automatico non disponibile</h5>
             <p class="mb-2"><strong>Il sistema non ha trovato date disponibili</strong> che rispettino tutti i requisiti sopra elencati.</p>
             <p class="mb-2">Questo può succedere perché:</p>
-            <ul class="alert-list">
+            <ul class="custom-alert-list">
               <li>Tutte le date disponibili superano i 37 giorni dal primo utilizzo del pacchetto</li>
               <li>Gli slot nello stesso giorno/orario sono già tutti pieni</li>
               <li>Hai già altre prenotazioni negli orari disponibili</li>
@@ -554,8 +556,8 @@
       <button 
         type="button" 
         class="btn quick-action-btn" 
-        (click)="procedeSpostamento()"
-        [disabled]="(!prenotazioneSelezionataPerSpostamento && !mostraFormMotivazione) || spostamentoInCorso">
+        (click)="mostraFormMotivazione ? inviaRichiestaConMotivazione() : procedeSpostamento()"
+        [disabled]="!prenotazioneSelezionataPerSpostamento || spostamentoInCorso">
         <span *ngIf="spostamentoInCorso">
           <i class="fas fa-spinner fa-spin"></i> Elaborando...
         </span>
