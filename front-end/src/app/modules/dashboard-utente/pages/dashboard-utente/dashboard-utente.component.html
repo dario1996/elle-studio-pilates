@@ -31,15 +31,22 @@
             <i class="fas fa-calendar-star stat-icon"></i>
           </div>
           <div class="stat-content">
-            <div class="stat-value" *ngIf="prossimaLezione">
-              {{ formatDateOnly(prossimaLezione.dataInizio) }}
+            <div *ngIf="prossimaLezione" class="prossima-lezione-content">
+              <div class="stat-value lezione-tipo">
+                {{ getLabelTipoLezione(prossimaLezione.tipo) }}
+              </div>
+              <div class="stat-subtitle lezione-data">
+                {{ formatGiornoData(prossimaLezione.dataInizio) }}
+              </div>
+              <div class="stat-subtitle lezione-orario">
+                dalle {{ formatOra(prossimaLezione.dataInizio) }} alle {{ formatOra(prossimaLezione.dataFine) }}
+              </div>
             </div>
-            <div class="stat-value" *ngIf="!prossimaLezione">--</div>
-            <div class="stat-subtitle" *ngIf="prossimaLezione">
-              {{ formatTimeRange(prossimaLezione.dataInizio, prossimaLezione.dataFine) }}
-            </div>
-            <div class="stat-subtitle" *ngIf="!prossimaLezione">
-              Nessuna lezione in programma
+            <div *ngIf="!prossimaLezione">
+              <div class="stat-value">--</div>
+              <div class="stat-subtitle">
+                Nessuna lezione in programma
+              </div>
             </div>
           </div>
         </div>
@@ -89,30 +96,20 @@
           <div class="card-header-modern">
             <h3><i class="fas fa-calendar-alt me-2"></i>{{ getTitoloCard() }}</h3>
             <div class="header-actions">
-              <button class="btn-text" *ngIf="giornoSelezionato || visualizzaTutte" (click)="resetVisualizzazione()">
-                <i class="fas fa-times me-1"></i> Reset
-              </button>
-              <button class="btn-text" (click)="mostraLeTutteLezioni()">
-                Vedi tutte <i class="fas fa-arrow-right ms-1"></i>
+              <button class="btn-text" *ngIf="giornoSelezionato" (click)="mostraLeTutteLezioni()">
+                <i class="fas fa-list me-1"></i> Vedi tutte
               </button>
             </div>
           </div>
           
           <div class="card-body-modern">
-            <!-- Stato vuoto quando non ci sono selezioni -->
-            <div *ngIf="!visualizzaTutte && !giornoSelezionato && lezioniPrenotate.length === 0" class="empty-state-modern">
+            <!-- Stato vuoto quando non ci sono lezioni prenotate -->
+            <div *ngIf="lezioniPrenotate.length === 0" class="empty-state-modern">
               <i class="fas fa-calendar-times fa-3x"></i>
               <p>Nessuna lezione prenotata</p>
               <button class="btn-prenota-ora mt-3" (click)="vaiAPrenotazioni()">
                 Prenota ora
               </button>
-            </div>
-
-            <!-- Messaggio quando nessun giorno è selezionato -->
-            <div *ngIf="!visualizzaTutte && !giornoSelezionato && lezioniPrenotate.length > 0" class="empty-state-modern">
-              <i class="fas fa-calendar-check fa-3x"></i>
-              <p>Seleziona un giorno dal calendario</p>
-              <p class="subtitle">oppure clicca su "Vedi tutte" per visualizzare tutte le lezioni</p>
             </div>
 
             <!-- Lista lezioni del giorno selezionato o tutte le lezioni -->
