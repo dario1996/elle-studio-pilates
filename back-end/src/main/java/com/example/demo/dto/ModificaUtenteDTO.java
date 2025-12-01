@@ -15,6 +15,9 @@ public class ModificaUtenteDTO {
     private String attivo; // "Si" o "No"
     private List<String> ruoli;
     private List<Long> pacchettiDisponibiliIds; // Lista di ID dei pacchetti
+    private Boolean patologie;
+    private String descrizionePatologie;
+    private String obiettivi;
     
     public ModificaUtenteDTO() {
     }
@@ -113,5 +116,29 @@ public class ModificaUtenteDTO {
 
     public void setPacchettiDisponibiliIds(List<Long> pacchettiDisponibiliIds) {
         this.pacchettiDisponibiliIds = pacchettiDisponibiliIds;
+    }
+
+    public Boolean getPatologie() {
+        return patologie;
+    }
+
+    public void setPatologie(Boolean patologie) {
+        this.patologie = patologie;
+    }
+
+    public String getDescrizionePatologie() {
+        return descrizionePatologie;
+    }
+
+    public void setDescrizionePatologie(String descrizionePatologie) {
+        this.descrizionePatologie = descrizionePatologie;
+    }
+
+    public String getObiettivi() {
+        return obiettivi;
+    }
+
+    public void setObiettivi(String obiettivi) {
+        this.obiettivi = obiettivi;
     }
 }

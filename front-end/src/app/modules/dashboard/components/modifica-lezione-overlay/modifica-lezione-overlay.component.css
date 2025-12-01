@@ -85,7 +85,7 @@
 
 .lezione-item {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: space-between;
   padding: 1rem;
   border: 1px solid #e2e8f0;
@@ -122,18 +122,57 @@
 
 .tipo-badge {
   font-size: 0.75rem;
-  font-weight: 500;
-  padding: 0.25rem 0.5rem;
-  border-radius: 12px;
+  font-weight: 600;
+  padding: 0.35rem 0.65rem;
+  border-radius: 4px;
   text-transform: uppercase;
+  background: white;
+  border-right: 4px solid;
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+  border-left: 1px solid #e5e7eb;
 }
 
-.tipo-privata { background: #dbeafe; color: #1e40af; }
-.tipo-semi_privata_duetto { background: #dcfce7; color: #166534; }
-.tipo-semi_privata_gruppo { background: #fef3c7; color: #92400e; }
-.tipo-matwork { background: #fee2e2; color: #dc2626; }
-.tipo-yoga { background: #f3e8ff; color: #7c3aed; }
-.tipo-prima_lezione { background: #ecfdf5; color: #047857; }
+/* Allineamento colori con il calendario */
+.tipo-privata { 
+  border-right-color: #ec4899;
+  color: #831843;
+}
+
+.tipo-semi_privata { 
+  border-right-color: #14b8a6;
+  color: #0f766e;
+}
+
+.tipo-yoga { 
+  border-right-color: #84cc16;
+  color: #4d7c0f;
+}
+
+.tipo-pilates_matwork { 
+  border-right-color: #ef4444;
+  color: #991b1b;
+}
+
+.tipo-studio_intermedio { 
+  border-right-color: #f59e0b;
+  color: #92400e;
+}
+
+.tipo-reformer_intermedio { 
+  border-right-color: #3b82f6;
+  color: #1e40af;
+}
+
+.tipo-studio_posturale { 
+  border-right-color: #a855f7;
+  color: #6b21a8;
+}
+
+.tipo-prima_lezione { 
+  border-right-color: #8b5cf6;
+  color: #5b21b6;
+}
 
 .lezione-details {
   display: flex;
@@ -157,6 +196,9 @@
 .lezione-actions {
   color: #9ca3af;
   font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  padding-left: 1rem;
 }
 
 /* Form Step */

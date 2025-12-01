@@ -24,7 +24,9 @@ export class DettaglioUtentiComponent implements OnInit {
   ngOnInit() {
     this.modaleService.config$.subscribe(config => {
       this.dati = config?.dati;
-      console.log('Dati utente caricati:', this.dati);
+      if (this.dati) {
+        console.log('👤 Dati utente caricati nel dettaglio:', this.dati);
+      }
     });
   }
 

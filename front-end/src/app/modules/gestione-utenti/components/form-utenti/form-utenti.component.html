@@ -39,150 +39,196 @@
     
     <!-- TAB 1: Dati Utente -->
     <div class="tab-pane fade" [class.show]="activeTab === 'dati'" [class.active]="activeTab === 'dati'">
-      <div class="row">
-        <div class="col-md-6 form-field">
-          <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
-          <input
-            type="text"
-            id="username"
-            class="form-control"
-            formControlName="username"
-            [class.is-invalid]="isFieldInvalid('username')"
-            [readonly]="isEditMode"
-            placeholder="Inserisci username">
-          <div class="invalid-feedback" *ngIf="isFieldInvalid('username')">
-            {{ getFieldErrorMessage('username') }}
-          </div>
+      
+      <!-- Sezione: Informazioni Principali -->
+      <div class="form-section">
+        <div class="section-header">
+          <i class="fas fa-user-circle me-2"></i>
+          INFORMAZIONI PRINCIPALI
         </div>
+        <div class="section-content">
+          <div class="row">
+            <div class="col-md-6 form-field">
+              <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
+              <input
+                type="text"
+                id="username"
+                class="form-control"
+                formControlName="username"
+                [class.is-invalid]="isFieldInvalid('username')"
+                [readonly]="isEditMode"
+                placeholder="Inserisci username">
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('username')">
+                {{ getFieldErrorMessage('username') }}
+              </div>
+            </div>
 
-        <div class="col-md-6 form-field">
-          <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-          <input
-            type="email"
-            id="email"
-            class="form-control"
-            formControlName="email"
-            [class.is-invalid]="isFieldInvalid('email')"
-            placeholder="Inserisci email">
-          <div class="invalid-feedback" *ngIf="isFieldInvalid('email')">
-            {{ getFieldErrorMessage('email') }}
-          </div>
-        </div>
-      </div>
-
-      <div class="row mt-3">
-        <div class="col-md-6 form-field">
-          <label for="nome" class="form-label">Nome <span class="text-danger">*</span></label>
-          <input
-            type="text"
-            id="nome"
-            class="form-control"
-            formControlName="nome"
-            [class.is-invalid]="isFieldInvalid('nome')"
-            placeholder="Inserisci nome">
-          <div class="invalid-feedback" *ngIf="isFieldInvalid('nome')">
-            {{ getFieldErrorMessage('nome') }}
-          </div>
-        </div>
-
-        <div class="col-md-6 form-field">
-          <label for="cognome" class="form-label">Cognome <span class="text-danger">*</span></label>
-          <input
-            type="text"
-            id="cognome"
-            class="form-control"
-            formControlName="cognome"
-            [class.is-invalid]="isFieldInvalid('cognome')"
-            placeholder="Inserisci cognome">
-          <div class="invalid-feedback" *ngIf="isFieldInvalid('cognome')">
-            {{ getFieldErrorMessage('cognome') }}
+            <div class="col-md-6 form-field">
+              <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+              <input
+                type="email"
+                id="email"
+                class="form-control"
+                formControlName="email"
+                [class.is-invalid]="isFieldInvalid('email')"
+                placeholder="Inserisci email">
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('email')">
+                {{ getFieldErrorMessage('email') }}
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="row mt-3">
-        <div class="col-md-6 form-field">
-          <label for="codiceFiscale" class="form-label">Codice Fiscale</label>
-          <input
-            type="text"
-            id="codiceFiscale"
-            class="form-control"
-            formControlName="codiceFiscale"
-            placeholder="Inserisci codice fiscale"
-            style="text-transform: uppercase;">
+      <!-- Sezione: Dati Anagrafici -->
+      <div class="form-section">
+        <div class="section-header">
+          <i class="fas fa-id-card me-2"></i>
+          DATI ANAGRAFICI
         </div>
+        <div class="section-content">
+          <div class="row">
+            <div class="col-md-6 form-field">
+              <label for="nome" class="form-label">Nome <span class="text-danger">*</span></label>
+              <input
+                type="text"
+                id="nome"
+                class="form-control"
+                formControlName="nome"
+                [class.is-invalid]="isFieldInvalid('nome')"
+                placeholder="Inserisci nome">
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('nome')">
+                {{ getFieldErrorMessage('nome') }}
+              </div>
+            </div>
 
-        <div class="col-md-6 form-field">
-          <label for="indirizzo" class="form-label">Indirizzo</label>
-          <input
-            type="text"
-            id="indirizzo"
-            class="form-control"
-            formControlName="indirizzo"
-            placeholder="Inserisci indirizzo">
-        </div>
-      </div>
+            <div class="col-md-6 form-field">
+              <label for="cognome" class="form-label">Cognome <span class="text-danger">*</span></label>
+              <input
+                type="text"
+                id="cognome"
+                class="form-control"
+                formControlName="cognome"
+                [class.is-invalid]="isFieldInvalid('cognome')"
+                placeholder="Inserisci cognome">
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('cognome')">
+                {{ getFieldErrorMessage('cognome') }}
+              </div>
+            </div>
+          </div>
 
-      <div class="row mt-3">
-        <div class="col-md-6 form-field">
-          <label for="città" class="form-label">Città</label>
-          <input
-            type="text"
-            id="città"
-            class="form-control"
-            formControlName="città"
-            placeholder="Inserisci città">
-        </div>
-
-        <div class="col-md-6 form-field">
-          <label for="telefono" class="form-label">Telefono</label>
-          <input
-            type="tel"
-            id="telefono"
-            class="form-control"
-            formControlName="telefono"
-            placeholder="Inserisci telefono">
-        </div>
-      </div>
-
-      <div class="row mt-3">
-        <div class="col-md-6 form-field">
-          <div class="form-check">
-            <input
-              type="checkbox"
-              id="patologie"
-              class="form-check-input"
-              formControlName="patologie">
-            <label for="patologie" class="form-check-label">
-              Ha patologie da segnalare
-            </label>
+          <div class="row mt-2">
+            <div class="col-md-12 form-field">
+              <label for="codiceFiscale" class="form-label">Codice Fiscale</label>
+              <input
+                type="text"
+                id="codiceFiscale"
+                class="form-control"
+                formControlName="codiceFiscale"
+                placeholder="Inserisci codice fiscale"
+                style="text-transform: uppercase;">
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="row mt-3" *ngIf="utenteForm.get('patologie')?.value">
-        <div class="col-12 form-field">
-          <label for="descrizionePatologie" class="form-label">Descrizione Patologie</label>
-          <textarea
-            id="descrizionePatologie"
-            class="form-control"
-            formControlName="descrizionePatologie"
-            rows="3"
-            placeholder="Descrivi le patologie..."></textarea>
+      <!-- Sezione: Dati di Contatto -->
+      <div class="form-section">
+        <div class="section-header">
+          <i class="fas fa-map-marker-alt me-2"></i>
+          DATI DI CONTATTO
+        </div>
+        <div class="section-content">
+          <div class="row">
+            <div class="col-md-6 form-field">
+              <label for="indirizzo" class="form-label">Indirizzo</label>
+              <input
+                type="text"
+                id="indirizzo"
+                class="form-control"
+                formControlName="indirizzo"
+                placeholder="Inserisci indirizzo">
+            </div>
+
+            <div class="col-md-6 form-field">
+              <label for="città" class="form-label">Città</label>
+              <input
+                type="text"
+                id="città"
+                class="form-control"
+                formControlName="città"
+                placeholder="Inserisci città">
+            </div>
+          </div>
+
+          <div class="row mt-2">
+            <div class="col-md-6 form-field">
+              <label for="telefono" class="form-label">Telefono</label>
+              <input
+                type="tel"
+                id="telefono"
+                class="form-control"
+                formControlName="telefono"
+                placeholder="Inserisci telefono">
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="row mt-3">
-        <div class="col-12 form-field">
-          <label for="obiettivi" class="form-label">Obiettivi</label>
-          <textarea
-            id="obiettivi"
-            class="form-control"
-            formControlName="obiettivi"
-            rows="3"
-            placeholder="Descrivi gli obiettivi..."></textarea>
+      <!-- Sezione: Informazioni Mediche -->
+      <div class="form-section">
+        <div class="section-header">
+          <i class="fas fa-heartbeat me-2"></i>
+          INFORMAZIONI MEDICHE E OBIETTIVI
+        </div>
+        <div class="section-content">
+          <div class="row">
+            <div class="col-12 form-field">
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  id="patologie"
+                  class="form-check-input"
+                  formControlName="patologie">
+                <label for="patologie" class="form-check-label">
+                  Ha patologie da segnalare
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mt-2" *ngIf="utenteForm.get('patologie')?.value">
+            <div class="col-12 form-field">
+              <label for="descrizionePatologie" class="form-label">
+                Descrizione Patologie <span class="text-danger">*</span>
+              </label>
+              <textarea
+                id="descrizionePatologie"
+                class="form-control"
+                formControlName="descrizionePatologie"
+                rows="3"
+                [class.is-invalid]="isFieldInvalid('descrizionePatologie')"
+                placeholder="Descrivi le patologie..."></textarea>
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('descrizionePatologie')">
+                La descrizione delle patologie è obbligatoria quando si segnalano patologie
+              </div>
+            </div>
+          </div>
+
+          <div class="row mt-2">
+            <div class="col-12 form-field">
+              <label for="obiettivi" class="form-label">Obiettivi</label>
+              <textarea
+                id="obiettivi"
+                class="form-control"
+                formControlName="obiettivi"
+                rows="3"
+                placeholder="Descrivi gli obiettivi..."></textarea>
+            </div>
+          </div>
         </div>
       </div>
+
     </div>
 
     <!-- TAB 2: Pacchetti Acquistabili -->

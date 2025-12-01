@@ -41,11 +41,12 @@ export class UserService {
       utente,
     );
 
-  updUtente = (id: number, utente: IUsers) =>
-    this.httpClient.put<IUsers>(
+  updUtente = (id: number, utente: IUsers) => {
+    return this.httpClient.put<IUsers>(
       `http://${this.server}:${this.port}/api/utenti/${id}`,
       utente,
     );
+  }
 
   delUtente = (id: number) =>
     this.httpClient.delete<void>(

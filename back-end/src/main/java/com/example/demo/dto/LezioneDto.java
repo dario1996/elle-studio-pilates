@@ -1,12 +1,13 @@
 package com.example.demo.dto;
 
-import com.example.demo.enums.TipoLezione;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+
+import com.example.demo.enums.TipoLezione;
+
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 public class LezioneDto {
 
@@ -26,6 +27,9 @@ public class LezioneDto {
 
     @NotNull(message = "Il tipo di lezione è obbligatorio")
     private TipoLezione tipoLezione;
+
+    // Label leggibile del tipo lezione
+    private String tipoLezioneLabel;
 
     private String note;
 
@@ -54,6 +58,7 @@ public class LezioneDto {
                       LocalDateTime dataFine,
                       String istruttore,
                       TipoLezione tipoLezione,
+                      String tipoLezioneLabel,
                       String note,
                       Boolean attiva,
                       Long templateId,
@@ -68,6 +73,7 @@ public class LezioneDto {
         this.dataFine = dataFine;
         this.istruttore = istruttore;
         this.tipoLezione = tipoLezione;
+        this.tipoLezioneLabel = tipoLezioneLabel;
         this.note = note;
         this.attiva = attiva;
         this.templateId = templateId;
@@ -124,6 +130,14 @@ public class LezioneDto {
 
     public void setTipoLezione(TipoLezione tipoLezione) {
         this.tipoLezione = tipoLezione;
+    }
+
+    public String getTipoLezioneLabel() {
+        return tipoLezioneLabel;
+    }
+
+    public void setTipoLezioneLabel(String tipoLezioneLabel) {
+        this.tipoLezioneLabel = tipoLezioneLabel;
     }
 
     public String getNote() {
