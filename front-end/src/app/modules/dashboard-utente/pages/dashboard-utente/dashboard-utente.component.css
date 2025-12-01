@@ -549,12 +549,6 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-.lezione-card-full:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  transform: translateY(-2px);
-  border-color: #c99e67;
-}
-
 .lezione-header-full {
   display: flex;
   justify-content: space-between;
