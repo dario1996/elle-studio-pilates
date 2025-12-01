@@ -11,6 +11,7 @@ export interface LezioneDto {
   dataFine: string;   // ISO string format
   istruttore: string;
   tipoLezione: TipoLezione;
+  tipoLezioneLabel?: string; // Label leggibile del tipo lezione
   note?: string;
   attiva?: boolean;
   createdAt?: string;
@@ -41,6 +42,7 @@ export class LezioniService {
       dataInizio,
       dataFine,
       tipo: dto.tipoLezione,
+      tipoLabel: dto.tipoLezioneLabel, // Usa la label dal backend
       durata: durataMinuti,
       maxPartecipanti: this.getMaxPartecipantiByTipo(dto.tipoLezione),
       partecipanti: dto.partecipanti || [], // Lista di username

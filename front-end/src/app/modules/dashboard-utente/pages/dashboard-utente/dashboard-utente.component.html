@@ -33,7 +33,7 @@
           <div class="stat-content">
             <div *ngIf="prossimaLezione" class="prossima-lezione-content">
               <div class="stat-value lezione-tipo">
-                {{ getLabelTipoLezione(prossimaLezione.tipo) }}
+                {{ prossimaLezione.tipoLabel || getLabelTipoLezione(prossimaLezione.tipo) }}
               </div>
               <div class="stat-subtitle lezione-data">
                 {{ formatGiornoData(prossimaLezione.dataInizio) }}
@@ -128,7 +128,7 @@
                 <div class="lezione-body-full">
                   <div class="lezione-type-badge">
                     <i [class]="getLezioneIcon(lezione.tipo)"></i>
-                    {{ getLabelTipoLezione(lezione.tipo) }}
+                    {{ lezione.tipoLabel || getLabelTipoLezione(lezione.tipo) }}
                   </div>
                   <div class="lezione-details-full" *ngIf="lezione.istruttore">
                     <i class="fas fa-user-tie"></i>

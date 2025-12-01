@@ -87,4 +87,10 @@ public interface PrenotazioneLezioneRepository extends JpaRepository<Prenotazion
             StatoPrenotazione stato,
             LocalDate dataLezione
     );
+
+    /**
+     * Conta il numero totale di prenotazioni confermate per un utente
+     */
+    @Query("SELECT COUNT(p) FROM PrenotazioneLezione p WHERE p.utente = :utente AND p.stato = 'CONFERMATA'")
+    Long countPrenotazioniConfermateByUtente(@Param("utente") Utenti utente);
 }

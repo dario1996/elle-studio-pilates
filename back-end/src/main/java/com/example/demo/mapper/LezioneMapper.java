@@ -34,6 +34,8 @@ public class LezioneMapper {
         dto.setDataFine(lezione.getDataFine());
         dto.setIstruttore(lezione.getIstruttore());
         dto.setTipoLezione(lezione.getTipoLezione());
+        // Imposta la label leggibile del tipo lezione
+        dto.setTipoLezioneLabel(lezione.getTipoLezione() != null ? lezione.getTipoLezione().getLabel() : null);
         dto.setNote(lezione.getNote());
         dto.setAttiva(lezione.getAttiva());
         dto.setTemplateId(lezione.getTemplateId());

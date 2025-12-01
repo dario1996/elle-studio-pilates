@@ -20,6 +20,7 @@ import com.example.demo.dto.LezioneDto;
 import com.example.demo.entity.Lezione;
 import com.example.demo.entity.PrenotazioneLezione;
 import com.example.demo.entity.Utenti;
+import com.example.demo.enums.TipoLezione;
 import com.example.demo.repository.LezioneRepository;
 import com.example.demo.repository.PrenotazioneLezioneRepository;
 import com.example.demo.repository.UtenteRepository;
@@ -106,6 +107,9 @@ public class DashboardController {
                 .filter(dt -> dt.isBefore(oggi))
                 .count();
             
+            // Calcola totale lezioni prenotate con query diretta al database
+            Long totaleLezioniPrenotate = prenotazioneRepository.countPrenotazioniConfermateByUtente(utente);
+            
             // Determina la prossima lezione
             DashboardStatisticheDto.ProssimaLezioneDto prossimaLezione = null;
             if (!lezioniFuture.isEmpty()) {
@@ -120,7 +124,8 @@ public class DashboardController {
                     LocalDateTime dataOraPrenotazione = LocalDateTime.of(p.getDataLezione(), p.getOraInizio());
                     if (dataOraPrenotazione.equals(prossimaDataOra) && 
                         p.getStato() == PrenotazioneLezione.StatoPrenotazione.CONFERMATA) {
-                        tipoLezione = p.getTipoLezione();
+                        // Converti il tipo lezione in label leggibile
+                        tipoLezione = convertTipoLezioneToLabel(p.getTipoLezione());
                         oraFine = p.getOraFine();
                         break;
                     }
@@ -130,7 +135,8 @@ public class DashboardController {
                 if (tipoLezione.isEmpty()) {
                     for (Lezione l : lezioniPartecipante) {
                         if (l.getDataInizio().equals(prossimaDataOra)) {
-                            tipoLezione = l.getTipoLezione().name();
+                            // Usa la label dell'enum invece del nome
+                            tipoLezione = l.getTipoLezione().getLabel();
                             oraFine = l.getDataFine().toLocalTime();
                             break;
                         }
@@ -146,20 +152,37 @@ public class DashboardController {
                 );
             }
             
-            // Crea il DTO di risposta usando il totale dalla tabella utenti
+            // Crea il DTO di risposta usando il totale dalla query diretta al database
             DashboardStatisticheDto statistiche = new DashboardStatisticheDto(
                 prossimaLezione,
-                utente.getTotaleLezioniPrenotate(), // Usa il totale dalla colonna della tabella utenti
+                totaleLezioniPrenotate.intValue(), // Usa il count diretto dalla tabella prenotazioni_lezioni
                 lezioniCompletate
             );
             
-            log.info("Statistiche utente {}: {} prenotate (totale), {} completate", 
-                username, utente.getTotaleLezioniPrenotate(), lezioniCompletate);
+            log.info("Statistiche utente {}: {} prenotate (query diretta db), {} completate", 
+                username, totaleLezioniPrenotate, lezioniCompletate);
             
             return ResponseEntity.ok(statistiche);
         } catch (Exception e) {
             log.error("Errore nel recupero statistiche utente", e);
             return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    /**
+     * Converte un tipo lezione (String) nella sua label leggibile
+     */
+    private String convertTipoLezioneToLabel(String tipoLezioneStr) {
+        if (tipoLezioneStr == null || tipoLezioneStr.isEmpty()) {
+            return tipoLezioneStr;
+        }
+        
+        try {
+            TipoLezione tipoLezione = TipoLezione.valueOf(tipoLezioneStr);
+            return tipoLezione.getLabel();
+        } catch (IllegalArgumentException e) {
+            // Se non è un valore enum valido, restituisci la stringa originale
+            return tipoLezioneStr;
         }
     }
 }

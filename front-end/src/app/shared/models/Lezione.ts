@@ -4,6 +4,7 @@ export interface ILezione {
   dataInizio: Date;
   dataFine: Date;
   tipo: TipoLezione;
+  tipoLabel?: string; // Label leggibile del tipo lezione
   maxPartecipanti?: number; // solo per tipi di gruppo
   partecipanti: string[]; // usernames degli utenti
   istruttore: string; // username istruttore
