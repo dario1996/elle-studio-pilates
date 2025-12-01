@@ -1,12 +1,13 @@
 package com.example.demo.dto;
 
-import com.example.demo.enums.TipoLezione;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+
+import com.example.demo.enums.TipoLezione;
+
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 public class LezioneDto {
 
