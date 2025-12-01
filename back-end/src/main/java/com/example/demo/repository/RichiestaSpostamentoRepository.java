@@ -40,4 +40,9 @@ public interface RichiestaSpostamentoRepository extends JpaRepository<RichiestaS
      * Trova tutte le richieste per una prenotazione
      */
     List<RichiestaSpostamento> findByPrenotazioneOrderByDataCreazioneDesc(PrenotazioneLezione prenotazione);
+
+    /**
+     * Trova TUTTE le richieste ordinate per data (per admin)
+     */
+    List<RichiestaSpostamento> findAllByOrderByDataCreazioneDesc();
 }

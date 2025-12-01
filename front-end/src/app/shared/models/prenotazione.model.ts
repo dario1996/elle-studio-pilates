@@ -122,4 +122,15 @@ export interface RichiestaSpostamento {
   rispostaAdmin?: string;
   dataCreazione: string;
   dataRisposta?: string;
+  
+  // Dati utente
+  nomeUtente?: string;
+  cognomeUtente?: string;
+  emailUtente?: string;
+  
+  // Dati prenotazione
+  titoloLezione?: string;
+  dataLezione?: string;
+  oraInizio?: string;
+  oraFine?: string;
 }

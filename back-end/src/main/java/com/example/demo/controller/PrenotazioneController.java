@@ -296,6 +296,33 @@ public class PrenotazioneController {
         }
     }
 
+    /**
+     * Ottiene TUTTE le richieste di spostamento (admin)
+     */
+    @GetMapping("/richieste-spostamento")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<RichiestaSpostamentoDTO>> getTutteRichieste() {
+        try {
+            List<RichiestaSpostamento> richieste = richiestaSpostamentoService.getAllRichieste();
+
+            List<RichiestaSpostamentoDTO> dtos = richieste.stream()
+                    .map(this::convertRichiestaToDTO)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(dtos);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @DeleteMapping("/richieste-spostamento/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<SuccessResponse> rifiutaRichiesta(@PathVariable Long id) {
+        richiestaSpostamentoService.rifiutaRichiesta(id, "Richiesta eliminata dall'amministratore");
+        return ResponseEntity.ok(new SuccessResponse("Richiesta eliminata con successo"));
+    }
+
     // Metodi di conversione DTO
     private PrenotazioneDTO convertToDTO(PrenotazioneLezione prenotazione) {
         PrenotazioneDTO dto = new PrenotazioneDTO();
@@ -329,6 +356,26 @@ public class PrenotazioneController {
         dto.setRispostaAdmin(richiesta.getRispostaAdmin());
         dto.setDataCreazione(richiesta.getDataCreazione());
         dto.setDataRisposta(richiesta.getDataRisposta());
+        
+        // Popola dati utente
+        if (richiesta.getUtente() != null) {
+            dto.setNomeUtente(richiesta.getUtente().getNome());
+            dto.setCognomeUtente(richiesta.getUtente().getCognome());
+            dto.setEmailUtente(richiesta.getUtente().getEmail());
+        }
+        
+        // Popola dati prenotazione
+        if (richiesta.getPrenotazione() != null) {
+            PrenotazioneLezione prenotazione = richiesta.getPrenotazione();
+            // Il titolo viene dal template associato alla prenotazione
+            if (prenotazione.getTemplate() != null) {
+                dto.setTitoloLezione(prenotazione.getTemplate().getTitolo());
+            }
+            dto.setDataLezione(prenotazione.getDataLezione());
+            dto.setOraInizio(prenotazione.getOraInizio());
+            dto.setOraFine(prenotazione.getOraFine());
+        }
+        
         return dto;
     }
 
@@ -429,6 +476,17 @@ public class PrenotazioneController {
         private String rispostaAdmin;
         private java.time.LocalDateTime dataCreazione;
         private java.time.LocalDateTime dataRisposta;
+        
+        // Dati utente
+        private String nomeUtente;
+        private String cognomeUtente;
+        private String emailUtente;
+        
+        // Dati prenotazione
+        private String titoloLezione;
+        private LocalDate dataLezione;
+        private java.time.LocalTime oraInizio;
+        private java.time.LocalTime oraFine;
 
         // Getters e Setters
         public Long getId() { return id; }
@@ -449,6 +507,22 @@ public class PrenotazioneController {
         public void setDataCreazione(java.time.LocalDateTime dataCreazione) { this.dataCreazione = dataCreazione; }
         public java.time.LocalDateTime getDataRisposta() { return dataRisposta; }
         public void setDataRisposta(java.time.LocalDateTime dataRisposta) { this.dataRisposta = dataRisposta; }
+        
+        public String getNomeUtente() { return nomeUtente; }
+        public void setNomeUtente(String nomeUtente) { this.nomeUtente = nomeUtente; }
+        public String getCognomeUtente() { return cognomeUtente; }
+        public void setCognomeUtente(String cognomeUtente) { this.cognomeUtente = cognomeUtente; }
+        public String getEmailUtente() { return emailUtente; }
+        public void setEmailUtente(String emailUtente) { this.emailUtente = emailUtente; }
+        
+        public String getTitoloLezione() { return titoloLezione; }
+        public void setTitoloLezione(String titoloLezione) { this.titoloLezione = titoloLezione; }
+        public LocalDate getDataLezione() { return dataLezione; }
+        public void setDataLezione(LocalDate dataLezione) { this.dataLezione = dataLezione; }
+        public java.time.LocalTime getOraInizio() { return oraInizio; }
+        public void setOraInizio(java.time.LocalTime oraInizio) { this.oraInizio = oraInizio; }
+        public java.time.LocalTime getOraFine() { return oraFine; }
+        public void setOraFine(java.time.LocalTime oraFine) { this.oraFine = oraFine; }
     }
 
     public static class PrenotazioneRicorrenteResponse {

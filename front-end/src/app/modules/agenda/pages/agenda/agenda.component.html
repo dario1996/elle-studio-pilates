@@ -15,21 +15,92 @@
   <div class="page-content">
     <!-- Pulsanti azioni -->
     <div class="row mb-3 mt-3">
-      <div class="col d-flex justify-content-between">
+      <div class="col d-flex justify-content-start gap-3">
         <button class="quick-action-btn" (click)="handleAggiungiLezione()">
           <i class="fas fa-plus"></i>
           <span>Aggiungi lezione</span>
         </button>
         
-        <!-- <button class="quick-action-btn btn-secondary" (click)="apriLeggenda()">
-          <i class="fas fa-palette"></i>
-          <span>Leggenda colori</span>
-        </button> -->
+        <button class="quick-action-btn" (click)="apriRichiesteSpostamento()">
+          <i class="fas fa-exchange-alt"></i>
+          <span>Richieste Spostamento</span>
+        </button>
       </div>
     </div>
 
   <div class="calendar-container fade-in-modal">
       <full-calendar [options]="calendarOptions"></full-calendar>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Richieste Spostamento -->
+<div class="modal-overlay" [class.show]="showRichiesteSpostamentoModal" (click)="chiudiRichiesteSpostamento()">
+  <div class="modal-container modal-richieste" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3><i class="fas fa-exchange-alt"></i> Richieste Spostamento</h3>
+      <button type="button" class="button-close" (click)="chiudiRichiesteSpostamento()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="modal-body">
+      <!-- Lista richieste -->
+      <div class="richieste-list" *ngIf="richiesteSpostamento.length > 0; else nessunaRichiesta">
+        <div class="richiesta-card" *ngFor="let richiesta of richiesteSpostamento">
+          <div class="richiesta-header">
+            <div class="richiesta-info-principale">
+              <h5><i class="fas fa-user"></i> {{ richiesta.nomeUtente }} {{ richiesta.cognomeUtente }}</h5>
+              <span class="badge badge-stato" [ngClass]="getStatoRichiestaBadge(richiesta.stato)">{{ getStatoRichiestaLabel(richiesta.stato) }}</span>
+            </div>
+            <div class="richiesta-data">
+              <small><i class="fas fa-calendar"></i><strong>Data richiesta spostamento: </strong></small>
+              <small> {{ formatDate(richiesta.dataCreazione) }}</small>
+            </div>
+          </div>
+          
+          <div class="richiesta-body">
+            <div class="lezione-originale">
+              <div class="label-section"><i class="fas fa-info-circle"></i> Lezione da spostare:</div>
+              <div class="lezione-dettagli">
+                <span class="dettaglio-item"><strong>{{ richiesta.titoloLezione }}</strong></span>
+                <span class="dettaglio-item"><i class="fas fa-calendar-day"></i> {{ formatDate(richiesta.dataLezione) }}</span>
+                <span class="dettaglio-item"><i class="fas fa-clock"></i> {{ formatTime(richiesta.oraInizio) }} - {{ formatTime(richiesta.oraFine) }}</span>
+              </div>
+            </div>
+            
+            <div class="motivazione" *ngIf="richiesta.motivazione">
+              <div class="label-section"><i class="fas fa-comment"></i> Motivazione:</div>
+              <p>{{ richiesta.motivazione }}</p>
+            </div>
+            
+            <div class="risposta-admin" *ngIf="richiesta.rispostaAdmin">
+              <div class="label-section"><i class="fas fa-reply"></i> Risposta Admin:</div>
+              <p>{{ richiesta.rispostaAdmin }}</p>
+            </div>
+          </div>
+          
+          <div class="richiesta-footer" *ngIf="richiesta.stato === 'PENDING'">
+            <button class="btn btn-sm btn-danger" (click)="gestisciRichiesta(richiesta.id, 'RIFIUTATA')">
+              <i class="fas fa-trash"></i> Elimina
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <ng-template #nessunaRichiesta>
+        <div class="empty-state">
+          <i class="fas fa-inbox"></i>
+          <h4>Nessuna richiesta di spostamento</h4>
+          <p>Non ci sono richieste pendenti al momento.</p>
+        </div>
+      </ng-template>
+    </div>
+    
+    <div class="modal-footer">
+      <button type="button" class="btn btn-cancel btn-sm" (click)="chiudiRichiesteSpostamento()">
+        <i class="fas fa-times"></i> Chiudi
+      </button>
     </div>
   </div>
 </div>

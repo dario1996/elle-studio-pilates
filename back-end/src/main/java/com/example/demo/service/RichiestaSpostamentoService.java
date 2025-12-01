@@ -124,29 +124,6 @@ public class RichiestaSpostamentoService {
     }
 
     /**
-     * Rifiuta una richiesta di spostamento
-     */
-    @Transactional
-    public void rifiutaRichiesta(Long richiestaId, String rispostaAdmin) {
-        RichiestaSpostamento richiesta = richiestaRepository.findById(richiestaId)
-                .orElseThrow(() -> new RuntimeException("Richiesta non trovata"));
-
-        if (!richiesta.isPending()) {
-            throw new RuntimeException("La richiesta è già stata processata");
-        }
-
-        PrenotazioneLezione prenotazione = richiesta.getPrenotazione();
-
-        // Ripristina stato prenotazione
-        prenotazione.setStato(PrenotazioneLezione.StatoPrenotazione.CONFERMATA);
-
-        richiesta.rifiuta(rispostaAdmin);
-
-        richiestaRepository.save(richiesta);
-        prenotazioneRepository.save(prenotazione);
-    }
-
-    /**
      * Calcola la quinta settimana (data in coda) rispetto alla data originale
      */
     private LocalDate calcolaQuintaSettimana(PrenotazioneLezione prenotazione) {
@@ -172,5 +149,37 @@ public class RichiestaSpostamentoService {
         }
 
         return richiestaRepository.findByUtenteOrderByDataCreazioneDesc(utente);
+    }
+
+    /**
+     * Ottiene TUTTE le richieste (per admin)
+     */
+    public List<RichiestaSpostamento> getAllRichieste() {
+        return richiestaRepository.findAllByOrderByDataCreazioneDesc();
+    }
+
+    /**
+     * Rifiuta una richiesta di spostamento (Admin)
+     */
+    @Transactional
+    public void rifiutaRichiesta(Long richiestaId, String motivazioneRifiuto) {
+        RichiestaSpostamento richiesta = richiestaRepository.findById(richiestaId)
+                .orElseThrow(() -> new RuntimeException("Richiesta non trovata"));
+
+        if (!richiesta.isPending()) {
+            throw new RuntimeException("La richiesta è già stata gestita");
+        }
+
+        // Imposta stato REJECTED e motivazione
+        richiesta.rifiuta(motivazioneRifiuto != null ? motivazioneRifiuto : "Richiesta rifiutata dall'amministratore");
+
+        // Riporta la prenotazione a CONFERMATA se era in SPOSTAMENTO_RICHIESTO
+        PrenotazioneLezione prenotazione = richiesta.getPrenotazione();
+        if (prenotazione.getStato() == PrenotazioneLezione.StatoPrenotazione.SPOSTAMENTO_RICHIESTO) {
+            prenotazione.setStato(PrenotazioneLezione.StatoPrenotazione.CONFERMATA);
+            prenotazioneRepository.save(prenotazione);
+        }
+
+        richiestaRepository.save(richiesta);
     }
 }

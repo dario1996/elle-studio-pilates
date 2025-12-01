@@ -19,6 +19,7 @@ import { PrenotazioneService } from '../../../../shared/services/prenotazione.se
 import { ToastrService } from 'ngx-toastr';
 import { ILezione, TipoLezione, TIPI_LEZIONE_CONFIG } from '../../../../shared/models/Lezione';
 import { PrenotazioneLezione } from '../../../../shared/models/prenotazione.model';
+import { RichiestaSpostamento } from '../../../../shared/models/prenotazione.model';
 import { FormLezioneComponent } from '../../components/form-lezione/form-lezione.component';
 import { DettaglioLezioneComponent } from '../../components/dettaglio-lezione/dettaglio-lezione.component';
 import { LeggendaColoriComponent } from '../../components/leggenda-colori/leggenda-colori.component';
@@ -46,6 +47,10 @@ export class AgendaComponent implements OnInit {
   templateEvents: EventInput[] = [];
   lezioneEvents: EventInput[] = [];
   prenotazioneEvents: EventInput[] = [];
+
+  // Richieste spostamento
+  showRichiesteSpostamentoModal = false;
+  richiesteSpostamento: RichiestaSpostamento[] = [];
 
   calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
@@ -707,6 +712,97 @@ export class AgendaComponent implements OnInit {
     const confirmMessage = `Sei sicuro di voler eliminare la lezione "${lezione.titolo}"?`;
     if (confirm(confirmMessage)) {
       this.eliminaLezione(lezione.id!);
+    }
+  }
+
+  /**
+   * Apre modale richieste spostamento
+   */
+  apriRichiesteSpostamento(): void {
+    this.showRichiesteSpostamentoModal = true;
+    this.loadRichiesteSpostamento();
+  }
+
+  /**
+   * Chiude modale richieste spostamento
+   */
+  chiudiRichiesteSpostamento(): void {
+    this.showRichiesteSpostamentoModal = false;
+  }
+
+  /**
+   * Carica tutte le richieste di spostamento
+   */
+  loadRichiesteSpostamento(): void {
+    this.prenotazioneService.getTutteRichiesteSpostamento().subscribe({
+      next: (richieste) => {
+        this.richiesteSpostamento = richieste;
+      },
+      error: (error) => {
+        console.error('Errore caricamento richieste spostamento', error);
+        this.toastr.error('Errore nel caricamento delle richieste');
+      }
+    });
+  }
+
+  /**
+   * Gestisce eliminazione richiesta
+   */
+  gestisciRichiesta(richiestaId: number, nuovoStato: string): void {
+    this.prenotazioneService.eliminaRichiestaSpostamento(richiestaId).subscribe({
+      next: () => {
+        this.toastr.success('Richiesta eliminata con successo');
+        this.loadRichiesteSpostamento();
+      },
+      error: (error) => {
+        console.error('Errore eliminazione richiesta', error);
+        this.toastr.error('Errore durante l\'eliminazione della richiesta');
+      }
+    });
+  }
+
+  /**
+   * Formatta data
+   */
+  formatDate(dateStr: string | Date | undefined): string {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    const dd = date.getDate().toString().padStart(2, '0');
+    const mm = (date.getMonth() + 1).toString().padStart(2, '0');
+    const yyyy = date.getFullYear();
+    return `${dd}/${mm}/${yyyy}`;
+  }
+
+  /**
+   * Formatta ora
+   */
+  formatTime(timeStr: string | undefined): string {
+    if (!timeStr) return '';
+    const [hours, minutes] = timeStr.split(':');
+    return `${hours}:${minutes}`;
+  }
+
+  /**
+   * Badge classe stato richiesta
+   */
+  getStatoRichiestaBadge(stato: string): string {
+    switch (stato) {
+      case 'PENDING': return 'badge-attesa';
+      case 'APPROVED': return 'badge-approvata';
+      case 'REJECTED': return 'badge-rifiutata';
+      default: return 'badge-default';
+    }
+  }
+
+  /**
+   * Label stato richiesta
+   */
+  getStatoRichiestaLabel(stato: string): string {
+    switch (stato) {
+      case 'PENDING': return 'In Attesa';
+      case 'APPROVED': return 'Approvata';
+      case 'REJECTED': return 'Rifiutata';
+      default: return stato;
     }
   }
 }

@@ -163,6 +163,17 @@ export class PrenotazioneService {
   }
 
   /**
+   * Recupera TUTTE le richieste di spostamento (admin)
+   */
+  getTutteRichiesteSpostamento(): Observable<RichiestaSpostamento[]> {
+    return this.http.get<RichiestaSpostamento[]>(`${this.baseUrl}/richieste-spostamento`);
+  }
+
+  eliminaRichiestaSpostamento(id: number): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/richieste-spostamento/${id}`);
+  }
+
+  /**
    * Crea prenotazioni COMBO (multiple categorie)
    */
   prenotaCombo(request: PrenotazioneComboRequest): Observable<PrenotazioneRicorrenteResponse> {
