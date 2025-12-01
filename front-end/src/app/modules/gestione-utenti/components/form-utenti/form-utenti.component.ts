@@ -109,6 +109,17 @@ export class FormUtentiComponent implements OnInit {
         this.dati?.pacchettiDisponibiliIds || []
       ]
     });
+    
+    // Aggiungi listener per il cambio del valore di patologie
+    this.utenteForm.get('patologie')?.valueChanges.subscribe(value => {
+      const descrizioneControl = this.utenteForm.get('descrizionePatologie');
+      if (value === true) {
+        descrizioneControl?.setValidators([Validators.required]);
+      } else {
+        descrizioneControl?.clearValidators();
+      }
+      descrizioneControl?.updateValueAndValidity();
+    });
   }
 
   private patchFormValues(): void {
@@ -132,7 +143,13 @@ export class FormUtentiComponent implements OnInit {
 
   onSubmit(): void {
     this.submitted = true;
+    console.log('📝 Form submitted');
+    console.log('📋 Form valid:', this.utenteForm.valid);
+    console.log('📦 Form values:', this.utenteForm.value);
+    console.log('🏥 Patologie value:', this.utenteForm.get('patologie')?.value);
+    
     if (this.utenteForm.invalid) {
+      console.warn('⚠️ Form non valido, errori:', this.utenteForm.errors);
       // Vai alla tab con errori
       if (this.hasErrorsInTab('dati')) {
         this.activeTab = 'dati';
@@ -141,6 +158,7 @@ export class FormUtentiComponent implements OnInit {
       }
       return;
     }
+    console.log('✅ Emetto conferma con valori:', this.utenteForm.value);
     this.conferma.emit(this.utenteForm.value);
   }
 

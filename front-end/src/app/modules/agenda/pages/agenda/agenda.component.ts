@@ -167,18 +167,16 @@ export class AgendaComponent implements OnInit {
           const startTime = (t.oraInizio || '').toString().slice(0,5);
           const endTime = (t.oraFine || '').toString().slice(0,5);
 
-          // Usa il colore gold dello studio per tutti gli slot
-          const eventColor = '#c99e67';
-
+          // Badge bianco con bordo colorato
           return {
             id: `tpl-${t.id}`,
             title: `${t.titolo}`,
             daysOfWeek: [day],
             startTime: startTime,
             endTime: endTime,
-            backgroundColor: eventColor,
-            borderColor: eventColor,
-            textColor: '#ffffff',
+            backgroundColor: '#ffffff',
+            borderColor: '#e5e7eb',
+            textColor: '#1f2937',
             extendedProps: {
               template: t,
               tipoLezione: t.tipoLezione,
@@ -393,12 +391,11 @@ export class AgendaComponent implements OnInit {
     const baseTitle = template.titolo || eventInfo.event.title;
     const isFull = prenotazioniCount >= maxPartecipanti;
     
-    const checkIcon = isFull ? '<i class="fas fa-check-circle" style="color: #d1fae5; font-size: 18px; margin-left: 8px;"></i>' : '';
-    const titleWithCount = `${baseTitle} (${prenotazioniCount}/${maxPartecipanti})`;
+    const checkIcon = isFull ? '<i class="fas fa-check-circle" style="color: #10b981; font-size: 16px; margin-left: 6px;"></i>' : '';
     
     return { 
       html: `<div class="fc-event-title" style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 2px 4px;">
-               <span>${titleWithCount}</span>${checkIcon}
+               <span style="color: #1f2937;">${baseTitle} <strong style="font-weight: 700; font-size: 11px;">(${prenotazioniCount}/${maxPartecipanti})</strong></span>${checkIcon}
              </div>` 
     };
   }
@@ -406,6 +403,25 @@ export class AgendaComponent implements OnInit {
   // Applica stili personalizzati all'elemento dell'evento
   styleEventElement(info: any) {
     const template = info.event.extendedProps?.template;
+    const tipoLezione = info.event.extendedProps?.tipoLezione;
+    
+    // Mappa i colori per tipo di lezione
+    const coloriTipo: { [key: string]: string } = {
+      'PRIVATA': '#ec4899',
+      'PRIMA_LEZIONE': '#8b5cf6',
+      'SEMI_PRIVATA': '#14b8a6',
+      'PILATES_MATWORK': '#ef4444',
+      'YOGA': '#84cc16',
+      'STUDIO_INTERMEDIO': '#f59e0b',
+      'REFORMER_INTERMEDIO': '#3b82f6',
+      'STUDIO_POSTURALE': '#a855f7'
+    };
+    
+    // Applica sempre lo sfondo bianco e il bordo colorato
+    info.el.style.backgroundColor = '#ffffff';
+    info.el.style.borderRight = `4px solid ${coloriTipo[tipoLezione] || '#c99e67'}`;
+    info.el.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)';
+    
     if (!template) return;
 
     const templateId = info.event.extendedProps?.templateId;
@@ -425,10 +441,8 @@ export class AgendaComponent implements OnInit {
     const isFull = prenotazioniCount >= maxPartecipanti;
     
     if (isFull) {
-      // Applica stile verde agli slot pieni
-      info.el.style.backgroundColor = '#059669';
-      info.el.style.borderColor = '#059669';
-      info.el.style.opacity = '0.9';
+      // Aggiungi un'ombra più accentuata per gli slot pieni
+      info.el.style.boxShadow = '0 2px 6px rgba(16, 185, 129, 0.3)';
     }
   }
 

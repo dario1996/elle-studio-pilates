@@ -162,13 +162,19 @@
 
       <div class="row mt-3" *ngIf="utenteForm.get('patologie')?.value">
         <div class="col-12 form-field">
-          <label for="descrizionePatologie" class="form-label">Descrizione Patologie</label>
+          <label for="descrizionePatologie" class="form-label">
+            Descrizione Patologie <span class="text-danger">*</span>
+          </label>
           <textarea
             id="descrizionePatologie"
             class="form-control"
             formControlName="descrizionePatologie"
             rows="3"
+            [class.is-invalid]="isFieldInvalid('descrizionePatologie')"
             placeholder="Descrivi le patologie..."></textarea>
+          <div class="invalid-feedback" *ngIf="isFieldInvalid('descrizionePatologie')">
+            La descrizione delle patologie è obbligatoria quando si segnalano patologie
+          </div>
         </div>
       </div>
 

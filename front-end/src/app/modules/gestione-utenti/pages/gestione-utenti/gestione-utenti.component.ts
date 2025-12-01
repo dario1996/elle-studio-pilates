@@ -272,20 +272,28 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
   }
 
   updateUtente(id: number, utenteData: any) {
+    console.log('🔄 updateUtente chiamato con ID:', id);
+    console.log('📋 Dati ricevuti dal form:', utenteData);
+    
     // Trova l'utente originale per preservare il campo attivo
     const utenteOriginale = this.utentiOriginali.find(u => u.id === id);
     const dataCompleta = {
       ...utenteData,
       attivo: utenteOriginale?.attivo || 'Si' // Preserva lo stato attivo originale
     };
+    
+    console.log('📦 Dati completi da inviare al backend:', dataCompleta);
 
     this.userService.updUtente(id, dataCompleta).subscribe({
-      next: () => {
+      next: (response) => {
+        console.log('✅ Risposta backend ricevuta:', response);
+        console.log('🔄 Ricaricando lista utenti...');
         this.loadUtenti();
         this.toastrUniversale.success('Utente modificato con successo');
         this.modaleService.chiudi();
       },
       error: (error) => {
+        console.error('❌ Errore backend:', error);
         this.toastrUniversale.error('Errore durante la modifica dell\'utente');
         console.error('Errore modifica utente:', error);
       },

@@ -1,531 +1,232 @@
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  padding: 20px;
+/* Container principale */
+.dettaglio-container {
+  font-family: 'Montserrat', sans-serif;
 }
 
-.modal-container {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  width: 100%;
-  max-width: 700px;
-  max-height: 90vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
+/* Header con titolo e badge */
+.dettaglio-header {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #f3f4f6;
 }
 
-.modal-header {
-  padding: 24px 24px 16px;
-  border-bottom: 1px solid #e5e7eb;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-.modal-title {
-  font-size: 1.5rem;
+.dettaglio-title {
+  font-size: 1.1rem;
   font-weight: 600;
   color: #1f2937;
-  margin: 0;
+  margin: 0 0 10px 0;
 }
 
-.close-btn {
-  background: none;
-  border: none;
-  font-size: 2rem;
-  color: #9ca3af;
-  cursor: pointer;
-  padding: 0;
-  width: 32px;
-  height: 32px;
+.badges-row {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 6px;
-  transition: all 0.2s;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
-.close-btn:hover {
-  background-color: #f3f4f6;
-  color: #374151;
+.badge-status,
+.badge-type {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 
-.modal-body {
-  padding: 24px;
-  overflow-y: auto;
-  flex: 1;
-}
-
-.status-section {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 24px;
-}
-
-.status-badge {
-  padding: 4px 8px;
-  border-radius: 16px;
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
-.status-badge.active {
+.badge-status.active {
   background-color: #d1fae5;
   color: #065f46;
 }
 
-.status-badge.inactive {
+.badge-status.inactive {
   background-color: #fee2e2;
   color: #991b1b;
 }
 
-.type-badge {
-  padding: 4px 8px;
-  border-radius: 16px;
-  font-size: 0.75rem;
-  font-weight: 500;
+.badge-type {
   color: white;
 }
 
-.type-badge[data-tipo="PRIVATA"] {
-  background-color: #3b82f6;
-}
+.badge-type[data-tipo="PRIVATA"] { background-color: #ec4899; }
+.badge-type[data-tipo="PRIMA_LEZIONE"] { background-color: #8b5cf6; }
+.badge-type[data-tipo="SEMI_PRIVATA"] { background-color: #14b8a6; }
+.badge-type[data-tipo="PILATES_MATWORK"] { background-color: #ef4444; }
+.badge-type[data-tipo="YOGA"] { background-color: #84cc16; }
+.badge-type[data-tipo="STUDIO_INTERMEDIO"] { background-color: #f59e0b; }
+.badge-type[data-tipo="REFORMER_INTERMEDIO"] { background-color: #3b82f6; }
+.badge-type[data-tipo="STUDIO_POSTURALE"] { background-color: #a855f7; }
 
-.type-badge[data-tipo="PRIMA_LEZIONE"] {
-  background-color: #8b5cf6;
-}
-
-.type-badge[data-tipo="SEMI_PRIVATA"] {
-  background-color: #f59e0b;
-}
-
-.type-badge[data-tipo="PILATES_MATWORK"] {
-  background-color: #ef4444;
-}
-
-.type-badge[data-tipo="YOGA"] {
-  background-color: #84cc16;
-}
-
-/* Title Section with Badges */
-.title-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* Grid layout per sezioni info */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 16px;
-}
-
-.title-section .lesson-title {
-  margin: 0;
-  flex: 1;
-}
-
-.badges-container {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  flex-shrink: 0;
-}
-
-/* Info Cards */
-.info-card {
-  background: white;
-  border: 1px solid #c99e67;
-  border-top: 4px solid #c99e67;
-  border-radius: 12px;
-  padding: 20px;
-  height: 100%;
-  margin-bottom: 2px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.info-card-title {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #1e293b;
-  margin: 0 0 16px 0;
-  padding-bottom: 12px;
-  border-bottom: 2px solid #f3e8d7;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.info-card-title i {
-  color: #c99e67;
-  font-size: 1rem;
-  width: 20px;
-  text-align: center;
-}
-
-.info-card .info-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 12px;
-  padding: 8px 12px;
-  background: linear-gradient(135deg, #fff8f3 0%, #fef9f5 100%);
-  border-radius: 8px;
-  border: 1px solid #f3e8d7;
-}
-
-.info-card .info-item:last-child {
-  margin-bottom: 0;
-}
-
-.info-card .info-item strong {
-  color: #475569;
-  font-weight: 600;
-  min-width: 120px;
-  flex-shrink: 0;
-  font-size: 0.9rem;
+  margin-bottom: 20px;
 }
 
 .info-section {
-  margin-bottom: 24px;
-}
-
-.lesson-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #1f2937;
-  margin: 0;
-}
-
-.info-grid {
-  display: grid;
-  gap: 16px;
-}
-
-.info-item {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.info-label {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #6b7280;
-}
-
-.info-value {
-  font-size: 1rem;
-  color: #1f2937;
-  font-weight: 400;
-}
-
-.participants.full {
-  color: #dc2626;
-  font-weight: 600;
-}
-
-.participants.available {
-  color: #059669;
-  font-weight: 500;
-}
-
-.availability-text {
-  font-size: 0.875rem;
-  color: #6b7280;
-  font-weight: 400;
-}
-
-.additional-info {
-  margin-bottom: 24px;
-}
-
-.alert {
-  padding: 12px 16px;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  margin-bottom: 12px;
-}
-
-.alert.info {
-  background-color: #dbeafe;
-  color: #1e40af;
-  border: 1px solid #93c5fd;
-}
-
-.alert.warning {
-  background-color: #fef3c7;
-  color: #92400e;
-  border: 1px solid #fbbf24;
-}
-
-.availability-alert {
-  text-align: center;
-}
-
-.full-badge {
-  background-color: #fee2e2;
-  color: #991b1b;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  display: inline-block;
-}
-
-.modal-footer {
-  padding: 24px;
-  /* border-top: 1px solid #e5e7eb; */
-  flex-shrink: 0;
-}
-
-.action-buttons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.btn {
-  padding: 12px 24px;
+  background: #fafafa;
+  border: 1px solid #e5e7eb;
+  border-left: 3px solid #c99e67;
   border-radius: 6px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  border: none;
-  font-size: 1rem;
+  padding: 14px;
+}
+
+.section-header {
   display: flex;
   align-items: center;
   gap: 8px;
-  white-space: nowrap;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #4b5563;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.section-header i {
+  color: #c99e67;
+  font-size: 0.85rem;
 }
 
-.btn-secondary {
-  background-color: #f3f4f6;
-  color: #374151;
-  border: 1px solid #d1d5db;
-}
-
-.btn-secondary:hover:not(:disabled) {
-  background-color: #e5e7eb;
-}
-
-.btn-primary {
-  background-color: #3b82f6;
-  color: white;
-}
-
-.btn-primary:hover:not(:disabled) {
-  background-color: #2563eb;
-}
-
-.btn-warning {
-  background-color: #f59e0b;
-  color: white;
-}
-
-.btn-warning:hover:not(:disabled) {
-  background-color: #d97706;
-}
-
-.btn-danger {
-  background-color: #dc2626;
-  color: white;
-}
-
-.btn-danger:hover:not(:disabled) {
-  background-color: #b91c1c;
-}
-
-.spinner {
-  width: 16px;
-  height: 16px;
-  border: 2px solid transparent;
-  border-top: 2px solid currentColor;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Mobile responsiveness */
-/* Stili per le icone negli alert */
-.alert i {
-  margin-right: 6px;
-}
-
-.alert-info i.fa-check-circle {
-  color: #0ea5e9;
-}
-
-.alert-warning i.fa-exclamation-triangle {
-  color: #f59e0b;
-}
-
-@media (max-width: 768px) {
-  .title-section {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-  
-  .badges-container {
-    align-self: flex-start;
-  }
-  
-  .modal-overlay {
-    padding: 10px;
-  }
-  
-  .modal-container {
-    max-height: 95vh;
-  }
-  
-  .modal-header,
-  .modal-body,
-  .modal-footer {
-    padding: 16px;
-  }
-  
-  .modal-title {
-    font-size: 1.25rem;
-  }
-  
-  .lesson-title {
-    font-size: 1.125rem;
-  }
-  
-  .action-buttons {
-    justify-content: center;
-  }
-  
-  .btn {
-    padding: 10px 20px;
-    font-size: 0.875rem;
-    flex: 1;
-    min-width: 0;
-  }
-}
-
-@media (max-width: 480px) {
-  .status-section {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .action-buttons {
-    flex-direction: column;
-  }
-  
-  .btn {
-    width: 100%;
-    justify-content: center;
-  }
-}
-
-/* Stili per i partecipanti */
-.participants-card {
-  border: 1px solid #c99e67;
-  border-top: 4px solid #c99e67;
-  background: white;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.participants-list {
+.info-row {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.participant-badge {
-  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  background: linear-gradient(135deg, #fff8f3 0%, #fef9f5 100%);
-  border-radius: 8px;
-  border: 1px solid #f3e8d7;
-}
-
-.participant-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #c99e67 0%, #d4af7a 100%);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  box-shadow: 0 2px 8px rgba(201, 158, 103, 0.3);
-  flex-shrink: 0;
-}
-
-.participant-info {
-  flex: 1;
-}
-
-.participant-name {
-  font-weight: 500;
-  color: #374151;
-  font-size: 0.95rem;
-}
-
-.participants-summary {
-  padding-top: 8px;
-  border-top: 1px solid #e2e8f0;
-}
-
-.participants-summary small {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  padding: 6px 0;
   font-size: 0.8rem;
 }
 
-.participants-summary i {
-  color: #94a3b8;
+.info-row .label {
+  color: #6b7280;
+  font-weight: 500;
 }
 
-@media (max-width: 768px) {
-  .participants-card {
-    padding: 16px;
-  }
+.info-row .value {
+  color: #1f2937;
+  font-weight: 600;
+  text-align: right;
+}
 
-  .participants-list {
-    gap: 8px;
+.value.full {
+  color: #dc2626;
+}
+
+.value.available {
+  color: #059669;
+}
+
+/* Sezione partecipanti */
+.participants-section {
+  margin-bottom: 16px;
+}
+
+.participants-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.participant-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #374151;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.participant-chip i {
+  color: #c99e67;
+  font-size: 0.7rem;
+}
+
+/* Alert compatti */
+.alerts-section {
+  margin-bottom: 16px;
+}
+
+.alert {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.alert i {
+  font-size: 0.8rem;
+}
+
+.alert-full {
+  background-color: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.alert-success {
+  background-color: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.alert-warning {
+  background-color: #fffbeb;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
+/* Sezione note */
+.notes-section {
+  background: #fafafa;
+  border: 1px solid #e5e7eb;
+  border-left: 3px solid #c99e67;
+  border-radius: 6px;
+  padding: 14px;
+}
+
+.notes-content {
+  font-size: 0.8rem;
+  color: #4b5563;
+  line-height: 1.5;
+  margin-top: 8px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .info-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
   
-  .participant-badge {
-    padding: 10px 12px;
-    gap: 10px;
+  .dettaglio-title {
+    font-size: 1rem;
   }
-
-  .participant-icon {
-    width: 36px;
-    height: 36px;
-    font-size: 16px;
+  
+  .info-row {
+    font-size: 0.75rem;
   }
-
-  .participant-name {
-    font-size: 0.9rem;
+  
+  .badges-row {
+    gap: 6px;
+  }
+  
+  .badge-status,
+  .badge-type {
+    font-size: 0.65rem;
+    padding: 3px 8px;
   }
 }
+
+

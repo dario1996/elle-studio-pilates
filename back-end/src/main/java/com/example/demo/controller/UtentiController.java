@@ -118,6 +118,17 @@ public class UtentiController {
             existingUtente.setRuoli(dto.getRuoli());
         }
         
+        // Aggiorna patologie, descrizione patologie e obiettivi
+        if (dto.getPatologie() != null) {
+            existingUtente.setPatologie(dto.getPatologie());
+        }
+        if (dto.getDescrizionePatologie() != null) {
+            existingUtente.setDescrizionePatologie(dto.getDescrizionePatologie());
+        }
+        if (dto.getObiettivi() != null) {
+            existingUtente.setObiettivi(dto.getObiettivi());
+        }
+        
         // Salva l'utente con i campi base aggiornati
         utentiService.Save(existingUtente);
         

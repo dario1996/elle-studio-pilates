@@ -1,195 +1,163 @@
-/* Clean modal design without borders */
-.modal-content {
-  background: #ffffff !important;
-  overflow: hidden !important;
-  max-height: 75vh !important;
-  display: flex !important;
-  flex-direction: column !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  border: none !important;
+/* Container principale */
+.dettaglio-container {
+  font-family: 'Montserrat', sans-serif;
 }
 
-.modal-header {
-  background: #ffffff !important;
-  padding: 12px!important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: flex-start !important;
-  margin: 0 !important;
-  width: 100% !important;
-  box-sizing: border-box !important;
+/* Header con titolo */
+.dettaglio-header {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #f3f4f6;
 }
 
-.modal-title {
-  margin: 0 !important;
-  font-size: 1.35rem !important;
-  font-weight: 700 !important;
-  color: #1f2937 !important;
-  display: flex !important;
-  align-items: center !important;
+.dettaglio-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
 }
 
-.modal-title i {
-  color: #6b7280 !important;
-  margin-right: 0.5rem !important;
-  font-size: 1.1rem !important;
-}
-
-.modal-body {
-  padding: 12px !important;
-  overflow-y: auto !important;
-  flex: 1 !important;
-  margin: 0 !important;
-  width: 100% !important;
-  box-sizing: border-box !important;
-}
-
-.detail-content {
-  width: 100%;
-}
-
-.detail-section {
+/* Grid layout per sezioni info */
+.info-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
 }
 
-.detail-field {
-  background: transparent;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+.info-section {
+  background: #fafafa;
+  border: 1px solid #e5e7eb;
+  border-left: 3px solid #c99e67;
+  border-radius: 6px;
+  padding: 14px;
 }
 
-.detail-field-label {
+.info-section-full {
+  background: #fafafa;
+  border: 1px solid #e5e7eb;
+  border-left: 3px solid #c99e67;
+  border-radius: 6px;
+  padding: 14px;
+  margin-bottom: 16px;
+}
+
+.section-header {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 8px;
+  margin-bottom: 10px;
   font-size: 0.8rem;
   font-weight: 600;
-  color: #6b7280;
+  color: #4b5563;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.5px;
 }
 
-.detail-field-label i {
-  width: 12px;
-  height: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #9ca3af;
-  font-size: 10px;
+.section-header i {
+  color: #c99e67;
+  font-size: 0.85rem;
 }
 
-.detail-field-value {
-  font-size: 0.9rem;
-  font-weight: 500;
+.info-value {
   color: #1f2937;
-  word-break: break-word;
-  line-height: 1.3;
-  padding: 0.25rem 0;
-  border-bottom: 1px solid #f3f4f6;
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.value-success {
+  color: #059669;
+  font-weight: 600;
+}
+
+.value-warning {
+  color: #dc2626;
+  font-weight: 600;
 }
 
 /* Sezione Certificato Medico */
 .certificate-section {
-  margin-top: 1.5rem;
-  padding: 1.25rem;
-  background: #f9fafb;
-  border-radius: 8px;
+  background: #fafafa;
+  border: 1px solid #e5e7eb;
+  border-left: 3px solid #c99e67;
+  border-radius: 6px;
+  padding: 14px;
+  margin-bottom: 16px;
 }
 
-.certificate-title {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #374151;
-  margin-bottom: 1rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 2px solid #e5e7eb;
-  display: flex;
-  align-items: center;
-}
-
-.certificate-title i {
-  color: #6b7280;
-}
-
-.certificate-info {
+.certificate-content {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 12px;
 }
 
 .certificate-status {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
 }
 
-.status-label,
-.date-label {
-  font-size: 0.8rem;
+.badge-certificate {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 16px;
+  font-size: 0.75rem;
   font-weight: 600;
-  color: #6b7280;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.3px;
 }
 
-.badge {
-  padding: 0.4rem 0.9rem;
-  border-radius: 20px;
+.badge-success {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.badge-warning {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.badge-certificate i {
   font-size: 0.8rem;
-  font-weight: 600;
-}
-
-.bg-success {
-  background-color: #10b981;
-  color: white;
-}
-
-.bg-warning {
-  background-color: #f59e0b;
-  color: white;
 }
 
 .certificate-date {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
+  gap: 8px;
+  font-size: 0.8rem;
 }
 
-.date-value {
-  font-size: 0.9rem;
-  font-weight: 500;
+.certificate-date .label {
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.certificate-date .value {
   color: #1f2937;
-}
-
-.certificate-actions {
-  margin-top: 0.5rem;
+  font-weight: 500;
 }
 
 .btn-download {
   background-color: #3b82f6;
   color: white;
   border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
+  padding: 8px 16px;
+  border-radius: 6px;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.75rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 6px;
+  align-self: flex-start;
 }
 
 .btn-download:hover:not(:disabled) {
   background-color: #2563eb;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+  transform: translateY(-1px);
 }
 
 .btn-download:disabled {
@@ -198,68 +166,42 @@
 }
 
 .btn-download i {
-  font-size: 0.9rem;
+  font-size: 0.75rem;
 }
 
-.certificate-alert {
-  background-color: #dbeafe;
-  border: 1px solid #93c5fd;
-  color: #1e40af;
-  padding: 1rem;
-  border-radius: 8px;
+.alert {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  font-size: 0.9rem;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
 }
 
-.certificate-alert i {
-  color: #3b82f6;
-  font-size: 1rem;
+.alert i {
+  font-size: 0.8rem;
 }
 
-/* Responsive design */
+.alert-info {
+  background-color: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #93c5fd;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-  .detail-section {
+  .info-grid {
     grid-template-columns: 1fr;
-    gap: 0.75rem;
+    gap: 12px;
   }
   
-  .modal-body {
-    padding: 0 1.25rem 1.25rem 1.25rem !important;
-  }
-  
-  .modal-header {
-    padding: 1.25rem 1.25rem 0.5rem 1.25rem !important;
-  }
-  
-  .modal-title {
-    font-size: 1.2rem !important;
-  }
-
-  .modal-content {
-    max-height: 80vh !important;
-  }
-
-  .certificate-section {
-    padding: 1rem;
-  }
-  
-  .certificate-title {
-    font-size: 0.95rem;
+  .dettaglio-title {
+    font-size: 1rem;
   }
   
   .btn-download {
     width: 100%;
     justify-content: center;
   }
-}
-
-/* Assicura che i badge nel modal non siano influenzati dagli stili della tabella */
-.modal-content app-status-badge {
-  display: inline-block;
-  white-space: normal;
-  overflow: visible;
-  text-overflow: initial;
-  max-width: none;
 }

@@ -1,123 +1,101 @@
 <div *ngIf="lezione">
-  <!-- Informazioni Principali -->
-  <div class="info-section">
-    <!-- Titolo con Badge -->
-    <div class="title-section mb-2">
-      <h3 class="lesson-title">{{ lezione.titolo }}</h3>
-      <div class="badges-container">
-        <span 
-          class="status-badge" 
-          [class.active]="lezione.attiva"
-          [class.inactive]="!lezione.attiva"
-        >
+  <div class="dettaglio-container">
+    <!-- Header con titolo e badge -->
+    <div class="dettaglio-header">
+      <h3 class="dettaglio-title">{{ lezione.titolo }}</h3>
+      <div class="badges-row">
+        <span class="badge-status" [class.active]="lezione.attiva" [class.inactive]="!lezione.attiva">
           {{ lezione.attiva ? 'Attiva' : 'Non Attiva' }}
         </span>
-        <span 
-          class="type-badge"
-          [attr.data-tipo]="lezione.tipo"
-        >
+        <span class="badge-type" [attr.data-tipo]="lezione.tipo">
           {{ tipoLezioneLabel }}
         </span>
       </div>
     </div>
-    
-    <!-- Informazioni Base -->
-    <div class="row mb-2">
-      <div class="col-md-6">
-        <div class="info-card">
-          <h5 class="info-card-title"><i class="fas fa-calendar-alt"></i> Programmazione</h5>
-          <div class="info-item">
-            <strong>Data e Ora:</strong> {{ dataOraFormatted }}
-          </div>
-          <div class="info-item">
-            <strong>Durata:</strong> {{ durataFormatted }}
-          </div>
-          <div class="info-item">
-            <strong>Fine lezione:</strong> {{ dataFineFormatted }}
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="info-card">
-          <h5 class="info-card-title"><i class="fas fa-users"></i> Partecipazione</h5>
-          <div class="info-item">
-            <strong>Istruttore:</strong> {{ istruttoreNome }}
-          </div>
-          <div class="info-item">
-            <strong>Partecipanti:</strong> 
-            <span class="participants" 
-                  [class.full]="isCompleta"
-                  [class.available]="!isCompleta">
-              {{ partecipantiIscritti }} / {{ lezione.maxPartecipanti || 0 }}
-            </span>
-          </div>
-          <div class="info-item">
-            <strong>Posti disponibili:</strong> {{ postiDisponibili }}
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- Partecipanti -->
-    <div class="row mb-2" *ngIf="partecipantiDettagli && partecipantiDettagli.length > 0">
-      <div class="col-12">
-        <div class="info-card participants-card">
-          <h5 class="info-card-title">
-            <i class="fas fa-user-friends" style="color: #c99e67;"></i> 
-            Partecipanti Iscritti ({{ partecipantiDettagli.length }})
-          </h5>
-          <div class="participants-list">
-            <div class="participant-badge" *ngFor="let partecipante of partecipantiDettagli">
-              <div class="participant-icon">
-                <i class="fas fa-user-circle"></i>
-              </div>
-              <div class="participant-info">
-                <span class="participant-name">{{ partecipante.nome || partecipante }}</span>
-              </div>
-            </div>
-          </div>
+    <!-- Grid informazioni -->
+    <div class="info-grid">
+      <!-- Programmazione -->
+      <div class="info-section">
+        <div class="section-header">
+          <i class="fas fa-calendar-alt"></i>
+          <span>Programmazione</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Data e Ora:</span>
+          <span class="value">{{ dataOraFormatted }}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Durata:</span>
+          <span class="value">{{ durataFormatted }}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Fine:</span>
+          <span class="value">{{ dataFineFormatted }}</span>
+        </div>
+      </div>
+
+      <!-- Partecipazione -->
+      <div class="info-section">
+        <div class="section-header">
+          <i class="fas fa-users"></i>
+          <span>Partecipazione</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Istruttore:</span>
+          <span class="value">{{ istruttoreNome }}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Partecipanti:</span>
+          <span class="value" [class.full]="isCompleta" [class.available]="!isCompleta">
+            <strong>{{ partecipantiIscritti }}/{{ lezione.maxPartecipanti || 0 }}</strong>
+          </span>
+        </div>
+        <div class="info-row">
+          <span class="label">Posti disponibili:</span>
+          <span class="value">{{ postiDisponibili }}</span>
         </div>
       </div>
     </div>
 
-
-    <!-- Informazioni Importanti -->
-    <div class="row mb-2">
-      <div class="col-12">
-        <div class="info-card">
-          <h5 class="info-card-title"><i class="fas fa-info-circle"></i> Informazioni Importanti</h5>
-          <div class="info-item" *ngIf="isCompleta">
-            <span class="full-badge">🔴 Lezione al Completo</span>
-          </div>
-          <div class="info-item">
-            <span *ngIf="canCancel" class="text-success">
-              <i class="fas fa-check-circle"></i> Cancellazione consentita
-            </span>
-            <span *ngIf="!canCancel" class="text-warning">
-              <i class="fas fa-exclamation-triangle"></i> Cancellazione non consentita (< 24h)
-            </span>
-          </div>
+    <!-- Partecipanti iscritti -->
+    <div class="participants-section" *ngIf="partecipantiDettagli && partecipantiDettagli.length > 0">
+      <div class="section-header">
+        <i class="fas fa-user-friends"></i>
+        <span>Partecipanti Iscritti ({{ partecipantiDettagli.length }})</span>
+      </div>
+      <div class="participants-chips">
+        <div class="participant-chip" *ngFor="let partecipante of partecipantiDettagli">
+          <i class="fas fa-user"></i>
+          <span>{{ partecipante.nome || partecipante }}</span>
         </div>
       </div>
     </div>
 
-    <!-- Descrizioni (se presenti) -->
-    <div class="row mb-2" *ngIf="lezione.note">
-      <!-- <div class="col-md-6" *ngIf="lezione.descrizione">
-        <div class="info-card">
-          <h5 class="info-card-title"><i class="fas fa-edit"></i> Descrizione</h5>
-          <div class="info-item">
-            {{ lezione.descrizione }}
-          </div>
-        </div>
-      </div> -->
-      <div class="col-md-12" *ngIf="lezione.note">
-        <div class="info-card">
-          <h5 class="info-card-title"><i class="fas fa-sticky-note"></i> Note</h5>
-          <div class="info-item">
-            {{ lezione.note }}
-          </div>
-        </div>
+    <!-- Alert informazioni -->
+    <div class="alerts-section">
+      <div class="alert alert-full" *ngIf="isCompleta">
+        <i class="fas fa-check-circle"></i>
+        Lezione al completo
+      </div>
+      <div class="alert alert-success" *ngIf="canCancel">
+        <i class="fas fa-check-circle"></i>
+        Cancellazione consentita
+      </div>
+      <div class="alert alert-warning" *ngIf="!canCancel">
+        <i class="fas fa-exclamation-triangle"></i>
+        Cancellazione non consentita (< 24h)
+      </div>
+    </div>
+
+    <!-- Note -->
+    <div class="notes-section" *ngIf="lezione.note">
+      <div class="section-header">
+        <i class="fas fa-sticky-note"></i>
+        <span>Note</span>
+      </div>
+      <div class="notes-content">
+        {{ lezione.note }}
       </div>
     </div>
   </div>
