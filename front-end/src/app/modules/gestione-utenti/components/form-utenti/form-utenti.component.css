@@ -1,3 +1,35 @@
+/* Form Sections con stile migliorato */
+.form-section {
+  margin-bottom: 1.5rem;
+  border: 1px solid #e5e7eb;
+  border-left: 3px solid #c99e67;
+  border-radius: 6px;
+  background-color: white;
+  overflow: hidden;
+}
+
+.section-header {
+  padding: 0.75rem 1rem;
+  background-color: #fafafa;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #4b5563;
+  display: flex;
+  align-items: center;
+}
+
+.section-header i {
+  color: #c99e67;
+  font-size: 0.9rem;
+}
+
+.section-content {
+  padding: 1rem;
+}
+
 /* Tabs personalizzate - stile bottoni */
 .nav-tabs {
   border-bottom: none;

@@ -31,10 +31,13 @@ export class DettaglioLezioneComponent implements OnInit, OnDestroy {
 
   tipiLezioneLabels = {
     [TipoLezione.PRIVATA]: 'Lezione Privata',
-    [TipoLezione.PRIMA_LEZIONE]: 'Prima Lezione',
-    [TipoLezione.SEMI_PRIVATA]: 'Semi-Privata',
-    [TipoLezione.PILATES_MATWORK]: 'Matwork',
-    [TipoLezione.YOGA]: 'Yoga'
+    [TipoLezione.PRIMA_LEZIONE]: 'Prima Lezione Privata',
+    [TipoLezione.SEMI_PRIVATA]: 'Semi Privata',
+    [TipoLezione.PILATES_MATWORK]: 'Pilates Matwork',
+    [TipoLezione.YOGA]: 'Yoga',
+    [TipoLezione.STUDIO_INTERMEDIO]: 'Studio Intermedio',
+    [TipoLezione.REFORMER_INTERMEDIO]: 'Reformer Intermedio',
+    [TipoLezione.STUDIO_POSTURALE]: 'Studio Posturale'
   };
 
   istruttori = [
