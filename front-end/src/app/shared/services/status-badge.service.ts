@@ -58,6 +58,11 @@ export class StatusBadgeService {
       { value: 'In corso', displayText: 'In corso', colorClass: 'status-badge-warning' },
       { value: 'Non superato', displayText: 'Non superato', colorClass: 'status-badge-danger' }
     ],
+    vendita: [
+      { value: 'PAID', displayText: 'Pagato', colorClass: 'status-badge-success' },
+      { value: 'PENDING', displayText: 'In attesa', colorClass: 'status-badge-warning' },
+      { value: 'CANCELLED', displayText: 'Annullato', colorClass: 'status-badge-danger' }
+    ]
   };
 
   /**

@@ -354,7 +354,7 @@ public class VenditaService {
             }
             stats.put("venditePerStato", venditePerStato);
             
-            // Vendite più recenti (ultime 10) - usiamo solo i dati essenziali per evitare problemi di serializzazione
+            // Vendite più recenti (ultime 10) - con dati completi di utente e pacchetto
             System.out.println("Getting vendite recenti");
             Pageable topTen = PageRequest.of(0, 10);
             List<Vendita> venditeRecenti = venditaRepository.findTop10WithRelations(topTen);
@@ -368,8 +368,28 @@ public class VenditaService {
                     dto.put("dataPagamento", v.getDataPagamento());
                     dto.put("utenteId", v.getUtente() != null ? v.getUtente().getUsername() : null);
                     dto.put("pacchettoId", v.getPacchetto() != null ? v.getPacchetto().getId() : null);
-                    dto.put("pacchettoNome", v.getPacchetto() != null ? v.getPacchetto().getNome() : null);
                     dto.put("note", v.getNote());
+                    
+                    // Aggiungi dati utente completi
+                    if (v.getUtente() != null) {
+                        Map<String, Object> utenteDto = new HashMap<>();
+                        utenteDto.put("id", v.getUtente().getId());
+                        utenteDto.put("username", v.getUtente().getUsername());
+                        utenteDto.put("nome", v.getUtente().getNome());
+                        utenteDto.put("cognome", v.getUtente().getCognome());
+                        utenteDto.put("email", v.getUtente().getEmail());
+                        dto.put("utente", utenteDto);
+                    }
+                    
+                    // Aggiungi dati pacchetto completi
+                    if (v.getPacchetto() != null) {
+                        Map<String, Object> pacchettoDto = new HashMap<>();
+                        pacchettoDto.put("id", v.getPacchetto().getId());
+                        pacchettoDto.put("nome", v.getPacchetto().getNome());
+                        pacchettoDto.put("prezzo", v.getPacchetto().getPrezzo());
+                        dto.put("pacchetto", pacchettoDto);
+                    }
+                    
                     return dto;
                 })
                 .collect(Collectors.toList());

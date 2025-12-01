@@ -6,6 +6,13 @@ import { environment } from '../../../environments/environment';
 export interface Vendita {
   id?: number;
   utenteId: string;
+  utente?: {
+    id: string;
+    username: string;
+    nome?: string;
+    cognome?: string;
+    email?: string;
+  };
   pacchettoId: number;
   pacchetto?: {
     id: number;

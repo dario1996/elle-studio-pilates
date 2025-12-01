@@ -9,6 +9,9 @@ import { PageTitleComponent } from '../../../../core/page-title/page-title.compo
 import { LoggedUserComponent } from '../../../../shared/components/logged-user/logged-user.component';
 import { NotificationComponent } from '../../../../core/notification/notification.component';
 import { SpinnerComponent } from '../../../../core/spinner/spinner.component';
+import { TabellaGenericaComponent } from '../../../../shared/components/tabella-generica/tabella-generica.component';
+import { IColumnDef } from '../../../../shared/models/ui/column-def';
+import { IAzioneDef, AzioneType, AzioneColor } from '../../../../shared/models/ui/azione-def';
 
 Chart.register(...registerables);
 
@@ -21,7 +24,8 @@ Chart.register(...registerables);
     PageTitleComponent,
     LoggedUserComponent,
     // NotificationComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    TabellaGenericaComponent
   ],
   templateUrl: './statistiche.component.html',
   styleUrls: ['./statistiche.component.css']
@@ -37,6 +41,39 @@ export class StatisticheComponent implements OnInit, OnDestroy, AfterViewInit {
   statistiche: StatisticheVendite | null = null;
   isLoading = false;
   errorMessage: string | null = null;
+  venditeTabella: any[] = [];
+  
+  // Proprietà calcolate per il template
+  cardTitles = {
+    fatturato: '',
+    vendite: '',
+    performance: '',
+    media: ''
+  };
+  
+  trendLabels = {
+    fatturato: '',
+    vendite: '',
+    performance: '',
+    media: ''
+  };
+  
+  titoliGrafici = {
+    fatturato: '',
+    vendite: ''
+  };
+  
+  formattedValues = {
+    totaleFatturato: '',
+    totaleFatturatoClass: '',
+    totaleVendite: '',
+    totaleVenditeClass: '',
+    venditeMese: '',
+    venditeMeseClass: '',
+    fatturateMese: '',
+    mediaVenditaGiornaliera: '',
+    mediaVenditaGiornalieraClass: ''
+  };
   
   // Grafici
   private andamentoGuadagniChart?: Chart;
@@ -64,6 +101,17 @@ export class StatisticheComponent implements OnInit, OnDestroy, AfterViewInit {
     dataInizio: '',
     dataFine: ''
   };
+  
+  // Configurazione tabella vendite recenti
+  venditeTabellaColumns: IColumnDef[] = [
+    { key: 'dataAcquisto', label: 'Data', type: 'date', width: '12%' },
+    { key: 'nome', label: 'Nome', type: 'text', width: '15%' },
+    { key: 'cognome', label: 'Cognome', type: 'text', width: '15%' },
+    { key: 'utenteId', label: 'Username', type: 'text', width: '15%' },
+    { key: 'pacchettoNome', label: 'Pacchetto', type: 'text', width: '20%' },
+    { key: 'importo', label: 'Importo', type: 'text', width: '13%' },
+    { key: 'stato', label: 'Stato', type: 'badge', statusType: 'vendita', width: '10%' }
+  ];
 
   constructor(
     private venditeService: VenditeService
@@ -112,6 +160,8 @@ export class StatisticheComponent implements OnInit, OnDestroy, AfterViewInit {
           console.log('Dati statistiche ricevuti:', data);
           console.log('andamentoMensile:', data.andamentoMensile);
           this.statistiche = data;
+          this.aggiornaValoriCalcolati();
+          this.aggiornaVenditeTabella();
           this.isLoading = false;
           setTimeout(() => this.creaGrafici(), 100);
         },
@@ -567,6 +617,74 @@ export class StatisticheComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       const periodoLabel = this.getPeriodoLabel();
       return `${baseTipo} - ${periodoLabel}`;
+    }
+  }
+  
+  /**
+   * Aggiorna i dati delle vendite per la tabella generica
+   */
+  private aggiornaVenditeTabella(): void {
+    if (!this.statistiche?.venditePiuRecenti) {
+      this.venditeTabella = [];
+      return;
+    }
+    
+    this.venditeTabella = this.statistiche.venditePiuRecenti.map(vendita => ({
+      ...vendita,
+      nome: vendita.utente?.nome || '-',
+      cognome: vendita.utente?.cognome || '-',
+      pacchettoNome: vendita.pacchetto?.nome || `Pacchetto ${vendita.pacchettoId}`,
+      importo: this.formattaImporto(vendita.importo)
+    }));
+  }
+  
+  /**
+   * Aggiorna tutti i valori calcolati per il template
+   */
+  private aggiornaValoriCalcolati(): void {
+    if (!this.statistiche) return;
+    
+    // Aggiorna i titoli delle card
+    this.cardTitles.fatturato = this.getCardTitle('fatturato');
+    this.cardTitles.vendite = this.getCardTitle('vendite');
+    this.cardTitles.performance = this.getCardTitle('performance');
+    this.cardTitles.media = this.getCardTitle('media');
+    
+    // Aggiorna i trend labels
+    this.trendLabels.fatturato = this.getTrendLabel('fatturato');
+    this.trendLabels.vendite = this.getTrendLabel('vendite');
+    this.trendLabels.performance = this.getTrendLabel('performance');
+    this.trendLabels.media = this.getTrendLabel('media');
+    
+    // Aggiorna i titoli dei grafici
+    this.titoliGrafici.fatturato = this.getTitoloGrafico('fatturato');
+    this.titoliGrafici.vendite = this.getTitoloGrafico('vendite');
+    
+    // Aggiorna i valori formattati
+    this.formattedValues.totaleFatturato = this.formattaImporto(this.statistiche.totaleFatturato);
+    this.formattedValues.totaleFatturatoClass = this.getNumberClass(this.formattedValues.totaleFatturato);
+    
+    this.formattedValues.totaleVendite = this.statistiche.totaleVendite.toString();
+    this.formattedValues.totaleVenditeClass = this.getNumberClass(this.formattedValues.totaleVendite);
+    
+    this.formattedValues.venditeMese = this.statistiche.venditeMese.toString();
+    this.formattedValues.venditeMeseClass = this.getNumberClass(this.formattedValues.venditeMese);
+    
+    this.formattedValues.fatturateMese = this.formattaImportoBreve(this.statistiche.fatturateMese);
+    
+    this.formattedValues.mediaVenditaGiornaliera = this.formattaImportoBreve(this.statistiche.mediaVenditaGiornaliera);
+    this.formattedValues.mediaVenditaGiornalieraClass = this.getNumberClass(this.formattedValues.mediaVenditaGiornaliera);
+  }
+  
+  /**
+   * Gestisce le azioni della tabella vendite
+   */
+  onVenditaAction(event: { tipo: string; item: any }): void {
+    switch (event.tipo) {
+      case AzioneType.View:
+        console.log('Visualizza vendita:', event.item);
+        // TODO: Implementare apertura modal o navigazione dettaglio vendita
+        break;
     }
   }
 }
