@@ -460,6 +460,6 @@ export class DashboardUtenteComponent implements OnInit, AfterViewInit {
 
   /** Naviga alla pagina pacchetti */
   vaiAPacchetti(): void {
-    this.router.navigate(['/gestione-pacchetti']);
+    this.router.navigate(['gestionale-elle-studio/gestione-pacchetti']);
   }
 }
