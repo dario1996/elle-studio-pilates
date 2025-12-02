@@ -27,6 +27,7 @@ import com.example.demo.dto.UtenteAutocompleteDto;
 import com.example.demo.entity.Pacchetto;
 import com.example.demo.entity.Utenti;
 import com.example.demo.exceptions.BindingException;
+import com.example.demo.services.RegistrazioneService;
 import com.example.demo.services.UtentiService;
 
 @RestController
@@ -37,13 +38,16 @@ public class UtentiController {
     private final UtentiService utentiService;
     private final BCryptPasswordEncoder passwordEncoder;
     private final ResourceBundleMessageSource errMessage;
+    private final RegistrazioneService registrazioneService;
 
     public UtentiController(final UtentiService utentiService,
                             final BCryptPasswordEncoder passwordEncoder,
-                            final ResourceBundleMessageSource errMessage) {
+                            final ResourceBundleMessageSource errMessage,
+                            final RegistrazioneService registrazioneService) {
         this.utentiService = utentiService;
         this.passwordEncoder = passwordEncoder;
         this.errMessage = errMessage;
+        this.registrazioneService = registrazioneService;
     }
 
     // 🆕 ENDPOINT GET per ottenere la lista degli utenti
@@ -94,6 +98,9 @@ public class UtentiController {
                     .body(new InfoMsg(LocalDate.now(), "Utente non trovato"));
         }
         
+        // Verifica se l'utente sta per essere attivato (era inattivo e diventa attivo)
+        boolean staPerEssereAttivato = "No".equals(existingUtente.getAttivo()) && "Si".equals(dto.getAttivo());
+        
         // Aggiorna i campi base
         existingUtente.setNome(dto.getNome());
         existingUtente.setCognome(dto.getCognome());
@@ -131,6 +138,12 @@ public class UtentiController {
         
         // Salva l'utente con i campi base aggiornati
         utentiService.Save(existingUtente);
+        
+        // Invia email di attivazione se l'utente è stato attivato
+        if (staPerEssereAttivato) {
+            log.info("Utente attivato, invio email di notifica a: " + existingUtente.getEmail());
+            registrazioneService.invioMailAttivazione(existingUtente.getEmail(), existingUtente.getUsername());
+        }
         
         // Aggiorna i pacchetti disponibili per l'utente
         if (dto.getPacchettiDisponibiliIds() != null) {
