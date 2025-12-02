@@ -140,4 +140,38 @@ public class RegistrazioneService {
             // Non blocchiamo la registrazione se l'email fallisce
         }
     }
+
+    /**
+     * Invia email di attivazione profilo
+     */
+    public void invioMailAttivazione(String email, String username) {
+        log.info("Invio email di attivazione profilo a: " + email);
+        
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom("vincenzo.cusaniello@gmail.com");
+            message.setTo(email);
+            message.setSubject("Profilo Attivato - Elle Studio Pilates");
+            
+            String emailBody = String.format(
+                "Ciao %s!\n\n" +
+                "Siamo felici di informarti che il tuo profilo è stato attivato con successo!\n\n" +
+                "Ora puoi accedere alla piattaforma di Elle Studio Pilates e procedere all'acquisto di uno o più pacchetti a te associati.\n\n" +
+                "Puoi effettuare il login utilizzando le credenziali che hai scelto durante la registrazione.\n\n" +
+                "Per qualsiasi informazione o assistenza, non esitare a contattarci.\n\n" +
+                "Buona navigazione!\n" +
+                "Elle Studio Pilates",
+                username
+            );
+            
+            message.setText(emailBody);
+            mailSender.send(message);
+            
+            log.info("Email di attivazione profilo inviata con successo a: " + email);
+            
+        } catch (Exception e) {
+            log.error("Errore durante l'invio dell'email di attivazione profilo: " + e.getMessage(), e);
+            // Non blocchiamo l'attivazione se l'email fallisce
+        }
+    }
 }
