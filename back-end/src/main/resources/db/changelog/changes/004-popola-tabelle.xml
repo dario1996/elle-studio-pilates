@@ -382,7 +382,7 @@
         <insert tableName="pacchetti">
             <column name="nome" value="Semi Privata - 4 Lezioni"/>
             <column name="descrizione" value="Abbonamento mensile 4 lezioni per 2 persone (50 minuti). Utilizzo di Reformer, Tower, Chair e piccoli attrezzi."/>
-            <column name="categoria" value="SEMI_PRIVATA"/>
+            <column name="categoria" value="STUDIO_INTERMEDIO"/>
             <column name="categorie_lezioni" valueComputed="NULL"/>
             <column name="livello" value="TUTTI"/>
             <column name="durata_minuti" value="50"/>
@@ -397,7 +397,7 @@
         <insert tableName="pacchetti">
             <column name="nome" value="Semi Privata - 8 Lezioni"/>
             <column name="descrizione" value="Abbonamento mensile 8 lezioni per 2 persone (50 minuti). Utilizzo di Reformer, Tower, Chair e piccoli attrezzi."/>
-            <column name="categoria" value="SEMI_PRIVATA"/>
+            <column name="categoria" value="STUDIO_INTERMEDIO"/>
             <column name="categorie_lezioni" valueComputed="NULL"/>
             <column name="livello" value="TUTTI"/>
             <column name="durata_minuti" value="50"/>
@@ -412,7 +412,7 @@
         <insert tableName="pacchetti">
             <column name="nome" value="Semi Privata 3-4 Persone - 4 Lezioni"/>
             <column name="descrizione" value="Abbonamento mensile 4 lezioni per 3-4 persone (50 minuti). Utilizzo di Reformer, Tower, Chair e piccoli attrezzi."/>
-            <column name="categoria" value="SEMI_PRIVATA"/>
+            <column name="categoria" value="STUDIO_INTERMEDIO"/>
             <column name="categorie_lezioni" valueComputed="NULL"/>
             <column name="livello" value="TUTTI"/>
             <column name="durata_minuti" value="50"/>
@@ -427,7 +427,7 @@
         <insert tableName="pacchetti">
             <column name="nome" value="Semi Privata 3-4 Persone - 8 Lezioni"/>
             <column name="descrizione" value="Abbonamento mensile 8 lezioni per 3-4 persone (50 minuti). Utilizzo di Reformer, Tower, Chair e piccoli attrezzi."/>
-            <column name="categoria" value="SEMI_PRIVATA"/>
+            <column name="categoria" value="STUDIO_INTERMEDIO"/>
             <column name="categorie_lezioni" valueComputed="NULL"/>
             <column name="livello" value="TUTTI"/>
             <column name="durata_minuti" value="50"/>
