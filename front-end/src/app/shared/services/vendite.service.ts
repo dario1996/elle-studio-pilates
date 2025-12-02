@@ -26,6 +26,14 @@ export interface Vendita {
   note?: string;
 }
 
+// DTO per la creazione di una vendita (corrisponde a VenditaRequest del backend)
+export interface VenditaRequest {
+  id: number;  // ID dell'utente
+  pacchettoId: number;
+  importo: number;
+  note?: string;
+}
+
 export interface PacchettoAcquistato {
   venditaId: number;
   pacchettoId: number;
@@ -102,7 +110,9 @@ export class VenditeService {
     return this.http.get<StatisticheVendite>(url);
   }
 
-  creaVendita(vendita: Omit<Vendita, 'id'>): Observable<Vendita> {
+  creaVendita(vendita: Omit<Vendita, 'id'>): Observable<Vendita>;
+  creaVendita(vendita: VenditaRequest): Observable<Vendita>;
+  creaVendita(vendita: Omit<Vendita, 'id'> | VenditaRequest): Observable<Vendita> {
     return this.http.post<Vendita>(this.baseUrl, vendita);
   }
 

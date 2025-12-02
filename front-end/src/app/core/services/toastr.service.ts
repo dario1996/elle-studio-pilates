@@ -17,7 +17,7 @@ export class ToastrService {
   private getConfig(options?: ToastOptions): Partial<IndividualConfig> {
     return {
       timeOut: options?.duration || 4000,
-      positionClass: this.getPositionClass(options?.position || 'bottom-right'),
+      positionClass: this.getPositionClass(options?.position || 'top-center'),
       closeButton: options?.dismissible ?? false,
       progressBar: options?.progressBar ?? false,
       disableTimeOut: options?.duration === 0,

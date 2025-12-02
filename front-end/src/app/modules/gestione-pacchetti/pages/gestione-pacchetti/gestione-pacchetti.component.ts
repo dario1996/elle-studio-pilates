@@ -6,7 +6,8 @@ import { PageTitleComponent } from '../../../../core/page-title/page-title.compo
 import { AuthJwtService } from '../../../../core/services/authJwt.service';
 import { UserService } from '../../../../core/services/data/user.service';
 import { PacchettiService, Pacchetto } from '../../../../core/services/pacchetti.service';
-import { VenditeService, PacchettoAcquistato } from '../../../../shared/services/vendite.service';
+import { VenditeService, PacchettoAcquistato, VenditaRequest } from '../../../../shared/services/vendite.service';
+import { ToastrService } from '../../../../core/services/toastr.service';
 import { inject } from '@angular/core';
 
 @Component({
@@ -25,15 +26,9 @@ export class GestionePacchettiComponent implements OnInit {
   private userService = inject(UserService);
   private pacchettiService = inject(PacchettiService);
   private venditeService = inject(VenditeService);
+  private toastr = inject(ToastrService);
 
   title: string = 'Gestione Pacchetti';
-
-  // Toast notification properties
-  showToast = false;
-  toastMessage = '';
-  toastType: 'success' | 'error' | 'info' = 'success';
-  toastIcon = '';
-  private toastTimeout?: number;
 
   // Pacchetti
   pacchettiAcquistati: PacchettoAcquistato[] = [];
@@ -58,7 +53,7 @@ export class GestionePacchettiComponent implements OnInit {
     if (!username) {
       console.error('Username non trovato');
       this.loadingAcquistati = false;
-      this.showToastMessage('Errore: utente non autenticato', 'error');
+      this.toastr.error('Utente non autenticato');
       return;
     }
     
@@ -71,7 +66,7 @@ export class GestionePacchettiComponent implements OnInit {
       error: (error) => {
         console.error('Errore nel caricamento dei pacchetti acquistati:', error);
         this.loadingAcquistati = false;
-        this.showToastMessage('Errore nel caricamento dei pacchetti acquistati', 'error');
+        this.toastr.error('Errore nel caricamento dei pacchetti acquistati');
       }
     });
   }
@@ -85,7 +80,7 @@ export class GestionePacchettiComponent implements OnInit {
     if (!username) {
       console.error('Username non trovato');
       this.loadingPacchetti = false;
-      this.showToastMessage('Errore: utente non autenticato', 'error');
+      this.toastr.error('Utente non autenticato');
       return;
     }
     
@@ -101,14 +96,14 @@ export class GestionePacchettiComponent implements OnInit {
           error: (error) => {
             console.error('Errore nel caricamento dei pacchetti disponibili:', error);
             this.loadingPacchetti = false;
-            this.showToastMessage('Errore nel caricamento dei pacchetti disponibili', 'error');
+            this.toastr.error('Errore nel caricamento dei pacchetti disponibili');
           }
         });
       },
       error: (error) => {
-        console.error('Errore nel recupero dati utente:', error);
+        console.error('Errore nel recupero dei dati utente:', error);
         this.loadingPacchetti = false;
-        this.showToastMessage('Errore nel recupero dati utente', 'error');
+        this.toastr.error('Errore nel recupero dati utente');
       }
     });
   }
@@ -131,36 +126,51 @@ export class GestionePacchettiComponent implements OnInit {
     return percentuale;
   }
 
-  // Acquista un pacchetto (placeholder)
+  // Acquista un pacchetto (pagamento fake)
   acquistaPacchetto(pacchetto: Pacchetto): void {
-    this.showToastMessage(`Funzionalità acquisto pacchetto "${pacchetto.nome}" in sviluppo`, 'info');
-    // TODO: Implementare la logica di acquisto pacchetto
+    const username = this.auth.loggedUser();
+    
+    if (!username) {
+      this.toastr.error('Utente non autenticato');
+      return;
+    }
+
+    // Simula un pagamento fake - crea direttamente una vendita con stato PAID
+    this.userService.getUtenteByUsername(username).subscribe({
+      next: (utente) => {
+        // Usa la struttura VenditaRequest che si aspetta il backend
+        const vendita: VenditaRequest = {
+          id: utente.id,  // ID utente (Long)
+          pacchettoId: pacchetto.id,  // ID pacchetto (Long)
+          importo: pacchetto.prezzo,  // BigDecimal
+          note: 'Pagamento fake - Acquisto dal portale utente'
+        };
+
+        this.venditeService.creaVendita(vendita).subscribe({
+          next: (venditaCreata) => {
+            this.toastr.success(`Pacchetto "${pacchetto.nome}" acquistato con successo!`);
+            
+            // Ricarica i pacchetti acquistati e disponibili
+            setTimeout(() => {
+              this.loadPacchettiAcquistati();
+              this.loadPacchettiDisponibili();
+            }, 500);
+          },
+          error: (error) => {
+            console.error('Errore durante l\'acquisto:', error);
+            this.toastr.error('Errore durante l\'acquisto del pacchetto. Riprova più tardi.');
+          }
+        });
+      },
+      error: (error) => {
+        console.error('Errore nel recupero dati utente:', error);
+        this.toastr.error('Errore nel recupero dati utente');
+      }
+    });
   }
 
   // Toggle visibilità descrizione pacchetto
   toggleDescrizioneVisibile(pacchettoId: number): void {
     this.descrizioneVisibile[pacchettoId] = !this.descrizioneVisibile[pacchettoId];
-  }
-
-  // Toast notification methods
-  showToastMessage(message: string, type: 'success' | 'error' | 'info' = 'success') {
-    this.toastMessage = message;
-    this.toastType = type;
-    this.toastIcon = type === 'success' ? 'success' : type === 'error' ? 'error' : 'info';
-    this.showToast = true;
-    
-    if (this.toastTimeout) {
-      clearTimeout(this.toastTimeout);
-    }
-    this.toastTimeout = window.setTimeout(() => {
-      this.hideToast();
-    }, 3000);
-  }
-  
-  hideToast() {
-    this.showToast = false;
-    if (this.toastTimeout) {
-      clearTimeout(this.toastTimeout);
-    }
   }
 }

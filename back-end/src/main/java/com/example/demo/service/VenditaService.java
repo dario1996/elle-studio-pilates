@@ -61,6 +61,13 @@ public class VenditaService {
         Vendita vendita = new Vendita(utente, pacchetto, importo);
         vendita.setNote(note);
         
+        // Imposta lo stato a PAID (pagamento fake)
+        vendita.marcaComePagata();
+        
+        // Imposta le lezioni rimanenti con il numero di lezioni del pacchetto
+        Integer numeroLezioni = pacchetto.getNumeroLezioni();
+        vendita.setLezioniRimanenti(numeroLezioni != null ? numeroLezioni : 0);
+        
         return venditaRepository.save(vendita);
     }
 

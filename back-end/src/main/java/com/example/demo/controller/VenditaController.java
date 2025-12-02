@@ -33,7 +33,6 @@ import com.example.demo.service.VenditaService;
  */
 @RestController
 @RequestMapping("/api/vendite")
-@PreAuthorize("hasRole('ADMIN')")
 public class VenditaController {
 
     @Autowired
@@ -45,6 +44,7 @@ public class VenditaController {
      * Crea una nuova vendita
      */
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<Vendita> creaVendita(@RequestBody VenditaRequest request) {
         try {
             Vendita vendita = venditaService.creaVendita(
@@ -63,6 +63,7 @@ public class VenditaController {
      * Ottiene una vendita per ID
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Vendita> getVendita(@PathVariable Long id) {
         Optional<Vendita> vendita = venditaService.trovaVenditaPerId(id);
         return vendita.map(ResponseEntity::ok)
@@ -73,6 +74,7 @@ public class VenditaController {
      * Aggiorna una vendita
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Vendita> aggiornaVendita(
             @PathVariable Long id,
             @RequestBody VenditaUpdateRequest request) {
@@ -93,6 +95,7 @@ public class VenditaController {
      * Marca una vendita come pagata
      */
     @PutMapping("/{id}/paga")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Vendita> marcaComePagata(@PathVariable Long id) {
         try {
             Vendita vendita = venditaService.marcaComePagata(id);
@@ -106,6 +109,7 @@ public class VenditaController {
      * Cancella una vendita
      */
     @PutMapping("/{id}/cancella")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Vendita> cancellaVendita(
             @PathVariable Long id,
             @RequestBody Map<String, String> request) {
@@ -122,6 +126,7 @@ public class VenditaController {
      * Elimina una vendita
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> eliminaVendita(@PathVariable Long id) {
         try {
             venditaService.eliminaVendita(id);
@@ -137,6 +142,7 @@ public class VenditaController {
      * Ottiene tutte le vendite con paginazione
      */
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<Vendita>> getTutteLeVendite(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
@@ -156,6 +162,7 @@ public class VenditaController {
      * Ottiene vendite per utente
      */
     @GetMapping("/utente/{username}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Vendita>> getVenditePerUtente(@PathVariable String username) {
         List<Vendita> vendite = venditaService.trovaVenditePerUtente(username);
         return ResponseEntity.ok(vendite);
@@ -185,6 +192,7 @@ public class VenditaController {
      * Ottiene vendite per pacchetto
      */
     @GetMapping("/pacchetto/{pacchettoId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Vendita>> getVenditePerPacchetto(@PathVariable Long pacchettoId) {
         List<Vendita> vendite = venditaService.trovaVenditePerPacchetto(pacchettoId);
         return ResponseEntity.ok(vendite);
@@ -194,6 +202,7 @@ public class VenditaController {
      * Ottiene vendite per stato
      */
     @GetMapping("/stato/{stato}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Vendita>> getVenditePerStato(@PathVariable StatoVendita stato) {
         List<Vendita> vendite = venditaService.trovaVenditePerStato(stato);
         return ResponseEntity.ok(vendite);
@@ -203,6 +212,7 @@ public class VenditaController {
      * Ottiene vendite in un range di date
      */
     @GetMapping("/range")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Vendita>> getVenditeInRange(
             @RequestParam String dataInizio,
             @RequestParam String dataFine) {
@@ -221,6 +231,7 @@ public class VenditaController {
      * Ottiene le ultime vendite
      */
     @GetMapping("/recenti")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Vendita>> getUltimeVendite() {
         List<Vendita> vendite = venditaService.trovaUltimeVendite();
         return ResponseEntity.ok(vendite);
@@ -232,6 +243,7 @@ public class VenditaController {
      * Ottiene le statistiche complete per la pagina statistiche
      */
     @GetMapping("/statistiche")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, Object>> getStatisticheComplete(
             @RequestParam(defaultValue = "ultimo_anno") String periodo,
             @RequestParam(required = false) String dataInizio,
@@ -263,6 +275,7 @@ public class VenditaController {
      * Ottiene le statistiche per la dashboard
      */
     @GetMapping("/statistiche/dashboard")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, Object>> getStatisticheDashboard() {
         Map<String, Object> stats = venditaService.getStatisticheDashboard();
         return ResponseEntity.ok(stats);
@@ -272,6 +285,7 @@ public class VenditaController {
      * Ottiene il trend dei ricavi per Chart.js
      */
     @GetMapping("/statistiche/trend-ricavi")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, Object>> getTrendRicavi() {
         Map<String, Object> trend = venditaService.getTrendRicavi();
         return ResponseEntity.ok(trend);
@@ -281,6 +295,7 @@ public class VenditaController {
      * Ottiene il trend delle vendite per Chart.js
      */
     @GetMapping("/statistiche/trend-vendite")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, Object>> getTrendVendite() {
         Map<String, Object> trend = venditaService.getTrendVendite();
         return ResponseEntity.ok(trend);
@@ -290,6 +305,7 @@ public class VenditaController {
      * Ottiene statistiche per mese in un range
      */
     @GetMapping("/statistiche/per-mese")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Map<String, Object>>> getStatistichePerMese(
             @RequestParam String dataInizio,
             @RequestParam String dataFine) {
@@ -308,6 +324,7 @@ public class VenditaController {
      * Ottiene statistiche per pacchetto in un range
      */
     @GetMapping("/statistiche/per-pacchetto")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Map<String, Object>>> getStatistichePerPacchetto(
             @RequestParam String dataInizio,
             @RequestParam String dataFine) {
@@ -326,6 +343,7 @@ public class VenditaController {
      * Ottiene statistiche per periodo
      */
     @GetMapping("/statistiche/periodo")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, Object>> getStatistichePeriodo(
             @RequestParam String dataInizio,
             @RequestParam String dataFine) {
@@ -344,6 +362,7 @@ public class VenditaController {
      * Verifica se un utente ha acquistato un pacchetto
      */
     @GetMapping("/verifica/{username}/{pacchettoId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<Map<String, Boolean>> verificaAcquisto(
             @PathVariable String username,
             @PathVariable Long pacchettoId) {
