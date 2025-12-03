@@ -93,4 +93,14 @@ public interface PrenotazioneLezioneRepository extends JpaRepository<Prenotazion
      */
     @Query("SELECT COUNT(p) FROM PrenotazioneLezione p WHERE p.utente = :utente AND p.stato = 'CONFERMATA'")
     Long countPrenotazioniConfermateByUtente(@Param("utente") Utenti utente);
+
+    /**
+     * Trova le prenotazioni confermate di oggi dalla ora corrente in poi
+     */
+    @Query("SELECT p FROM PrenotazioneLezione p WHERE p.dataLezione = :dataLezione AND p.stato = :stato AND p.oraInizio >= :oraInizio ORDER BY p.oraInizio ASC")
+    List<PrenotazioneLezione> findByDataLezioneAndStatoAndOraInizioGreaterThanEqual(
+            @Param("dataLezione") LocalDate dataLezione,
+            @Param("stato") StatoPrenotazione stato,
+            @Param("oraInizio") java.time.LocalTime oraInizio
+    );
 }

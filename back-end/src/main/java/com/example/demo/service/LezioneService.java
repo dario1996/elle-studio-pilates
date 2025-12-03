@@ -86,10 +86,58 @@ public class LezioneService {
     @Transactional(readOnly = true)
     public List<LezioneDto> getLezioniOggiDaOraCorrente() {
         LocalDateTime now = LocalDateTime.now();
-        log.info("Recupero lezioni di oggi dalle ore {}", now);
-        List<Lezione> lezioni = lezioneRepository.findLezioniOggiDaOra(now);
-        log.info("Trovate {} lezioni per oggi", lezioni.size());
-        return lezioneMapper.toDtoList(lezioni);
+        java.time.LocalDate oggi = now.toLocalDate();
+        java.time.LocalTime oraCorrente = now.toLocalTime();
+        
+        log.info("Recupero lezioni NON VUOTE di oggi ({}) dalle ore {}", oggi, oraCorrente);
+        
+        // Recupera tutte le prenotazioni confermate di oggi dalla ora corrente in poi
+        List<PrenotazioneLezione> prenotazioni = prenotazioneLezioneRepository
+                .findByDataLezioneAndStatoAndOraInizioGreaterThanEqual(
+                        oggi,
+                        PrenotazioneLezione.StatoPrenotazione.CONFERMATA,
+                        oraCorrente
+                );
+        
+        log.info("Trovate {} prenotazioni confermate per oggi", prenotazioni.size());
+        
+        // Raggruppa per template/orario e crea LezioneDto
+        // Usa una Map per evitare duplicati (stessa lezione con più partecipanti)
+        java.util.Map<String, LezioneDto> lezioniMap = new java.util.LinkedHashMap<>();
+        
+        for (PrenotazioneLezione p : prenotazioni) {
+            // Crea una chiave unica per ogni lezione (template + data + ora)
+            String key = p.getTemplate().getId() + "_" + p.getDataLezione() + "_" + p.getOraInizio();
+            
+            if (!lezioniMap.containsKey(key)) {
+                // Crea un nuovo LezioneDto per questa lezione
+                LezioneDto dto = new LezioneDto();
+                dto.setId(p.getId());
+                dto.setTitolo(p.getTipoLezione());
+                dto.setDataInizio(LocalDateTime.of(p.getDataLezione(), p.getOraInizio()));
+                dto.setDataFine(LocalDateTime.of(p.getDataLezione(), p.getOraFine()));
+                dto.setIstruttore(p.getTemplate().getIstruttore() != null ? p.getTemplate().getIstruttore() : "");
+                dto.setTipoLezione(TipoLezione.valueOf(p.getTipoLezione()));
+                dto.setAttiva(true);
+                dto.setMaxPartecipanti(p.getTemplate().getMaxPartecipanti());
+                
+                // Conta i partecipanti per questa lezione
+                Long numeroPartecipanti = prenotazioneLezioneRepository.countPartecipantiByTemplateAndData(
+                        p.getTemplate().getId(),
+                        p.getDataLezione()
+                );
+                
+                // Aggiungi solo se ha almeno un partecipante (dovrebbe sempre essere vero qui)
+                if (numeroPartecipanti > 0) {
+                    dto.setPartecipanti(new ArrayList<>()); // Lista vuota per ora
+                    lezioniMap.put(key, dto);
+                }
+            }
+        }
+        
+        List<LezioneDto> result = new ArrayList<>(lezioniMap.values());
+        log.info("Restituite {} lezioni NON VUOTE per oggi", result.size());
+        return result;
     }
 
     @Transactional(readOnly = true)
