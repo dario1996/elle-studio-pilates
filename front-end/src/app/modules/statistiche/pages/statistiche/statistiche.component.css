@@ -22,23 +22,18 @@
 }
 
 .dashboard-stats .row {
-  justify-content: center;
-  align-items: stretch;
   display: flex;
   align-items: stretch;
+  gap: 20px; /* Gap uniforme tra tutte le card */
   max-width: 100%;
   width: 100%;
   margin: 0;
 }
 
 .dashboard-stats .col-md-3 {
-  flex: 1;
+  flex: 1 1 0; /* Tutte le card hanno la stessa larghezza */
   max-width: 350px;
   min-width: 260px;
-}
-
-.dashboard-stats .col-md-3:not(:last-child) {
-  margin-right: 20px; /* Gap tra le card come nella dashboard */
 }
 
 .stats-card {
@@ -159,7 +154,25 @@
 }
 
 /* Responsive design for stats cards */
+@media (max-width: 1400px) {
+  .dashboard-stats .row {
+    gap: 18px;
+  }
+  
+  .dashboard-stats .col-md-3 {
+    max-width: 280px;
+  }
+}
+
 @media (max-width: 1200px) {
+  .dashboard-stats .row {
+    gap: 16px;
+  }
+  
+  .dashboard-stats .col-md-3 {
+    max-width: 260px;
+  }
+  
   .main-number {
     font-size: 22px; /* Ridotto da 42px */
   }
@@ -170,6 +183,32 @@
   
   .stats-card {
     padding: 20px;
+  }
+}
+
+@media (max-width: 992px) and (min-width: 769px) {
+  .dashboard-stats .row {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  .dashboard-stats .col-md-3 {
+    flex: 1 1 calc(50% - 8px); /* 2 card per riga su tablet */
+    max-width: calc(50% - 8px);
+    min-width: unset;
+  }
+}
+
+@media (max-width: 768px) and (min-width: 577px) {
+  .dashboard-stats .row {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  .dashboard-stats .col-md-3 {
+    flex: 1 1 calc(50% - 8px); /* 2 card per riga */
+    max-width: calc(50% - 8px);
+    min-width: unset;
   }
 }
 
@@ -207,6 +246,17 @@
 }
 
 @media (max-width: 576px) {
+  .dashboard-stats .row {
+    flex-direction: column; /* Stack verticale solo per smartphone */
+    gap: 16px;
+  }
+  
+  .dashboard-stats .col-md-3 {
+    flex: 1;
+    max-width: 100%;
+    min-width: unset;
+  }
+
   .main-number {
     font-size: 16px; /* Ridotto da 28px */
   }
