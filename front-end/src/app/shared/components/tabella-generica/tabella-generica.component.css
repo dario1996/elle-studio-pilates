@@ -473,29 +473,46 @@ th .fa {
   color: #1f09ee !important;
 } */
 
-.action-buttons .btn-outline-danger *,
-.action-buttons .btn-danger * {
+/* Colore cestino - gestito dalla classe trash-icon */
+.action-buttons .btn-outline-danger *:not(.trash-icon),
+.action-buttons .btn-danger *:not(.trash-icon) {
   color: #de8a8a !important;
   transition: all 0.25s ease !important;
 }
 
-.action-buttons .btn-outline-danger:hover *,
-.action-buttons .btn-danger:hover * {
+.action-buttons .btn-outline-danger .trash-icon,
+.action-buttons .btn-danger .trash-icon {
+  color: #9ca3af !important; /* Grigio chiaro */
+  transition: all 0.3s ease !important;
+}
+
+.action-buttons .btn-outline-danger:hover *:not(.trash-icon),
+.action-buttons .btn-danger:hover *:not(.trash-icon) {
   color: #ff5353 !important;
   transform: translateY(-2px);
   transition: all 0.25s ease !important;
 }
 
+/* Animazione cestino - apertura coperchio */
+.trash-icon {
+  color: #9ca3af !important; /* Grigio chiaro */
+  transition: all 0.3s ease !important;
+}
+
+.action-buttons .btn-danger:hover .trash-icon {
+  color: #4b5563 !important; /* Grigio più scuro su hover */
+  transform: translateY(-2px) rotate(-10deg) !important;
+  transform-origin: bottom right;
+}
+
 .action-buttons .btn-outline-warning *,
 .action-buttons .btn-warning * {
-  color: #ffb84d !important;
+  /* Rimosso colore generico - gestito dalle classi specifiche toggle */
 }
 
 .action-buttons .btn-outline-warning:hover *,
 .action-buttons .btn-warning:hover * {
-  color: #ff8c00 !important;
-  transform: translateY(-2px);
-  transition: all 0.25s ease !important;
+  /* Rimosso colore generico - gestito dalle classi specifiche toggle */
 }
 
 .action-buttons .btn-outline-primary *,
@@ -503,31 +520,44 @@ th .fa {
   color: #0d6efd !important;
 }
 
-/* Tasto modifica in tabella-generica-component*/
+/* Tasto modifica in tabella-generica-component - Icona quadrato con matita */
 .action-buttons .btn-outline-secondary *,
 .action-buttons .btn-secondary * {
-  color: #a4a4a4 !important;
+  color: #9ca3af !important; /* Grigio chiaro */
 }
 
 .action-buttons .btn-outline-secondary:hover *,
 .action-buttons .btn-secondary:hover * {
-  color: #000000 !important;
+  color: #4b5563 !important; /* Grigio più scuro su hover */
   transform: translateY(-2px);
   transition: all 0.25s ease !important;
 }
 
-/* Tasto attiva utente (success) */
-.action-buttons .btn-outline-success *,
-.action-buttons .btn-success * {
-  color: #28a745 !important;
-  justify-content: center;
+/* Tasto attiva/disattiva utente - Toggle con colori pastello */
+.action-buttons .btn-warning .toggle-active,
+.action-buttons .btn-warning.toggle-active,
+.toggle-active {
+  color: #86d8a8 !important; /* Verde pastello per utente attivo */
+  transition: all 0.3s ease !important;
 }
 
-.action-buttons .btn-outline-success:hover *,
-.action-buttons .btn-success:hover * {
-  color: #20c997 !important;
+.action-buttons .btn-success .toggle-inactive,
+.action-buttons .btn-success.toggle-inactive,
+.toggle-inactive {
+  color: #ffb3b3 !important; /* Rosso pastello per utente inattivo */
+  transition: all 0.3s ease !important;
+}
+
+.action-buttons .btn-warning:hover .toggle-active,
+.action-buttons .btn-warning:hover.toggle-active {
+  color: #5ec97e !important; /* Verde più scuro su hover */
   transform: translateY(-2px);
-  transition: all 0.25s ease !important;
+}
+
+.action-buttons .btn-success:hover .toggle-inactive,
+.action-buttons .btn-success:hover.toggle-inactive {
+  color: #ff8585 !important; /* Rosso più scuro su hover */
+  transform: translateY(-2px);
 }
 
 /* ================== BADGE PERSONALIZZATI =================== */

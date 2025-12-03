@@ -164,25 +164,25 @@
 }
 
 ::ng-deep .fc-toolbar-title {
-  font-size: 24px !important;
+  font-size: 16px !important;
   font-weight: 700;
   color: #1f2937;
   letter-spacing: -0.5px;
 }
 
-/* Toolbar buttons: stile elegante e minimal */
+/* Toolbar buttons: stile coerente con quick-action-btn */
 ::ng-deep .fc-button {
-  background: #ffffff !important;
-  border: 1px solid #e5e7eb !important;
+  background: white !important;
+  border: 1px solid white !important;
   color: #374151 !important;
-  font-weight: 600;
-  padding: 0.5rem 1rem;
-  border-radius: 8px !important;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+  font-weight: 500;
+  padding: 8px 8px;
+  border-radius: 6px !important;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.05) !important;
   transition: all 0.2s ease;
   outline: none !important;
   text-decoration: none;
-  font-size: 14px;
+  font-size: 12px !important;
   margin: 0 4px !important;
 }
 
@@ -237,31 +237,31 @@
 }
 
 ::ng-deep .fc-button:hover {
-  background: #f9fafb !important;
-  border-color: #c99e67 !important;
-  color: #c99e67 !important;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(201, 158, 103, 0.1) !important;
+  background: white !important;
+  border-color: var(--color-BORDO) !important;
+  color: #846843 !important;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1) !important;
+  transform: none;
 }
 
 ::ng-deep .fc-button-primary {
-  background: #ffffff !important;
-  border: 1px solid #e5e7eb !important;
+  background: white !important;
+  border: 1px solid white !important;
   color: #374151 !important;
 }
 ::ng-deep .fc-button-primary:hover {
-  background: #f9fafb !important;
-  border-color: #c99e67 !important;
-  color: #c99e67 !important;
+  background: white !important;
+  border-color: var(--color-BORDO) !important;
+  color: #846843 !important;
 }
 ::ng-deep .fc-button-active,
 ::ng-deep .fc-button.fc-button-active {
   background: #c99e67 !important;
   color: #ffffff !important;
   border: 1px solid #c99e67 !important;
-  border-radius: 8px !important;
+  border-radius: 6px !important;
   box-shadow: 0 2px 6px rgba(201, 158, 103, 0.25) !important;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 /* Assicura che i bottoni abbiano una dimensione minima */

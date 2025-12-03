@@ -74,3 +74,20 @@
 .form-control {
   font-size: 12px;
 }
+
+/* Stile per il form-select per renderlo identico al form-control */
+.form-select {
+  font-size: 12px;
+  height: calc(1.5em + 0.75rem + 2px); /* Stessa altezza del form-control */
+  padding: 0.375rem 2.25rem 0.375rem 0.75rem; /* Stesso padding del form-control */
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  background-color: #fff;
+  color: #495057;
+}
+
+.form-select:focus {
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}

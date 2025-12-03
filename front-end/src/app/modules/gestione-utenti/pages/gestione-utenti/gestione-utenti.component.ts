@@ -70,6 +70,9 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
   searchTerm = '';
   private searchSubject = new Subject<string>();
 
+  // Filtro stato
+  statoFiltro = '';
+
   buttons: ButtonConfig[] = [
     {
       text: 'Filtri',
@@ -176,6 +179,11 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
         if (!matches) {
           return false;
         }
+      }
+
+      // Filtro stato attivo/disattivato
+      if (this.statoFiltro && u.attivo !== this.statoFiltro) {
+        return false;
       }
 
       const nominativo = `${u.nome || ''} ${u.cognome || ''}`.trim().toLowerCase() || u.username.toLowerCase();
@@ -489,6 +497,10 @@ export class GestioneUtentiComponent implements OnInit, AfterViewInit {
 
   clearSearch(): void {
     this.searchTerm = '';
+    this.applicaFiltri();
+  }
+
+  onStatoFilterChange(): void {
     this.applicaFiltri();
   }
 }

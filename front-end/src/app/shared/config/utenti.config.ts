@@ -51,26 +51,26 @@ export const UTENTI_AZIONI: IAzioneDef[] = [
   // },
   {
     label: 'Modifica',
-    icon: 'fa fa-pen',
+    icon: 'fa-solid fa-pen-to-square',
     action: AzioneType.Edit,
     color: AzioneColor.Secondary,
   },
   {
     label: 'Elimina',
-    icon: 'fa fa-trash',
+    icon: 'fa fa-trash trash-icon',
     action: AzioneType.Delete,
     color: AzioneColor.Danger,
   },
   {
     label: 'Disattiva',
-    icon: 'fa fa-user-xmark',
+    icon: 'fa-solid fa-toggle-on toggle-active',
     action: AzioneType.Disable,
     color: AzioneColor.Warning,
     condition: (item: any) => item.attivo === 'Attivo' || item.attivo === 'Si'
   },
   {
     label: 'Attiva',
-    icon: 'fa fa-user-check',
+    icon: 'fa-solid fa-toggle-off toggle-inactive',
     action: AzioneType.Enable,
     color: AzioneColor.Success,
     condition: (item: any) => item.attivo === 'Non attivo' || item.attivo === 'No'

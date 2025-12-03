@@ -21,9 +21,9 @@
     </div>
     <div class="page-content" #pageContentInner>
       <div #pageContentInner class="page-content-inner">
-        <!-- Campo di Ricerca Rapida -->
+        <!-- Campo di Ricerca Rapida e Filtro Stato -->
         <div class="row mb-3">
-          <div class="col-md-6">
+          <div class="col-md-5">
             <div class="input-group">
               <span class="input-group-text">
                 <i class="fas fa-search"></i>
@@ -43,6 +43,21 @@
                 title="Cancella ricerca">
                 <i class="fas fa-times"></i>
               </button>
+            </div>
+          </div>
+          <div class="col-md-3 ms-3">
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="fas fa-filter"></i>
+              </span>
+              <select 
+                class="form-select"
+                [(ngModel)]="statoFiltro"
+                (change)="onStatoFilterChange()">
+                <option value="">Tutti gli stati</option>
+                <option value="Attivo">Solo Attivi</option>
+                <option value="Non attivo">Solo Disattivati</option>
+              </select>
             </div>
           </div>
         </div>
