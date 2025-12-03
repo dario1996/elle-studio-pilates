@@ -100,17 +100,6 @@
   </div>
 </div>
 
-<!-- Toast Badge Notification -->
-<div class="toast-badge" [class.show]="showToast" [ngClass]="toastType">
-  <div class="toast-content">
-    <i class="toast-icon">{{ toastIcon }}</i>
-    <span class="toast-message">{{ toastMessage }}</span>
-    <button type="button" class="toast-close" (click)="hideToast()">
-      close
-    </button>
-  </div>
-</div>
-
 <!-- Modal Cambio Password -->
 <div class="modal-overlay" [class.show]="showPasswordModal" (click)="closePasswordModal()">
   <div class="modal-container" (click)="$event.stopPropagation()">

@@ -70,6 +70,16 @@ export class AgendaComponent implements OnInit {
     slotMinTime: '07:00:00',
     slotMaxTime: '22:00:00',
     slotDuration: '00:30:00',
+    slotLabelFormat: {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    },
+    dayHeaderFormat: {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'numeric'
+    },
     allDaySlot: false,
     nowIndicator: true,
     businessHours: {
@@ -367,7 +377,7 @@ export class AgendaComponent implements OnInit {
     }
   }
 
-  // Renderizza il contenuto degli eventi con conteggio dinamico
+  // Renderizza il contenuto degli eventi con conteggio dinamico e barra di progresso
   renderEventContent(eventInfo: any) {
     const template = eventInfo.event.extendedProps?.template;
     if (!template) {
@@ -395,12 +405,20 @@ export class AgendaComponent implements OnInit {
     
     const baseTitle = template.titolo || eventInfo.event.title;
     const isFull = prenotazioniCount >= maxPartecipanti;
+    const percentage = Math.min(100, (prenotazioniCount / maxPartecipanti) * 100);
     
-    const checkIcon = isFull ? '<i class="fas fa-check-circle" style="color: #10b981; font-size: 16px; margin-left: 6px;"></i>' : '';
+    const checkIcon = isFull ? '<i class="fas fa-check-circle" style="color: #10b981; font-size: 14px;"></i>' : '';
     
     return { 
-      html: `<div class="fc-event-title" style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 2px 4px;">
-               <span style="color: #1f2937;">${baseTitle} <strong style="font-weight: 700; font-size: 11px;">(${prenotazioniCount}/${maxPartecipanti})</strong></span>${checkIcon}
+      html: `<div style="position: relative; width: 100%; height: 100%; padding: 4px 6px; display: flex; flex-direction: column; justify-content: space-between;">
+               <div style="display: flex; align-items: flex-start; justify-content: space-between; flex: 1;">
+                 <span style="color: #1f2937; font-weight: 600; font-size: 10px; line-height: 1.3;">${baseTitle}</span>
+                 ${checkIcon}
+               </div>
+               <div style="display: flex; align-items: center; justify-content: flex-end; margin-top: 2px;">
+                 <strong style="font-weight: 600; font-size: 10px; color: #6b7280;">(${prenotazioniCount}/${maxPartecipanti})</strong>
+               </div>
+               <div class="event-progress-bar" style="width: ${percentage}%;"></div>
              </div>` 
     };
   }
@@ -410,22 +428,15 @@ export class AgendaComponent implements OnInit {
     const template = info.event.extendedProps?.template;
     const tipoLezione = info.event.extendedProps?.tipoLezione;
     
-    // Mappa i colori per tipo di lezione
-    const coloriTipo: { [key: string]: string } = {
-      'PRIVATA': '#ec4899',
-      'PRIMA_LEZIONE': '#8b5cf6',
-      'SEMI_PRIVATA': '#14b8a6',
-      'PILATES_MATWORK': '#ef4444',
-      'YOGA': '#84cc16',
-      'STUDIO_INTERMEDIO': '#f59e0b',
-      'REFORMER_INTERMEDIO': '#3b82f6',
-      'STUDIO_POSTURALE': '#a855f7'
-    };
-    
-    // Applica sempre lo sfondo bianco e il bordo colorato
+    // Applica sempre lo sfondo bianco e bordo neutro
     info.el.style.backgroundColor = '#ffffff';
-    info.el.style.borderRight = `4px solid ${coloriTipo[tipoLezione] || '#c99e67'}`;
+    info.el.style.border = '1px solid #e5e7eb';
     info.el.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)';
+    
+    // Aggiungi l'attributo data-tipo per il CSS
+    if (tipoLezione) {
+      info.el.setAttribute('data-tipo', tipoLezione);
+    }
     
     if (!template) return;
 
@@ -447,7 +458,8 @@ export class AgendaComponent implements OnInit {
     
     if (isFull) {
       // Aggiungi un'ombra più accentuata per gli slot pieni
-      info.el.style.boxShadow = '0 2px 6px rgba(16, 185, 129, 0.3)';
+      info.el.style.boxShadow = '0 2px 8px rgba(16, 185, 129, 0.25)';
+      info.el.style.border = '1px solid #d1fae5';
     }
   }
 

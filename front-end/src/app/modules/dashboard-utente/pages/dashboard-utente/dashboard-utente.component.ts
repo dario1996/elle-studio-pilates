@@ -462,4 +462,85 @@ export class DashboardUtenteComponent implements OnInit, AfterViewInit {
   vaiAPacchetti(): void {
     this.router.navigate(['gestionale-elle-studio/gestione-pacchetti']);
   }
+
+  /** Ottiene il background image per tipo lezione */
+  getLezioneBackground(tipo: string): string {
+    if (!tipo) return 'assets/images/lezioni_bg/lezione_privata.png';
+    
+    const tipoLowerCase = tipo.toLowerCase().replace(/\s+/g, '_');
+    
+    switch (tipoLowerCase) {
+      case 'privata':
+      case 'semi_privata':
+      case 'prima_lezione':
+        return 'assets/images/lezioni_bg/lezione_privata.png';
+      case 'pilates_matwork':
+        return 'assets/images/lezioni_bg/pilates_matwork.png';
+      case 'studio_intermedio':
+      case 'reformer_intermedio':
+        return 'assets/images/lezioni_bg/studio_intermedio.png';
+      case 'yoga':
+        return 'assets/images/lezioni_bg/yoga.png';
+      case 'studio_posturale':
+        return 'assets/images/lezioni_bg/posturale.png';
+      default:
+        return 'assets/images/lezioni_bg/lezione_privata.png';
+    }
+  }
+
+  /** Formatta la data come "5 Dicembre 2025" */
+  formatDataEstesa(data: string | Date): string {
+    const d = typeof data === 'string' ? new Date(data) : data as Date;
+    const mesi = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 
+                  'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
+    const giorno = d.getDate();
+    const mese = mesi[d.getMonth()];
+    const anno = d.getFullYear();
+    return `${giorno} ${mese} ${anno}`;
+  }
+
+  /** Formatta l'orario come "dalle ore 10:00 alle ore 10:55" */
+  formatOrarioEsteso(dataInizio: string | Date, dataFine: string | Date): string {
+    const inizio = typeof dataInizio === 'string' ? new Date(dataInizio) : dataInizio as Date;
+    const fine = typeof dataFine === 'string' ? new Date(dataFine) : dataFine as Date;
+    const h1 = inizio.getHours().toString().padStart(2, '0');
+    const min1 = inizio.getMinutes().toString().padStart(2, '0');
+    const h2 = fine.getHours().toString().padStart(2, '0');
+    const min2 = fine.getMinutes().toString().padStart(2, '0');
+    return `dalle ore ${h1}:${min1} alle ore ${h2}:${min2}`;
+  }
+
+  /** Formatta il tipo di lezione in modo leggibile */
+  formatTipoLezioneLeggibile(tipo: string): string {
+    if (!tipo) return '';
+    
+    const tipoLowerCase = tipo.toLowerCase().replace(/\s+/g, '_');
+    
+    switch (tipoLowerCase) {
+      case 'privata':
+      case 'lezione_privata':
+        return 'Lezione Privata';
+      case 'semi_privata':
+        return 'Semi Privata';
+      case 'pilates_matwork':
+        return 'Pilates Matwork';
+      case 'studio_intermedio':
+        return 'Studio Intermedio';
+      case 'reformer_intermedio':
+        return 'Reformer Intermedio';
+      case 'yoga':
+        return 'Yoga';
+      case 'studio_posturale':
+        return 'Studio Posturale';
+      case 'prima_lezione':
+        return 'Prima Lezione';
+      default:
+        // Capitalizza ogni parola separata da underscore o spazio
+        return tipo
+          .replace(/_/g, ' ')
+          .split(' ')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+          .join(' ');
+    }
+  }
 }

@@ -15,6 +15,7 @@
     transform: translateY(0);
   }
 }
+
 /* Forza la vista agenda a occupare tutta la larghezza del container */
 ::ng-deep .fc-list,
 ::ng-deep .fc-list-table,
@@ -45,11 +46,10 @@
 }
 .calendar-container {
   background: white;
-  border-radius: 6px;
-  padding: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  border: 1px solid #c99e67;
-  border-top: 4px solid #c99e67;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
   transition: all 0.3s ease;
   position: relative;
   flex: 1 1 auto;
@@ -58,26 +58,10 @@
   overflow-x: hidden;
   display: flex;
   scrollbar-width: thin;
-  scrollbar-color: var(--color-BORDO) #f8f8f8;
+  scrollbar-color: #c99e67 #f8f8f8;
 }
 
-.fc-view-harness {
-  background: white;
-  border-radius: 6px;
-  padding: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  border: 1px solid #c99e67;
-  border-top: 4px solid #c99e67;
-  transition: all 0.3s ease;
-  position: relative;
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  display: flex;
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-BORDO) #f8f8f8;
-}
+
 
 /* Personalizzazioni aggiuntive per FullCalendar */
 ::ng-deep .fc-popover {
@@ -89,14 +73,63 @@
   font-family: 'Montserrat', sans-serif;
 }
 
+/* Stile vista Lista/Agenda */
 ::ng-deep .fc-list-event-title {
   font-family: 'Montserrat', sans-serif;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 14px;
+  color: #1f2937;
 }
 
 ::ng-deep .fc-list-event-time {
   font-family: 'Montserrat', sans-serif;
-  font-weight: 400;
+  font-weight: 500;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+::ng-deep .fc-list-day-cushion {
+  background: #fafafa !important;
+  color: #c99e67 !important;
+  font-weight: 700;
+  padding: 12px 16px;
+  border-left: 4px solid #c99e67;
+  text-transform: capitalize;
+  text-decoration: none !important;
+}
+
+::ng-deep .fc-list-day-cushion a {
+  color: #c99e67 !important;
+  text-decoration: none !important;
+}
+
+::ng-deep .fc-list-event {
+  background: white;
+  border-left: 3px solid transparent;
+  transition: all 0.2s ease;
+}
+
+::ng-deep .fc-list-event:hover {
+  background: #fafafa;
+  border-left-color: #c99e67;
+}
+
+::ng-deep .fc-list-event-dot {
+  display: none;
+}
+
+::ng-deep .fc-list-table {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+::ng-deep .fc-list-empty {
+  background: white;
+  color: #6b7280;
+  padding: 40px;
+  text-align: center;
+  font-size: 14px;
 }
 
 /* Orari nella vista settimanale/giornaliera */
@@ -119,26 +152,36 @@
 
 ::ng-deep .fc-toolbar {
   margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f3f4f6;
+}
+
+::ng-deep .fc-toolbar-chunk:last-child {
+  gap: 12px;
+  display: flex;
 }
 
 ::ng-deep .fc-toolbar-title {
-  font-size: 15px;
-  color: #374151;
-  font-size: 20px !important;
+  font-size: 24px !important;
+  font-weight: 700;
+  color: #1f2937;
+  letter-spacing: -0.5px;
 }
 
-/* Toolbar buttons: solo testo nero, nessun bordo/sfondo, effetto solo su attivo */
+/* Toolbar buttons: stile elegante e minimal */
 ::ng-deep .fc-button {
-  background: #fff !important;
-  border: none !important;
-  color: #222 !important;
-  font-weight: 500;
-  padding: 0.45rem 0.9rem;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  transition: color 0.2s, background 0.2s, border 0.2s;
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  color: #374151 !important;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 8px !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+  transition: all 0.2s ease;
   outline: none !important;
   text-decoration: none;
+  font-size: 14px;
+  margin: 0 4px !important;
 }
 
 /* Font weight per i titoli degli eventi */
@@ -149,49 +192,74 @@
 
 /* Font weight per i numeri dei giorni */
 ::ng-deep .fc-daygrid-day-number {
-  font-weight: 500;
+  font-weight: 600;
   font-family: 'Montserrat', sans-serif;
   text-decoration: none !important;
-  color: #3e3e3e;
+  color: #374151;
+  padding: 4px 8px;
 }
 
 /* Font weight per le intestazioni dei giorni */
 ::ng-deep .fc-col-header-cell-cushion {
-  font-weight: 500;
+  font-weight: 600;
   font-family: 'Montserrat', sans-serif;
-  color: #3e3e3e;
+  color: #374151;
   text-decoration: none !important;
-  font-size: 12px !important;
+  font-size: 13px !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 12px 8px;
+}
+
+::ng-deep .fc-col-header-cell {
+  background: #fafafa;
+  border-color: #e5e7eb !important;
 }
 
 ::ng-deep .fc-scrollgrid-section-header {
-  background-color: #10b981;
+  background: #fafafa;
+  border-color: #e5e7eb !important;
+}
+
+::ng-deep .fc-theme-standard td,
+::ng-deep .fc-theme-standard th {
+  border-color: #e5e7eb !important;
+}
+
+::ng-deep .fc-scrollgrid {
+  border-color: #e5e7eb !important;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 ::ng-deep .fc-button:hover {
-  /* background: #f5f5f5 !important; */
+  background: #f9fafb !important;
+  border-color: #c99e67 !important;
   color: #c99e67 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(201, 158, 103, 0.1) !important;
 }
 
 ::ng-deep .fc-button-primary {
-  background: #fff !important;
-  border: none !important;
-  color: #222 !important;
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  color: #374151 !important;
 }
 ::ng-deep .fc-button-primary:hover {
-  /* background: #f5f5f5 !important; */
+  background: #f9fafb !important;
+  border-color: #c99e67 !important;
   color: #c99e67 !important;
 }
 ::ng-deep .fc-button-active,
 ::ng-deep .fc-button.fc-button-active {
-  /* background: #f8f5f1 !important; */
-  color: #c99e67 !important;
-  border: none !important;
-  border-radius: 6px !important;
-  box-shadow: none !important;
-  /* text-decoration: underline 2px #c99e67; */
-  text-underline-offset: 3px;
-  font-weight: 550;
+  background: #c99e67 !important;
+  color: #ffffff !important;
+  border: 1px solid #c99e67 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 6px rgba(201, 158, 103, 0.25) !important;
+  font-weight: 700;
 }
 
 /* Assicura che i bottoni abbiano una dimensione minima */
@@ -234,21 +302,23 @@
 }
 
 ::ng-deep .fc-event {
-  border-radius: 4px;
-  border: none;
-  border-right: 4px solid;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
   font-weight: 500;
   font-size: 0.875rem;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
   background-color: #ffffff !important;
   color: #1f2937 !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
 }
 
 ::ng-deep .fc-event:hover {
-  opacity: 0.95;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+  transform: translateY(-1px);
+  border-color: #d1d5db;
 }
 
 ::ng-deep .fc-event-title {
@@ -263,37 +333,58 @@
   color: #1f2937 !important;
 }
 
-/* Bordi colorati per le diverse tipologie di lezione */
-::ng-deep .fc-event[data-tipo="PRIVATA"] {
-  border-right-color: #ec4899;
+/* Barra di progresso colorata in basso per le diverse tipologie di lezione */
+::ng-deep .fc-event::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  background: #e5e7eb;
+  width: 100%;
+  z-index: 1;
 }
 
-::ng-deep .fc-event[data-tipo="PRIMA_LEZIONE"] {
-  border-right-color: #8b5cf6;
+::ng-deep .fc-event .event-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 5px;
+  transition: width 0.3s ease;
+  z-index: 2;
+  border-radius: 0 0 8px 8px;
 }
 
-::ng-deep .fc-event[data-tipo="SEMI_PRIVATA"] {
-  border-right-color: #14b8a6;
+::ng-deep .fc-event[data-tipo="PRIVATA"] .event-progress-bar {
+  background: linear-gradient(90deg, #ec4899 0%, #f472b6 100%);
 }
 
-::ng-deep .fc-event[data-tipo="PILATES_MATWORK"] {
-  border-right-color: #ef4444;
+::ng-deep .fc-event[data-tipo="PRIMA_LEZIONE"] .event-progress-bar {
+  background: linear-gradient(90deg, #8b5cf6 0%, #a78bfa 100%);
 }
 
-::ng-deep .fc-event[data-tipo="YOGA"] {
-  border-right-color: #84cc16;
+::ng-deep .fc-event[data-tipo="SEMI_PRIVATA"] .event-progress-bar {
+  background: linear-gradient(90deg, #14b8a6 0%, #2dd4bf 100%);
 }
 
-::ng-deep .fc-event[data-tipo="STUDIO_INTERMEDIO"] {
-  border-right-color: #f59e0b;
+::ng-deep .fc-event[data-tipo="PILATES_MATWORK"] .event-progress-bar {
+  background: linear-gradient(90deg, #ef4444 0%, #f87171 100%);
 }
 
-::ng-deep .fc-event[data-tipo="REFORMER_INTERMEDIO"] {
-  border-right-color: #3b82f6;
+::ng-deep .fc-event[data-tipo="YOGA"] .event-progress-bar {
+  background: linear-gradient(90deg, #84cc16 0%, #a3e635 100%);
 }
 
-::ng-deep .fc-event[data-tipo="STUDIO_POSTURALE"] {
-  border-right-color: #a855f7;
+::ng-deep .fc-event[data-tipo="STUDIO_INTERMEDIO"] .event-progress-bar {
+  background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%);
+}
+
+::ng-deep .fc-event[data-tipo="REFORMER_INTERMEDIO"] .event-progress-bar {
+  background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 100%);
+}
+
+::ng-deep .fc-event[data-tipo="STUDIO_POSTURALE"] .event-progress-bar {
+  background: linear-gradient(90deg, #a855f7 0%, #c084fc 100%);
 }
 
 /* Business hours highlighting */
@@ -311,15 +402,47 @@
   color: #6b7280;
 }
 
-/* Weekend styling */
+/* Stile generale celle giorni */
+::ng-deep .fc-daygrid-day {
+  transition: all 0.2s ease;
+}
+
+::ng-deep .fc-daygrid-day:hover {
+  background-color: rgba(201, 158, 103, 0.03);
+}
+
+/* Weekend styling - Studio chiuso */
 ::ng-deep .fc-day-sat,
 ::ng-deep .fc-day-sun {
-  background-color: #fef3c7;
+  background-color: #e5e7eb;
+  opacity: 0.85;
+}
+
+::ng-deep .fc-day-sat .fc-daygrid-day-frame,
+::ng-deep .fc-day-sun .fc-daygrid-day-frame {
+  background-color: #e5e7eb;
+}
+
+::ng-deep .fc-day-sat .fc-daygrid-day-number,
+::ng-deep .fc-day-sun .fc-daygrid-day-number {
+  color: #6b7280;
 }
 
 /* Today highlighting */
 ::ng-deep .fc-day-today {
-  background-color: #eff6ff !important;
+  background: rgba(201, 158, 103, 0.06) !important;
+}
+
+::ng-deep .fc-day-today .fc-daygrid-day-number {
+  background: #c99e67;
+  color: white;
+  font-weight: 700;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Rende scrollabile solo la parte interna dell'agenda (vista calendario), bloccando la toolbar/header */

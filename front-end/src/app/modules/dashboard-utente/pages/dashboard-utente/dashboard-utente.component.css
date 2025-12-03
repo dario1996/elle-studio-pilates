@@ -540,6 +540,106 @@
   border-radius: 10px;
 }
 
+/* Nuovo stile con background image */
+.lezione-card-image {
+  position: relative;
+  min-height: 140px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.lezione-card-image:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* Overlay gradient: da nero semi-trasparente a trasparente */
+.lezione-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0.1) 100%);
+  z-index: 1;
+}
+
+/* Contenuto sopra l'overlay */
+.lezione-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  min-height: 140px;
+  padding: 16px 18px;
+}
+
+/* Header con nome lezione */
+.lezione-header-image {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.nome-lezione-image {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+  text-transform: capitalize;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.3px;
+}
+
+/* Footer con data e ora */
+.lezione-footer-image {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.datetime-info-image {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: right;
+}
+
+.datetime-row-image {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.datetime-row-image i {
+  color: white;
+  font-size: 14px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.data-text-image,
+.ora-text-image {
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.data-text-image {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* Vecchi stili mantenuti per compatibilità */
 .lezione-card-full {
   background: white;
   border: 1px solid #e0e0e0;

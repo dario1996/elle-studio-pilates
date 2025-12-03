@@ -114,27 +114,34 @@
 
             <!-- Lista lezioni del giorno selezionato o tutte le lezioni -->
             <div *ngIf="(visualizzaTutte || giornoSelezionato) && getLezioniDaVisualizzare().length > 0" class="lezioni-list-main">
-              <div class="lezione-card-full" *ngFor="let lezione of getLezioniDaVisualizzare()">
-                <div class="lezione-header-full">
-                  <div class="lezione-date-info">
-                    <div class="lezione-day-name">{{ formatGiornoSettimana(lezione.dataInizio) }}</div>
-                    <div class="lezione-date">{{ formatDateOnly(lezione.dataInizio) }}</div>
+              <div class="lezione-card-image" *ngFor="let lezione of getLezioniDaVisualizzare()"
+                   [style.background-image]="'url(' + getLezioneBackground(lezione.tipo) + ')'">
+                
+                <!-- Overlay gradient -->
+                <div class="lezione-overlay"></div>
+                
+                <!-- Contenuto -->
+                <div class="lezione-content">
+                  <!-- Header: nome lezione -->
+                  <div class="lezione-header-image">
+                    <h3 class="nome-lezione-image">{{ formatTipoLezioneLeggibile(lezione.tipo) }}</h3>
                   </div>
-                  <div class="lezione-time-info">
-                    <i class="fas fa-clock"></i>
-                    {{ formatTimeRange(lezione.dataInizio, lezione.dataFine) }}
+                  
+                  <!-- Footer: data e ora -->
+                  <div class="lezione-footer-image">
+                    <div class="datetime-info-image">
+                      <div class="datetime-row-image">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span class="data-text-image">{{ formatDataEstesa(lezione.dataInizio) }}</span>
+                      </div>
+                      <div class="datetime-row-image">
+                        <i class="fas fa-clock"></i>
+                        <span class="ora-text-image">{{ formatOrarioEsteso(lezione.dataInizio, lezione.dataFine) }}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div class="lezione-body-full">
-                  <div class="lezione-type-badge">
-                    <i [class]="getLezioneIcon(lezione.tipo)"></i>
-                    {{ lezione.tipoLabel || getLabelTipoLezione(lezione.tipo) }}
-                  </div>
-                  <div class="lezione-details-full" *ngIf="lezione.istruttore">
-                    <i class="fas fa-user-tie"></i>
-                    {{ lezione.istruttore }}
-                  </div>
-                </div>
+                
               </div>
             </div>
 

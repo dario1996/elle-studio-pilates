@@ -7,7 +7,7 @@ import { AuthJwtService } from '../../../../core/services/authJwt.service';
 import { UserService } from '../../../../core/services/data/user.service';
 import { PacchettiService, Pacchetto } from '../../../../core/services/pacchetti.service';
 import { VenditeService, PacchettoAcquistato, VenditaRequest } from '../../../../shared/services/vendite.service';
-import { ToastrService } from '../../../../core/services/toastr.service';
+import { ToastrUniversaleService } from '../../../../shared/services/toastr-universale.service';
 import { inject } from '@angular/core';
 
 @Component({
@@ -26,7 +26,7 @@ export class GestionePacchettiComponent implements OnInit {
   private userService = inject(UserService);
   private pacchettiService = inject(PacchettiService);
   private venditeService = inject(VenditeService);
-  private toastr = inject(ToastrService);
+  private toastr = inject(ToastrUniversaleService);
 
   title: string = 'Gestione Pacchetti';
 

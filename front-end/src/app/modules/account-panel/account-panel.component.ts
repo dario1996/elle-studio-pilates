@@ -7,6 +7,7 @@ import { PageTitleComponent } from '../../core/page-title/page-title.component';
 import { UserService } from '../../core/services/data/user.service';
 import { AuthJwtService } from '../../core/services/authJwt.service';
 import { RegistrazioneService } from '../../shared/services/registrazione.service';
+import { ToastrUniversaleService } from '../../shared/services/toastr-universale.service';
 import { inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
@@ -28,6 +29,7 @@ export class AccountPanelComponent implements OnInit {
   private fb = inject(FormBuilder);
   private registrazioneService = inject(RegistrazioneService);
   private http = inject(HttpClient);
+  private toastr = inject(ToastrUniversaleService);
 
   title: string = 'Informazioni Account';
 
@@ -42,13 +44,6 @@ export class AccountPanelComponent implements OnInit {
   uploadingCertificate = false;
   fileName = '';
   selectedFile: File | null = null;
-  
-  // Toast notification properties
-  showToast = false;
-  toastMessage = '';
-  toastType: 'success' | 'error' | 'info' = 'success';
-  toastIcon = '';
-  private toastTimeout?: number;
 
   // Fallback object structure matching DB `utenti` table - real data will override from API
   user: any = {
@@ -240,7 +235,7 @@ export class AccountPanelComponent implements OnInit {
       next: (response) => {
         this.passwordLoading = false;
         this.passwordSuccess = 'Password cambiata con successo!';
-        this.showToastMessage('Password cambiata con successo!', 'success');
+        this.toastr.success('Password cambiata con successo!');
         
         // Chiudi il modal dopo 2 secondi
         setTimeout(() => {
@@ -259,7 +254,7 @@ export class AccountPanelComponent implements OnInit {
           this.passwordError = 'Errore durante il cambio password. Riprova più tardi.';
         }
         
-        this.showToastMessage(this.passwordError, 'error');
+        this.toastr.error(this.passwordError);
       }
     });
   }
@@ -308,28 +303,6 @@ export class AccountPanelComponent implements OnInit {
            this.passwordForm.get('confirmPassword')?.touched || false;
   }
 
-  // Toast notification methods
-  showToastMessage(message: string, type: 'success' | 'error' | 'info' = 'success') {
-    this.toastMessage = message;
-    this.toastType = type;
-    this.toastIcon = type === 'success' ? 'success' : type === 'error' ? 'error' : 'info';
-    this.showToast = true;
-    
-    if (this.toastTimeout) {
-      clearTimeout(this.toastTimeout);
-    }
-    this.toastTimeout = window.setTimeout(() => {
-      this.hideToast();
-    }, 3000);
-  }
-  
-  hideToast() {
-    this.showToast = false;
-    if (this.toastTimeout) {
-      clearTimeout(this.toastTimeout);
-    }
-  }
-
   // Certificato medico methods
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -340,7 +313,7 @@ export class AccountPanelComponent implements OnInit {
       const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
       
       if (!isPdf) {
-        this.showToastMessage('Sono accettati solo file in formato PDF', 'error');
+        this.toastr.error('Sono accettati solo file in formato PDF');
         input.value = '';
         return;
       }
@@ -348,7 +321,7 @@ export class AccountPanelComponent implements OnInit {
       // Validazione dimensione file (max 10MB)
       const maxSize = 10 * 1024 * 1024; // 10MB
       if (file.size > maxSize) {
-        this.showToastMessage('Il file è troppo grande. Dimensione massima: 10MB', 'error');
+        this.toastr.error('Il file è troppo grande. Dimensione massima: 10MB');
         input.value = '';
         return;
       }
@@ -363,7 +336,7 @@ export class AccountPanelComponent implements OnInit {
 
   uploadCertificate() {
     if (!this.selectedFile || !this.user.id) {
-      this.showToastMessage('Errore durante l\'upload del certificato', 'error');
+      this.toastr.error('Errore durante l\'upload del certificato');
       return;
     }
 
@@ -378,7 +351,7 @@ export class AccountPanelComponent implements OnInit {
       next: (response: any) => {
         console.log('Certificato caricato:', response);
         this.uploadingCertificate = false;
-        this.showToastMessage('Certificato medico caricato con successo!', 'success');
+        this.toastr.success('Certificato medico caricato con successo!');
         
         // Aggiorna i campi BLOB dell'utente
         this.user.certificato_medico_nome = this.selectedFile?.name || 'certificato.pdf';
@@ -398,7 +371,7 @@ export class AccountPanelComponent implements OnInit {
       error: (error) => {
         console.error('Errore upload certificato:', error);
         this.uploadingCertificate = false;
-        this.showToastMessage('Errore durante il caricamento del certificato', 'error');
+        this.toastr.error('Errore durante il caricamento del certificato');
         this.selectedFile = null;
         this.fileName = '';
       }
@@ -407,11 +380,11 @@ export class AccountPanelComponent implements OnInit {
 
   downloadCertificate() {
     if (!this.user.id) {
-      this.showToastMessage('Errore durante il download del certificato', 'error');
+      this.toastr.error('Errore durante il download del certificato');
       return;
     }
 
-    this.showToastMessage('Download in corso...', 'info');
+    this.toastr.info('Download in corso...');
     
     this.http.get(`http://localhost:8080/api/upload/certificato-medico/${this.user.id}`, {
       responseType: 'blob',
@@ -420,7 +393,7 @@ export class AccountPanelComponent implements OnInit {
       next: (response) => {
         const blob = response.body;
         if (!blob) {
-          this.showToastMessage('Nessun file trovato', 'error');
+          this.toastr.error('Nessun file trovato');
           return;
         }
 
@@ -444,14 +417,14 @@ export class AccountPanelComponent implements OnInit {
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
         
-        this.showToastMessage('Certificato scaricato con successo!', 'success');
+        this.toastr.success('Certificato scaricato con successo!');
       },
       error: (error) => {
         console.error('Errore download certificato:', error);
         if (error.status === 404) {
-          this.showToastMessage('Certificato medico non trovato', 'error');
+          this.toastr.error('Certificato medico non trovato');
         } else {
-          this.showToastMessage('Errore durante il download del certificato', 'error');
+          this.toastr.error('Errore durante il download del certificato');
         }
       }
     });

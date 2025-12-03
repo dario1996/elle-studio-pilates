@@ -508,6 +508,56 @@ export class GestionePrenotazioniComponent implements OnInit {
     }
   }
 
+  getTipoBadgeClass(tipo: string): string {
+    if (!tipo) return 'tipo-default';
+    
+    const tipoLowerCase = tipo.toLowerCase().replace(/\s+/g, '_');
+    switch (tipoLowerCase) {
+      case 'privata':
+        return 'tipo-privata';
+      case 'semi_privata':
+        return 'tipo-semi_privata';
+      case 'pilates_matwork':
+        return 'tipo-pilates_matwork';
+      case 'studio_intermedio':
+        return 'tipo-studio_intermedio';
+      case 'reformer_intermedio':
+        return 'tipo-reformer_intermedio';
+      case 'yoga':
+        return 'tipo-yoga';
+      case 'studio_posturale':
+        return 'tipo-studio_posturale';
+      case 'prima_lezione':
+        return 'tipo-prima_lezione';
+      default:
+        return 'tipo-default';
+    }
+  }
+
+  getLezioneBackground(tipo: string): string {
+    if (!tipo) return 'assets/images/lezioni_bg/lezione_privata.png';
+    
+    const tipoLowerCase = tipo.toLowerCase().replace(/\s+/g, '_');
+    
+    switch (tipoLowerCase) {
+      case 'privata':
+      case 'semi_privata':
+      case 'prima_lezione':
+        return 'assets/images/lezioni_bg/lezione_privata.png';
+      case 'pilates_matwork':
+        return 'assets/images/lezioni_bg/pilates_matwork.png';
+      case 'studio_intermedio':
+      case 'reformer_intermedio':
+        return 'assets/images/lezioni_bg/studio_intermedio.png';
+      case 'yoga':
+        return 'assets/images/lezioni_bg/yoga.png';
+      case 'studio_posturale':
+        return 'assets/images/lezioni_bg/posturale.png';
+      default:
+        return 'assets/images/lezioni_bg/lezione_privata.png';
+    }
+  }
+
   getStatoLabel(stato: string): string {
     switch (stato) {
       case 'CONFERMATA':
@@ -520,6 +570,58 @@ export class GestionePrenotazioniComponent implements OnInit {
         return 'Spostamento Richiesto';
       default:
         return stato;
+    }
+  }
+
+  /** Formatta la data come "5 Dicembre 2025" */
+  formatDataEstesa(data: string): string {
+    const d = new Date(data);
+    const mesi = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 
+                  'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
+    const giorno = d.getDate();
+    const mese = mesi[d.getMonth()];
+    const anno = d.getFullYear();
+    return `${giorno} ${mese} ${anno}`;
+  }
+
+  /** Formatta l'orario come "dalle ore 10:00 alle ore 10:55" */
+  formatOrarioEsteso(oraInizio: string, oraFine: string): string {
+    const h1 = oraInizio.slice(0, 5);
+    const h2 = oraFine.slice(0, 5);
+    return `dalle ore ${h1} alle ore ${h2}`;
+  }
+
+  /** Formatta il tipo di lezione in modo leggibile */
+  formatTipoLezioneLeggibile(tipo: string): string {
+    if (!tipo) return '';
+    
+    const tipoLowerCase = tipo.toLowerCase().replace(/\s+/g, '_');
+    
+    switch (tipoLowerCase) {
+      case 'privata':
+      case 'lezione_privata':
+        return 'Lezione Privata';
+      case 'semi_privata':
+        return 'Semi Privata';
+      case 'pilates_matwork':
+        return 'Pilates Matwork';
+      case 'studio_intermedio':
+        return 'Studio Intermedio';
+      case 'reformer_intermedio':
+        return 'Reformer Intermedio';
+      case 'yoga':
+        return 'Yoga';
+      case 'studio_posturale':
+        return 'Studio Posturale';
+      case 'prima_lezione':
+        return 'Prima Lezione';
+      default:
+        // Capitalizza ogni parola separata da underscore o spazio
+        return tipo
+          .replace(/_/g, ' ')
+          .split(' ')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+          .join(' ');
     }
   }
 

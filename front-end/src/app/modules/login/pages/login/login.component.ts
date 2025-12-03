@@ -136,15 +136,14 @@ export class LoginComponent implements OnInit {
         
         // Verifica se ci sono errori nella risposta
         if (response.errorCode) {
-          // Gestisci i diversi tipi di errore
+          // Gestisci i diversi tipi di errore con toastr universale
           if (response.errorCode === 'ACCOUNT_DISABLED') {
-            this.errMsg = response.errorMessage || 'Il tuo account non è ancora stato attivato. Contatta l\'amministratore.';
+            this.toastr.error('Il tuo account non è ancora stato attivato. Contatta l\'amministratore.', 'Account non attivo');
           } else if (response.errorCode === 'INVALID_CREDENTIALS') {
-            this.errMsg = response.errorMessage || 'Username o password errati. Riprova.';
+            this.toastr.error('Username o password errati. Riprova.', 'Credenziali non valide');
           } else {
-            this.errMsg = response.errorMessage || 'Errore durante il login. Riprova.';
+            this.toastr.error(response.errorMessage || 'Errore durante il login. Riprova.', 'Errore');
           }
-          this.viewMsg = true;
           this.autenticato.set(false);
         } else {
           // Login riuscito
@@ -154,20 +153,19 @@ export class LoginComponent implements OnInit {
       error: error => {
         console.error('Errore durante il login:', error);
         
-        // Gestione errori HTTP
+        // Gestione errori HTTP con toastr universale
         if (error.status === 403 && error.error?.errorCode) {
           if (error.error.errorCode === 'ACCOUNT_DISABLED') {
-            this.errMsg = 'Il tuo account non è ancora stato attivato. Contatta l\'amministratore.';
+            this.toastr.error('Il tuo account non è ancora stato attivato. Contatta l\'amministratore.', 'Account non attivo');
           } else if (error.error.errorCode === 'INVALID_CREDENTIALS') {
-            this.errMsg = 'Username o password errati. Riprova.';
+            this.toastr.error('Username o password errati. Riprova.', 'Credenziali non valide');
           } else {
-            this.errMsg = error.error.errorMessage || 'Errore durante il login. Riprova.';
+            this.toastr.error(error.error.errorMessage || 'Errore durante il login. Riprova.', 'Errore');
           }
         } else {
-          this.errMsg = 'Errore di connessione. Riprova più tardi.';
+          this.toastr.error('Errore di connessione. Riprova più tardi.', 'Errore connessione');
         }
         
-        this.viewMsg = true;
         this.autenticato.set(false);
       },
     });
