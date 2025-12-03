@@ -126,6 +126,20 @@
   flex: 1;
 }
 
+.data-acquisto {
+  font-size: 0.6875rem;
+  color: #6b7280;
+  font-weight: 400;
+  white-space: nowrap;
+  margin-left: 0.5rem;
+}
+
+.data-acquisto i {
+  color: #c99e67;
+  font-size: 0.625rem;
+  margin-right: 0.25rem;
+}
+
 .badges-row {
   display: flex;
   gap: 0.375rem;
@@ -149,8 +163,14 @@
 .badge-cardio { background-color: #fef3c7; color: #92400e; }
 .badge-stretching { background-color: #e0e7ff; color: #3730a3; }
 .badge-matwork { background-color: #fce7f3; color: #9f1239; }
-.badge-prima_lezione { background-color: #dbeafe; color: #1e40af; }
+.badge-primalezione { background-color: #dbeafe; color: #1e40af; }
 .badge-privata { background-color: #fef3c7; color: #92400e; }
+.badge-combo { background-color: #fde68a; color: #78350f; }
+.badge-studiointermedio { background-color: #ddd6fe; color: #5b21b6; }
+.badge-pilatesmatwork { background-color: #fce7f3; color: #9f1239; }
+.badge-semiprivata { background-color: #ddd6fe; color: #5b21b6; }
+.badge-reformerintermedio { background-color: #e0e7ff; color: #3730a3; }
+.badge-studioposturale { background-color: #d1fae5; color: #065f46; }
 
 .stato-attivo { background-color: #d1fae5; color: #065f46; }
 .stato-completato { background-color: #e5e7eb; color: #6b7280; }

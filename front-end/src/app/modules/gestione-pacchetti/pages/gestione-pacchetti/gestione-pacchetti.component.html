@@ -28,13 +28,17 @@
             <div class="pacchetto-header-compact">
               <div class="pacchetto-title-row">
                 <h3>{{ pacchetto.pacchettoNome }}</h3>
+                <span class="data-acquisto" *ngIf="pacchetto.dataAcquisto">
+                  <i class="fas fa-calendar-check"></i>
+                  Acquistato il: {{ formatDateTimeShort(pacchetto.dataAcquisto) }}
+                </span>
               </div>
               <div class="badges-row">
-                <span class="pacchetto-badge" [ngClass]="'badge-' + pacchetto.categoria.toLowerCase()">
+                <span class="pacchetto-badge" [ngClass]="getBadgeClass(pacchetto.categoria)">
                   {{ pacchetto.categoria }}
                 </span>
                 <span class="pacchetto-stato" [ngClass]="pacchetto.lezioniRimaste === 0 ? 'stato-completato' : 'stato-attivo'">
-                  {{ pacchetto.lezioniRimaste === 0 ? 'COMPLETATO' : 'ATTIVO' }}
+                  {{ pacchetto.lezioniRimaste === 0 ? 'UTILIZZATO' : 'DISPONIBILE' }}
                 </span>
               </div>
             </div>

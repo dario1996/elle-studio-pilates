@@ -59,7 +59,12 @@ export class GestionePacchettiComponent implements OnInit {
     
     this.venditeService.getPacchettiAcquistatiByUtente(username).subscribe({
       next: (pacchetti) => {
-        this.pacchettiAcquistati = pacchetti || [];
+        // Ordina i pacchetti per data di acquisto (dal più recente al meno recente)
+        this.pacchettiAcquistati = (pacchetti || []).sort((a, b) => {
+          const dataA = new Date(a.dataAcquisto).getTime();
+          const dataB = new Date(b.dataAcquisto).getTime();
+          return dataB - dataA; // Ordine decrescente (più recente prima)
+        });
         console.log('Pacchetti acquistati:', this.pacchettiAcquistati);
         this.loadingAcquistati = false;
       },
@@ -119,6 +124,20 @@ export class GestionePacchettiComponent implements OnInit {
     });
   }
 
+  // Formatta la data e ora in formato breve
+  formatDateTimeShort(dateString: string): string {
+    if (!dateString) return '-';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('it-IT', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    }) + ' ' + date.toLocaleTimeString('it-IT', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
   // Calcola la percentuale di utilizzo del pacchetto
   getUsagePercentage(pacchetto: PacchettoAcquistato): number {
     if (!pacchetto.lezioniTotali) return 0;
@@ -172,5 +191,10 @@ export class GestionePacchettiComponent implements OnInit {
   // Toggle visibilità descrizione pacchetto
   toggleDescrizioneVisibile(pacchettoId: number): void {
     this.descrizioneVisibile[pacchettoId] = !this.descrizioneVisibile[pacchettoId];
+  }
+
+  // Converte il nome della categoria in una classe CSS valida (rimuove underscore)
+  getBadgeClass(categoria: string): string {
+    return 'badge-' + categoria.toLowerCase().replace(/_/g, '');
   }
 }
