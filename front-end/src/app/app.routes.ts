@@ -17,13 +17,14 @@ export const routes: Routes = [
         m => m.WelcomeComponent,
       ),
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       {
         path: 'dashboard',
         loadComponent: () =>
           import(
             './modules/dashboard/pages/home-dashboard/home-dashboard.component'
           ).then(m => m.HomeDashboardComponent),
+        canActivate: [AuthGuard],
+        data: { roles: [Ruoli.amministratore] },
       },
       {
         path: 'dashboard-utente',
