@@ -72,6 +72,7 @@ export interface PrenotazioneRicorrenteRequest {
   templateId: number;
   tipoLezione?: string; // Per pacchetti COMBO
   numeroLezioni?: number; // Opzionale, default = tutte disponibili
+  dataLezione?: string; // Data di inizio prenotazioni (formato YYYY-MM-DD)
 }
 
 // Response dopo creazione prenotazioni ricorrenti

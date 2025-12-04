@@ -9,6 +9,7 @@ import { LezioniService, LezioneDto } from '../../../../core/services/lezioni.se
 import { TIPI_LEZIONE_CONFIG } from '../../../../shared/models/Lezione';
 import { ModaleService } from '../../../../core/services/modal.service';
 import { ModificaLezioneOverlayComponent } from '../../components/modifica-lezione-overlay/modifica-lezione-overlay.component';
+import { ModificaPagamentiOverlayComponent } from '../../components/modifica-pagamenti-overlay/modifica-pagamenti-overlay.component';
 import { ToastrUniversaleService } from '../../../../shared/services/toastr-universale.service';
 
 @Component({
@@ -102,6 +103,22 @@ export class HomeDashboardComponent implements OnInit {
   prenotaPosturale(): void {
     this.router.navigate(['/gestionale-elle-studio/agenda'], { 
       queryParams: { openPosturale: 'true' } 
+    });
+  }
+
+  // Apre il modale per modificare lo stato dei pagamenti
+  modificaStatoPagamenti(): void {
+    this.modaleService.apri({
+      titolo: 'Modifica Stato Pagamenti',
+      componente: ModificaPagamentiOverlayComponent,
+      dimensione: 'lg',
+      onConferma: (risultati: any) => {
+        console.log('Pagamenti confermati:', risultati);
+        // risultati è un array di vendite confermate
+        const count = Array.isArray(risultati) ? risultati.length : 1;
+        this.toastrUniversale.success(`${count} pagamento/i confermato/i con successo!`);
+        // Eventualmente ricaricare dati se necessario
+      }
     });
   }
 }

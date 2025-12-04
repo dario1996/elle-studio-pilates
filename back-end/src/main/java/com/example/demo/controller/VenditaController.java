@@ -212,13 +212,44 @@ public class VenditaController {
     }
 
     /**
-     * Ottiene vendite per stato
+     * Ottiene vendite per stato con dati completi (per dashboard admin)
      */
     @GetMapping("/stato/{stato}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Vendita>> getVenditePerStato(@PathVariable StatoVendita stato) {
+    public ResponseEntity<List<Map<String, Object>>> getVenditePerStato(@PathVariable StatoVendita stato) {
         List<Vendita> vendite = venditaService.trovaVenditePerStato(stato);
-        return ResponseEntity.ok(vendite);
+        List<Map<String, Object>> venditeDTOs = vendite.stream()
+            .map(v -> {
+                Map<String, Object> vendita = new java.util.HashMap<>();
+                vendita.put("id", v.getId());
+                vendita.put("utenteId", v.getUtente().getId().toString());
+                vendita.put("pacchettoId", v.getPacchetto().getId());
+                vendita.put("importo", v.getImporto());
+                vendita.put("stato", v.getStato());
+                vendita.put("dataAcquisto", v.getDataAcquisto());
+                vendita.put("dataPagamento", v.getDataPagamento());
+                vendita.put("note", v.getNote());
+                
+                // Informazioni utente
+                Map<String, Object> utente = new java.util.HashMap<>();
+                utente.put("id", v.getUtente().getId().toString());
+                utente.put("username", v.getUtente().getUsername());
+                utente.put("nome", v.getUtente().getNome());
+                utente.put("cognome", v.getUtente().getCognome());
+                utente.put("email", v.getUtente().getEmail());
+                vendita.put("utente", utente);
+                
+                // Informazioni pacchetto
+                Map<String, Object> pacchetto = new java.util.HashMap<>();
+                pacchetto.put("id", v.getPacchetto().getId());
+                pacchetto.put("nome", v.getPacchetto().getNome());
+                pacchetto.put("prezzo", v.getPacchetto().getPrezzo());
+                vendita.put("pacchetto", pacchetto);
+                
+                return vendita;
+            })
+            .collect(java.util.stream.Collectors.toList());
+        return ResponseEntity.ok(venditeDTOs);
     }
 
     /**

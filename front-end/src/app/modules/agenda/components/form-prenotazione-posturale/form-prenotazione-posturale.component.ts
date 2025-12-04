@@ -262,7 +262,6 @@ export class FormPrenotazionePosturaleComponent implements OnInit {
     });
 
     this.cdr.detectChanges();
-    console.log('🔄 Disponibilità ricalcolata per data:', dataStr);
   }
 
   onSubmit(): any {
@@ -303,8 +302,6 @@ export class FormPrenotazionePosturaleComponent implements OnInit {
       note: formValue.note || `Prima lezione posturale - Pacchetto ID ${this.PACCHETTO_PRIMA_LEZIONE_ID}`,
       numeroLezioni: 1 // Prima lezione = 1 sola lezione
     };
-
-    console.log('📝 Prenotazione da creare:', prenotazione);
     
     // Chiama il callback onConferma dal modal service
     this.modaleService.config$.subscribe(config => {
@@ -357,6 +354,8 @@ export class FormPrenotazionePosturaleComponent implements OnInit {
       return;
     }
     const proxData = this.getProxGiornoSettimana(giorno);
-    this.form.patchValue({ dataPrenotazione: proxData });
+    this.form.patchValue({ dataPrenotazione: proxData }, { emitEvent: true });
+    // Forza il ricalcolo della disponibilità
+    this.ricalcolaDisponibilitaPerData(proxData);
   }
 }

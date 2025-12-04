@@ -115,7 +115,8 @@ public class PrenotazioneController {
                     request.getTemplateId(),
                     username,
                     request.getTipoLezione(),
-                    request.getNumeroLezioni()
+                    request.getNumeroLezioni(),
+                    request.getDataLezione()
             );
 
             // Converti in DTO
@@ -395,6 +396,7 @@ public class PrenotazioneController {
         private Long templateId;
         private String tipoLezione;
         private Integer numeroLezioni;
+        private LocalDate dataLezione;  // Data di inizio delle prenotazioni
 
         public Long getVenditaId() { return venditaId; }
         public void setVenditaId(Long venditaId) { this.venditaId = venditaId; }
@@ -404,6 +406,8 @@ public class PrenotazioneController {
         public void setTipoLezione(String tipoLezione) { this.tipoLezione = tipoLezione; }
         public Integer getNumeroLezioni() { return numeroLezioni; }
         public void setNumeroLezioni(Integer numeroLezioni) { this.numeroLezioni = numeroLezioni; }
+        public LocalDate getDataLezione() { return dataLezione; }
+        public void setDataLezione(LocalDate dataLezione) { this.dataLezione = dataLezione; }
     }
 
     public static class RichiestaSpostamentoRequest {

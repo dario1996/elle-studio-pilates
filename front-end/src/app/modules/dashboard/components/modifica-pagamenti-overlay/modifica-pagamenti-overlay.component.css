@@ -1,0 +1,418 @@
+.modifica-pagamenti-container {
+  padding: 20px;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.info-message {
+  background-color: #e3f2fd;
+  border-left: 3px solid #2196f3;
+  padding: 10px 12px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #1565c0;
+  font-size: 13px;
+}
+
+.info-message i {
+  font-size: 15px;
+}
+
+.vendite-grid {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.vendita-card {
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: visible;
+}
+
+.vendita-card:hover {
+  border-color: #c99e67;
+  box-shadow: 0 4px 12px rgba(201, 158, 103, 0.15);
+  transform: translateY(-2px);
+}
+
+.vendita-card.selected {
+  border-color: #c99e67;
+  background-color: #fef9f3;
+  box-shadow: 0 4px 16px rgba(201, 158, 103, 0.25);
+}
+
+.vendita-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.vendita-utente {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #111827;
+  flex: 1;
+  min-width: 0;
+}
+
+.vendita-utente i {
+  color: #6b7280;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.vendita-utente strong {
+  flex-shrink: 0;
+}
+
+.vendita-nota {
+  color: #6b7280;
+  font-size: 12px;
+  font-style: italic;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+.vendita-data {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: #6b7280;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.vendita-data .data-label {
+  font-weight: 500;
+  color: #9ca3af;
+}
+
+.vendita-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.vendita-pacchetto {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #374151;
+}
+
+.vendita-pacchetto i {
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+.vendita-importo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background-color: #f9fafb;
+  border-radius: 6px;
+}
+
+.vendita-importo-originale {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  background-color: #f3f4f6;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.vendita-importo .label,
+.vendita-importo-originale .label {
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.vendita-importo .amount {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.vendita-importo-originale .amount {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.vendita-footer {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 8px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.vendita-footer i {
+  color: #9ca3af;
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.vendita-footer .note {
+  font-size: 13px;
+  color: #6b7280;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+.selection-indicator {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #c99e67;
+  font-size: 18px;
+  animation: scaleIn 0.3s ease;
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Input importo inline nella card */
+.vendita-importo-input {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #c99e67;
+  animation: slideDown 0.3s ease;
+}
+
+.vendita-importo-input .input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.vendita-importo-input .form-control {
+  width: 100%;
+  padding: 8px 30px 8px 10px;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1.5px solid #c99e67;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  background-color: white;
+}
+
+.vendita-importo-input .form-control:focus {
+  outline: none;
+  border-color: #b8874f;
+  box-shadow: 0 0 0 3px rgba(201, 158, 103, 0.2);
+}
+
+.vendita-importo-input .form-control:disabled {
+  background-color: #f3f4f6;
+  cursor: not-allowed;
+}
+
+.vendita-importo-input .currency {
+  position: absolute;
+  right: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #374151;
+  pointer-events: none;
+}
+
+/* Riepilogo selezione */
+.riepilogo-selezione {
+  margin-top: 16px;
+  padding: 12px;
+  background: linear-gradient(135deg, #c99e67 0%, #b8874f 100%);
+  border-radius: 8px;
+  color: white;
+  animation: slideDown 0.3s ease;
+}
+
+.riepilogo-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.riepilogo-header i {
+  font-size: 15px;
+}
+
+.importo-form {
+  background-color: #f9fafb;
+  border: 2px solid #c99e67;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-group {
+  margin-bottom: 0;
+}
+
+.form-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 12px;
+}
+
+.form-group label i {
+  color: #c99e67;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px 40px 12px 12px;
+  font-size: 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  background-color: white;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #c99e67;
+  box-shadow: 0 0 0 3px rgba(201, 158, 103, 0.1);
+}
+
+.form-control:disabled {
+  background-color: #f3f4f6;
+  cursor: not-allowed;
+}
+
+.currency {
+  position: absolute;
+  right: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #6b7280;
+  pointer-events: none;
+}
+
+.form-text {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Stati di caricamento ed errore */
+.text-center {
+  text-align: center;
+}
+
+.text-muted {
+  color: #6b7280;
+}
+
+.p-4 {
+  padding: 24px;
+}
+
+.mt-2 {
+  margin-top: 8px;
+}
+
+.mb-3 {
+  margin-bottom: 16px;
+}
+
+.alert {
+  padding: 16px;
+  border-radius: 8px;
+  margin: 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.alert-danger {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+}
+
+.fa-spinner.fa-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .modifica-pagamenti-container {
+    padding: 16px;
+    max-height: 500px;
+  }
+
+  .vendita-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .vendita-importo .amount {
+    font-size: 16px;
+  }
+
+  .selection-indicator {
+    font-size: 20px;
+  }
+}

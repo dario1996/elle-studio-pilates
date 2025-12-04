@@ -1,0 +1,73 @@
+<div class="modifica-pagamenti-container">
+  <!-- Loading -->
+  <div *ngIf="loading" class="text-center p-4">
+    <i class="fas fa-spinner fa-spin fa-2x"></i>
+    <p class="mt-2">Caricamento...</p>
+  </div>
+
+  <!-- Errore -->
+  <div *ngIf="error && !loading" class="alert alert-danger">
+    <i class="fas fa-exclamation-triangle"></i>
+    {{ error }}
+  </div>
+
+  <!-- Nessuna vendita pending -->
+  <div *ngIf="!loading && !error && venditesPending.length === 0" class="text-center p-4 text-muted">
+    <i class="fas fa-check-circle fa-3x mb-3"></i>
+    <p>Nessuna vendita in attesa di pagamento</p>
+  </div>
+
+  <!-- Lista vendite pending -->
+  <div *ngIf="!loading && !error && venditesPending.length > 0" class="vendite-list">
+    <div class="info-message">
+      <i class="fas fa-info-circle"></i>
+      Seleziona una o più vendite e inserisci l'importo pagato per ogni vendita
+    </div>
+
+    <div class="vendite-grid">
+      <div 
+        *ngFor="let vendita of venditesPending" 
+        class="vendita-card"
+        [class.selected]="isVenditaSelezionata(vendita)"
+        (click)="selezionaVendita(vendita)">
+        
+        <div class="vendita-header">
+          <div class="vendita-utente">
+            <i class="fas fa-user"></i>
+            <strong>{{ getNomeCompleto(vendita) }}</strong>
+            <span class="vendita-nota" *ngIf="vendita.note"> - {{ vendita.note }}</span>
+          </div>
+          <div class="vendita-data">
+            <span class="data-label">Data prenotazione:</span>
+            {{ formatDate(vendita.dataAcquisto) }}
+          </div>
+        </div>
+
+        <!-- Input importo inline per vendita selezionata -->
+        <div class="vendita-importo-input" *ngIf="isVenditaSelezionata(vendita)">
+          <div class="input-wrapper">
+            <input 
+              type="number" 
+              class="form-control"
+              [value]="getImportoVendita(vendita.id!)"
+              (input)="aggiornaImporto(vendita.id!, $any($event.target).value)"
+              min="0"
+              step="0.01"
+              placeholder="Importo pagato"
+              [disabled]="loading"
+              (click)="$event.stopPropagation()">
+            <span class="currency">€</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Riepilogo selezione -->
+    <div class="riepilogo-selezione" *ngIf="venditeSelezionate.size > 0">
+      <div class="riepilogo-header">
+        <i class="fas fa-list-check"></i>
+        <strong>Riepilogo: {{ venditeSelezionate.size }} vendita/e selezionata/e</strong>
+      </div>
+    </div>
+  </div>
+</div>

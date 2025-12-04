@@ -90,6 +90,19 @@ export class VenditeService {
     return this.http.get<Vendita[]>(`${this.baseUrl}/utente/${username}/pending`);
   }
 
+  // Recupera tutte le vendite in stato PENDING
+  getVenditePending(): Observable<Vendita[]> {
+    return this.http.get<Vendita[]>(`${this.baseUrl}/stato/PENDING`);
+  }
+
+  // Conferma il pagamento di una vendita
+  confermaPagamento(id: number, importo: number): Observable<Vendita> {
+    return this.http.put<Vendita>(`${this.baseUrl}/${id}`, { 
+      importo: importo,
+      stato: 'PAID'
+    });
+  }
+
   getPacchettiAcquistatiByUtente(username: string): Observable<PacchettoAcquistato[]> {
     return this.http.get<PacchettoAcquistato[]>(`${this.baseUrl}/utente/${username}/pacchetti-acquistati`);
   }

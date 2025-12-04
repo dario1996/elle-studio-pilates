@@ -46,6 +46,7 @@ public class PrenotazioneRicorrenteService {
      * @param username Username dell'utente
      * @param tipoLezione Tipo di lezione (per pacchetti COMBO)
      * @param numeroLezioniDaPrenotare Numero di lezioni da prenotare (null = tutte)
+     * @param dataInizioRichiesta Data di inizio richiesta (se null, usa prossima data disponibile)
      * @return Lista delle prenotazioni create
      */
     @Transactional
@@ -54,7 +55,8 @@ public class PrenotazioneRicorrenteService {
             Long templateId,
             String username,
             String tipoLezione,
-            Integer numeroLezioniDaPrenotare) {
+            Integer numeroLezioniDaPrenotare,
+            LocalDate dataInizioRichiesta) {
 
         // Recupera entità
         Vendita vendita = venditaRepository.findById(venditaId)
@@ -92,8 +94,15 @@ public class PrenotazioneRicorrenteService {
         // Genera ID gruppo per raggruppare le prenotazioni
         String gruppoId = UUID.randomUUID().toString();
 
-        // Calcola la prima data disponibile
-        LocalDate primaData = calcolaPrimaDataDisponibile(template.getGiornoSettimana());
+        // Usa la data richiesta se fornita, altrimenti calcola la prossima disponibile
+        LocalDate primaData;
+        if (dataInizioRichiesta != null) {
+            primaData = dataInizioRichiesta;
+            System.out.println("📅 Usando data richiesta: " + primaData);
+        } else {
+            primaData = calcolaPrimaDataDisponibile(template.getGiornoSettimana());
+            System.out.println("📅 Calcolata prossima data disponibile: " + primaData);
+        }
 
         // Crea le prenotazioni
         List<PrenotazioneLezione> prenotazioni = new ArrayList<>();
@@ -340,7 +349,8 @@ public class PrenotazioneRicorrenteService {
                     selezione.getTemplateId(),
                     username,
                     selezione.getCategoria(),
-                    selezione.getNumeroLezioni()
+                    selezione.getNumeroLezioni(),
+                    null  // Usa calcolo automatico data
             );
 
             tuttePrenotazioni.addAll(prenotazioniCategoria);

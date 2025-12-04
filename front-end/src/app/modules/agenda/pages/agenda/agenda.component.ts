@@ -649,8 +649,6 @@ export class AgendaComponent implements OnInit {
 
   // Crea prenotazione posturale (Prima Lezione)
   private creaPrenotazionePosturale(prenotazioneData: any): void {
-    console.log('📝 Creazione prenotazione posturale:', prenotazioneData);
-    
     // Validazione dati in input
     if (!prenotazioneData.username) {
       this.toastr.error('Username non specificato');
@@ -660,8 +658,6 @@ export class AgendaComponent implements OnInit {
     // Step 1: Ottieni l'ID dell'utente dal username
     this.userService.getUtenteByUsername(prenotazioneData.username).subscribe({
       next: (utente) => {
-        console.log('✅ Utente trovato:', utente);
-        
         if (!utente || !utente.id) {
           this.toastr.error('Dati utente non validi');
           return;
@@ -672,23 +668,12 @@ export class AgendaComponent implements OnInit {
           id: utente.id,
           pacchettoId: prenotazioneData.pacchettoId,
           importo: 0, // Prezzo del pacchetto - può essere 0 per admin
-          note: 'Prima lezione posturale - Vendita automatica',
+          note: 'Prima lezione posturale con pagamento in struttura',
           stato: 'PENDING' // Stato PENDING - Pagamento da effettuare in struttura
         };
 
-        console.log('🛒 Creazione vendita per pacchetto ID 1:', vendita);
-        console.log('👤 Utente selezionato:', {
-          id: utente.id,
-          username: utente.username,
-          nome: utente.nome,
-          cognome: utente.cognome,
-          nomeCompleto: `${utente.nome || ''} ${utente.cognome || ''}`.trim()
-        });
-
         this.venditeService.creaVendita(vendita).subscribe({
           next: (venditaCreata) => {
-            console.log('✅ Vendita creata:', venditaCreata);
-            
             if (!venditaCreata || !venditaCreata.id) {
               this.toastr.error('Errore nella creazione della vendita');
               return;
@@ -698,43 +683,39 @@ export class AgendaComponent implements OnInit {
             const richiesta = {
               venditaId: venditaCreata.id,
               templateId: prenotazioneData.templateId,
-              numeroLezioni: 1 // Prima lezione = una sola lezione
+              numeroLezioni: 1, // Prima lezione = una sola lezione
+              dataLezione: prenotazioneData.dataLezione // Data selezionata dall'utente
             };
-
-            console.log('📅 Prenotazione ricorrente (1 lezione):', richiesta);
-            console.log('📋 Dettagli vendita creata:', {
-              venditaId: venditaCreata.id,
-              utenteIdVendita: venditaCreata.utenteId || venditaCreata.id,
-              utenteSelezionato: {
-                id: utente.id,
-                username: utente.username,
-                nomeCompleto: `${utente.nome || ''} ${utente.cognome || ''}`.trim()
-              }
-            });
 
             this.prenotazioneService.prenotaRicorrente(richiesta).subscribe({
               next: (response) => {
-                console.log('✅ Prenotazione posturale creata:', response);
                 this.loadPrenotazioni();
                 this.toastr.success(`Prima lezione posturale prenotata con successo per ${prenotazioneData.username}!`);
                 this.modaleService.chiudi();
               },
               error: (error) => {
-                console.error('❌ Errore prenotazione:', error);
                 const errorMessage = error?.error?.message || 'Errore durante la prenotazione';
                 this.toastr.error(errorMessage);
+                
+                // ROLLBACK: Elimina la vendita creata se la prenotazione fallisce
+                if (venditaCreata.id) {
+                  this.venditeService.eliminaVendita(venditaCreata.id).subscribe({
+                    next: () => {},
+                    error: (deleteError) => {
+                      this.toastr.warning('La vendita non è stata eliminata automaticamente. Verificare manualmente.');
+                    }
+                  });
+                }
               }
             });
           },
           error: (error) => {
-            console.error('❌ Errore creazione vendita:', error);
             const errorMessage = error?.error?.message || 'Errore durante la creazione della vendita';
             this.toastr.error(errorMessage);
           }
         });
       },
       error: (error) => {
-        console.error('❌ Errore recupero utente:', error);
         this.toastr.error('Utente non trovato');
       }
     });
