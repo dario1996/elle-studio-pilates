@@ -466,7 +466,7 @@ export class AgendaComponent implements OnInit {
   // Apertura modal per creazione nuova lezione
   apriModalCreazione(dateInfo?: { dataInizio: Date, dataFine: Date }): void {
       this.modaleService.apri({
-        titolo: 'Nuova Lezione',
+        titolo: 'Prenota nuova prima lezione con posturale',
         componente: FormLezioneComponent,
         dati: {},
         onConferma: (formValue: ILezione) => this.creaLezione(formValue),
