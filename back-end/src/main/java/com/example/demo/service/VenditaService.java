@@ -52,6 +52,14 @@ public class VenditaService {
      * Crea una nuova vendita
      */
     public Vendita creaVendita(Long id, Long pacchettoId, BigDecimal importo, String note) {
+        // Default: marca come pagata (comportamento originale)
+        return creaVendita(id, pacchettoId, importo, note, StatoVendita.PAID);
+    }
+    
+    /**
+     * Crea una nuova vendita con stato personalizzato
+     */
+    public Vendita creaVendita(Long id, Long pacchettoId, BigDecimal importo, String note, StatoVendita stato) {
         Utenti utente = utenteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Utente non trovato con ID: " + id));
 
@@ -61,12 +69,18 @@ public class VenditaService {
         Vendita vendita = new Vendita(utente, pacchetto, importo);
         vendita.setNote(note);
         
-        // Imposta lo stato a PAID (pagamento fake)
-        vendita.marcaComePagata();
+        // Imposta lo stato specificato
+        if (stato == StatoVendita.PAID) {
+            vendita.marcaComePagata();
+        } else {
+            vendita.setStato(stato);
+        }
         
         // Imposta le lezioni rimanenti con il numero di lezioni del pacchetto
         Integer numeroLezioni = pacchetto.getNumeroLezioni();
         vendita.setLezioniRimanenti(numeroLezioni != null ? numeroLezioni : 0);
+        
+        System.out.println("💰 Vendita creata per utente: " + utente.getUsername() + " con stato: " + stato);
         
         return venditaRepository.save(vendita);
     }

@@ -32,6 +32,7 @@ export interface VenditaRequest {
   pacchettoId: number;
   importo: number;
   note?: string;
+  stato?: 'PENDING' | 'PAID' | 'CANCELLED'; // Stato opzionale (default PAID se non specificato)
 }
 
 export interface PacchettoAcquistato {

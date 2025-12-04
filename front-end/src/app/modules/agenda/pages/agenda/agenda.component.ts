@@ -21,8 +21,11 @@ import { ILezione, TipoLezione, TIPI_LEZIONE_CONFIG } from '../../../../shared/m
 import { PrenotazioneLezione } from '../../../../shared/models/prenotazione.model';
 import { RichiestaSpostamento } from '../../../../shared/models/prenotazione.model';
 import { FormLezioneComponent } from '../../components/form-lezione/form-lezione.component';
+import { FormPrenotazionePosturaleComponent } from '../../components/form-prenotazione-posturale/form-prenotazione-posturale.component';
 import { DettaglioLezioneComponent } from '../../components/dettaglio-lezione/dettaglio-lezione.component';
 import { LeggendaColoriComponent } from '../../components/leggenda-colori/leggenda-colori.component';
+import { VenditeService, VenditaRequest } from '../../../../shared/services/vendite.service';
+import { UserService } from '../../../../core/services/data/user.service';
 
 @Component({
   selector: 'app-agenda',
@@ -111,7 +114,9 @@ export class AgendaComponent implements OnInit {
     private cd: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router,
-    private calendarioService: CalendarioService
+    private calendarioService: CalendarioService,
+    private venditeService: VenditeService,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -465,11 +470,24 @@ export class AgendaComponent implements OnInit {
 
   // Apertura modal per creazione nuova lezione
   apriModalCreazione(dateInfo?: { dataInizio: Date, dataFine: Date }): void {
+      console.log('🚀 apriModalCreazione chiamato - Apertura FormPrenotazionePosturaleComponent');
+      console.log('📦 Componente da caricare:', FormPrenotazionePosturaleComponent);
+      
       this.modaleService.apri({
         titolo: 'Prenota nuova prima lezione con posturale',
-        componente: FormLezioneComponent,
+        componente: FormPrenotazionePosturaleComponent,
         dati: {},
-        onConferma: (formValue: ILezione) => this.creaLezione(formValue),
+        onConferma: (prenotazioneData: any) => {
+          // Riceve i dati direttamente dal componente via onConferma
+          if (!prenotazioneData) {
+            // Il componente ha già mostrato il messaggio di errore
+            return;
+          }
+
+          console.log('📥 Dati prenotazione ricevuti:', prenotazioneData);
+          // Passa i dati al metodo di creazione
+          this.creaPrenotazionePosturale(prenotazioneData);
+        },
       });
   }
 
@@ -615,6 +633,99 @@ export class AgendaComponent implements OnInit {
         this.toastr.error('Errore durante la creazione della lezione');
         console.error('Errore creazione lezione:', error);
       },
+    });
+  }
+
+  // Crea prenotazione posturale (Prima Lezione)
+  private creaPrenotazionePosturale(prenotazioneData: any): void {
+    console.log('📝 Creazione prenotazione posturale:', prenotazioneData);
+    
+    // Validazione dati in input
+    if (!prenotazioneData.username) {
+      this.toastr.error('Username non specificato');
+      return;
+    }
+    
+    // Step 1: Ottieni l'ID dell'utente dal username
+    this.userService.getUtenteByUsername(prenotazioneData.username).subscribe({
+      next: (utente) => {
+        console.log('✅ Utente trovato:', utente);
+        
+        if (!utente || !utente.id) {
+          this.toastr.error('Dati utente non validi');
+          return;
+        }
+        
+        // Step 2: Crea la vendita del pacchetto per l'utente
+        const vendita: VenditaRequest = {
+          id: utente.id,
+          pacchettoId: prenotazioneData.pacchettoId,
+          importo: 0, // Prezzo del pacchetto - può essere 0 per admin
+          note: 'Prima lezione posturale - Vendita automatica',
+          stato: 'PENDING' // Stato PENDING - Pagamento da effettuare in struttura
+        };
+
+        console.log('🛒 Creazione vendita per pacchetto ID 1:', vendita);
+        console.log('👤 Utente selezionato:', {
+          id: utente.id,
+          username: utente.username,
+          nome: utente.nome,
+          cognome: utente.cognome,
+          nomeCompleto: `${utente.nome || ''} ${utente.cognome || ''}`.trim()
+        });
+
+        this.venditeService.creaVendita(vendita).subscribe({
+          next: (venditaCreata) => {
+            console.log('✅ Vendita creata:', venditaCreata);
+            
+            if (!venditaCreata || !venditaCreata.id) {
+              this.toastr.error('Errore nella creazione della vendita');
+              return;
+            }
+            
+            // Step 3: Ora prenota la lezione usando la venditaId
+            const richiesta = {
+              venditaId: venditaCreata.id,
+              templateId: prenotazioneData.templateId,
+              numeroLezioni: 1 // Prima lezione = una sola lezione
+            };
+
+            console.log('📅 Prenotazione ricorrente (1 lezione):', richiesta);
+            console.log('📋 Dettagli vendita creata:', {
+              venditaId: venditaCreata.id,
+              utenteIdVendita: venditaCreata.utenteId || venditaCreata.id,
+              utenteSelezionato: {
+                id: utente.id,
+                username: utente.username,
+                nomeCompleto: `${utente.nome || ''} ${utente.cognome || ''}`.trim()
+              }
+            });
+
+            this.prenotazioneService.prenotaRicorrente(richiesta).subscribe({
+              next: (response) => {
+                console.log('✅ Prenotazione posturale creata:', response);
+                this.loadPrenotazioni();
+                this.toastr.success(`Prima lezione posturale prenotata con successo per ${prenotazioneData.username}!`);
+                this.modaleService.chiudi();
+              },
+              error: (error) => {
+                console.error('❌ Errore prenotazione:', error);
+                const errorMessage = error?.error?.message || 'Errore durante la prenotazione';
+                this.toastr.error(errorMessage);
+              }
+            });
+          },
+          error: (error) => {
+            console.error('❌ Errore creazione vendita:', error);
+            const errorMessage = error?.error?.message || 'Errore durante la creazione della vendita';
+            this.toastr.error(errorMessage);
+          }
+        });
+      },
+      error: (error) => {
+        console.error('❌ Errore recupero utente:', error);
+        this.toastr.error('Utente non trovato');
+      }
     });
   }
 

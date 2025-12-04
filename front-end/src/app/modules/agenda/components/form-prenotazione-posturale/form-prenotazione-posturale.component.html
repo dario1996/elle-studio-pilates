@@ -1,0 +1,188 @@
+<div class="form-container">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    
+    <!-- Sezione Utente -->
+    <div class="form-section">
+      <div class="section-header">
+        <i class="fas fa-user"></i>
+        <h3>UTENTE</h3>
+      </div>
+      
+      <div class="form-group">
+        <label for="utente">Utente <span class="required">*</span></label>
+        <div class="autocomplete-container">
+          <input 
+            type="text" 
+            [formControl]="autocompleteSearch"
+            class="form-control"
+            placeholder="Cerca utente per nome, cognome o username..."
+            [class.is-invalid]="form.get('utente')?.invalid && form.get('utente')?.touched"
+            (focus)="showAutocomplete = true"
+          />
+          
+          <!-- Suggerimenti autocomplete -->
+          <div class="autocomplete-suggestions" *ngIf="showAutocomplete && utentiSuggestions.length > 0">
+            <div 
+              class="suggestion-item" 
+              *ngFor="let utente of utentiSuggestions"
+              (click)="selezionaUtente(utente)"
+            >
+              <i class="fas fa-user-circle"></i>
+              <span>{{ utente.displayText }}</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Utente selezionato -->
+        <div class="selected-user" *ngIf="utenteSelezionato">
+          <div class="user-badge">
+            <i class="fas fa-user-check"></i>
+            <span>{{ utenteSelezionato.displayText }}</span>
+            <button type="button" class="btn-remove" (click)="rimuoviUtente()">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+        
+        <div class="form-text">
+          <i class="fas fa-info-circle"></i>
+          Cerca e seleziona l'utente che desidera prenotare la prima lezione posturale
+        </div>
+      </div>
+    </div>
+
+    <!-- Sezione Programmazione -->
+    <div class="form-section">
+      <div class="section-header">
+        <i class="fas fa-calendar-alt"></i>
+        <h3>PROGRAMMAZIONE</h3>
+      </div>
+
+      <div class="row">
+        <!-- Giorno della settimana -->
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="giornoSettimana">Giorno della Settimana <span class="required">*</span></label>
+            <select 
+              formControlName="giornoSettimana" 
+              class="form-control"
+              [class.is-invalid]="form.get('giornoSettimana')?.invalid && form.get('giornoSettimana')?.touched"
+              (change)="onGiornoChange($any($event.target).value)"
+            >
+              <option value="">Seleziona un giorno</option>
+              <option *ngFor="let giorno of giorniDisponibili" [value]="giorno">
+                {{ giorniMap[giorno] }}
+              </option>
+            </select>
+            <div class="form-text">
+              <i class="fas fa-info-circle"></i>
+              Seleziona il giorno della settimana per vedere gli orari disponibili
+            </div>
+          </div>
+        </div>
+
+        <!-- Data specifica -->
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="dataPrenotazione">Data Prenotazione <span class="required">*</span></label>
+            <input 
+              type="date" 
+              formControlName="dataPrenotazione" 
+              class="form-control"
+              [class.is-invalid]="form.get('dataPrenotazione')?.invalid && form.get('dataPrenotazione')?.touched"
+            />
+            <div class="form-text">
+              <i class="fas fa-info-circle"></i>
+              La data verrà impostata automaticamente
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slot orari disponibili -->
+      <div class="form-group" *ngIf="form.get('giornoSettimana')?.value">
+        <label>Orario <span class="required">*</span></label>
+        
+        <!-- Alert se non è stata selezionata una data -->
+        <div class="alert alert-warning" *ngIf="!form.get('dataPrenotazione')?.value">
+          <i class="fas fa-exclamation-triangle"></i>
+          Seleziona prima una data per vedere la disponibilità degli slot
+        </div>
+        
+        <div class="slots-container" *ngIf="form.get('dataPrenotazione')?.value">
+          <div 
+            class="slot-card" 
+            *ngFor="let slot of getSlotsPerGiornoSelezionato()"
+            [class.selected]="form.get('slotId')?.value == slot.templateId"
+            [class.full]="!slot.disponibile"
+            [class.disabled]="!slot.disponibile"
+            (click)="slot.disponibile && form.patchValue({ slotId: slot.templateId })"
+          >
+            <div class="slot-header">
+              <h4>{{ slot.titolo }}</h4>
+              <span class="badge" 
+                [class.badge-success]="slot.disponibile && slot.postiOccupati === 0"
+                [class.badge-warning]="slot.disponibile && slot.postiOccupati > 0"
+                [class.badge-danger]="!slot.disponibile">
+                {{ slot.postiOccupati }} / {{ slot.maxPartecipanti }} posti
+              </span>
+            </div>
+            <div class="slot-body">
+              <div class="slot-info">
+                <i class="fas fa-clock"></i>
+                <span>{{ slot.oraInizio }} - {{ slot.oraFine }}</span>
+              </div>
+              <div class="slot-info">
+                <i class="fas fa-user-md"></i>
+                <span>{{ slot.istruttore }}</span>
+              </div>
+              <div class="slot-info" *ngIf="!slot.disponibile && slot.utenteAssegnato">
+                <i class="fas fa-user-check"></i>
+                <span class="text-danger"><strong>Assegnato a: {{ slot.utenteAssegnato }}</strong></span>
+              </div>
+            </div>
+            <div class="slot-footer" *ngIf="!slot.disponibile">
+              <i class="fas fa-ban"></i>
+              <span>Slot completo - Non disponibile</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="alert alert-info" *ngIf="getSlotsPerGiornoSelezionato().length === 0">
+          <i class="fas fa-info-circle"></i>
+          Nessuno slot posturale disponibile per questo giorno
+        </div>
+      </div>
+    </div>
+
+    <!-- Sezione Note -->
+    <div class="form-section">
+      <div class="section-header">
+        <i class="fas fa-sticky-note"></i>
+        <h3>NOTE AGGIUNTIVE</h3>
+      </div>
+      
+      <div class="form-group">
+        <label for="note">Note</label>
+        <textarea 
+          formControlName="note" 
+          class="form-control" 
+          rows="3"
+          placeholder="Eventuali note o richieste particolari..."
+        ></textarea>
+      </div>
+    </div>
+
+    <!-- Info Pacchetto -->
+    <div class="info-box">
+      <i class="fas fa-info-circle"></i>
+      <div class="info-content">
+        <h4>Informazioni Pacchetto</h4>
+        <p><strong>Pacchetto:</strong> Prima Lezione - Anamnesi e Valutazione Posturale</p>
+        <p><strong>Descrizione:</strong> Anamnesi e approccio al metodo Pilates. Sessione introduttiva di valutazione posturale e conoscenza del metodo.</p>
+        <p><strong>Durata:</strong> 1 lezione</p>
+      </div>
+    </div>
+
+  </form>
+</div>

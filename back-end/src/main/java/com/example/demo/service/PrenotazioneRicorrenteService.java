@@ -69,7 +69,11 @@ public class PrenotazioneRicorrenteService {
         }
 
         // Validazioni
-        if (!vendita.isPagata()) {
+        // Per il pacchetto "Prima Lezione Posturale" (ID=1) permettiamo stato PENDING
+        // Per tutti gli altri pacchetti richiediamo che la vendita sia pagata
+        boolean isPrimaLezionePosturale = vendita.getPacchetto().getId() == 1L;
+        
+        if (!isPrimaLezionePosturale && !vendita.isPagata()) {
             throw new RuntimeException("La vendita non è stata ancora pagata");
         }
 

@@ -47,12 +47,25 @@ public class VenditaController {
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<Vendita> creaVendita(@RequestBody VenditaRequest request) {
         try {
-            Vendita vendita = venditaService.creaVendita(
-                    request.getId(),
-                    request.getPacchettoId(),
-                    request.getImporto(),
-                    request.getNote()
-            );
+            Vendita vendita;
+            if (request.getStato() != null) {
+                // Se lo stato è specificato, usalo
+                vendita = venditaService.creaVendita(
+                        request.getId(),
+                        request.getPacchettoId(),
+                        request.getImporto(),
+                        request.getNote(),
+                        request.getStato()
+                );
+            } else {
+                // Altrimenti usa il metodo default (PAID)
+                vendita = venditaService.creaVendita(
+                        request.getId(),
+                        request.getPacchettoId(),
+                        request.getImporto(),
+                        request.getNote()
+                );
+            }
             return ResponseEntity.ok(vendita);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
@@ -381,6 +394,7 @@ public class VenditaController {
         private Long pacchettoId;
         private BigDecimal importo;
         private String note;
+        private StatoVendita stato; // Stato opzionale (PENDING per prenotazioni admin)
 
         // Getters e Setters
         public Long getId() { return id; }
@@ -394,6 +408,9 @@ public class VenditaController {
         
         public String getNote() { return note; }
         public void setNote(String note) { this.note = note; }
+        
+        public StatoVendita getStato() { return stato; }
+        public void setStato(StatoVendita stato) { this.stato = stato; }
     }
 
     /**

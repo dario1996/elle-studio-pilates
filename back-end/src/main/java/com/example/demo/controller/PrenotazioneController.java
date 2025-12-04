@@ -1,26 +1,26 @@
 package com.example.demo.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.entity.Vendita;
-import com.example.demo.entity.Vendita.StatoVendita;
 import com.example.demo.entity.PrenotazioneLezione;
 import com.example.demo.entity.RichiestaSpostamento;
+import com.example.demo.entity.Vendita;
+import com.example.demo.entity.Vendita.StatoVendita;
 import com.example.demo.repository.VenditaRepository;
 import com.example.demo.service.PrenotazioneRicorrenteService;
 import com.example.demo.service.RichiestaSpostamentoService;
@@ -99,7 +99,16 @@ public class PrenotazioneController {
             @RequestBody PrenotazioneRicorrenteRequest request,
             Authentication authentication) {
         try {
-            String username = authentication.getName();
+            // Recupera la vendita per ottenere l'utente che ha acquistato il pacchetto
+            Vendita vendita = venditaRepository.findById(request.getVenditaId())
+                    .orElseThrow(() -> new RuntimeException("Vendita non trovata con ID: " + request.getVenditaId()));
+            
+            // Usa l'username dell'utente che ha acquistato il pacchetto (dalla vendita)
+            // NON l'admin che sta effettuando la prenotazione
+            String username = vendita.getUtente().getUsername();
+            
+            System.out.println("🎯 Creazione prenotazione per utente dalla vendita: " + username);
+            System.out.println("👤 Admin che effettua l'operazione: " + authentication.getName());
 
             List<PrenotazioneLezione> prenotazioni = prenotazioneRicorrenteService.creaPrenotazioniRicorrenti(
                     request.getVenditaId(),
