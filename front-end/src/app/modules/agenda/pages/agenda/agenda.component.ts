@@ -145,6 +145,17 @@ export class AgendaComponent implements OnInit {
         setTimeout(() => {
           this.apriModalCreazione();
         }, 100);
+      } else if (params['openPosturale'] === 'true') {
+        // Apre il modale di prenotazione posturale dalla dashboard
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: {},
+          replaceUrl: true
+        });
+        
+        setTimeout(() => {
+          this.apriModalCreazione();
+        }, 100);
       } else if (params['edit']) {
         const lezioneId = parseInt(params['edit']);
         
@@ -770,7 +781,7 @@ export class AgendaComponent implements OnInit {
   }
 
   // Gestione toolbar button
-  handleAggiungiLezione(): void {
+  prenotaPosturale(): void {
     this.apriModalCreazione();
   }
 

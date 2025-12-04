@@ -4,7 +4,7 @@
       [title]="title" 
       [buttons]="buttons"
       buttonText="Aggiungi Lezione"
-      (buttonClick)="handleAggiungiLezione()">
+      (buttonClick)="prenotaPosturale()">
     </app-page-title>
     <div class="user-bar">
       <!-- <app-notification></app-notification> -->
@@ -16,7 +16,7 @@
     <!-- Pulsanti azioni -->
     <div class="row mb-3 mt-3">
       <div class="col d-flex justify-content-start gap-3">
-        <button class="quick-action-btn" (click)="handleAggiungiLezione()">
+        <button class="quick-action-btn" (click)="prenotaPosturale()">
           <i class="fas fa-walking"></i>
           <span>Prenota posturale</span>
         </button>

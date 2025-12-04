@@ -66,21 +66,6 @@ export class HomeDashboardComponent implements OnInit {
     this.router.navigate(['/gestionale-elle-studio/agenda'], { queryParams: { openForm: 'true' } });
   }
 
-  apriOverlayModificaLezione(): void {
-    // Apro l'overlay per la modifica delle lezioni
-    this.modaleService.apri({
-      titolo: 'Modifica Lezioni',
-      componente: ModificaLezioneOverlayComponent,
-      dimensione: 'lg',
-      onConferma: (lezioneModificata: any) => {
-        console.log('Lezione modificata:', lezioneModificata);
-        this.toastrUniversale.success('Lezione modificata con successo!');
-        // Ricarica gli appuntamenti per aggiornare la dashboard
-        this.caricaAppuntamentiOggi();
-      }
-    });
-  }
-
   modificaLezione(id: number): void {
     // Apro l'overlay per la modifica delle lezioni
     this.modaleService.apri({
@@ -111,5 +96,12 @@ export class HomeDashboardComponent implements OnInit {
 
   getLabelTipoLezione(tipo: string): string {
     return TIPI_LEZIONE_CONFIG[tipo as keyof typeof TIPI_LEZIONE_CONFIG]?.label || tipo;
+  }
+
+  // Naviga alla pagina agenda e apre il modale di prenotazione posturale
+  prenotaPosturale(): void {
+    this.router.navigate(['/gestionale-elle-studio/agenda'], { 
+      queryParams: { openPosturale: 'true' } 
+    });
   }
 }
