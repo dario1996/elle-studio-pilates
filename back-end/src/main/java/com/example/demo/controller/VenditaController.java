@@ -24,8 +24,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.PacchettoAcquistatoDTO;
+import com.example.demo.entity.PrenotazioneLezione;
 import com.example.demo.entity.Vendita;
 import com.example.demo.entity.Vendita.StatoVendita;
+import com.example.demo.repository.PrenotazioneLezioneRepository;
 import com.example.demo.service.VenditaService;
 
 /**
@@ -37,6 +39,9 @@ public class VenditaController {
 
     @Autowired
     private VenditaService venditaService;
+
+    @Autowired
+    private PrenotazioneLezioneRepository prenotazioneRepository;
 
     // ===== OPERAZIONI CRUD =====
 
@@ -245,6 +250,18 @@ public class VenditaController {
                 pacchetto.put("nome", v.getPacchetto().getNome());
                 pacchetto.put("prezzo", v.getPacchetto().getPrezzo());
                 vendita.put("pacchetto", pacchetto);
+                
+                // Trova la prima prenotazione associata a questa vendita
+                List<PrenotazioneLezione> prenotazioni = prenotazioneRepository.findByVenditaOrderByDataLezioneAsc(v);
+                if (!prenotazioni.isEmpty()) {
+                    PrenotazioneLezione primaPrenotazione = prenotazioni.get(0);
+                    Map<String, Object> prenotazione = new java.util.HashMap<>();
+                    prenotazione.put("dataLezione", primaPrenotazione.getDataLezione());
+                    prenotazione.put("oraInizio", primaPrenotazione.getOraInizio());
+                    prenotazione.put("oraFine", primaPrenotazione.getOraFine());
+                    prenotazione.put("tipoLezione", primaPrenotazione.getTipoLezione());
+                    vendita.put("prenotazione", prenotazione);
+                }
                 
                 return vendita;
             })

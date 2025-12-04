@@ -514,3 +514,17 @@
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+/* Icona lampeggiante rossa per pagamenti pending */
+.quick-action-btn i.pending-alert {
+  animation: blink-red-black 1.5s ease-in-out infinite;
+}
+
+@keyframes blink-red-black {
+  0%, 100% {
+    color: #111827;
+  }
+  50% {
+    color: #ef4444;
+  }
+}

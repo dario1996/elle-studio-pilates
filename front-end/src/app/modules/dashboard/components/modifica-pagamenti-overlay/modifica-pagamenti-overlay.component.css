@@ -52,8 +52,8 @@
 
 .vendita-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .vendita-utente {
@@ -64,12 +64,6 @@
   color: #111827;
   flex: 1;
   min-width: 0;
-}
-
-.vendita-utente i {
-  color: #6b7280;
-  font-size: 12px;
-  flex-shrink: 0;
 }
 
 .vendita-utente strong {
@@ -87,14 +81,30 @@
   min-width: 0;
 }
 
-.vendita-data {
+.vendita-info-row {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.vendita-info-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   font-size: 11px;
   color: #6b7280;
   flex-shrink: 0;
   white-space: nowrap;
+}
+
+.info-label {
+  font-weight: 400;
+}
+
+.info-value {
+  font-weight: 500;
+  color: #374151;
 }
 
 .vendita-data .data-label {

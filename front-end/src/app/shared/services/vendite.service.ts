@@ -19,6 +19,12 @@ export interface Vendita {
     nome: string;
     prezzo: number;
   };
+  prenotazione?: {
+    dataLezione: string;
+    oraInizio: string;
+    oraFine: string;
+    tipoLezione: string;
+  };
   importo: number;
   stato: 'PENDING' | 'PAID' | 'CANCELLED';
   dataAcquisto: string;

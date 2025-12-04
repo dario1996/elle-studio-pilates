@@ -20,7 +20,7 @@
             <span>Prenota posturale</span>
           </button>
           <button class="quick-action-btn" (click)="modificaStatoPagamenti()">
-            <i class="fas fa-money-bill-wave"></i>
+            <i class="fas fa-money-bill-wave" [class.pending-alert]="hasPendingPayments"></i>
             <span>Modifica stato pagamenti</span>
           </button>
           <button class="quick-action-btn" (click)="router.navigate(['/gestionale-elle-studio/gestione-utenti'])">

@@ -11,6 +11,7 @@ import { ModaleService } from '../../../../core/services/modal.service';
 import { ModificaLezioneOverlayComponent } from '../../components/modifica-lezione-overlay/modifica-lezione-overlay.component';
 import { ModificaPagamentiOverlayComponent } from '../../components/modifica-pagamenti-overlay/modifica-pagamenti-overlay.component';
 import { ToastrUniversaleService } from '../../../../shared/services/toastr-universale.service';
+import { VenditeService } from '../../../../shared/services/vendite.service';
 
 @Component({
   selector: 'app-home-dashboard',
@@ -32,17 +33,20 @@ export class HomeDashboardComponent implements OnInit {
   appuntamentiOggi: LezioneDto[] = [];
   loading = false;
   error: string | null = null;
+  hasPendingPayments = false;
 
   constructor(
     public router: Router,
     private dashboardService: DashboardService,
     private lezioniService: LezioniService,
     private modaleService: ModaleService,
-    private toastrUniversale: ToastrUniversaleService
+    private toastrUniversale: ToastrUniversaleService,
+    private venditeService: VenditeService
   ) {}
 
   ngOnInit(): void {
     this.caricaAppuntamentiOggi();
+    this.controllaPagamentiPending();
   }
 
   private caricaAppuntamentiOggi(): void {
@@ -59,6 +63,17 @@ export class HomeDashboardComponent implements OnInit {
         console.error('Errore nel caricamento appuntamenti:', err);
         this.error = 'Errore nel caricamento degli appuntamenti';
         this.loading = false;
+      }
+    });
+  }
+
+  private controllaPagamentiPending(): void {
+    this.venditeService.getVenditePending().subscribe({
+      next: (vendite) => {
+        this.hasPendingPayments = vendite.length > 0;
+      },
+      error: (err) => {
+        console.error('Errore nel controllo pagamenti pending:', err);
       }
     });
   }
@@ -117,7 +132,8 @@ export class HomeDashboardComponent implements OnInit {
         // risultati è un array di vendite confermate
         const count = Array.isArray(risultati) ? risultati.length : 1;
         this.toastrUniversale.success(`${count} pagamento/i confermato/i con successo!`);
-        // Eventualmente ricaricare dati se necessario
+        // Ricarica il controllo dei pagamenti pending
+        this.controllaPagamentiPending();
       }
     });
   }

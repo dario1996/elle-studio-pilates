@@ -33,13 +33,22 @@
         
         <div class="vendita-header">
           <div class="vendita-utente">
-            <i class="fas fa-user"></i>
             <strong>{{ getNomeCompleto(vendita) }}</strong>
             <span class="vendita-nota" *ngIf="vendita.note"> - {{ vendita.note }}</span>
           </div>
-          <div class="vendita-data">
-            <span class="data-label">Data prenotazione:</span>
-            {{ formatDate(vendita.dataAcquisto) }}
+          <div class="vendita-info-row">
+            <div class="vendita-info-item">
+              <span class="info-label">Data prenotazione:</span>
+              <span class="info-value">{{ formatDate(vendita.dataAcquisto) }}</span>
+            </div>
+            <div class="vendita-info-item" *ngIf="vendita.prenotazione">
+              <span class="info-label">Data lezione:</span>
+              <span class="info-value">{{ formatDate(vendita.prenotazione.dataLezione) }}</span>
+            </div>
+            <div class="vendita-info-item" *ngIf="vendita.prenotazione">
+              <span class="info-label">Orario inizio lezione:</span>
+              <span class="info-value">{{ formatTime(vendita.prenotazione.oraInizio) }}</span>
+            </div>
           </div>
         </div>
 
@@ -49,7 +58,7 @@
             <input 
               type="number" 
               class="form-control"
-              [value]="getImportoVendita(vendita.id!)"
+              [value]="getImportoVendita(vendita.id!) || ''"
               (input)="aggiornaImporto(vendita.id!, $any($event.target).value)"
               min="0"
               step="0.01"

@@ -54,8 +54,8 @@ export class ModificaPagamentiOverlayComponent implements OnInit {
       // Deseleziona se già selezionata
       this.venditeSelezionate.delete(vendita.id!);
     } else {
-      // Seleziona e precompila con l'importo originale
-      this.venditeSelezionate.set(vendita.id!, vendita.importo);
+      // Seleziona senza precompilare l'importo (campo vuoto)
+      this.venditeSelezionate.set(vendita.id!, 0);
     }
   }
 
@@ -63,8 +63,9 @@ export class ModificaPagamentiOverlayComponent implements OnInit {
     return this.venditeSelezionate.has(vendita.id!);
   }
 
-  getImportoVendita(venditaId: number): number {
-    return this.venditeSelezionate.get(venditaId) || 0;
+  getImportoVendita(venditaId: number): number | null {
+    const importo = this.venditeSelezionate.get(venditaId);
+    return (importo === 0) ? null : importo!;
   }
 
   aggiornaImporto(venditaId: number, importo: number): void {
@@ -126,6 +127,12 @@ export class ModificaPagamentiOverlayComponent implements OnInit {
     const month = (d.getMonth() + 1).toString().padStart(2, '0');
     const year = d.getFullYear();
     return `${day}/${month}/${year}`;
+  }
+
+  formatTime(time: string): string {
+    if (!time) return '';
+    // time è in formato HH:mm:ss, prendiamo solo HH:mm
+    return time.substring(0, 5);
   }
 
   getNomeCompleto(vendita: Vendita): string {
