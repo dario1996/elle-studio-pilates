@@ -6,13 +6,24 @@ import { Injectable } from '@angular/core';
 })
 export class LoadingService {
   private loading = new BehaviorSubject<boolean>(false);
+  private requestCount = 0;
 
   public readonly loading$ = this.loading.asObservable();
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   constructor() {}
 
-  show = () => this.loading.next(true);
+  show(): void {
+    this.requestCount++;
+    if (this.requestCount === 1) {
+      this.loading.next(true);
+    }
+  }
 
-  hide = () => this.loading.next(false);
+  hide(): void {
+    this.requestCount--;
+    if (this.requestCount <= 0) {
+      this.requestCount = 0;
+      this.loading.next(false);
+    }
+  }
 }
