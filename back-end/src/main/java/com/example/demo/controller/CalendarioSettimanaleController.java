@@ -20,7 +20,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/calendario-settimanale")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "https://d2b8w1i9zwozdy.cloudfront.net"})
 public class CalendarioSettimanaleController {
 
     private static final Logger log = LoggerFactory.getLogger(CalendarioSettimanaleController.class);

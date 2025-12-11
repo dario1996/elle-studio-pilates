@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { LezioneDto } from '../../core/services/lezioni.service';
 
@@ -21,7 +22,7 @@ export interface DashboardStatisticheDto {
   providedIn: 'root'
 })
 export class DashboardService {
-  private apiUrl = 'http://localhost:8080/api';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 

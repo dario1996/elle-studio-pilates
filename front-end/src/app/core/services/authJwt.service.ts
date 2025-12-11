@@ -11,7 +11,7 @@ import {
   timer,
 } from 'rxjs';
 import { Token } from '../../shared/models/Token';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { AppCookieService } from './app-cookie.service';
 
 @Injectable({

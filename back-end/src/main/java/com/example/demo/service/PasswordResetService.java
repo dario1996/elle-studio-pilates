@@ -59,7 +59,7 @@ public class PasswordResetService {
     
     private void sendPasswordResetEmail(String toEmail, String token, String username) {
         // URL del frontend per il reset
-        String resetLink = "http://localhost:4200/login?token=" + token;
+        String resetLink = "https://d2b8w1i9zwozdy.cloudfront.net/login?token=" + token;
         
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("vincenzo.cusaniello@gmail.com");

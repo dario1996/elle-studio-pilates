@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 
 export interface RegistrazioneRequest {
@@ -34,7 +35,7 @@ export interface ApiResponse {
   providedIn: 'root'
 })
 export class RegistrazioneService {
-  private apiUrl = 'http://localhost:8080/api/registrazione';
+  private apiUrl = "${environment.apiUrl}/registrazione";
 
   constructor(private http: HttpClient) {}
 

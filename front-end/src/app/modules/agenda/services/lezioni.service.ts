@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 import { Observable, map } from 'rxjs';
 
 // Backend DTOs
@@ -47,7 +48,7 @@ export interface ILezione {
 })
 export class LezioniService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/api/lezioni';
+  private apiUrl = "${environment.apiUrl}/lezioni";
 
   // Converter helper methods
   private dtoToModel(dto: LezioneDto): ILezione {

@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { ApiMsg } from '../../../shared/models/ApiMsg';
 import { HttpClient } from '@angular/common/http';
 import { IUsers } from '../../../shared/models/Users';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',

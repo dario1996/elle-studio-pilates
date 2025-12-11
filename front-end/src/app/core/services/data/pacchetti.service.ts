@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IPacchetti } from '../../../shared/models/Pacchetti';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
 import { ApiMsg } from '../../../shared/models/ApiMsg';
 

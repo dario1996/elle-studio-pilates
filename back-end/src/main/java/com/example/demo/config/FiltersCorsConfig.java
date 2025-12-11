@@ -18,7 +18,7 @@ public class FiltersCorsConfig implements WebMvcConfigurer
 			{
 				registry
 				.addMapping("/**")
-				.allowedOrigins("http://localhost:4200")
+				.allowedOrigins("http://localhost:4200", "https://d2b8w1i9zwozdy.cloudfront.net", "http://frontendstack-angularsitebucket92ab5f40-tars8wajaibr.s3-website-eu-west-1.amazonaws.com")
 				.allowedMethods("PUT","DELETE","GET","POST","OPTIONS","HEAD","PATCH")
 				.allowedHeaders("*")
 				.exposedHeaders("header1","header2","Authorization")

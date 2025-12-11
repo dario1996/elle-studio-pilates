@@ -28,7 +28,7 @@ import com.example.demo.service.LezioneService;
 
 @RestController
 @RequestMapping("/api/dashboard")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "https://d2b8w1i9zwozdy.cloudfront.net"})
 public class DashboardController {
 
     private static final Logger log = LoggerFactory.getLogger(DashboardController.class);

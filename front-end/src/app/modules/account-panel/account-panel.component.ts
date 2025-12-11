@@ -10,6 +10,7 @@ import { RegistrazioneService } from '../../shared/services/registrazione.servic
 import { ToastrUniversaleService } from '../../shared/services/toastr-universale.service';
 import { inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-account-panel',
@@ -347,7 +348,7 @@ export class AccountPanelComponent implements OnInit {
     formData.append('file', this.selectedFile);
     formData.append('userId', this.user.id.toString());
     
-    this.http.post('http://localhost:8080/api/upload/certificato-medico', formData).subscribe({
+    this.http.post('${environment.apiUrl}/upload/certificato-medico', formData).subscribe({
       next: (response: any) => {
         console.log('Certificato caricato:', response);
         this.uploadingCertificate = false;
@@ -386,7 +387,7 @@ export class AccountPanelComponent implements OnInit {
 
     this.toastr.info('Download in corso...');
     
-    this.http.get(`http://localhost:8080/api/upload/certificato-medico/${this.user.id}`, {
+    this.http.get(`${environment.apiUrl}/upload/certificato-medico/${this.user.id}`, {
       responseType: 'blob',
       observe: 'response'
     }).subscribe({

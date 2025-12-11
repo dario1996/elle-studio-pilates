@@ -24,7 +24,7 @@ export interface LezioneDto {
 })
 export class LezioniService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/api/lezioni';
+  private apiUrl = "${environment.apiUrl}/lezioni";
 
   // Converter helper methods
   private dtoToModel(dto: LezioneDto): ILezione {

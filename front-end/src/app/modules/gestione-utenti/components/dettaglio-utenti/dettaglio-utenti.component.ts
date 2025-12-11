@@ -4,6 +4,7 @@ import { IUsers } from '../../../../shared/models/Users';
 import { UserService } from '../../../../core/services/data/user.service';
 import { ModaleService } from '../../../../core/services/modal.service';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-dettaglio-utenti',
@@ -75,7 +76,7 @@ export class DettaglioUtentiComponent implements OnInit {
 
     this.downloadingCertificate = true;
     
-    this.http.get(`http://localhost:8080/api/upload/certificato-medico/${this.dati.id}`, {
+    this.http.get(`${environment.apiUrl}/upload/certificato-medico/${this.dati.id}`, {
       responseType: 'blob',
       observe: 'response'
     }).subscribe({
