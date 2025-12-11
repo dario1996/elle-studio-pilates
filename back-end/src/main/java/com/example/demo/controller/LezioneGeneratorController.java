@@ -12,7 +12,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/lezioni/genera")
-@CrossOrigin(origins = {"http://localhost:4200", "https://d2b8w1i9zwozdy.cloudfront.net"})
+@CrossOrigin(origins = {"http://localhost:4200", "https://d1g9w0fi1247xw.cloudfront.net", "http://frontendstack-angularsitebucket92ab5f40-0eshkezhkns1.s3-website-eu-west-1.amazonaws.com"})
 public class LezioneGeneratorController {
 
     private static final Logger log = LoggerFactory.getLogger(LezioneGeneratorController.class);

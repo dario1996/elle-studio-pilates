@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.PacchettoAcquistatoDTO;
@@ -33,7 +34,7 @@ import com.example.demo.service.VenditaService;
 /**
  * Controller REST per gestire le vendite e le statistiche
  */
-@RestController
+@CrossOrigin(origins = {"http://localhost:4200", "https://d1g9w0fi1247xw.cloudfront.net", "http://frontendstack-angularsitebucket92ab5f40-0eshkezhkns1.s3-website-eu-west-1.amazonaws.com"})@RestController
 @RequestMapping("/api/vendite")
 public class VenditaController {
 

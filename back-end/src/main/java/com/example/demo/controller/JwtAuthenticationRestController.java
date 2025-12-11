@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entity.JwtTokenRequest;
@@ -30,7 +31,7 @@ import com.example.demo.security.JwtConfig;
 import com.example.demo.security.JwtTokenUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
-@RestController
+@CrossOrigin(origins = {"http://localhost:4200", "https://d1g9w0fi1247xw.cloudfront.net", "http://frontendstack-angularsitebucket92ab5f40-0eshkezhkns1.s3-website-eu-west-1.amazonaws.com"})@RestController
 public class JwtAuthenticationRestController 
 {
 

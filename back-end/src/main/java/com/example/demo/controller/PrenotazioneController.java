@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entity.PrenotazioneLezione;
@@ -29,7 +30,7 @@ import com.example.demo.service.SpostamentoLezioneService;
 /**
  * Controller REST per gestire le prenotazioni
  */
-@RestController
+@CrossOrigin(origins = {"http://localhost:4200", "https://d1g9w0fi1247xw.cloudfront.net", "http://frontendstack-angularsitebucket92ab5f40-0eshkezhkns1.s3-website-eu-west-1.amazonaws.com"})@RestController
 @RequestMapping("/api/prenotazioni")
 @PreAuthorize("isAuthenticated()")
 public class PrenotazioneController {

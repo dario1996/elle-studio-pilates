@@ -9,15 +9,14 @@ import { environment } from '../../../../environments/environment';
   providedIn: 'root',
 })
 export class UserService {
-  server: string = environment.server;
-  port: string = environment.port;
+  private apiUrl = environment.apiUrl;
 
   httpClient = inject(HttpClient);
 
   // CRUD Operations
   getListaUtenti = (soloAttivi: boolean = false) =>
     this.httpClient.get<IUsers[]>(
-      `http://${this.server}:${this.port}/api/utenti`,
+      `${this.apiUrl}/utenti`,
       {
         params: {
           soloAttivi: soloAttivi.toString(),
@@ -27,35 +26,35 @@ export class UserService {
 
   getUtenteById = (id: string) =>
     this.httpClient.get<IUsers>(
-      `http://${this.server}:${this.port}/api/utenti/${id}`,
+      `${this.apiUrl}/utenti/${id}`,
     );
 
   getUtenteByUsername = (username: string) =>
     this.httpClient.get<IUsers>(
-      `http://${this.server}:${this.port}/api/utenti/username/${username}`,
+      `${this.apiUrl}/utenti/username/${username}`,
     );
 
   insUtente = (utente: IUsers) =>
     this.httpClient.post<IUsers>(
-      `http://${this.server}:${this.port}/api/utenti`,
+      `${this.apiUrl}/utenti`,
       utente,
     );
 
   updUtente = (id: number, utente: IUsers) => {
     return this.httpClient.put<IUsers>(
-      `http://${this.server}:${this.port}/api/utenti/${id}`,
+      `${this.apiUrl}/utenti/${id}`,
       utente,
     );
   }
 
   delUtente = (id: number) =>
     this.httpClient.delete<void>(
-      `http://${this.server}:${this.port}/api/utenti/${id}`,
+      `${this.apiUrl}/utenti/${id}`,
     );
 
   toggleUtenteStatus = (id: number) =>
     this.httpClient.put<IUsers>(
-      `http://${this.server}:${this.port}/api/utenti/${id}/toggle-status`,
+      `${this.apiUrl}/utenti/${id}/toggle-status`,
       {},
     );
 
@@ -65,7 +64,7 @@ export class UserService {
     soloAttivi: boolean = true,
   ) =>
     this.httpClient.get<IUsers[]>(
-      `http://${this.server}:${this.port}/api/utenti`,
+      `${this.apiUrl}/utenti`,
       {
         params: {
           ...(search && { search }),
@@ -78,7 +77,7 @@ export class UserService {
   // Autocomplete utenti per form lezioni
   getUtentiAutocomplete = (search?: string) =>
     this.httpClient.get<any[]>(
-      `http://${this.server}:${this.port}/api/utenti/autocomplete`,
+      `${this.apiUrl}/utenti/autocomplete`,
       {
         params: {
           ...(search && { search }),
@@ -89,21 +88,21 @@ export class UserService {
   // Ottieni dati utenti per username multipli
   getUtentiByUsernames = (usernames: string[]) =>
     this.httpClient.post<IUsers[]>(
-      `http://${this.server}:${this.port}/api/utenti/by-usernames`,
+      `${this.apiUrl}/utenti/by-usernames`,
       { usernames }
     );
 
   // Download certificato medico
   downloadCertificatoMedico = (username: string) =>
     this.httpClient.get(
-      `http://${this.server}:${this.port}/api/upload/certificato-medico/${username}`,
+      `${this.apiUrl}/upload/certificato-medico/${username}`,
       { responseType: 'blob' }
     );
 
   // Cambio password
   changePassword = (username: string, oldPassword: string, newPassword: string) =>
     this.httpClient.put<ApiMsg>(
-      `http://${this.server}:${this.port}/api/utenti/${username}/change-password`,
+      `${this.apiUrl}/utenti/${username}/change-password`,
       {
         oldPassword: oldPassword,
         newPassword: newPassword
@@ -114,7 +113,7 @@ export class UserService {
   // IMPORT MASSIVO - COMMENTATO PER ORA
   bulkImport = (utenti: any[], options?: any) =>
     this.httpClient.post<any>(
-      `http://${this.server}:${this.port}/api/utenti/bulk-import`,
+      `${this.apiUrl}/utenti/bulk-import`,
       {
         utenti: utenti,
         options: {
@@ -127,7 +126,7 @@ export class UserService {
 
   checkDuplicates = (utenti: any[]) =>
     this.httpClient.post<any>(
-      `http://${this.server}:${this.port}/api/utenti/check-duplicates`,
+      `${this.apiUrl}/utenti/check-duplicates`,
       { utenti: utenti },
     );
   */
@@ -135,7 +134,7 @@ export class UserService {
   // Legacy method for backward compatibility
   insUser = (user: IUsers) =>
     this.httpClient.post<ApiMsg>(
-      `http://${this.server}:${this.port}/api/utenti/register`,
+      `${this.apiUrl}/utenti/register`,
       user,
     );
 }

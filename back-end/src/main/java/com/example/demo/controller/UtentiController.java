@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.ModificaUtenteDTO;
@@ -30,6 +31,7 @@ import com.example.demo.exceptions.BindingException;
 import com.example.demo.services.RegistrazioneService;
 import com.example.demo.services.UtentiService;
 
+@CrossOrigin(origins = {"http://localhost:4200", "https://d1g9w0fi1247xw.cloudfront.net", "http://frontendstack-angularsitebucket92ab5f40-0eshkezhkns1.s3-website-eu-west-1.amazonaws.com"})
 @RestController
 @RequestMapping(value = "/api/utenti")
 public class UtentiController {

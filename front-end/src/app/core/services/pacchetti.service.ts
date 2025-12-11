@@ -30,9 +30,8 @@ export interface PrenotazioneRequest {
   providedIn: 'root'
 })
 export class PacchettiService {
-  server: string = environment.server;
-  port: string = environment.port;
-  private apiUrl = `http://${this.server}:${this.port}/api/pacchetti`;
+  private baseUrl = environment.apiUrl;
+  private apiUrl = `${this.baseUrl}/pacchetti`;
 
   constructor(private http: HttpClient) {}
 
@@ -71,7 +70,7 @@ export class PacchettiService {
    * Effettua una prenotazione
    */
   effettuaPrenotazione(prenotazione: PrenotazioneRequest): Observable<any> {
-    return this.http.post(`http://${this.server}:${this.port}/api/prenotazioni`, prenotazione);
+    return this.http.post(`${this.apiUrl}/api/prenotazioni`, prenotazione);
   }
 
   /**
@@ -79,7 +78,7 @@ export class PacchettiService {
    * Recupera i pacchetti dalla tabella utente_pacchetti_disponibili
    */
   getPacchettiDisponibiliPerUtente(utenteId: number): Observable<Pacchetto[]> {
-    return this.http.get<Pacchetto[]>(`http://${this.server}:${this.port}/api/utenti/${utenteId}/pacchetti-disponibili`);
+    return this.http.get<Pacchetto[]>(`${this.apiUrl}/api/utenti/${utenteId}/pacchetti-disponibili`);
   }
 
   /**

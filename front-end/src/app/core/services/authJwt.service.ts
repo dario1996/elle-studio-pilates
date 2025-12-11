@@ -18,7 +18,7 @@ import { AppCookieService } from './app-cookie.service';
   providedIn: 'root',
 })
 export class AuthJwtService {
-  server: string = environment.server;
+  private apiUrl = environment.apiUrl;
   private helper = new JwtHelperService();
   private refreshTokenSubject = new BehaviorSubject<string | null>(null);
   private isRefreshing = false;

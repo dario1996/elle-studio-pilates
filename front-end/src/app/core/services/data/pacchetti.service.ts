@@ -9,32 +9,31 @@ import { ApiMsg } from '../../../shared/models/ApiMsg';
   providedIn: 'root',
 })
 export class PacchettiService {
-  server: string = environment.server;
-  port: string = environment.port;
+  private apiUrl = environment.apiUrl;
 
   constructor(private httpClient: HttpClient) {}
 
   getListaPacchetti = () =>
     this.httpClient.get<IPacchetti[]>(
-      `http://${this.server}:${this.port}/api/pacchetti/lista`,
+      `${this.apiUrl}/api/pacchetti/lista`,
     );
 
 
   createPacchetto = (pacchetto: IPacchetti) : Observable<ApiMsg> =>
     this.httpClient.post<ApiMsg>(
-      `http://${this.server}:${this.port}/api/pacchetti/inserisci`,
+      `${this.apiUrl}/api/pacchetti/inserisci`,
       pacchetto
     );
 
   updatePacchetto = (id: number, pacchetto: IPacchetti) : Observable<ApiMsg> =>
     this.httpClient.put<ApiMsg>(
-      `http://${this.server}:${this.port}/api/pacchetti/modifica/${id}`,
+      `${this.apiUrl}/api/pacchetti/modifica/${id}`,
       pacchetto
     );
 
   deletePacchetto = (id: number) : Observable<ApiMsg> =>
     this.httpClient.delete<ApiMsg>(
-      `http://${this.server}:${this.port}/api/pacchetti/${id}`
+      `${this.apiUrl}/api/pacchetti/${id}`
     );
 
 
