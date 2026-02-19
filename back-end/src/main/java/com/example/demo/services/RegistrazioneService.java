@@ -116,17 +116,17 @@ public class RegistrazioneService {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom("vincenzo.cusaniello@gmail.com");
             message.setTo(email);
-            message.setSubject("Benvenuto in Elle Studio Pilates!");
+            message.setSubject("Benvenuto in BC Management!");
             
             String emailBody = String.format(
                 "Ciao %s!\n\n" +
-                "Benvenuto in Elle Studio Pilates!\n\n" +
+                "Benvenuto in BC Management!\n\n" +
                 "La tua registrazione è stata completata con successo.\n" +
                 "L'utenza verrà abilitata nel più breve tempo possibile e riceverai una mail quando questo avverrà.\n\n" +
                 "Quando questo accadrà potrai accedere al sistema utilizzando le credenziali che hai scelto.\n\n" +
                 "Se non hai richiesto questa registrazione, ti preghiamo di contattarci immediatamente.\n\n" +
                 "Grazie per esserti registrato!\n" +
-                "Elle Studio Pilates",
+                "BC Management Team",
                 username
             );
             
@@ -151,16 +151,16 @@ public class RegistrazioneService {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom("vincenzo.cusaniello@gmail.com");
             message.setTo(email);
-            message.setSubject("Profilo Attivato - Elle Studio Pilates");
+            message.setSubject("Profilo Attivato - BC Management");
             
             String emailBody = String.format(
                 "Ciao %s!\n\n" +
                 "Siamo felici di informarti che il tuo profilo è stato attivato con successo!\n\n" +
-                "Ora puoi accedere alla piattaforma di Elle Studio Pilates e procedere all'acquisto di uno o più pacchetti a te associati.\n\n" +
+                "Ora puoi accedere alla piattaforma di BC Management e procedere all'acquisto di uno o più pacchetti a te associati.\n\n" +
                 "Puoi effettuare il login utilizzando le credenziali che hai scelto durante la registrazione.\n\n" +
                 "Per qualsiasi informazione o assistenza, non esitare a contattarci.\n\n" +
                 "Buona navigazione!\n" +
-                "Elle Studio Pilates",
+                "BC Management Team",
                 username
             );
             

@@ -64,7 +64,7 @@ public class PasswordResetService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("vincenzo.cusaniello@gmail.com");
         message.setTo(toEmail);
-        message.setSubject("Recupero Password - Elle Studio Pilates");
+        message.setSubject("Recupero Password");
         
         String emailBody = String.format(
             "Ciao %s!\n\n" +
