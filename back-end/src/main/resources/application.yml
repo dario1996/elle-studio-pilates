@@ -1,6 +1,6 @@
 spring:
   application:
-    name: gestionale-elle-studio
+    name: gestionale
 
   sql:
     init:
@@ -8,7 +8,7 @@ spring:
       platform: mysql
 
   datasource:
-    url: jdbc:mysql://localhost:3307/elle-studio?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3307/gestionale?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
     username: root
     password: Agostino96!
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -24,7 +24,7 @@ spring:
   liquibase:
     enabled: true
     change-log: classpath:db/changelog/db.changelog-master.xml
-    default-schema: elle-studio
+    default-schema: gestionale
 
   # Configurazione email
   mail:
@@ -53,7 +53,7 @@ spring:
 # Configurazione upload directory
 app:
   upload:
-    dir: ${user.home}/elle-studio-uploads
+    dir: ${user.home}/gestionale-uploads
 
 # Security Configuration
 sicurezza:

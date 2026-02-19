@@ -56,6 +56,6 @@ export class LoggedUserComponent implements OnInit {
 
   goToAccountPanel() {
     this.showDropdown = false;
-    this.router.navigate(['/gestionale-elle-studio/account-panel']);
+    this.router.navigate(['/gestionale/account-panel']);
   }
 }

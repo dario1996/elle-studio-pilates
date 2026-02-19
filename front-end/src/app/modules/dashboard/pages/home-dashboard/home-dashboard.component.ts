@@ -79,7 +79,7 @@ export class HomeDashboardComponent implements OnInit {
   }
 
   aggiungiLezione(): void {
-    this.router.navigate(['/gestionale-elle-studio/agenda'], { queryParams: { openForm: 'true' } });
+    this.router.navigate(['/gestionale/agenda'], { queryParams: { openForm: 'true' } });
   }
 
   modificaLezione(id: number): void {
@@ -116,7 +116,7 @@ export class HomeDashboardComponent implements OnInit {
 
   // Naviga alla pagina agenda e apre il modale di prenotazione posturale
   prenotaPosturale(): void {
-    this.router.navigate(['/gestionale-elle-studio/agenda'], { 
+    this.router.navigate(['/gestionale/agenda'], { 
       queryParams: { openPosturale: 'true' } 
     });
   }

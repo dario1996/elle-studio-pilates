@@ -146,7 +146,7 @@ export class WelcomeComponent implements OnInit {
       userRoles.includes(Ruoli.utente) &&
       this.router.url.includes('dashboard')
     ) {
-      this.router.navigate(['/gestionale-elle-studio/dashboard-utente']);
+      this.router.navigate(['/gestionale/dashboard-utente']);
     }
   }
 

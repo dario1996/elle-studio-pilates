@@ -117,10 +117,10 @@ export class LoginComponent implements OnInit {
 
     if (authorities.includes(Ruoli.amministratore)) {
       console.log('Redirect per amministratore');
-      this.route.navigate(['/gestionale-elle-studio/dashboard']);
+      this.route.navigate(['/gestionale/dashboard']);
     } else if (authorities.includes(Ruoli.utente)) {
       console.log('Redirect per utente');
-      this.route.navigate(['/gestionale-elle-studio/dashboard-utente']);
+      this.route.navigate(['/gestionale/dashboard-utente']);
     } else {
       console.error('Ruolo non riconosciuto:', authorities);
       this.route.navigate(['/forbidden']);

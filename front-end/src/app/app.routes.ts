@@ -11,7 +11,7 @@ export const routes: Routes = [
     redirectTo: 'login',
   },
   {
-    path: 'gestionale-elle-studio',
+    path: 'gestionale',
     loadComponent: () =>
       import('./modules/home/pages/welcome/welcome.component').then(
         m => m.WelcomeComponent,

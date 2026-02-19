@@ -13,7 +13,7 @@ import { SpinnerComponent } from './core/spinner/spinner.component';
   imports: [RouterOutlet, ModalComponent, SpinnerComponent],
 })
 export class AppComponent implements OnInit {
-  title = 'gestionale-elle-studio-ui';
+  title = 'gestionale-ui';
   private translate = inject(TranslateService);
   private defaultLang = 'it';
 

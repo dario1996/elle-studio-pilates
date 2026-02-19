@@ -455,12 +455,12 @@ export class DashboardUtenteComponent implements OnInit, AfterViewInit {
 
   /** Naviga alla pagina prenotazioni */
   vaiAPrenotazioni(): void {
-    this.router.navigate(['/gestionale-elle-studio/gestione-prenotazioni']);
+    this.router.navigate(['/gestionale/gestione-prenotazioni']);
   }
 
   /** Naviga alla pagina pacchetti */
   vaiAPacchetti(): void {
-    this.router.navigate(['/gestionale-elle-studio/gestione-pacchetti']);
+    this.router.navigate(['/gestionale/gestione-pacchetti']);
   }
 
   /** Ottiene il background image per tipo lezione */

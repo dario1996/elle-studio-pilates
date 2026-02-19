@@ -194,7 +194,7 @@
 							<outputDirectory>${project.build.outputDirectory}/static</outputDirectory>
 							<resources>
 								<resource>
-									<directory>../front-end/dist/gestionale-elle-studio-ui</directory>
+									<directory>../front-end/dist/gestionale-ui</directory>
 									<filtering>false</filtering>
 								</resource>
 							</resources>
